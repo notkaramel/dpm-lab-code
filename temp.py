@@ -6,9 +6,9 @@ from collections import Counter, defaultdict
 import time
 import math
 
-BASE_SPEED = 120
+BASE_SPEED = 180
 MAX_SPEED = 720
-P_CONSTANT = 200.0
+P_CONSTANT = 300.0
 I_CONSTANT = 200.0
 
 COLOR_MARKERS = (
@@ -228,8 +228,8 @@ def controller_slowest(self, final_color):
 
 
 def main():
-    motor_left = brick.Motor('A')
-    motor_right = brick.Motor('D')
+    motor_left = brick.Motor('D')
+    motor_right = brick.Motor('A')
     touch_sensor = brick.TouchSensor(1)
     color_sensor = brick.EV3ColorSensor(3)
 
