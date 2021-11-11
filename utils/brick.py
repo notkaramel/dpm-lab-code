@@ -593,7 +593,7 @@ class Motor:
             encoder - The encoder position
             dps - The current speed in Degrees Per Second
         """
-        self.brick.get_motor_status(self.port)
+        return self.brick.get_motor_status(self.port)
 
     def get_encoder(self):
         """
@@ -604,7 +604,7 @@ class Motor:
 
         Returns the encoder position in degrees
         """
-        self.brick.get_motor_encoder(self.port)
+        return self.brick.get_motor_encoder(self.port)
 
     def offset_encoder(self, position):
         """
