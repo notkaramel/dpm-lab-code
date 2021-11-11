@@ -8,6 +8,7 @@ Authors: Ryan Au, Younes Boubekeur
 from __future__ import annotations  # not required in Python 3.10+
 from brickpi3 import *
 from typing import Literal, Type
+import math
 import atexit
 import os
 import signal
@@ -334,7 +335,7 @@ class TouchSensor(Sensor):
 
     def is_pressed(self) -> bool:
         "Return True if pressed, False otherwise."
-        return self.brick.get_sensor(self.port) > 0
+        return self.get_value() == 1
 
 
 class EV3UltrasonicSensor(Sensor):
@@ -376,6 +377,24 @@ class EV3UltrasonicSensor(Sensor):
             return True
         except SensorError as error:
             return error
+    
+    def get_cm(self):
+        if self.mode != self.mode.CM:
+            self.set_mode(self.mode.CM)
+            self.wait_ready()
+        return self.get_value()
+
+    def get_inches(self):
+        if self.mode != self.mode.IN:
+            self.set_mode(self.mode.IN)
+            self.wait_ready()
+        return self.get_value()
+    
+    def detects_other_us_sensor(self):
+        if self.mode != self.mode.LISTEN:
+            self.set_mode(self.mode.LISTEN)
+            self.wait_ready()
+        return self.get_value() == 1
 
 
 class EV3ColorSensor(Sensor):
@@ -434,9 +453,10 @@ class EV3ColorSensor(Sensor):
         if self.mode != self.Mode.COMPONENT:
             self.set_mode(self.Mode.COMPONENT)
             self.wait_ready()
-        return self.get_value()[:-1]
+        val = self.get_value()
+        return val[:-1] if val is not None else [None, None, None]
 
-    def get_color(self) -> str:
+    def get_color_name(self) -> str:
         "Return the closest detected color by name. This will switch the sensor to id mode."
         if self.mode != self.Mode.ID:
             self.set_mode(self.Mode.ID)
@@ -480,9 +500,28 @@ class EV3GyroSensor(Sensor):
             elif mode == self.Mode.BOTH:
                 self.brick.set_sensor_type(self.port, BrickPi3.SENSOR_TYPE.EV3_GYRO_ABS_DPS)
             else:
-                return True
+                return False
+            return True
         except SensorError as error:
             return error
+
+    def get_abs_measure(self):
+        if self.mode != self.Mode.ABS:
+            self.set_mode(self.Mode.ABS)
+            self.wait_ready()
+        return self.get_value()
+    
+    def get_dps_measure(self):
+        if self.mode != self.Mode.DPS:
+            self.set_mode(self.Mode.DPS)
+            self.wait_ready()
+        return self.get_value()
+    
+    def get_both_measure(self):
+        if self.mode != self.Mode.BOTH:
+            self.set_mode(self.Mode.BOTH)
+            self.wait_ready()
+        return self.get_value()
 
 
 class Motor:
@@ -593,7 +632,10 @@ class Motor:
             encoder - The encoder position
             dps - The current speed in Degrees Per Second
         """
-        return self.brick.get_motor_status(self.port)
+        try:
+            return self.brick.get_motor_status(self.port)
+        except BaseException:
+            return [None, None, None, None]
 
     def get_encoder(self):
         """
@@ -605,6 +647,35 @@ class Motor:
         Returns the encoder position in degrees
         """
         return self.brick.get_motor_encoder(self.port)
+
+    def get_power(self):
+        """
+        Read motor status and returns power percent (-100 to 100)
+        
+        Returns:
+            None if error encountered
+            Numeric Value -100 to 100 of raw power percent
+        """
+        return self.get_status()[1]
+
+    def get_speed(self):
+        """
+        Read motor status and returns speed in degrees per second
+        
+        Returns:
+            None if error encountered
+            Numeric Value, negative or positive, in degrees per second
+        """
+        return self.get_status()[3]
+
+    def is_moving(self):
+        try:
+            return (not math.isclose(self.get_power(), 0)) or (not math.isclose(self.get_speed(), 0))
+        except TypeError:
+            return None
+
+    def get_dps(self):
+        return self.get_speed()
 
     def offset_encoder(self, position):
         """
