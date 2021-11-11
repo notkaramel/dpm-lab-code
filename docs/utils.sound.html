@@ -8,8 +8,8 @@
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="utils.html"><font color="#ffffff">utils</font></a>.sound</strong></big></big></font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/pi/ecse211/lab2-course-staff/project/utils/sound.py">/home/pi/ecse211/lab2-course-staff/project/utils/sound.py</a></font></td></tr></table>
-    <p></p>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/pi/ecse211/dpm-lab-code/utils/sound.py">/home/pi/ecse211/dpm-lab-code/utils/sound.py</a></font></td></tr></table>
+    <p><tt>#&nbsp;Written&nbsp;by&nbsp;Ryan&nbsp;Au&nbsp;and&nbsp;Younes&nbsp;Boubekaur</tt></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#aa55cc">
@@ -17,44 +17,90 @@
 <font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
     
 <tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="math.html">math</a><br>
-</td><td width="25%" valign=top><a href="simpleaudio.html">simpleaudio</a><br>
-</td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="array.html">array</a><br>
+<a href="functools.html">functools</a><br>
+</td><td width="25%" valign=top><a href="math.html">math</a><br>
+<a href="os.html">os</a><br>
+</td><td width="25%" valign=top><a href="pickle.html">pickle</a><br>
+<a href="simpleaudio.html">simpleaudio</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="utils.sound.html#Sound">Sound</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Sound">class <strong>Sound</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#Sound">Sound</a>(duration=1,&nbsp;volume=0.2,&nbsp;pitch='A4',&nbsp;mod_f=0,&nbsp;mod_k=0,&nbsp;amp_f=0,&nbsp;amp_ka=0,&nbsp;amp_ac=1,&nbsp;cutoff=0.01,&nbsp;fs=8000)<br>
+&nbsp;<br>
+<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Sound-__init__"><strong>__init__</strong></a>(self, duration=1, volume=0.2, pitch='A4', mod_f=0, mod_k=0, amp_f=0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="Sound-alter_wave"><strong>alter_wave</strong></a>(self, func)</dt></dl>
+
+<dl><dt><a name="Sound-is_playing"><strong>is_playing</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Sound-play"><strong>play</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Sound-set_amplitude_modulation"><strong>set_amplitude_modulation</strong></a>(self, amp_f, amp_ka, amp_ac)</dt></dl>
+
+<dl><dt><a name="Sound-set_cutoff"><strong>set_cutoff</strong></a>(self, cutoff)</dt></dl>
+
+<dl><dt><a name="Sound-set_frequency_modulation"><strong>set_frequency_modulation</strong></a>(self, mod_f, mod_k)</dt></dl>
+
+<dl><dt><a name="Sound-set_pitch"><strong>set_pitch</strong></a>(self, pitch)</dt></dl>
+
+<dl><dt><a name="Sound-set_volume"><strong>set_volume</strong></a>(self, volume)</dt></dl>
+
+<dl><dt><a name="Sound-stop"><strong>stop</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Sound-update_audio"><strong>update_audio</strong></a>(self, overwrite=False)</dt></dl>
+
+<dl><dt><a name="Sound-update_duration"><strong>update_duration</strong></a>(self, duration, fs=None)</dt></dl>
+
+<dl><dt><a name="Sound-wait_done"><strong>wait_done</strong></a>(self)</dt></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#eeaa77">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
     
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><dl><dt><strong>BASE_SOUND</strong> <em>lambda</em> x, freq</dt></dl>
- <dl><dt><a name="-gen_custom_freq"><strong>gen_custom_freq</strong></a>(frequency=440, seconds=1, vol_factor=0.2, fs=8000, func=None)</dt><dd><tt>Generate&nbsp;a&nbsp;byte-string&nbsp;of&nbsp;a&nbsp;sin-wave&nbsp;based&nbsp;sound,&nbsp;given&nbsp;a&nbsp;frequency,&nbsp;time,&nbsp;and&nbsp;volume.<br>
-func&nbsp;is&nbsp;a&nbsp;function&nbsp;with&nbsp;two&nbsp;inputs,&nbsp;x&nbsp;for&nbsp;time,&nbsp;and&nbsp;frequency&nbsp;for&nbsp;what&nbsp;the&nbsp;frequency&nbsp;is.</tt></dd></dl>
- <dl><dt><a name="-gen_freq"><strong>gen_freq</strong></a>(frequency=440, seconds=1, vol_factor=0.2, fs=8000)</dt><dd><tt>Generate&nbsp;a&nbsp;byte-string&nbsp;of&nbsp;a&nbsp;sin-wave&nbsp;based&nbsp;sound,&nbsp;given&nbsp;a&nbsp;frequency,&nbsp;time,&nbsp;and&nbsp;volume.</tt></dd></dl>
- <dl><dt><a name="-play_freq"><strong>play_freq</strong></a>(frequency=440, seconds=1, vol_factor=0.2, fs=8000, bg_play=False)</dt><dd><tt>Play&nbsp;a&nbsp;sound&nbsp;given&nbsp;frequency,&nbsp;time,&nbsp;and&nbsp;volume.</tt></dd></dl>
- <dl><dt><a name="-play_many_freq"><strong>play_many_freq</strong></a>(frequencies: list, fs=8000, bg_play=False)</dt><dd><tt>Play&nbsp;many&nbsp;frequencies.&nbsp;Accepts&nbsp;a&nbsp;list&nbsp;of&nbsp;3-length&nbsp;tuplets,&nbsp;each&nbsp;consisting&nbsp;of&nbsp;(freq,&nbsp;sec,&nbsp;vol).<br>
-freq&nbsp;is&nbsp;in&nbsp;Hz&nbsp;or&nbsp;Hertz<br>
-sec&nbsp;uses&nbsp;seconds<br>
-vol&nbsp;is&nbsp;a&nbsp;scale&nbsp;from&nbsp;0&nbsp;to&nbsp;1</tt></dd></dl>
- <dl><dt><a name="-play_many_notes"><strong>play_many_notes</strong></a>(notes: list, fs=8000, bg_play=False)</dt><dd><tt>Play&nbsp;many&nbsp;notes.&nbsp;Accepts&nbsp;a&nbsp;list&nbsp;of&nbsp;3-length&nbsp;tuplets,&nbsp;each&nbsp;consisting&nbsp;of&nbsp;(note,&nbsp;sec,&nbsp;vol).<br>
-notes&nbsp;such&nbsp;as&nbsp;"A4"&nbsp;or&nbsp;"Bb2"<br>
-sec&nbsp;uses&nbsp;seconds<br>
-vol&nbsp;is&nbsp;a&nbsp;scale&nbsp;from&nbsp;0&nbsp;to&nbsp;1</tt></dd></dl>
- <dl><dt><a name="-play_note"><strong>play_note</strong></a>(note_name='A4', seconds=1, vol_factor=0.2, fs=8000, bg_play=False)</dt><dd><tt>Play&nbsp;a&nbsp;sound&nbsp;given&nbsp;note&nbsp;name,&nbsp;time,&nbsp;and&nbsp;volume.<br>
+<td width="100%"><dl><dt><a name="-cos"><strong>cos</strong></a>(x)</dt></dl>
+ <dl><dt><a name="-gen_wave"><strong>gen_wave</strong></a>(duration=1, volume=0.2, pitch='A4', mod_f=0, mod_k=0, amp_f=0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000)</dt></dl>
+ <dl><dt><a name="-load_all_pitches_file"><strong>load_all_pitches_file</strong></a>(filename='sounds')</dt></dl>
+ <dl><dt><a name="-preload_all_pitches"><strong>preload_all_pitches</strong></a>(duration=1, volume=0.2, mod_f=0, mod_k=0, amp_f=0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000)</dt></dl>
+ <dl><dt><a name="-save_all_pitches_file"><strong>save_all_pitches_file</strong></a>(sounds, filename='sounds')</dt></dl>
+ <dl><dt><a name="-sin"><strong>sin</strong></a>(x)</dt></dl>
+ <dl><dt><a name="-time"><strong>time</strong></a>(...)</dt><dd><tt><a href="#-time">time</a>()&nbsp;-&gt;&nbsp;floating&nbsp;point&nbsp;number<br>
 &nbsp;<br>
-Sound&nbsp;will&nbsp;play&nbsp;on&nbsp;its&nbsp;own&nbsp;thread,&nbsp;separate&nbsp;from&nbsp;the&nbsp;main&nbsp;thread.<br>
-Sound&nbsp;will&nbsp;stop&nbsp;when&nbsp;the&nbsp;main&nbsp;thread&nbsp;exits.<br>
-&nbsp;<br>
-If&nbsp;bg_play&nbsp;(background&nbsp;play)&nbsp;is&nbsp;True,&nbsp;play&nbsp;and&nbsp;return&nbsp;a&nbsp;sound&nbsp;object&nbsp;s,&nbsp;which&nbsp;has&nbsp;the&nbsp;following&nbsp;methods:<br>
---&nbsp;s.wait_done():&nbsp;pauses&nbsp;current&nbsp;thread&nbsp;until&nbsp;sound&nbsp;has&nbsp;stopped&nbsp;playing<br>
---&nbsp;s.stop():&nbsp;stops&nbsp;the&nbsp;sound&nbsp;from&nbsp;playing<br>
---&nbsp;s.is_playing():&nbsp;whether&nbsp;the&nbsp;sound&nbsp;is&nbsp;playing&nbsp;or&nbsp;not<br>
-If&nbsp;bg_play&nbsp;is&nbsp;False,&nbsp;pauses&nbsp;current&nbsp;thread&nbsp;until&nbsp;sound&nbsp;has&nbsp;stopped&nbsp;playing&nbsp;then&nbsp;return&nbsp;None<br>
-&nbsp;<br>
-Note&nbsp;use&nbsp;the&nbsp;format&nbsp;A4,&nbsp;B4,&nbsp;C#2,&nbsp;Gb6...etc.<br>
-Warning:&nbsp;there&nbsp;is&nbsp;no&nbsp;support&nbsp;for&nbsp;B#_,&nbsp;E#_,&nbsp;Cb_,&nbsp;or&nbsp;Fb_<br>
-&nbsp;<br>
-NOTE:&nbsp;Use&nbsp;<a href="#-play_many_notes">play_many_notes</a>()&nbsp;to&nbsp;get&nbsp;one&nbsp;continuous&nbsp;sound&nbsp;object&nbsp;s</tt></dd></dl>
- <dl><dt><a name="-sound_example"><strong>sound_example</strong></a>()</dt><dd><tt>Example&nbsp;of&nbsp;using&nbsp;the&nbsp;sound&nbsp;module.</tt></dd></dl>
+Return&nbsp;the&nbsp;current&nbsp;time&nbsp;in&nbsp;seconds&nbsp;since&nbsp;the&nbsp;Epoch.<br>
+Fractions&nbsp;of&nbsp;a&nbsp;second&nbsp;may&nbsp;be&nbsp;present&nbsp;if&nbsp;the&nbsp;system&nbsp;clock&nbsp;provides&nbsp;them.</tt></dd></dl>
 </td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
@@ -62,6 +108,9 @@ NOTE:&nbsp;Use&nbsp;<a href="#-play_many_notes">play_many_notes</a>()&nbsp;to&nb
 <font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
     
 <tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><strong>NOTE</strong> = {'A#0': 29.14, 'A#1': 58.27, 'A#2': 116.54, 'A#3': 233.08, 'A#4': 466.16, 'A#5': 932.33, 'A#6': 1864.66, 'A#7': 3729.31, 'A#8': 7458.62, 'A0': 27.5, ...}<br>
+<td width="100%"><strong>Iterable</strong> = typing.Iterable<br>
+<strong>NOTES</strong> = {'A#0': 29.14, 'A#1': 58.27, 'A#2': 116.54, 'A#3': 233.08, 'A#4': 466.16, 'A#5': 932.33, 'A#6': 1864.66, 'A#7': 3729.31, 'A#8': 7458.62, 'A0': 27.5, ...}<br>
+<strong>NOTE_NAMES</strong> = ['C0', 'C#0', 'Db0', 'D0', 'D#0', 'Eb0', 'E0', 'F0', 'F#0', 'Gb0', 'G0', 'G#0', 'Ab0', 'A0', 'A#0', 'Bb0', 'B0', 'C1', 'C#1', 'Db1', ...]<br>
+<strong>SAMPLE_RATES</strong> = [8000, 11025, 16000, 22050, 24000, 32000, 44100, 48000, 88200, 96000, 192000]<br>
 <strong>Tuple</strong> = typing.Tuple</td></tr></table>
 </body></html>
