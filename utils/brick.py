@@ -12,7 +12,9 @@ import math
 import atexit
 import os
 import signal
+import time
 
+WAIT_READY_INTERVAL = 0.01
 
 PORTS: dict[str, int] = {
     '1': BrickPi3.PORT_1,
@@ -268,10 +270,13 @@ class Sensor:
         NO_DATA = "NO_DATA"
         I2C_ERROR = "I2C_ERROR"
 
+    ALL_SENSORS = []
+
     def __init__(self, port: Literal[1, 2, 3, 4]):
         "Initialize sensor with a given port (1, 2, 3, or 4)."
         self.brick = Brick()
         self.port = PORTS[str(port).upper()]
+        Sensor.ALL_SENSORS.append(self)
 
     def get_status(self):
         """
@@ -304,8 +309,11 @@ class Sensor:
     def wait_ready(self):
         "Wait (pause program) until the sensor is initialized."
         while self.get_status() != Sensor.Status.VALID_DATA:
-            pass
+            time.sleep(WAIT_READY_INTERVAL)
 
+def wait_ready_sensors():
+    for sensor in Sensor.ALL_SENSORS:
+        sensor.wait_ready()
 
 class TouchSensor(Sensor):
     """
