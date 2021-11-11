@@ -4,6 +4,8 @@
 from typing import Iterable, SupportsIndex, Tuple, overload
 from time import time
 from typing import Tuple
+import os
+import pickle
 import simpleaudio as sa
 import math
 import functools
@@ -290,7 +292,21 @@ _note_order = {
 
 NOTE_NAMES = sorted(list(NOTES.keys()), key=lambda x: x[-1] + _note_order[x[0]] + _note_order[x[1:-1]])
 
-# NOTE_SOUNDS = {key:gen_wave(pitch=key) for key in NOTE_NAMES}
+def preload_all_pitches(duration=1, volume=0.2, mod_f=0, mod_k=0, amp_f=0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000):
+    return {key:Sound(pitch=key, duration=duration, volume=volume, mod_f=mod_f, mod_k=mod_k, amp_f=amp_f, amp_ka=amp_ka, amp_ac=amp_ac, cutoff=cutoff, fs=fs) for key in NOTE_NAMES}
+
+def save_all_pitches_file(sounds, filename="sounds"):
+    path = os.path.join(os.path.dirname(os.path.realpath(__file__)), str(filename) + ".pickle")
+    with open(path, "rb") as f:
+        pickle.dump(sounds, f)
+
+
+def load_all_pitches_file(filename="sounds"):
+    path = os.path.join(os.path.dirname(os.path.realpath(__file__)), str(filename) + ".pickle")
+    with open(path, "rb") as f:
+        return pickle.load(f)
+
+
 
 SAMPLE_RATES = [
     8000,
