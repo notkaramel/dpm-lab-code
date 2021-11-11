@@ -134,7 +134,8 @@ class Brick(BrickPi3):
             message_type = self.BPSPI_MESSAGE_TYPE.GET_SENSOR_4
             port_index = 3
         else:
-            raise IOError("get_sensor error. Must be one sensor port at a time. PORT_1, PORT_2, PORT_3, or PORT_4.")
+            raise IOError(
+                "get_sensor error. Must be one sensor port at a time. PORT_1, PORT_2, PORT_3, or PORT_4.")
 
         if self.SensorType[port_index] == self.SENSOR_TYPE.CUSTOM:
             outArray = [self.SPI_Address, message_type, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -181,7 +182,8 @@ class Brick(BrickPi3):
                 raise IOError("get_sensor error: No SPI response")
 
         elif self.SensorType[port_index] == self.SENSOR_TYPE.NXT_COLOR_FULL:
-            outArray = [self.SPI_Address, message_type, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            outArray = [self.SPI_Address, message_type,
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             reply = self.spi_transfer_array(outArray)
             if reply[3] == 0xA5:
                 if reply[4] == self.SensorType[port_index]:
@@ -224,7 +226,8 @@ class Brick(BrickPi3):
                 raise IOError("get_sensor error: No SPI response")
 
         elif self.SensorType[port_index] == self.SENSOR_TYPE.EV3_COLOR_COLOR_COMPONENTS:
-            outArray = [self.SPI_Address, message_type, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            outArray = [self.SPI_Address, message_type,
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             reply = self.spi_transfer_array(outArray)
             if reply[3] == 0xA5:
                 if reply[4] == self.SensorType[port_index]:
@@ -235,7 +238,8 @@ class Brick(BrickPi3):
                 raise IOError("get_sensor error: No SPI response")
 
         elif self.SensorType[port_index] == self.SENSOR_TYPE.EV3_INFRARED_SEEK:
-            outArray = [self.SPI_Address, message_type, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            outArray = [self.SPI_Address, message_type,
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             reply = self.spi_transfer_array(outArray)
             if reply[3] == 0xA5:
                 if reply[4] == self.SensorType[port_index]:
@@ -256,7 +260,8 @@ class Brick(BrickPi3):
             else:
                 raise IOError("get_sensor error: No SPI response")
 
-        raise IOError("get_sensor error: Sensor not configured or not supported.")
+        raise IOError(
+            "get_sensor error: Sensor not configured or not supported.")
 
 
 class Sensor:
@@ -311,9 +316,11 @@ class Sensor:
         while self.get_status() != Sensor.Status.VALID_DATA:
             time.sleep(WAIT_READY_INTERVAL)
 
+
 def wait_ready_sensors():
     for sensor in Sensor.ALL_SENSORS:
         sensor.wait_ready()
+
 
 class TouchSensor(Sensor):
     """
@@ -375,17 +382,20 @@ class EV3UltrasonicSensor(Sensor):
         try:
             self.mode = mode
             if mode.lower() == self.Mode.CM:
-                self.brick.set_sensor_type(self.port, BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_CM)
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_CM)
             elif mode.lower() == self.Mode.IN:
-                self.brick.set_sensor_type(self.port, BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_INCHES)
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_INCHES)
             elif mode.lower() == self.Mode.LISTEN:
-                self.brick.set_sensor_type(self.port, BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_LISTEN)
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_LISTEN)
             else:
                 return False
             return True
         except SensorError as error:
             return error
-    
+
     def get_cm(self):
         if self.mode != self.mode.CM:
             self.set_mode(self.mode.CM)
@@ -397,7 +407,7 @@ class EV3UltrasonicSensor(Sensor):
             self.set_mode(self.mode.IN)
             self.wait_ready()
         return self.get_value()
-    
+
     def detects_other_us_sensor(self):
         if self.mode != self.mode.LISTEN:
             self.set_mode(self.mode.LISTEN)
@@ -441,15 +451,20 @@ class EV3ColorSensor(Sensor):
         try:
             self.mode = mode
             if mode.lower() == self.Mode.COMPONENT:
-                self.brick.set_sensor_type(self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_COLOR_COMPONENTS)
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_COLOR_COMPONENTS)
             elif mode.lower() == self.Mode.AMBIENT:
-                self.brick.set_sensor_type(self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_AMBIENT)
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_AMBIENT)
             elif mode.lower() == self.Mode.RED:
-                self.brick.set_sensor_type(self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_REFLECTED)
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_REFLECTED)
             elif mode.lower() == self.Mode.RAW_RED:
-                self.brick.set_sensor_type(self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_RAW_REFLECTED)
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_RAW_REFLECTED)
             elif mode.lower() == self.Mode.ID:
-                self.brick.set_sensor_type(self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_COLOR)
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_COLOR)
             else:
                 return False
             return True
@@ -502,11 +517,14 @@ class EV3GyroSensor(Sensor):
         try:
             self.mode = mode
             if mode == self.Mode.ABS:
-                self.brick.set_sensor_type(self.port, BrickPi3.SENSOR_TYPE.EV3_GYRO_ABS)
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_GYRO_ABS)
             elif mode == self.Mode.DPS:
-                self.brick.set_sensor_type(self.port, BrickPi3.SENSOR_TYPE.EV3_GYRO_DPS)
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_GYRO_DPS)
             elif mode == self.Mode.BOTH:
-                self.brick.set_sensor_type(self.port, BrickPi3.SENSOR_TYPE.EV3_GYRO_ABS_DPS)
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_GYRO_ABS_DPS)
             else:
                 return False
             return True
@@ -518,13 +536,13 @@ class EV3GyroSensor(Sensor):
             self.set_mode(self.Mode.ABS)
             self.wait_ready()
         return self.get_value()
-    
+
     def get_dps_measure(self):
         if self.mode != self.Mode.DPS:
             self.set_mode(self.Mode.DPS)
             self.wait_ready()
         return self.get_value()
-    
+
     def get_both_measure(self):
         if self.mode != self.Mode.BOTH:
             self.set_mode(self.Mode.BOTH)
@@ -659,7 +677,7 @@ class Motor:
     def get_power(self):
         """
         Read motor status and returns power percent (-100 to 100)
-        
+
         Returns:
             None if error encountered
             Numeric Value -100 to 100 of raw power percent
@@ -669,7 +687,7 @@ class Motor:
     def get_speed(self):
         """
         Read motor status and returns speed in degrees per second
-        
+
         Returns:
             None if error encountered
             Numeric Value, negative or positive, in degrees per second
@@ -736,7 +754,8 @@ def configure_ports(*,
     if (sensor_ports + motor_ports).count(None) == 7:  # if only one device configured
         is_single_device = True
     if print_status:
-        print(f"Configuring port{'' if is_single_device else 's'}, please wait...")
+        print(
+            f"Configuring port{'' if is_single_device else 's'}, please wait...")
     sensors: list[Sensor] = []
     motors: list[Motor] = []
     for n, sensor_type in enumerate(sensor_ports, 1):

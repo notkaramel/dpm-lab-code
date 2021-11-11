@@ -11,13 +11,17 @@ import math
 import functools
 import array
 
+
 @functools.lru_cache()
 def sin(x):
     return math.sin(x)
 
 # @functools.lru_cache()
+
+
 def cos(x):
     return math.cos(x)
+
 
 def _parse_freq(value):
     if type(value) == str:
@@ -27,19 +31,21 @@ def _parse_freq(value):
         return float(value)
     return 0
 
+
 def gen_wave(duration=1, volume=0.2, pitch="A4", mod_f=0, mod_k=0, amp_f=0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000):
     # Process frequencies, factors
     pitch = _parse_freq(pitch)
     mod_f = _parse_freq(mod_f)
     amp_f = _parse_freq(amp_f)
-    
-    return _gen_wave(duration, volume, pitch, mod_f, mod_k, amp_f, amp_ka, amp_ac, cutoff, fs )
 
-def _gen_wave(duration, volume, pitch, mod_f, mod_k, amp_f, amp_ka, amp_ac, cutoff, fs ):
+    return _gen_wave(duration, volume, pitch, mod_f, mod_k, amp_f, amp_ka, amp_ac, cutoff, fs)
+
+
+def _gen_wave(duration, volume, pitch, mod_f, mod_k, amp_f, amp_ka, amp_ac, cutoff, fs):
     n = int(duration * fs)
-    t = [ 0 for i in range(n)] # comprehension faster than append
-    maximum =  -2**31
-    for i in range(0,n):
+    t = [0 for i in range(n)]  # comprehension faster than append
+    maximum = -2**31
+    for i in range(0, n):
         x = i / fs
         # create carrier wave (float division is faster)
         c = (2 * math.pi * x * pitch)
@@ -63,7 +69,7 @@ def _gen_wave(duration, volume, pitch, mod_f, mod_k, amp_f, amp_ka, amp_ac, cuto
         y = t[i] * volume
 
         # # apply cutoff
-        if  0 <= i and i < cutoff:
+        if 0 <= i and i < cutoff:
             y *= math.log(i / cutoff * 7 + 1) * k
         elif n - cutoff <= i and i < n:
             j = n - i - 1
@@ -76,10 +82,11 @@ def _gen_wave(duration, volume, pitch, mod_f, mod_k, amp_f, amp_ka, amp_ac, cuto
 
     return array.array('h', t)
 
+
 class Sound:
     def __init__(self, duration=1, volume=0.2, pitch="A4", mod_f=0, mod_k=0, amp_f=0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000):
         self.player = None
-        self.fs = fs # needs a default value
+        self.fs = fs  # needs a default value
         self.set_volume(volume)
         self.set_pitch(pitch)
         self.set_cutoff(cutoff)
@@ -89,17 +96,22 @@ class Sound:
 
     def set_volume(self, volume):
         self.volume = volume
+
     def set_pitch(self, pitch):
         self.pitch = pitch
+
     def set_cutoff(self, cutoff):
         self.cutoff = cutoff
+
     def set_frequency_modulation(self, mod_f, mod_k):
         self.mod_f = mod_f
         self.mod_k = mod_k
+
     def set_amplitude_modulation(self, amp_f, amp_ka, amp_ac):
         self.amp_f = amp_f
         self.amp_ka = amp_ka
         self.amp_ac = amp_ac
+
     def update_duration(self, duration, fs=None):
         if fs is not None:
             self.fs = fs
@@ -108,28 +120,39 @@ class Sound:
         if not self.is_playing():
             self.update_audio(True)
         else:
-            raise RuntimeError("Cannot change duration or sample rate while playing sound.")
+            raise RuntimeError(
+                "Cannot change duration or sample rate while playing sound.")
+
     def update_audio(self, overwrite=False):
-        arr = gen_wave(self.duration, self.volume, self.pitch, self.mod_f, self.mod_k, self.amp_f, self.amp_ka, self.amp_ac, self.cutoff, self.fs)
+        arr = gen_wave(self.duration, self.volume, self.pitch, self.mod_f,
+                       self.mod_k, self.amp_f, self.amp_ka, self.amp_ac, self.cutoff, self.fs)
         if not overwrite:
             for i in range(len(arr)):
                 self.audio[i] = arr[i]
         else:
             self.audio = arr
+
     def alter_wave(self, func):
         for i in range(len(self.audio)):
-            self.audio[i] = func(i/fs, self.audio[i]) # func(x:float, y:int16) -> y:int16
+            # func(x:float, y:int16) -> y:int16
+            self.audio[i] = func(i/self.fs, self.audio[i])
+
     def play(self):
         self.stop()
         self.player = sa.play_buffer(self.audio, 1, 2, self.fs)
+
     def stop(self):
         if self.is_playing():
             self.player.stop()
+
     def is_playing(self):
         return self.player is not None and self.player.is_playing()
+
     def wait_done(self):
         if self.is_playing():
             self.player.wait_done()
+
+
 NOTES = {
     "C0": 16.35,
     "D0": 18.35,
@@ -290,22 +313,26 @@ _note_order = {
     'b': 'x', '': 'y', '#': 'z',
     'C': '0', 'D': '1', 'E': '2', 'F': '3', 'G': '4', 'A': '5', 'B': '6', }
 
-NOTE_NAMES = sorted(list(NOTES.keys()), key=lambda x: x[-1] + _note_order[x[0]] + _note_order[x[1:-1]])
+NOTE_NAMES = sorted(list(
+    NOTES.keys()), key=lambda x: x[-1] + _note_order[x[0]] + _note_order[x[1:-1]])
+
 
 def preload_all_pitches(duration=1, volume=0.2, mod_f=0, mod_k=0, amp_f=0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000):
-    return {key:Sound(pitch=key, duration=duration, volume=volume, mod_f=mod_f, mod_k=mod_k, amp_f=amp_f, amp_ka=amp_ka, amp_ac=amp_ac, cutoff=cutoff, fs=fs) for key in NOTE_NAMES}
+    return {key: Sound(pitch=key, duration=duration, volume=volume, mod_f=mod_f, mod_k=mod_k, amp_f=amp_f, amp_ka=amp_ka, amp_ac=amp_ac, cutoff=cutoff, fs=fs) for key in NOTE_NAMES}
+
 
 def save_all_pitches_file(sounds, filename="sounds"):
-    path = os.path.join(os.path.dirname(os.path.realpath(__file__)), str(filename) + ".pickle")
+    path = os.path.join(os.path.dirname(
+        os.path.realpath(__file__)), str(filename) + ".pickle")
     with open(path, "rb") as f:
         pickle.dump(sounds, f)
 
 
 def load_all_pitches_file(filename="sounds"):
-    path = os.path.join(os.path.dirname(os.path.realpath(__file__)), str(filename) + ".pickle")
+    path = os.path.join(os.path.dirname(
+        os.path.realpath(__file__)), str(filename) + ".pickle")
     with open(path, "rb") as f:
         return pickle.load(f)
-
 
 
 SAMPLE_RATES = [
@@ -322,23 +349,20 @@ SAMPLE_RATES = [
     192000,
 ]
 
-if __name__=='__main__':
-    sec = .1
-    fs = 8000
-    x = [ i/fs for i in range(int(sec * fs))]
-    y = gen_wave(pitch="A4", duration=sec, fs = fs, mod_f=110, mod_k=1, cutoff=0.2)
-    print(len(y))
-    s = Sound(duration=10)
-    s1 = Sound(duration=10, pitch="G4")
-    s.play()
-    input(">> Press Enter to play next note(s)")
-    s.set_pitch("B4")
-    s.update_audio()
-    s1.play()
-    input(">> Press Enter to play next note(s)")
-    s.alter_wave(lambda x,y : int(y*0.5))
-    # s.update_audio()
-    input(">> Press Enter to play next note(s)")
-    for key in ["A4", "B4", "C5", "D5"]:
-        y = gen_wave(volume=0.4, pitch=key, duration=sec, fs = fs, cutoff=0.03, amp_f=10, amp_ac=0.5, amp_ka=1)
-        sa.play_buffer(y, 1, 2, fs).wait_done()
+if __name__ == '__main__':
+    a = Sound()  # Basic 1sec A4 Note at 20% vol
+    a.play()
+    input("Press any button to continue to new pitch...")
+    b = Sound(pitch="C4")  # Now a C4 note
+    b.play()
+    input("Press any button to continue to reuse and play two notes...")
+    a.play()
+    b.play()
+    input("Press any button to continue to play strange notes...")
+    c = Sound(mod_f=10, mod_k=10)
+    c.play()
+    input("Press any button to continue to play a different basic sound...")
+    # swap mod_f and pitch for new effect
+    d = Sound(mod_f="A4", mod_k=1, pitch=1)
+    d.play()
+    input("Press any button to continue to stop...")
