@@ -16,8 +16,6 @@ import array
 def sin(x):
     return math.sin(x)
 
-# @functools.lru_cache()
-
 
 def cos(x):
     return math.cos(x)
@@ -77,8 +75,6 @@ def _gen_wave(duration, volume, pitch, mod_f, mod_k, amp_f, amp_ka, amp_ac, cuto
 
         # pull down value to int16
         t[i] = int(y * max16 / maximum)
-
-    # convert to array.array('h')
 
     return array.array('h', t)
 
