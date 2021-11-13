@@ -1,11 +1,11 @@
-from tkinter import *
-from tkinter import ttk
+from tkinter import ttk, StringVar, TclError
 
 import tkinter as tk
 
 WINDOW = None
 LABELS = {}
 _EXIT_FLAG = True
+
 
 def _on_closing():
     global WINDOW, _EXIT_FLAG, LABELS
@@ -90,10 +90,10 @@ if __name__ == '__main__':
             clear()
             if not isopen():
                 start()
-        
+
         add("color", "red")
         i = i + 2 if i < 40 else 0
-        
+
         print(i, isopen())
         add("counter", "*"*i)
         update()
