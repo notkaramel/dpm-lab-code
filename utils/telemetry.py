@@ -74,11 +74,6 @@ def clear():
     LABELS = {}
 
 
-def run_loop():
-    if WINDOW is not None:
-        WINDOW.mainloop()
-
-
 if __name__ == '__main__':
     import time
     start()
