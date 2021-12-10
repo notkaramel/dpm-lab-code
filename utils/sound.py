@@ -21,6 +21,43 @@ def cos(x):
     return math.cos(x)
 
 
+def clip(x, bot, top):
+    # Ensures that x is no lesser than bot and no greater than top
+    return max(min(x, top), bot)
+
+
+def _amp_to_db(p0, p1):
+    """Converts the relative amplitude to decibels.
+    p0 is the reference amplitude, p1 is the next value
+    """
+    return 20 * math.log10(p1/p0)
+
+
+def db_to_amp(db, ref_amp):
+    """Converts decibels to a next amplitude.
+    ref_amp is the reference amplitude to start at.
+    """
+    # [0, -60] => [1.0, .001]
+    # y = 20log(p1/p0)
+    # 10^(y/20) * 0.0001 = p1
+    return 10**(db/20) * ref_amp
+
+
+HIGHEST_VOLUME = 100
+_LOWEST_AMPLITUDE = 0.0001
+_HIGHEST_AMPLITUDE = 1.0
+_HIGHEST_DECIBEL = _amp_to_db(_LOWEST_AMPLITUDE, _HIGHEST_AMPLITUDE)
+
+
+def vol_to_amp(vol):
+    # vol => [0, 100]
+    # [0, -60] => [1.0, .001]
+    # return => [0.001, 1.0]
+    db = clip(vol, -100, HIGHEST_VOLUME) * _HIGHEST_DECIBEL / HIGHEST_VOLUME
+    amp = db_to_amp(db, 1) * _LOWEST_AMPLITUDE
+    return clip(amp, 0, _HIGHEST_AMPLITUDE)
+
+
 def _parse_freq(value):
     if type(value) == str:
         if value in NOTES:
@@ -35,6 +72,9 @@ def gen_wave(duration=1, volume=0.2, pitch="A4", mod_f=0, mod_k=0, amp_f=0, amp_
     pitch = _parse_freq(pitch)
     mod_f = _parse_freq(mod_f)
     amp_f = _parse_freq(amp_f)
+
+    # Convert volume using decibel underneath
+    volume = vol_to_amp(volume)
 
     return _gen_wave(duration, volume, pitch, mod_f, mod_k, amp_f, amp_ka, amp_ac, cutoff, fs)
 
@@ -82,7 +122,7 @@ def _gen_wave(duration, volume, pitch, mod_f, mod_k, amp_f, amp_ka, amp_ac, cuto
 class Sound:
     def __init__(self, duration=1, volume=0.2, pitch="A4", mod_f=0, mod_k=0, amp_f=0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000):
         self.player = None
-        self.fs = fs  # needs a default value
+        self._fs = fs  # needs a default value
         self.set_volume(volume)
         self.set_pitch(pitch)
         self.set_cutoff(cutoff)
@@ -91,55 +131,130 @@ class Sound:
         self.update_duration(duration, fs)
 
     def set_volume(self, volume):
+        """Set the volume level of this sound.
+        **Must use Sound.update_audio() to apply all changes**
+        
+        Enter a value from (0-100).
+        """
         self.volume = volume
+        return self
 
     def set_pitch(self, pitch):
+        """Set the pitch or frequency of this sound.
+        **Must use Sound.update_audio() to apply all changes**
+
+        Enter a Hertz value within audible human range:
+            minimum: 0
+            maximum: ~7500
+        """
         self.pitch = pitch
+        return self
 
     def set_cutoff(self, cutoff):
-        self.cutoff = cutoff
+        """Set the 'cutoff', the duration of the lead-in and fade-out for each sound wave.
+        **Must use Sound.update_audio() to apply all changes**
+        
+        Enter a value in seconds, default: 0.01s
 
-    def set_frequency_modulation(self, mod_f, mod_k):
+        Notable Effects:
+        a value of 0s may lead to a 'pop/crackle' noise at the beginning and end of a sound.
+        a value greater than or equal to the duration (also <1s) may lead to a pulse-like noise.
+        a value greater than or equal to duration (also >1s) may lead to a 'coming and going' feeling.
+        """
+        self.cutoff = cutoff
+        return self
+
+    def set_frequency_modulation(self, mod_f=0, mod_k=0):
+        """Set the frequency(mod_f) and strength(mod_k) of Frequency Modulation.
+        This modulation gives special effects to your sounds.
+        **Must use Sound.update_audio() to apply all changes**
+
+        Enter a value of frequency for mod_f
+        Enter any positive integer for mod_k, a multiplication factor
+
+        Notable Effects:
+        mod_f=0, mod_k=0 - no modulation. This is default settings.
+        mod_f=(1-10Hz), mod_k=(1-10) - mild modulation, sounding wavy, possibly crackly.
+        mod_f='A4', mod_k=(1-50) - increasing levels of graininess observed, with increasing k factor.
+
+        *Swapping mod_f and the pitch leads to new effects*
+        mod_f=pitch, pitch=1, mod_k=1 - Sounds like a pipe organ, where mod_f becomes the new pitch setting.
+        """
         self.mod_f = mod_f
         self.mod_k = mod_k
+        return self
 
     def set_amplitude_modulation(self, amp_f, amp_ka, amp_ac):
+        """Set the frequency(amp_f), ka factor(amp_ka), and ac factor(amp_ac) of Amplitude Modulation.
+        Effect is most similar to 'vibrato' altering the volume in a wobbling sense.
+        **Must use Sound.update_audio() to apply all changes**
+        
+        amp_ka - wobbling factor. 0 is no wobble. >0 provides wobble.
+        amp_ac - factor to change strength of wobble overall. See Notable Effects to understand this.
+
+        Constraints:
+        (resultant volume is % of the set volume of this Sound object)
+        highest % of volume = amp_ac * (1 + amp_ka)
+        lowest  % of volume = amp_ac * (1 - amp_ka)
+
+        Notable Effects:
+        amp_f=1Hz - wobbles 1 time per second
+        amp_f=10Hz - wobbles 10 times per second
+
+        amp_ka=0, amp_ac=1 - no wobble. The default settings.
+        amp_ka=1, amp_ac=0.5 - alternates volume from 100% to 0% according to amp_f frequency.
+        amp_ka=0.5, amp_ac=0.5 - alternates volume from 25% to 75% according to amp_f frequency.
+        """
         self.amp_f = amp_f
         self.amp_ka = amp_ka
         self.amp_ac = amp_ac
+        return self
 
     def update_duration(self, duration, fs=None):
+        """Change the duration of this Sound in seconds.
+        Cannot change duration of currently playing sounds.
+
+        Only affects the next played sound.
+
+        fs - Sample rate of sound wave. Default 8000 as lowest.
+            Increased 'quality' with higher rate.
+        """
         if fs is not None:
-            self.fs = fs
-        self.duration = duration
+            self._fs = fs
+        self._duration = duration
 
         if not self.is_playing():
             self.update_audio(True)
         else:
             raise RuntimeError(
                 "Cannot change duration or sample rate while playing sound.")
+        return self
 
     def update_audio(self, overwrite=False):
-        arr = gen_wave(self.duration, self.volume, self.pitch, self.mod_f,
-                       self.mod_k, self.amp_f, self.amp_ka, self.amp_ac, self.cutoff, self.fs)
+        arr = gen_wave(self._duration, self.volume, self.pitch, self.mod_f,
+                       self.mod_k, self.amp_f, self.amp_ka, self.amp_ac, self.cutoff, self._fs)
         if not overwrite:
             for i in range(len(arr)):
                 self.audio[i] = arr[i]
         else:
             self.audio = arr
+        return self
 
     def alter_wave(self, func):
         for i in range(len(self.audio)):
             # func(x:float, y:int16) -> y:int16
-            self.audio[i] = func(i/self.fs, self.audio[i])
+            self.audio[i] = func(i/self._fs, self.audio[i])
+        return self
 
     def play(self):
         self.stop()
-        self.player = sa.play_buffer(self.audio, 1, 2, self.fs)
+        self.player = sa.play_buffer(self.audio, 1, 2, self._fs)
+        return self
 
     def stop(self):
         if self.is_playing():
             self.player.stop()
+        return self
 
     def is_playing(self):
         return self.player is not None and self.player.is_playing()
@@ -147,6 +262,7 @@ class Sound:
     def wait_done(self):
         if self.is_playing():
             self.player.wait_done()
+        return self
 
 
 NOTES = {
@@ -345,7 +461,8 @@ SAMPLE_RATES = [
     192000,
 ]
 
-if __name__ == '__main__':
+
+def _test1():
     a = Sound()  # Basic 1sec A4 Note at 20% vol
     a.play()
     input("Press any button to continue to new pitch...")
@@ -362,3 +479,13 @@ if __name__ == '__main__':
     d = Sound(mod_f="A4", mod_k=1, pitch=1)
     d.play()
     input("Press any button to continue to stop...")
+
+
+def _test_vol1():
+    Sound(volume=.001).play().wait_done()
+    while (ans := input("Enter volume (100-0): ")) and ans.count('.') <= 1 and ans.replace('.', '').isnumeric():
+        Sound(volume=float(ans)).play().wait_done()
+
+
+if __name__ == '__main__':
+    _test_vol1()
