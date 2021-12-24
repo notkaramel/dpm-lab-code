@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 # Written by Ryan Au and Younes Boubekaur
 
-from typing import Iterable, SupportsIndex, Tuple, overload
+from typing import Callable, Iterable, SupportsIndex, Tuple, overload, Union
 from time import time
-from typing import Tuple
 import os
 import pickle
 import simpleaudio as sa
@@ -11,54 +10,60 @@ import math
 import functools
 import array
 
+LIMIT_MAX_VOLUME = True
 
 @functools.lru_cache()
-def sin(x):
+def sin(x: float) -> float:
     return math.sin(x)
 
 
-def cos(x):
+def cos(x: float) -> float:
     return math.cos(x)
 
 
-def clip(x, bot, top):
+def clip(x: float, bot: float, top: float, nomax=False) -> float:
     # Ensures that x is no lesser than bot and no greater than top
-    return max(min(x, top), bot)
+    return max(x, bot) if nomax else max(min(x, top), bot)
 
 
-def _amp_to_db(p0, p1):
+def _amp_to_db(p0: float, p1: float) -> float:
     """Converts the relative amplitude to decibels.
     p0 is the reference amplitude, p1 is the next value
     """
     return 20 * math.log10(p1/p0)
 
 
-def db_to_amp(db, ref_amp):
+def db_to_amp(db: float, ref_amp: float) -> float:
     """Converts decibels to a next amplitude.
     ref_amp is the reference amplitude to start at.
     """
-    # [0, -60] => [1.0, .001]
-    # y = 20log(p1/p0)
-    # 10^(y/20) * 0.0001 = p1
     return 10**(db/20) * ref_amp
 
 
-HIGHEST_VOLUME = 100
-_LOWEST_AMPLITUDE = 0.0001
-_HIGHEST_AMPLITUDE = 1.0
+HIGHEST_VOLUME = 100 # Custom value. Could be 100, 1.0, 50, doesn't matter.
+_LOWEST_AMPLITUDE = 0.0001 # must be non-zero, but low
+_HIGHEST_AMPLITUDE = 1.0 # acts as a scalar factor, should be 0 to 1
 _HIGHEST_DECIBEL = _amp_to_db(_LOWEST_AMPLITUDE, _HIGHEST_AMPLITUDE)
 
 
-def vol_to_amp(vol):
-    # vol => [0, 100]
-    # [0, -60] => [1.0, .001]
-    # return => [0.001, 1.0]
-    db = clip(vol, -100, HIGHEST_VOLUME) * _HIGHEST_DECIBEL / HIGHEST_VOLUME
-    amp = db_to_amp(db, 1) * _LOWEST_AMPLITUDE
-    return clip(amp, 0, _HIGHEST_AMPLITUDE)
+def vol_to_amp(vol: float) -> float:
+    """Converts a volume level to an amplitude scalar factor.
+    Input would range from 0 to HIGHEST_VOLUME (default:100).
+    Output ranges from 0 to 1
+
+    Furthermore, the output behaves similarly to the volume on a listening device,
+    when setting the volume. If the max is 100% level, then 50% feels half as loud.
+    
+    Note: 0 is not absolutely silent, it is just extremely quiet, and is audible.
+    Note 2: this volume is dependent on the system volume.
+        Loudness = program volume * system volume (if in percentage)
+    """
+    db = clip(vol, 0, HIGHEST_VOLUME, nomax=LIMIT_MAX_VOLUME) * _HIGHEST_DECIBEL / HIGHEST_VOLUME
+    amp = db_to_amp(db, _LOWEST_AMPLITUDE)
+    return clip(amp, 0, _HIGHEST_AMPLITUDE, nomax=LIMIT_MAX_VOLUME)
 
 
-def _parse_freq(value):
+def _parse_freq(value: Union[str, float]):
     if type(value) == str:
         if value in NOTES:
             return NOTES[value]
@@ -67,7 +72,7 @@ def _parse_freq(value):
     return 0
 
 
-def gen_wave(duration=1, volume=0.2, pitch="A4", mod_f=0, mod_k=0, amp_f=0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000):
+def gen_wave(duration=1, volume=0.2, pitch: Union[str, float] = "A4", mod_f: Union[str, float] = 0, mod_k=0, amp_f: Union[str, float] = 0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000):
     # Process frequencies, factors
     pitch = _parse_freq(pitch)
     mod_f = _parse_freq(mod_f)
@@ -114,7 +119,7 @@ def _gen_wave(duration, volume, pitch, mod_f, mod_k, amp_f, amp_ka, amp_ac, cuto
             y *= math.log(j / cutoff * 7 + 1) * k
 
         # pull down value to int16
-        t[i] = int(y * max16 / maximum)
+        t[i] = clip(int(y * max16 / maximum), -32768, 32767, nomax=False)
 
     return array.array('h', t)
 
@@ -133,13 +138,13 @@ class Sound:
     def set_volume(self, volume):
         """Set the volume level of this sound.
         **Must use Sound.update_audio() to apply all changes**
-        
+
         Enter a value from (0-100).
         """
         self.volume = volume
         return self
 
-    def set_pitch(self, pitch):
+    def set_pitch(self, pitch: Union[str, float]):
         """Set the pitch or frequency of this sound.
         **Must use Sound.update_audio() to apply all changes**
 
@@ -153,7 +158,7 @@ class Sound:
     def set_cutoff(self, cutoff):
         """Set the 'cutoff', the duration of the lead-in and fade-out for each sound wave.
         **Must use Sound.update_audio() to apply all changes**
-        
+
         Enter a value in seconds, default: 0.01s
 
         Notable Effects:
@@ -164,7 +169,7 @@ class Sound:
         self.cutoff = cutoff
         return self
 
-    def set_frequency_modulation(self, mod_f=0, mod_k=0):
+    def set_frequency_modulation(self, mod_f: Union[str, float], mod_k):
         """Set the frequency(mod_f) and strength(mod_k) of Frequency Modulation.
         This modulation gives special effects to your sounds.
         **Must use Sound.update_audio() to apply all changes**
@@ -184,11 +189,11 @@ class Sound:
         self.mod_k = mod_k
         return self
 
-    def set_amplitude_modulation(self, amp_f, amp_ka, amp_ac):
+    def set_amplitude_modulation(self, amp_f: Union[str, float], amp_ka, amp_ac):
         """Set the frequency(amp_f), ka factor(amp_ka), and ac factor(amp_ac) of Amplitude Modulation.
         Effect is most similar to 'vibrato' altering the volume in a wobbling sense.
         **Must use Sound.update_audio() to apply all changes**
-        
+
         amp_ka - wobbling factor. 0 is no wobble. >0 provides wobble.
         amp_ac - factor to change strength of wobble overall. See Notable Effects to understand this.
 
@@ -210,8 +215,8 @@ class Sound:
         self.amp_ac = amp_ac
         return self
 
-    def update_duration(self, duration, fs=None):
-        """Change the duration of this Sound in seconds.
+    def update_duration(self, duration, fs: int = None):
+        """Change the duration of this Sound (seconds).
         Cannot change duration of currently playing sounds.
 
         Only affects the next played sound.
@@ -230,20 +235,35 @@ class Sound:
                 "Cannot change duration or sample rate while playing sound.")
         return self
 
-    def update_audio(self, overwrite=False):
+    def update_audio(self, overwrite: bool = False):
+        """Updates the audio to be played, based on current Sound attributes.
+
+        - if overwrite=False and is_playing()==True, the playing audio will be updated
+        - if overwrite=True and is_playing()==True, changes are present only in next play()
+        """
         arr = gen_wave(self._duration, self.volume, self.pitch, self.mod_f,
                        self.mod_k, self.amp_f, self.amp_ka, self.amp_ac, self.cutoff, self._fs)
         if not overwrite:
-            for i in range(len(arr)):
+            for i in range(min(len(self.audio), len(arr))):
                 self.audio[i] = arr[i]
         else:
             self.audio = arr
         return self
 
-    def alter_wave(self, func):
+    def alter_wave(self, func: Callable[[float, int], int]):
+        """Apply a function to change the currently playing/prepared audio wave.
+
+        func is of the format: func(x:float, y:int16) -> y:int16
+
+        Given an xy-coordinate plane with the sound wave being centered on y=0,
+        x is time in seconds, and y is amplitude in the range [-32768, 32767]
+
+
+        """
         for i in range(len(self.audio)):
             # func(x:float, y:int16) -> y:int16
-            self.audio[i] = func(i/self._fs, self.audio[i])
+            self.audio[i] = clip(
+                func(i/self._fs, self.audio[i]), -32768, 32767)
         return self
 
     def play(self):
@@ -256,7 +276,7 @@ class Sound:
             self.player.stop()
         return self
 
-    def is_playing(self):
+    def is_playing(self) -> bool:
         return self.player is not None and self.player.is_playing()
 
     def wait_done(self):
