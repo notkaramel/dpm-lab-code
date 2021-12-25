@@ -1,6 +1,5 @@
-import brickpi3
 import time
-from utils.brick import BP, EV3ColorSensor, TouchSensor, wait_ready_sensors
+from utils.brick import BP, EV3ColorSensor, TouchSensor, wait_ready_sensors, SensorError
 
 # DPM Sensors and Filtering (Lecture 9) - DataLog.py
 # This program is a variation on the Scan2File example with a few more
@@ -19,23 +18,17 @@ INIT_TIME = 5                                               # Initialization tim
 SENSOR_POLL = 0.05                                          # Defaut polling rate is 50 mSec
 
 # Allocate resources, initial configuration
-
-T_SENSOR = BP.PORT_1                                        # Touch sensor plugged into Port S1
-C_SENSOR = BP.PORT_2                                        # Color sensor plugged into Port S2
-BP.set_sensor_type(T_SENSOR, BP.SENSOR_TYPE.TOUCH)          # Configure touch sensor
-BP.set_sensor_type(C_SENSOR, BP.SENSOR_TYPE.EV3_COLOR_COLOR_COMPONENTS)   # Configure color sensor
-
-T_SENSOR = TouchSensor(1)
-C_SENSOR = EV3ColorSensor(2)
+T_SENSOR = TouchSensor(1)                                   # Touch sensor plugged into Port S1
+C_SENSOR = EV3ColorSensor(2)                                # Color sensor plugged into Port S2
 
 # Function to open file for logging
-
 def fopen(fName):
     try:
         return open(fName,'w')
     except IOError:
         print('Unable to open file - aborting program.')
         BP.reset_all()
+
 
 def prompt_options():
     print('BrickPi data logging program.')                      # Instructions
@@ -60,11 +53,10 @@ def prompt_options():
     
     return pDelay, resp=='y', f
 
-# Entry point - get parameters from user.
-
 try:
+    # Entry point - get parameters from user.
     polling_delay, write_to_file, output_file = prompt_options()
-    wait_ready_sensors()                                   # Allow motors/sensors to settle down
+    wait_ready_sensors()                                    # Allow motors/sensors to settle down
 
 # Main polling loop starts here
 
@@ -87,7 +79,7 @@ try:
             time.sleep(polling_delay)                              # Sleep For Polling Delay
             
             
-        except brickpi3.SensorError as error:
+        except SensorError as error:
             print(error)                                    # On exception, simply print error code
 
 # ^C exit here
