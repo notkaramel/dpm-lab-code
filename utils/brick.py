@@ -304,12 +304,17 @@ class Sensor:
         except SensorError as error:
             return error
 
+
     def get_value(self):
-        "Get the sensor value. May return a float, int, list or None if error."
+        "Get the raw sensor value. May return a float, int, list or None if error."
         try:
             return self.brick.get_sensor(self.port)
         except SensorError:
             return None
+
+    def get_raw_value(self):
+        "Get the raw sensor value. May return a float, int, list or None if error."
+        return self.get_value()
 
     def wait_ready(self):
         "Wait (pause program) until the sensor is initialized."
@@ -397,20 +402,20 @@ class EV3UltrasonicSensor(Sensor):
             return error
 
     def get_cm(self):
-        if self.mode != self.mode.CM:
-            self.set_mode(self.mode.CM)
+        if self.mode != self.Mode.CM:
+            self.set_mode(self.Mode.CM)
             self.wait_ready()
         return self.get_value()
 
     def get_inches(self):
-        if self.mode != self.mode.IN:
-            self.set_mode(self.mode.IN)
+        if self.mode != self.Mode.IN:
+            self.set_mode(self.Mode.IN)
             self.wait_ready()
         return self.get_value()
 
     def detects_other_us_sensor(self):
-        if self.mode != self.mode.LISTEN:
-            self.set_mode(self.mode.LISTEN)
+        if self.mode != self.Mode.LISTEN:
+            self.set_mode(self.Mode.LISTEN)
             self.wait_ready()
         return self.get_value() == 1
 
@@ -470,6 +475,14 @@ class EV3ColorSensor(Sensor):
             return True
         except SensorError as error:
             return error
+
+    def get_ambient(self) -> float:
+        "Returns the ambient light detected by the sensor. Light will not turn on."
+        if self.mode != self.Mode.AMBIENT:
+            self.set_mode(self.Mode.AMBIENT)
+            self.wait_ready()
+        return self.get_value()
+        
 
     def get_rgb(self) -> list[float]:
         "Return the RGB values from the sensor. This will switch the sensor to component mode."
