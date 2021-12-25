@@ -2,17 +2,23 @@ from threading import Thread
 from time import time, sleep
 from utils.brick import EV3ColorSensor, EV3UltrasonicSensor, Sensor, Motor
 
-
-SHARED_DATA = {'us': None, 'color': None}
+# Preapre Motor and Sensors
 COLOR_SENSOR = EV3ColorSensor(1) # Port S1
 US_SENSOR = EV3UltrasonicSensor(2) # Port S2
 MOTOR = Motor("A") # Motor in Port MA
 
+# Wait for Sensor Initialization
 print("waiting for sensors")
 COLOR_SENSOR.wait_ready()
 US_SENSOR.wait_ready()
 print("sensors ready")
 
+# Set a dictionary to store sensor data.
+# None means no data.
+SHARED_DATA = {'us': None, 'color': None}
+
+# Runs in background, polling the ultrasonic sensor
+# storing the data in its own space in SHARED_DATA
 def read_ultrasonic(shared):
     try:
         while True:
@@ -21,6 +27,8 @@ def read_ultrasonic(shared):
     except Exception:
         return
 
+# Runs in background, polling the COLOR sensor
+# storing the data in its own space in SHARED_DATA
 def read_color(shared):
     try:
         while True:
@@ -32,12 +40,16 @@ def read_color(shared):
         return
 
 def main():
+    # Starting the threads for reading sensors
     print("starting sensor readings")
     t1 = Thread(target=read_ultrasonic, args=[SHARED_DATA])
     t2 = Thread(target=read_color, args=[SHARED_DATA])
     t1.start() # will update SHARED_DATA['us'] in the background
     t2.start() # will update SHARED_DATA['color'] in the background
 
+    # Main loop is usually where primary decisions and actions are done.
+    # Threads are for "background tasks" that run while you perform
+    # "main loop" actions.
     motor_power = 0 # power value 0.0 to 1.0
     while True:
 
@@ -62,4 +74,4 @@ if __name__ == '__main__':
     try:
         main()
     except Exception:
-        pass # catch all
+        pass # catch all exceptions, like Ctrl + C
