@@ -18,6 +18,14 @@ touch.get_raw_value() # 0 or 1
 ultra.get_raw_value() # usually distance, centimeters
 
 
+#######################
+###                 ###
+### TOUCH DETECTION ###
+###                 ###
+#######################
+"""Touch sensor has no real setup necessary. One method, returns True/False boolean."""
+print(touch.is_pressed())
+
 
 #######################
 ###                 ###
@@ -66,5 +74,5 @@ print(distance)
 distance = ultra.get_inches()
 print(distance)
 
-"""{Detection mode} uses ultrasonic sensor to detect other ultrasonic sensors. Output boolean."""
+"""{Detection mode} uses ultrasonic sensor to detect any other ultrasonic sensors nearby. Output boolean."""
 ultra.detects_other_us_sensor()
