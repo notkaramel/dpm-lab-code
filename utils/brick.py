@@ -26,6 +26,8 @@ PORTS: dict[str, int] = {
     'C': BrickPi3.PORT_C,
     'D': BrickPi3.PORT_D,
 }
+
+
 def exception_handler(exception=Exception):
     def exception_handler_factory(func):
         def wrapper(*args, **kwargs):
@@ -35,6 +37,7 @@ def exception_handler(exception=Exception):
                 print("ERROR:", err)
         return wrapper
     return exception_handler_factory
+
 
 class RevEnumeration:
     """
@@ -312,7 +315,6 @@ class Sensor:
         except SensorError as error:
             return error
 
-
     def get_value(self):
         "Get the raw sensor value. May return a float, int, list or None if error."
         try:
@@ -490,7 +492,6 @@ class EV3ColorSensor(Sensor):
             self.set_mode(self.Mode.AMBIENT)
             self.wait_ready()
         return self.get_value()
-        
 
     def get_rgb(self) -> list[float]:
         "Return the RGB values from the sensor. This will switch the sensor to component mode."
