@@ -163,6 +163,27 @@ class SumFilter(SliceFunctionFilter):
 
 
 class IntegrationTracker(AppendingList):
+    """IntegrationTracker is a special type of list which finds the trapezoidal integral of added values.
+
+    For Example:
+    tracker = IntegrationTracker() # instantiate tracker
+    tracker.append(0,1) # append with values (y-value, delta-x)
+    tracker.append(1)   # same as .append(1,1)
+    tracker.append(2,1)   
+    tracker.append(3,1)
+
+    print(tracker.get_original()) # gives list of added values (y,dx)
+    print(tracker)     # gives integrated values: [0, 0.5, 2, 4.5]
+    print(tracker[-1]) # gives 4.5, last added value
+    tracker[2] = 3     # will not work, only append or extend can change tracker
+
+    tracker += [0,1,2,3] # appends each element of list
+    tracker.extend([0,1,2,3]) # appends each element of list
+
+    tracker += [(0,2), (0,3)] # appends each pair from list as y and dx to tracker
+    tracker.extend([(0,2), (0,3)]) # appends each pair from list as y and dx to tracker
+    """
+
     def __init__(self):
         super().__init__()
         self._result = 0
@@ -170,11 +191,38 @@ class IntegrationTracker(AppendingList):
         self._original = []
 
     def append(self, value, dx=1):
+        if type(value) != float and type(value) != int:
+            raise ValueError(
+                "Parameter 'value' must be an acceptable numerical value, float or int")
+        if type(dx) != float and type(dx) != int:
+            raise ValueError(
+                "Parameter 'dx' must be an acceptable numerical value, float or int")
+
         self._original.append((value, dx))
         if len(self) > 0:
             self._result += (self._last + value) * dx * 0.5
         self._last = value
         super().append(self._result)
+
+    def extend(self, ls):
+        self.__iadd__(ls)
+
+    def __iadd__(self, ls):
+        ls = list(ls)
+        for o in ls:
+            try:
+                i = iter(o)
+                if len(i) > 1:
+                    self.append(i[0], i[1])
+                else:
+                    self.append(i[0])
+            except TypeError:
+                self.append(o)
+        return self
+
+    def reset(self, value=0):
+        self._result = value
+        self._last = 0
 
     def get_original(self):
         return tuple(self._original)
@@ -222,4 +270,12 @@ if __name__ == '__main__':
     tracker.append(1, 1)
     tracker.append(2, 1)
     tracker.append(3, 1)
+    tracker.reset()
+    tracker.append(0)
+    tracker.append(1, 1)
+    tracker.append(2, 1)
+    tracker.append(3, 1)
+    print(tracker)
+    tracker.reset()
+    tracker += tracker
     print(tracker)
