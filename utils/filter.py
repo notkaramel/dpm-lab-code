@@ -1,18 +1,21 @@
 import math
 
+
 def mean(ls: list):
     """Takes the mean or average of a list of numerical values"""
     return sum(ls) / len(ls)
 
-def range_limit(value:float, lower:float, upper:float) -> float:
+
+def range_limit(value: float, lower: float, upper: float) -> float:
     """Prevents the value from going beyond the upper or lower values.
-    
+
     Example:
     range_limit(40,30,50)->40 (within bounds)
     range_limit(60,30,50)->50 (upper limit)
     range_limit(20,30,50)->30 (lower limit)
     """
     return min(max(value, lower), upper)
+
 
 def ZeroFilter(samples: list, zero_offsets: list):
     """Returns a list of the samples minus zero_offsets. Acts circularly on zero_offsets.
@@ -85,8 +88,6 @@ def ModulusFilter(samples: list, mod: int):
     result => [1,2,3,0,1,2]
     """
     return [val % mod for val in samples]
-
-
 
 
 def MeanFilter(samples: list, N: int):
