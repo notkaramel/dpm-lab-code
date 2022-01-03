@@ -22,8 +22,7 @@ def start():
     _EXIT_FLAG = False
     if WINDOW is None:
         WINDOW = tk.Tk()
-    else:
-        WINDOW.protocol("WM_DELETE_WINDOW", _on_closing)
+    WINDOW.protocol("WM_DELETE_WINDOW", _on_closing)
     update()
 
 
@@ -81,7 +80,10 @@ def clear():
     """Destroy and remove all LABELS of telemetry"""
     global LABELS
     for i, widget in LABELS.items():
-        widget[0].destroy()
+        try:
+            widget[0].destroy()
+        except TclError:
+            pass
     LABELS = {}
 
 

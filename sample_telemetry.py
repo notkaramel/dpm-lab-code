@@ -16,7 +16,7 @@ while True:
         break
 
     i = i + 1 if i < 30 else 0
-    telemetry.add("counter", i, showboth=True)
+    telemetry.add("counter", i, showkey=True)
 
     # telemetry.add(key, value, showboth=False)
     telemetry.add("something", "Hello Robots")
