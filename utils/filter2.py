@@ -35,9 +35,35 @@ def _wrap_index(i, l):
         return i
 
 
-class BaseFilter(object):
+class AppendingList(object):
+    def __init__(self, source: list = None):
+        if source is None:
+            self.src = []
+        else:
+            self.src = source
+
+    def __getitem__(self, key):
+        return self.src.__getitem__(key)
+
+    def __repr__(self):
+        return self.src.__repr__()
+
+    def __contains__(self, key):
+        return self.src.__contains__(key)
+
+    def __iter__(self):
+        return self.src.__iter__()
+
+    def __len__(self):
+        return self.src.__len__()
+
+    def append(self, value):
+        return self.src.append(value)
+
+
+class BaseFilter(AppendingList):
     def __init__(self, source):
-        self.src = source
+        super().__init__(source)
 
     def __getitem__(self, key):
         if type(key) == int:
@@ -63,6 +89,12 @@ class BaseFilter(object):
 
     def __repr__(self):
         return self[:len(self.src)].__repr__()
+
+    def __iter__(self):
+        return self[:len(self.src)].__iter__()
+
+    def __contains__(self, key):
+        return None
 
 
 class SimpleFunctionFilter(BaseFilter):
@@ -130,6 +162,24 @@ class SumFilter(SliceFunctionFilter):
         super().__init__(source, N, sum)
 
 
+class IntegrationTracker(AppendingList):
+    def __init__(self):
+        super().__init__()
+        self._result = 0
+        self._last = 0
+        self._original = []
+
+    def append(self, value, dx=1):
+        self._original.append((value, dx))
+        if len(self) > 0:
+            self._result += (self._last + value) * dx * 0.5
+        self._last = value
+        super().append(self._result)
+
+    def get_original(self):
+        return tuple(self._original)
+
+
 def integration(samples: list, delta_time=1):
     """Returns the trapezoidal integration of the samples, given a constant sample time interval.
 
@@ -167,3 +217,9 @@ if __name__ == '__main__':
     print(f, f[2])
     f = RangeLimitFilter(ls, 1, 7)
     print(f, f[2])
+    tracker = IntegrationTracker()
+    tracker.append(0)
+    tracker.append(1, 1)
+    tracker.append(2, 1)
+    tracker.append(3, 1)
+    print(tracker)
