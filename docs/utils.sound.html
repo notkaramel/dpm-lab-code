@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module utils.sound</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="utils.html"><font color="#ffffff">utils</font></a>.sound</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/pi/ecse211/lab2-course-staff/project/utils/sound.py">/home/pi/ecse211/lab2-course-staff/project/utils/sound.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="math.html">math</a><br>
+</td><td width="25%" valign=top><a href="simpleaudio.html">simpleaudio</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><strong>BASE_SOUND</strong> <em>lambda</em> x, freq</dt></dl>
+ <dl><dt><a name="-gen_custom_freq"><strong>gen_custom_freq</strong></a>(frequency=440, seconds=1, vol_factor=0.2, fs=8000, func=None)</dt><dd><tt>Generate&nbsp;a&nbsp;byte-string&nbsp;of&nbsp;a&nbsp;sin-wave&nbsp;based&nbsp;sound,&nbsp;given&nbsp;a&nbsp;frequency,&nbsp;time,&nbsp;and&nbsp;volume.<br>
+func&nbsp;is&nbsp;a&nbsp;function&nbsp;with&nbsp;two&nbsp;inputs,&nbsp;x&nbsp;for&nbsp;time,&nbsp;and&nbsp;frequency&nbsp;for&nbsp;what&nbsp;the&nbsp;frequency&nbsp;is.</tt></dd></dl>
+ <dl><dt><a name="-gen_freq"><strong>gen_freq</strong></a>(frequency=440, seconds=1, vol_factor=0.2, fs=8000)</dt><dd><tt>Generate&nbsp;a&nbsp;byte-string&nbsp;of&nbsp;a&nbsp;sin-wave&nbsp;based&nbsp;sound,&nbsp;given&nbsp;a&nbsp;frequency,&nbsp;time,&nbsp;and&nbsp;volume.</tt></dd></dl>
+ <dl><dt><a name="-play_freq"><strong>play_freq</strong></a>(frequency=440, seconds=1, vol_factor=0.2, fs=8000, bg_play=False)</dt><dd><tt>Play&nbsp;a&nbsp;sound&nbsp;given&nbsp;frequency,&nbsp;time,&nbsp;and&nbsp;volume.</tt></dd></dl>
+ <dl><dt><a name="-play_many_freq"><strong>play_many_freq</strong></a>(frequencies: list, fs=8000, bg_play=False)</dt><dd><tt>Play&nbsp;many&nbsp;frequencies.&nbsp;Accepts&nbsp;a&nbsp;list&nbsp;of&nbsp;3-length&nbsp;tuplets,&nbsp;each&nbsp;consisting&nbsp;of&nbsp;(freq,&nbsp;sec,&nbsp;vol).<br>
+freq&nbsp;is&nbsp;in&nbsp;Hz&nbsp;or&nbsp;Hertz<br>
+sec&nbsp;uses&nbsp;seconds<br>
+vol&nbsp;is&nbsp;a&nbsp;scale&nbsp;from&nbsp;0&nbsp;to&nbsp;1</tt></dd></dl>
+ <dl><dt><a name="-play_many_notes"><strong>play_many_notes</strong></a>(notes: list, fs=8000, bg_play=False)</dt><dd><tt>Play&nbsp;many&nbsp;notes.&nbsp;Accepts&nbsp;a&nbsp;list&nbsp;of&nbsp;3-length&nbsp;tuplets,&nbsp;each&nbsp;consisting&nbsp;of&nbsp;(note,&nbsp;sec,&nbsp;vol).<br>
+notes&nbsp;such&nbsp;as&nbsp;"A4"&nbsp;or&nbsp;"Bb2"<br>
+sec&nbsp;uses&nbsp;seconds<br>
+vol&nbsp;is&nbsp;a&nbsp;scale&nbsp;from&nbsp;0&nbsp;to&nbsp;1</tt></dd></dl>
+ <dl><dt><a name="-play_note"><strong>play_note</strong></a>(note_name='A4', seconds=1, vol_factor=0.2, fs=8000, bg_play=False)</dt><dd><tt>Play&nbsp;a&nbsp;sound&nbsp;given&nbsp;note&nbsp;name,&nbsp;time,&nbsp;and&nbsp;volume.<br>
+&nbsp;<br>
+Sound&nbsp;will&nbsp;play&nbsp;on&nbsp;its&nbsp;own&nbsp;thread,&nbsp;separate&nbsp;from&nbsp;the&nbsp;main&nbsp;thread.<br>
+Sound&nbsp;will&nbsp;stop&nbsp;when&nbsp;the&nbsp;main&nbsp;thread&nbsp;exits.<br>
+&nbsp;<br>
+If&nbsp;bg_play&nbsp;(background&nbsp;play)&nbsp;is&nbsp;True,&nbsp;play&nbsp;and&nbsp;return&nbsp;a&nbsp;sound&nbsp;object&nbsp;s,&nbsp;which&nbsp;has&nbsp;the&nbsp;following&nbsp;methods:<br>
+--&nbsp;s.wait_done():&nbsp;pauses&nbsp;current&nbsp;thread&nbsp;until&nbsp;sound&nbsp;has&nbsp;stopped&nbsp;playing<br>
+--&nbsp;s.stop():&nbsp;stops&nbsp;the&nbsp;sound&nbsp;from&nbsp;playing<br>
+--&nbsp;s.is_playing():&nbsp;whether&nbsp;the&nbsp;sound&nbsp;is&nbsp;playing&nbsp;or&nbsp;not<br>
+If&nbsp;bg_play&nbsp;is&nbsp;False,&nbsp;pauses&nbsp;current&nbsp;thread&nbsp;until&nbsp;sound&nbsp;has&nbsp;stopped&nbsp;playing&nbsp;then&nbsp;return&nbsp;None<br>
+&nbsp;<br>
+Note&nbsp;use&nbsp;the&nbsp;format&nbsp;A4,&nbsp;B4,&nbsp;C#2,&nbsp;Gb6...etc.<br>
+Warning:&nbsp;there&nbsp;is&nbsp;no&nbsp;support&nbsp;for&nbsp;B#_,&nbsp;E#_,&nbsp;Cb_,&nbsp;or&nbsp;Fb_<br>
+&nbsp;<br>
+NOTE:&nbsp;Use&nbsp;<a href="#-play_many_notes">play_many_notes</a>()&nbsp;to&nbsp;get&nbsp;one&nbsp;continuous&nbsp;sound&nbsp;object&nbsp;s</tt></dd></dl>
+ <dl><dt><a name="-sound_example"><strong>sound_example</strong></a>()</dt><dd><tt>Example&nbsp;of&nbsp;using&nbsp;the&nbsp;sound&nbsp;module.</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>NOTE</strong> = {'A#0': 29.14, 'A#1': 58.27, 'A#2': 116.54, 'A#3': 233.08, 'A#4': 466.16, 'A#5': 932.33, 'A#6': 1864.66, 'A#7': 3729.31, 'A#8': 7458.62, 'A0': 27.5, ...}<br>
+<strong>Tuple</strong> = typing.Tuple</td></tr></table>
+</body></html>
