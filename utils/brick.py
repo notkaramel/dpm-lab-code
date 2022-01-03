@@ -6,13 +6,18 @@ Authors: Ryan Au, Younes Boubekeur
 """
 
 from __future__ import annotations  # not required in Python 3.10+
-from brickpi3 import *
+try:
+    from brickpi3 import *
+except ModuleNotFoundError:
+    from .brickpi3 import *
+
 from typing import Literal, Type
 import math
 import atexit
 import os
 import signal
 import time
+import sys
 
 WAIT_READY_INTERVAL = 0.01
 
@@ -59,8 +64,18 @@ class RevEnumeration:
 
 SENSOR_CODES = RevEnumeration(BrickPi3.SENSOR_STATE)
 
-BP = BrickPi3()  # The BrickPi3 instance
+BP = None
 
+
+try:
+    import spidev
+    BP = BrickPi3()  # The BrickPi3 instance
+except ModuleNotFoundError as err:
+    class _FakeBP():
+        def reset_all(self):
+            pass
+    print('spidev not found, unable to initialize BP', file=sys.stderr)
+    BP = _FakeBP()
 
 class ColorMapping:
     """
@@ -809,6 +824,9 @@ def reset_brick(*args):
 
 
 # Reset brick when the program exits
-atexit.register(reset_brick)
-signal.signal(signal.SIGTERM, reset_brick)
-signal.signal(signal.SIGINT, reset_brick)  # Ctrl-C
+try:
+    atexit.register(reset_brick)
+    signal.signal(signal.SIGTERM, reset_brick)
+    signal.signal(signal.SIGINT, reset_brick)  # Ctrl-C
+except ValueError as err:
+    print(err, "Must import brick in main thread", file=sys.stderr)
