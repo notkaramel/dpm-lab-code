@@ -26,7 +26,15 @@ PORTS: dict[str, int] = {
     'C': BrickPi3.PORT_C,
     'D': BrickPi3.PORT_D,
 }
-
+def exception_handler(exception=Exception):
+    def exception_handler_factory(func):
+        def wrapper(*args, **kwargs):
+            try:
+                func(*args, **kwargs)
+            except exception as err:
+                print("ERROR:", err)
+        return wrapper
+    return exception_handler_factory
 
 class RevEnumeration:
     """
