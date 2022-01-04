@@ -2,3 +2,4 @@ __pycache__/
 *.pyc
 brickpi3.py
 spidev.py
+.vscode/
