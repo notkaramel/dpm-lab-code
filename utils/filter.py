@@ -1,3 +1,10 @@
+"""
+Module for list-like filters that generate statistics based on a source list. 
+Changes to the source list result in changes in the filters' results.
+
+Author: Ryan Au
+"""
+
 import math
 
 

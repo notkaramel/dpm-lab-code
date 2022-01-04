@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-# Written by Ryan Au and Younes Boubekaur
+"""
+Module for creating and generating sine wave based sound. 
+Includes Frequency modulation and Amplitude modulation.
+
+Authors: Ryan Au and Younes Boubekaur
+"""
 
 from typing import Callable, Iterable, SupportsIndex, Tuple, overload, Union
 from time import time
@@ -11,6 +16,7 @@ import functools
 import array
 
 LIMIT_MAX_VOLUME = True
+
 
 @functools.lru_cache()
 def sin(x: float) -> float:
@@ -40,9 +46,9 @@ def db_to_amp(db: float, ref_amp: float) -> float:
     return 10**(db/20) * ref_amp
 
 
-HIGHEST_VOLUME = 100 # Custom value. Could be 100, 1.0, 50, doesn't matter.
-_LOWEST_AMPLITUDE = 0.0001 # must be non-zero, but low
-_HIGHEST_AMPLITUDE = 1.0 # acts as a scalar factor, should be 0 to 1
+HIGHEST_VOLUME = 100  # Custom value. Could be 100, 1.0, 50, doesn't matter.
+_LOWEST_AMPLITUDE = 0.0001  # must be non-zero, but low
+_HIGHEST_AMPLITUDE = 1.0  # acts as a scalar factor, should be 0 to 1
 _HIGHEST_DECIBEL = _amp_to_db(_LOWEST_AMPLITUDE, _HIGHEST_AMPLITUDE)
 
 
@@ -53,12 +59,13 @@ def vol_to_amp(vol: float) -> float:
 
     Furthermore, the output behaves similarly to the volume on a listening device,
     when setting the volume. If the max is 100% level, then 50% feels half as loud.
-    
+
     Note: 0 is not absolutely silent, it is just extremely quiet, and is audible.
     Note 2: this volume is dependent on the system volume.
         Loudness = program volume * system volume (if in percentage)
     """
-    db = clip(vol, 0, HIGHEST_VOLUME, nomax=LIMIT_MAX_VOLUME) * _HIGHEST_DECIBEL / HIGHEST_VOLUME
+    db = clip(vol, 0, HIGHEST_VOLUME, nomax=LIMIT_MAX_VOLUME) * \
+        _HIGHEST_DECIBEL / HIGHEST_VOLUME
     amp = db_to_amp(db, _LOWEST_AMPLITUDE)
     return clip(amp, 0, _HIGHEST_AMPLITUDE, nomax=LIMIT_MAX_VOLUME)
 

@@ -1,8 +1,14 @@
+"""
+Module for providing access to a single, simple, GUI that can easily display data.
+
+Author: Ryan Au
+"""
+
 from tkinter import ttk, StringVar, TclError
 
 import tkinter as tk
 
-WINDOW = None
+WINDOW: tk.Tk = None
 LABELS = {}
 _EXIT_FLAG = True
 
@@ -87,12 +93,17 @@ def clear():
     LABELS = {}
 
 
+def mainloop():
+    if WINDOW is not None and isopen():
+        WINDOW.mainloop()
+
+
 if __name__ == '__main__':
     import time
     start()
     resize(500, 200)
     i = 0
-    add("word","heyo this is the start")
+    add("word", "heyo this is the start")
     update()
     while True:
         time.sleep(1)
@@ -103,12 +114,12 @@ if __name__ == '__main__':
             if not isopen():
                 start()
 
-        ### Adding data
+        # Adding data
         add("color", "red", True)
         i = i + 2 if i < 40 else 0
 
         print(i, isopen())
         add("counter", "*"*i)
 
-        ### Must update window to see changes
+        # Must update window to see changes
         update()
