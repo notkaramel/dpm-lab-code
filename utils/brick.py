@@ -77,6 +77,7 @@ except ModuleNotFoundError as err:
     print('spidev not found, unable to initialize BP', file=sys.stderr)
     BP = _FakeBP()
 
+
 class ColorMapping:
     """
     Class that maps a color to a numeric code used by the color sensor.

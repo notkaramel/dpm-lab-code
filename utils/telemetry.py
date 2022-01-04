@@ -76,6 +76,7 @@ def slider(lower, upper=None, value=None):
     s.pack()
     return Slider(s)
 
+
 class Button:
     def __init__(self, name, func):
         self.b = TkButton(WINDOW, text=name, command=(func))
@@ -83,20 +84,23 @@ class Button:
         self.b.bind("<ButtonRelease>", self._on_release)
         self._is_pressed = False
         self.b.pack()
+
     def _on_press(self, *args):
         self._is_pressed = True
+
     def _on_release(self, *args):
         self._is_pressed = False
+
     def is_pressed(self):
         return self._is_pressed
-    
+
 
 def button(name, func=None):
     if WINDOW is None or not isopen():
         return
-    
+
     return Button(name, func)
-    
+
 
 def label(key, data, showkey=False):
     add(key, data, showkey)
