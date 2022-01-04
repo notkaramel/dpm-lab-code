@@ -37,7 +37,7 @@ def isopen():
     return not _EXIT_FLAG
 
 
-def resize(width, height):
+def resize(width=100, height=100):
     """Resize telemtry to a set width and height in pixels"""
     if WINDOW is None:
         return
@@ -52,9 +52,12 @@ def stop():
         WINDOW = None
 
 
+def set(key, data, showkey=False):
+    add(key, data, showkey)
+
 def add(key, data, showkey=False):
     """Adds/Sets data by a key to the telemetry window"""
-    if WINDOW is None:
+    if WINDOW is None or not isopen():
         return
     key = str(key)
     data = str(data)
