@@ -4,9 +4,10 @@ Module for providing access to a single, simple, GUI that can easily display dat
 Author: Ryan Au
 """
 
-from tkinter import ttk, StringVar, TclError
+from tkinter import Scale, ttk, StringVar, TclError, Button as TkButton
 
 import tkinter as tk
+from tkinter.constants import HORIZONTAL
 
 WINDOW: tk.Tk = None
 LABELS = {}
@@ -52,8 +53,54 @@ def stop():
         WINDOW = None
 
 
-def set(key, data, showkey=False):
+class Slider:
+    def __init__(self, scale: Scale):
+        self.scale = scale
+
+    def get_value(self):
+        return self.scale.get()
+
+
+def slider(lower, upper=None, value=None):
+    if upper is None:
+        upper = lower
+        lower = 0
+
+    if value is None:
+        value = lower
+
+    if WINDOW is None or not isopen():
+        return
+    s = Scale(WINDOW, from_=lower, to=upper, orient=HORIZONTAL)
+    s.set(value)
+    s.pack()
+    return Slider(s)
+
+class Button:
+    def __init__(self, name, func):
+        self.b = TkButton(WINDOW, text=name, command=(func))
+        self.b.bind("<ButtonPress>", self._on_press)
+        self.b.bind("<ButtonRelease>", self._on_release)
+        self._is_pressed = False
+        self.b.pack()
+    def _on_press(self, *args):
+        self._is_pressed = True
+    def _on_release(self, *args):
+        self._is_pressed = False
+    def is_pressed(self):
+        return self._is_pressed
+    
+
+def button(name, func=None):
+    if WINDOW is None or not isopen():
+        return
+    
+    return Button(name, func)
+    
+
+def label(key, data, showkey=False):
     add(key, data, showkey)
+
 
 def add(key, data, showkey=False):
     """Adds/Sets data by a key to the telemetry window"""
@@ -98,7 +145,10 @@ def clear():
 
 def mainloop():
     if WINDOW is not None and isopen():
-        WINDOW.mainloop()
+        try:
+            WINDOW.mainloop()
+        except KeyboardInterrupt:
+            return
 
 
 if __name__ == '__main__':
