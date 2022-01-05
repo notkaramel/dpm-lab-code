@@ -40,7 +40,7 @@ def prompt_options():
     
     resp = input('Override the default polling rate? y/n: ')    # Allow user to override
     if resp == 'y':
-        pDelay = eval(input('Enter polling rate (units=seconds): '))
+        pDelay = float(input('Enter polling rate (units=seconds): '))
         
     resp = input('Save data to a log file? y/n: ')              # Allow save to file
     if resp == 'y':
