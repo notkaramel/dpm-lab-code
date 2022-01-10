@@ -21,3 +21,12 @@ except KeyboardInterrupt as error:
     print(error)
     exit(0) # exit this thread execution
 
+try:
+    f = open('testfile.txt', 'w')
+    f.write(None)
+    g = open('srcfile.txt','r')
+except (IOError, FileNotFoundError) as error:
+    print("File Error!")
+finally:
+    f.close() # on sucess(try) or fail(except), close file
+

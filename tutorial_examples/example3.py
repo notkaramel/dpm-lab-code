@@ -1,9 +1,9 @@
 import math
 
-# Empty lists
 lst = list()
-lst = []
 
+# Empty lists
+lst = []
 # Filled list
 lst = [0,1,2,3,4]
 print(lst[0])   # get item
