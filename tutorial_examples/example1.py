@@ -1,12 +1,6 @@
 import math
 from math import pi, sin
 
-# almost like:
-import math
-pi = math.pi
-sin = math.sin
-
-print("> python3 example1.py")
 print("Hello World.")
 
 hypotenuse_of_triangle = 2 / sin(pi * 2/3)
