@@ -30,6 +30,7 @@ func4(8) # 12
 func4(8,9) # 17
 
 """Type hinting doesn't give any warning or errors.
+(When running code directly with 'python' or 'python3')
 But it's useful for you to read, and IDEs to use.
 """
 def func5_1(lst):
@@ -37,7 +38,6 @@ def func5_1(lst):
 
 def func5_2(lst:list) -> int:
     return len(lst)
-
 
 """We can also import any functions present in other files/modules"""
 from .library import ceil, action
