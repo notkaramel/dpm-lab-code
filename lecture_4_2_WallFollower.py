@@ -2,38 +2,44 @@ import time
 from utils import brick
 from utils.brick import BP, EV3UltrasonicSensor, Motor, TouchSensor, wait_ready_sensors
 
-SAMPLING_INTERVAL = 0.2 # seconds?
-DEFAULT_WALL_DIST = 0.2 # meters?
-DEADBAND = 0.02
-DEFAULT_SPEED = 150
-DEFAULT_DELTA_SPEED = 100
-US_OUTLIER = 200
+SAMPLING_INTERVAL = 0.2   # Sampling Interval 200ms or 5Hz
+DEFAULT_WALL_DIST = 0.2   # Default distance from wall = 20cm
+DEADBAND = 0.02           # Deadband is 2cm
+DEFAULT_SPEED = 150       # Default speed = 150dps
+DEFAULT_DELTA_SPEED = 100  # Default delta change in speed = 100dps
+US_OUTLIER = 200          # Ignore ultrasonic readings > 200
 
-LEFT_MOTOR = Motor("A")
-RIGHT_MOTOR = Motor("D")
-T_SENSOR = TouchSensor(1)
-US_SENSOR = EV3UltrasonicSensor(2)
+POWER_LIMIT = 80          # Motor Power limit = 80%
+SPEED_LIMIT = 720         # Motor Speed limit = 720dps
 
-POWER_LIMIT = 80
-SPEED_LIMIT = 720
+LEFT_MOTOR = Motor("A")            # Left motor on Port A
+RIGHT_MOTOR = Motor("D")           # Right motor on Port D
+T_SENSOR = TouchSensor(1)          # Touch sensor on Port S1
+US_SENSOR = EV3UltrasonicSensor(2)  # Ultrasonic on Port S2
+
 
 # Initialization
-wait_ready_sensors()
-LEFT_MOTOR.set_limits(POWER_LIMIT, SPEED_LIMIT)
-RIGHT_MOTOR.set_limits(POWER_LIMIT, SPEED_LIMIT)
-LEFT_MOTOR.reset_encoder()
-RIGHT_MOTOR.reset_encoder()
 
 try:
     print('Wall Follower Demo')
+    wait_ready_sensors()                             # Wait for sensor initialization
+    # Set motor power and speed limits
+    LEFT_MOTOR.set_limits(POWER_LIMIT, SPEED_LIMIT)
+    RIGHT_MOTOR.set_limits(POWER_LIMIT, SPEED_LIMIT)
+    # Reset motor encoders to 0 value
+    LEFT_MOTOR.reset_encoder()
+    RIGHT_MOTOR.reset_encoder()
+
+    """Allow user to override default parameters, of speed, wall distance, and delta speed"""
+
     fwd_speed = DEFAULT_SPEED
     wall_dist = DEFAULT_WALL_DIST
     delta_speed = DEFAULT_DELTA_SPEED
-    
+
     resp = input('Enter speed (default:{0.2f})'.format(fwd_speed))
     if resp.isnumeric():
         fwd_speed = int(resp)
-    
+
     resp = input('Enter wall distance (default:{0.2f})'.format(wall_dist))
     if resp.isnumeric():
         wall_dist = int(resp)
@@ -41,41 +47,47 @@ try:
     resp = input('Enter delta speed (default:{0.2f})'.format(delta_speed))
     if resp.isnumeric():
         delta_speed = int(resp)
-    
+
     print('Starting wall follower!')
 
-    LEFT_MOTOR.set_dps(fwd_speed)
+    LEFT_MOTOR.set_dps(fwd_speed)  # Set the motor speeds to start them
     RIGHT_MOTOR.set_dps(fwd_speed)
-    last = wall_dist
 
     while True:
+
+        # End if the wall follower bumps the wall
         if T_SENSOR.is_pressed():
             print("Contact - wall follower terminated.")
             BP.reset_all()
             break
 
-        dist = US_SENSOR.get_cm()
-        if dist >= US_OUTLIER:
-            dist = last
-        dist = dist / 100.0
-        error = wall_dist - dist
+        dist = US_SENSOR.get_cm()  # Get distance reading from wall
+        if dist >= US_OUTLIER:    # If error or too far, no error correction
+            dist = wall_dist
+        dist = dist / 100.0       # Convert to meters
+        error = wall_dist - dist  # Get error difference
         print('dist: {:0.2f}'.format(dist))
         print('error: {:0.2f}'.format(error))
 
+        # Error within Deadband: wheels rotate same speed, go forward
         if abs(error) <= DEADBAND:
             LEFT_MOTOR.set_dps(fwd_speed)
             RIGHT_MOTOR.set_dps(fwd_speed)
             print('reaction: no correction')
+
+        # Error negative (and outside deadband): move closer to wall
         elif error < 0:
             LEFT_MOTOR.set_dps(fwd_speed)
             RIGHT_MOTOR.set_dps(fwd_speed+delta_speed)
             print('reaction: move closer to wall')
+
+        # Error positive (and outside deadband): move away from wall
         else:
             LEFT_MOTOR.set_dps(fwd_speed+delta_speed)
             RIGHT_MOTOR.set_dps(fwd_speed)
             print('reaction: move away from wall')
 
-        time.sleep(SAMPLING_INTERVAL)
-        
-except KeyboardInterrupt:
+        time.sleep(SAMPLING_INTERVAL) # Sleep for sampling interval
+
+except KeyboardInterrupt: # Program exit on ^C (Ctrl + C)
     BP.reset_all()
