@@ -32,4 +32,9 @@ print(result)
     ['4', '5', '6\n'], 
     ['8', '9', '10\n']
 ]
+
+# Note:
+# Remove whitespace with str.strip()
+# ('3\n'.strip()) -> '3'
 """
+
