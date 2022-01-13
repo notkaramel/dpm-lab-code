@@ -1,5 +1,6 @@
 """
 Module for providing access to a single, simple, GUI that can easily display data.
+It also allows the creation of buttons and sliders for adjusting starting parameters.
 
 Author: Ryan Au
 """
@@ -46,7 +47,7 @@ def resize(width=100, height=100):
 
 
 def stop():
-    """Closes window"""
+    """Closes telemtry window"""
     global WINDOW
     if WINDOW is not None:
         WINDOW.quit()
@@ -62,6 +63,7 @@ class Slider:
 
 
 def create_slider(lower, upper=None, value=None):
+    """Adds a slider to the telemetry window AND returns the slider object added"""
     if upper is None:
         upper = lower
         lower = 0
@@ -96,6 +98,7 @@ class Button:
 
 
 def create_button(name, func=None):
+    """Adds a button to the telemetry window AND returns the button object added"""
     if WINDOW is None or not isopen():
         return
 
@@ -103,6 +106,7 @@ def create_button(name, func=None):
 
 
 def label(key, data, showkey=False):
+    """Adds/Sets data by a key to the telemetry window"""
     add(key, data, showkey)
 
 
