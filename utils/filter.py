@@ -6,21 +6,7 @@ Author: Ryan Au
 """
 
 import math
-
-
-def mean(ls: list):
-    """Takes the mean or average of a list of numerical values"""
-    return sum(ls) / len(ls)
-
-
-def median(ls: list):
-    """Takes the median of a list of numerical values"""
-    l = len(ls)
-    s = sorted(ls)
-    if l % 2 == 1:
-        return s[math.ceil(l/2)]
-    else:
-        return (s[l/2] + s[l/2+1]) / 2
+from statistics import mean, median
 
 
 def range_limit(value: float, lower: float, upper: float) -> float:
@@ -116,13 +102,13 @@ class SimpleFunctionFilter(BaseFilter):
         return list(map(self.func, super()._get_by_slice_(start, stop, step, l)))
 
 
-class SliceFunctionFilter(BaseFilter):
+class SectionFunctionFilter(BaseFilter):
     def __init__(self, source, N, func):
         super().__init__(source)
         self.N = N
         self.func = func
 
-    def _get_by_key_(self, key: int, l: int):
+    def _get_by_key_(self, key: int, length: int):
         section = int(key // self.N * self.N)
         return self.func(self.src[section:section+self.N])
 
@@ -134,6 +120,22 @@ class SliceFunctionFilter(BaseFilter):
         return [m[i//self.N] for i in range(start, stop, step)]
 
 
+class WidthFunctionFilter(BaseFilter):
+    def __init__(self, source, width, func):
+        super().__init__(source)
+        self.width = width
+        self.func = func
+
+    def _get_by_key_(self, key: int, length: int):
+        index = range_limit(key, 0, length - self.width)
+        return self.func(self.src[index:index+self.width])
+
+    def _get_by_slice_(self, start, stop, step, l):
+        return [self._get_by_key_(i, len(self.src)) for i in range(start, stop, step)]
+
+    def __len__(self):
+        return self.src - self.width
+
 class RangeLimitFilter(SimpleFunctionFilter):
     def __init__(self, source, lower, upper):
         super().__init__(source, lambda x: range_limit(x, lower, upper))
@@ -144,27 +146,27 @@ class ModulusFilter(SimpleFunctionFilter):
         super().__init__(source, lambda x: x % mod)
 
 
-class MaximumFilter(SliceFunctionFilter):
+class MaximumFilter(WidthFunctionFilter):
     def __init__(self, source, N):
         super().__init__(source, N, max)
 
 
-class MinimumFilter(SliceFunctionFilter):
+class MinimumFilter(WidthFunctionFilter):
     def __init__(self, source, N):
         super().__init__(source, N, min)
 
 
-class MeanFilter(SliceFunctionFilter):
+class MeanFilter(WidthFunctionFilter):
     def __init__(self, source, N):
         super().__init__(source, N, mean)
 
 
-class MedianFilter(SliceFunctionFilter):
+class MedianFilter(WidthFunctionFilter):
     def __init__(self, source, N):
         super().__init__(source, N, median)
 
 
-class SumFilter(SliceFunctionFilter):
+class SumFilter(WidthFunctionFilter):
     def __init__(self, source, N):
         super().__init__(source, N, sum)
 
