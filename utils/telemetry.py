@@ -61,7 +61,7 @@ class Slider:
         return self.scale.get()
 
 
-def slider(lower, upper=None, value=None):
+def create_slider(lower, upper=None, value=None):
     if upper is None:
         upper = lower
         lower = 0
@@ -95,7 +95,7 @@ class Button:
         return self._is_pressed
 
 
-def button(name, func=None):
+def create_button(name, func=None):
     if WINDOW is None or not isopen():
         return
 

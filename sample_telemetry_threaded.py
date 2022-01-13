@@ -22,8 +22,8 @@ import time
 telemetry.start()  # open and create telemetry window
 telemetry.resize(200, 100)
 
-SLIDER = telemetry.slider(0, 100, 51)
-BUTTON = telemetry.button("Ok")
+SLIDER = telemetry.create_slider(0, 100, 51)
+BUTTON = telemetry.create_button("Ok")
 
 def main():
     """
