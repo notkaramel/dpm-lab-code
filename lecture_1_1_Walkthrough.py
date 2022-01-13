@@ -1,3 +1,12 @@
+"""DPM Hands on Example 1 (Lecture 8) - StopOnSw
+
+A simple program to move a two-wheeled robot forward until the touch sensor is tripped.
+
+Author: F.P. Ferrie, Ryan Au
+
+Date: January 13th, 2022
+"""
+
 from utils.brick import BP, TouchSensor, Motor, wait_ready_sensors, SensorError
 import time
 

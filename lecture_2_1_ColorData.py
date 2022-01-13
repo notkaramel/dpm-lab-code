@@ -1,3 +1,13 @@
+"""DPM Sensor and Filtering (Lecture 9) - SimpleLog.py
+
+A simple program to poll the color sensor and write the results to a log file (colorSensorLog.csv).
+Graceful termination when Touch sensor pressed.
+Abort on ^C.
+
+Author: F.P. Ferrie, Ryan Au
+Date: January 13th, 2022
+"""
+
 from utils.brick import BP, Motor, TouchSensor, EV3ColorSensor, wait_ready_sensors, SensorError
 import time
 

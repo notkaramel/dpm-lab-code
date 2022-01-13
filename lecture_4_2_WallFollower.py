@@ -1,3 +1,14 @@
+"""DPM Hands on Example 5 (Lecture 11) - WallFollower
+
+A striaghtforward implementation of the Wall Follower described in the slides for Lecture 12.
+The program prompts the user to override default values of wall distance, forward speed,
+and delta speed and then proceedsd to execute the BangBang controller. Program runs until interrupted
+with ^C.
+
+Author: F.P. Ferrie, Ryan Au
+Date: January 13th, 2022
+"""
+
 import time
 from utils import brick
 from utils.brick import BP, EV3UltrasonicSensor, Motor, TouchSensor, wait_ready_sensors

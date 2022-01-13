@@ -1,6 +1,13 @@
+"""
+A simple median filter (Python)
+
+Author: F.P. Ferrie, Ryan Au
+Date: January 13th, 2022
+"""
+
 import math
 
-def median_filter(samples, width):
+def simple_median_filter(samples, width):
     """width must be an odd number"""
     N = len(samples)
     
@@ -12,8 +19,14 @@ def median_filter(samples, width):
     
     return result
 
-print(median_filter([1,2,3,4,5,6,7,8,9,10,11], 3))
+print(simple_median_filter([1,2,3,4,5,6,7,8,9,10,11], 3))
 
+"""
+A simple median filter (Python)
+
+Author: F.P. Ferrie, Ryan Au
+Date: January 13th, 2022
+"""
 from statistics import median
 
 def median_filter(samples, width):

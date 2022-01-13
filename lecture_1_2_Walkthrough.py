@@ -1,3 +1,12 @@
+"""DPM Hands On Example 2 (Lecture 8) - Scan2File
+
+This program builds on the StopOnSw example to include scanning with the color sensor
+and writing the results to a data file, colorSensor.txt
+
+Author: F.P. Ferrie, Ryan Au
+Date: January 13th, 2022
+"""
+
 from utils.brick import BP, Motor, TouchSensor, EV3ColorSensor, wait_ready_sensors, SensorError
 import time
 
@@ -28,10 +37,11 @@ try:
 
             # Write color values to the file
             f.write('R={:d},G={:d},B={:d},L={:d}\n'.format(red, gre, blu, lum))
-            
+
             time.sleep(SENSOR_POLL_SLEEP)  # Use sensor polling interval here
         except SensorError as error:
-            print(error)                   # On exception or error, print error code
+            # On exception or error, print error code
+            print(error)
 
 except KeyboardInterrupt:                  # Allows program to be stopped on keyboard interrupt
     f.close()
