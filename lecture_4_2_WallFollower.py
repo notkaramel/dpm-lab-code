@@ -13,19 +13,19 @@ import time
 from utils import brick
 from utils.brick import BP, EV3UltrasonicSensor, Motor, TouchSensor, wait_ready_sensors
 
-SAMPLING_INTERVAL = 0.2   # Sampling Interval 200ms or 5Hz
-DEFAULT_WALL_DIST = 0.2   # Default distance from wall = 20cm
-DEADBAND = 0.02           # Deadband is 2cm
-DEFAULT_SPEED = 150       # Default speed = 150dps
+SAMPLING_INTERVAL = 0.2    # Sampling Interval 200ms or 5Hz
+DEFAULT_WALL_DIST = 0.2    # Default distance from wall = 20cm
+DEADBAND = 0.02            # Deadband is 2cm
+DEFAULT_SPEED = 150        # Default speed = 150dps
 DEFAULT_DELTA_SPEED = 100  # Default delta change in speed = 100dps
-US_OUTLIER = 200          # Ignore ultrasonic readings > 200
+US_OUTLIER = 200           # Ignore ultrasonic readings > 200
 
-POWER_LIMIT = 80          # Motor Power limit = 80%
-SPEED_LIMIT = 720         # Motor Speed limit = 720dps
+POWER_LIMIT = 80           # Motor Power limit = 80%
+SPEED_LIMIT = 720          # Motor Speed limit = 720dps
 
-LEFT_MOTOR = Motor("A")            # Left motor on Port A
-RIGHT_MOTOR = Motor("D")           # Right motor on Port D
-T_SENSOR = TouchSensor(1)          # Touch sensor on Port S1
+LEFT_MOTOR = Motor("A")             # Left motor on Port A
+RIGHT_MOTOR = Motor("D")            # Right motor on Port D
+T_SENSOR = TouchSensor(1)           # Touch sensor on Port S1
 US_SENSOR = EV3UltrasonicSensor(2)  # Ultrasonic on Port S2
 
 
