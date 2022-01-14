@@ -54,7 +54,7 @@ def stop():
         WINDOW = None
 
 
-class Slider:
+class _Slider:
     def __init__(self, scale: Scale):
         self.scale = scale
 
@@ -76,10 +76,10 @@ def create_slider(lower, upper=None, value=None):
     s = Scale(WINDOW, from_=lower, to=upper, orient=HORIZONTAL)
     s.set(value)
     s.pack()
-    return Slider(s)
+    return _Slider(s)
 
 
-class Button:
+class _Button:
     def __init__(self, name, func):
         self.b = TkButton(WINDOW, text=name, command=(func))
         self.b.bind("<ButtonPress>", self._on_press)
@@ -102,7 +102,7 @@ def create_button(name, func=None):
     if WINDOW is None or not isopen():
         return
 
-    return Button(name, func)
+    return _Button(name, func)
 
 
 def label(key, data, showkey=False):
