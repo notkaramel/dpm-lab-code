@@ -152,6 +152,8 @@ def clear():
 
 
 def mainloop():
+    """Starts a while loop that calls update for you! 
+    Usage of telemetry.update not needed when using this"""
     if WINDOW is not None and isopen():
         try:
             WINDOW.mainloop()

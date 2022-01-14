@@ -24,70 +24,6 @@ Author:&nbsp;Ryan&nbsp;Au</tt></p>
 </td><td width="25%" valign=top><a href="tkinter.ttk.html">tkinter.ttk</a><br>
 </td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
-<tr bgcolor="#ee77aa">
-<td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
-    
-<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><dl>
-<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
-</font></dt><dd>
-<dl>
-<dt><font face="helvetica, arial"><a href="utils.telemetry.html#Button">Button</a>
-</font></dt><dt><font face="helvetica, arial"><a href="utils.telemetry.html#Slider">Slider</a>
-</font></dt></dl>
-</dd>
-</dl>
- <p>
-<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
-<tr bgcolor="#ffc8d8">
-<td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#000000" face="helvetica, arial"><a name="Button">class <strong>Button</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
-    
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt><a href="#Button">Button</a>(name,&nbsp;func)<br>
-&nbsp;<br>
-<br>&nbsp;</tt></td></tr>
-<tr><td>&nbsp;</td>
-<td width="100%">Methods defined here:<br>
-<dl><dt><a name="Button-__init__"><strong>__init__</strong></a>(self, name, func)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
-
-<dl><dt><a name="Button-is_pressed"><strong>is_pressed</strong></a>(self)</dt></dl>
-
-<hr>
-Data descriptors defined here:<br>
-<dl><dt><strong>__dict__</strong></dt>
-<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
-</dl>
-<dl><dt><strong>__weakref__</strong></dt>
-<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
-</dl>
-</td></tr></table> <p>
-<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
-<tr bgcolor="#ffc8d8">
-<td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#000000" face="helvetica, arial"><a name="Slider">class <strong>Slider</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
-    
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt><a href="#Slider">Slider</a>(scale:&nbsp;tkinter.Scale)<br>
-&nbsp;<br>
-<br>&nbsp;</tt></td></tr>
-<tr><td>&nbsp;</td>
-<td width="100%">Methods defined here:<br>
-<dl><dt><a name="Slider-__init__"><strong>__init__</strong></a>(self, scale: tkinter.Scale)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
-
-<dl><dt><a name="Slider-get_value"><strong>get_value</strong></a>(self)</dt></dl>
-
-<hr>
-Data descriptors defined here:<br>
-<dl><dt><strong>__dict__</strong></dt>
-<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
-</dl>
-<dl><dt><strong>__weakref__</strong></dt>
-<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
-</dl>
-</td></tr></table></td></tr></table><p>
-<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#eeaa77">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
@@ -95,11 +31,12 @@ Data descriptors defined here:<br>
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><dl><dt><a name="-add"><strong>add</strong></a>(key, data, showkey=False)</dt><dd><tt>Adds/Sets&nbsp;data&nbsp;by&nbsp;a&nbsp;key&nbsp;to&nbsp;the&nbsp;telemetry&nbsp;window</tt></dd></dl>
  <dl><dt><a name="-clear"><strong>clear</strong></a>()</dt><dd><tt>Destroy&nbsp;and&nbsp;remove&nbsp;all&nbsp;LABELS&nbsp;of&nbsp;telemetry</tt></dd></dl>
- <dl><dt><a name="-create_button"><strong>create_button</strong></a>(name, func=None)</dt><dd><tt>Adds&nbsp;a&nbsp;button&nbsp;to&nbsp;the&nbsp;telemetry&nbsp;window&nbsp;AND&nbsp;returns&nbsp;the&nbsp;button&nbsp;<a href="builtins.html#object">object</a>&nbsp;added</tt></dd></dl>
- <dl><dt><a name="-create_slider"><strong>create_slider</strong></a>(lower, upper=None, value=None)</dt><dd><tt>Adds&nbsp;a&nbsp;slider&nbsp;to&nbsp;the&nbsp;telemetry&nbsp;window&nbsp;AND&nbsp;returns&nbsp;the&nbsp;slider&nbsp;<a href="builtins.html#object">object</a>&nbsp;added</tt></dd></dl>
+ <dl><dt><a name="-create_button"><strong>create_button</strong></a>(name, func=None)</dt><dd><tt>Adds&nbsp;a&nbsp;button&nbsp;to&nbsp;the&nbsp;telemetry&nbsp;window&nbsp;AND&nbsp;returns&nbsp;the&nbsp;button&nbsp;object&nbsp;added</tt></dd></dl>
+ <dl><dt><a name="-create_slider"><strong>create_slider</strong></a>(lower, upper=None, value=None)</dt><dd><tt>Adds&nbsp;a&nbsp;slider&nbsp;to&nbsp;the&nbsp;telemetry&nbsp;window&nbsp;AND&nbsp;returns&nbsp;the&nbsp;slider&nbsp;object&nbsp;added</tt></dd></dl>
  <dl><dt><a name="-isopen"><strong>isopen</strong></a>()</dt><dd><tt>Determines&nbsp;if&nbsp;the&nbsp;telemtry&nbsp;window&nbsp;has&nbsp;been&nbsp;opened&nbsp;or&nbsp;closed</tt></dd></dl>
  <dl><dt><a name="-label"><strong>label</strong></a>(key, data, showkey=False)</dt><dd><tt>Adds/Sets&nbsp;data&nbsp;by&nbsp;a&nbsp;key&nbsp;to&nbsp;the&nbsp;telemetry&nbsp;window</tt></dd></dl>
- <dl><dt><a name="-mainloop"><strong>mainloop</strong></a>()</dt></dl>
+ <dl><dt><a name="-mainloop"><strong>mainloop</strong></a>()</dt><dd><tt>Starts&nbsp;a&nbsp;while&nbsp;loop&nbsp;that&nbsp;calls&nbsp;update&nbsp;for&nbsp;you!&nbsp;<br>
+Usage&nbsp;of&nbsp;telemetry.update&nbsp;not&nbsp;needed&nbsp;when&nbsp;using&nbsp;this</tt></dd></dl>
  <dl><dt><a name="-resize"><strong>resize</strong></a>(width=100, height=100)</dt><dd><tt>Resize&nbsp;telemtry&nbsp;to&nbsp;a&nbsp;set&nbsp;width&nbsp;and&nbsp;height&nbsp;in&nbsp;pixels</tt></dd></dl>
  <dl><dt><a name="-start"><strong>start</strong></a>()</dt><dd><tt>Open&nbsp;the&nbsp;telemetry&nbsp;window</tt></dd></dl>
  <dl><dt><a name="-stop"><strong>stop</strong></a>()</dt><dd><tt>Closes&nbsp;telemtry&nbsp;window</tt></dd></dl>
