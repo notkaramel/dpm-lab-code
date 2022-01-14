@@ -762,6 +762,18 @@ class Motor:
         """
         self.brick.reset_motor_encoder(self.port)
 
+    def create_motors(motor_ports: list[Literal["A", "B", "C", "D"]] | str):
+        motor_ports = map(str.upper, list(motor_ports))
+        result = []
+        for port in motor_ports:
+            if port in ['A', 'B', 'C', 'D']:
+                result.append(Motor(port))
+        return tuple(result)
+
+
+def create_motors(motor_ports: list[Literal["A", "B", "C", "D"]] | str):
+    return Motor.create_motors(motor_ports)
+
 
 def configure_ports(*,
                     PORT_1: Type[Sensor] = None,
