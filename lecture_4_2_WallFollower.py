@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """DPM Hands on Example 5 (Lecture 11) - WallFollower
 
 A striaghtforward implementation of the Wall Follower described in the slides for Lecture 12.

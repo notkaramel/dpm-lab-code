@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """DPM Sensor and Filtering (Lecture 9) - SimpleLog.py
 
 A simple program to poll the color sensor and write the results to a log file (colorSensorLog.csv).

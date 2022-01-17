@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """DPM Hands On Example 2 (Lecture 8) - Scan2File
 
 This program builds on the StopOnSw example to include scanning with the color sensor
