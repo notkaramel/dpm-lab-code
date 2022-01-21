@@ -48,15 +48,15 @@ try:
     wall_dist = DEFAULT_WALL_DIST
     delta_speed = DEFAULT_DELTA_SPEED
 
-    resp = input('Enter speed (default:{0.2f})'.format(fwd_speed))
+    resp = input('Enter speed (default:{:0.2f})'.format(fwd_speed))
     if resp.isnumeric():
         fwd_speed = int(resp)
 
-    resp = input('Enter wall distance (default:{0.2f})'.format(wall_dist))
+    resp = input('Enter wall distance (default:{:0.2f})'.format(wall_dist))
     if resp.isnumeric():
         wall_dist = int(resp)
 
-    resp = input('Enter delta speed (default:{0.2f})'.format(delta_speed))
+    resp = input('Enter delta speed (default:{:0.2f})'.format(delta_speed))
     if resp.isnumeric():
         delta_speed = int(resp)
 
