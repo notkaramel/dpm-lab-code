@@ -698,7 +698,7 @@ class Motor:
         """
         try:
             return self.brick.get_motor_status(self.port)
-        except BaseException:
+        except IOError:
             return [None, None, None, None]
 
     def get_encoder(self):
