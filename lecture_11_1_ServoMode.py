@@ -25,7 +25,7 @@ try:
 
     while True:
         speed = int(input('Enter speed:'))                        # Get the speed from user input
-        rotation = int(input('Enter rotation change (deg +/-):')) # Get the degrees to rotate from user input 
+        rotation = str(input('Enter rotation change (deg +/-):')) # Get the degrees to rotate from user input 
         try:
             AUX_MOTOR.set_dps(speed)                              # Set the speed for the motor
             AUX_MOTOR.set_limits(POWER_LIMIT, speed)
