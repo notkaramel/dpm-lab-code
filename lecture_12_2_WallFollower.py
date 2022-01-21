@@ -101,5 +101,5 @@ try:
 
         time.sleep(SAMPLING_INTERVAL) # Sleep for sampling interval
 
-except KeyboardInterrupt: # Program exit on ^C (Ctrl + C)
+except (KeyboardInterrupt, OSError): # Program exit on ^C (Ctrl + C)
     BP.reset_all()
