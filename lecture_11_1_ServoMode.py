@@ -24,8 +24,13 @@ try:
     AUX_MOTOR.set_power(0)
 
     while True:
-        speed = int(input('Enter speed:'))                        # Get the speed from user input
-        rotation = int(input('Enter rotation change in degrees (+/- degrees):')) # Get the degrees to rotate from user input 
+        try:
+            speed = int(input('Enter speed (enter empty input to quit):'))           # Get the speed from user input
+            rotation = int(input('Enter rotation change in degrees (+/- degrees):')) # Get the degrees to rotate from user input 
+        except ValueError:
+            print("Non-integer value inputted. Closing Program.")     # Input any non-integer to quit program
+            BP.reset_all()
+            exit()
         try:
             AUX_MOTOR.set_dps(speed)                              # Set the speed for the motor
             AUX_MOTOR.set_limits(POWER_LIMIT, speed)

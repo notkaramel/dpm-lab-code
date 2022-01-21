@@ -96,9 +96,12 @@ try:
     # Prompt for drive loop
     while True:
         side_length = SQUARE_LENGTH # Assume default side length
-        resp = input('Override default side length 0.5m? y/n')
+        resp = input('Override default side length 0.5m? y/n (q for quit): ')
         if resp.lower() == 'y':
             side_length = int(input('Enter square side length (m): '))
+        if resp.lower() == 'q':
+            BP.reset_all()
+            exit()
         print('Starting sqaure driver with side length = {:0.2f}m'.format(
             side_length))
         
