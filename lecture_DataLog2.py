@@ -28,6 +28,7 @@ def fopen(fName):
     except IOError:
         print('Unable to open file - aborting program.')
         BP.reset_all()
+        exit()
 
 
 def prompt_options():
@@ -68,6 +69,7 @@ try:
                 if write_to_file:
                     output_file.close
                 BP.reset_all()                              # If anything other than 0, assume tripped
+                exit()
                 
             sD = C_SENSOR.get_value()                       # Read color sensor, print values
                                                             # Read raw data [Red, Green, Blue, Intensity]

@@ -71,7 +71,7 @@ try:
         if T_SENSOR.is_pressed():
             print("Contact - wall follower terminated.")
             BP.reset_all()
-            break
+            exit()
 
         dist = US_SENSOR.get_cm()  # Get distance reading from wall
         if dist >= US_OUTLIER:    # If error or too far, no error correction

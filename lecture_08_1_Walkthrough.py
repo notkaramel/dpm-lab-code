@@ -27,6 +27,7 @@ try:
         try:
             if T_SENSOR.is_pressed():      # Press touch sensor to stop robot
                 BP.reset_all()
+                exit()
             time.sleep(SENSOR_POLL_SLEEP)  # Use sensor polling interval here
         except SensorError as error:
             print(error)                   # On exception or error, print error code

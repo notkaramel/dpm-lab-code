@@ -32,6 +32,7 @@ try:
         try:
             if T_SENSOR.is_pressed():     # Press touch sensor to stop robot
                 BP.reset_all()
+                exit()
 
             # Retrieve the color values the Color sensor
             red, gre, blu, lum = C_SENSOR.get_value()

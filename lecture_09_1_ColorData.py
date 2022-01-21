@@ -32,7 +32,7 @@ try:
                 print("Data acquisition complete. Closing log file.")
                 f.close()                         # Close file (save contents)
                 BP.reset_all()                    # Stop robot
-
+                exit()
             # Retrieve the color values the Color sensor
             red, gre, blu, lum = C_SENSOR.get_value()
 
