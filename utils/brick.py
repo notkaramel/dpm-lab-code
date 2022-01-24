@@ -20,6 +20,7 @@ import time
 import sys
 
 WAIT_READY_INTERVAL = 0.01
+INF = float("inf")
 
 PORTS: dict[str, int] = {
     '1': BrickPi3.PORT_1,
@@ -590,6 +591,9 @@ class EV3GyroSensor(Sensor):
 
 class Motor:
     "Motor class for any motor."
+    INF = INF
+    MAX_SPEED = 1560 # positive or negative degree per second speed
+    MAX_POWER = 100 # positive or negative percent power
 
     def __init__(self, port: Literal["A", "B", "C", "D"] | list[str]):
         """
@@ -669,6 +673,7 @@ class Motor:
         dps - The target speed in degrees per second
         """
         self.brick.set_motor_dps(self.port, dps)
+        self.set_limits(dps=dps)
 
     def set_limits(self, power=0, dps=0):
         """
@@ -712,6 +717,17 @@ class Motor:
         """
         return self.brick.get_motor_encoder(self.port)
 
+    def get_position(self):
+        """
+        Read a motor encoder in degrees.
+
+        Keyword arguments:
+        port - The motor port (one at a time). PORT_A, PORT_B, PORT_C, or PORT_D.
+
+        Returns the encoder position in degrees
+        """
+        return self.get_encoder()
+
     def get_power(self):
         """
         Read motor status and returns power percent (-100 to 100)
@@ -734,7 +750,7 @@ class Motor:
 
     def is_moving(self):
         try:
-            return (not math.isclose(self.get_power(), 0)) or (not math.isclose(self.get_speed(), 0))
+            return (not math.isclose(self.get_power(), 0)) and (not math.isclose(self.get_speed(), 0))
         except TypeError:
             return None
 
@@ -762,6 +778,16 @@ class Motor:
         """
         self.brick.reset_motor_encoder(self.port)
 
+    def reset_position(self):
+        """
+        Reset motor encoder(s) to 0.
+
+        Keyword arguments:
+        port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
+        """
+        return self.reset_encoder()
+
+    @staticmethod
     def create_motors(motor_ports: list[Literal["A", "B", "C", "D"]] | str):
         motor_ports = map(str.upper, list(motor_ports))
         result = []
@@ -769,6 +795,20 @@ class Motor:
             if port in ['A', 'B', 'C', 'D']:
                 result.append(Motor(port))
         return tuple(result)
+
+
+    def wait_is_moving(self, sleep_interval:float=None):
+        if sleep_interval is None:
+            sleep_interval = WAIT_READY_INTERVAL
+        while not self.is_moving():
+            time.sleep(sleep_interval)
+
+    def wait_is_stopped(self, sleep_interval:float=None):
+        if sleep_interval is None:
+            sleep_interval = WAIT_READY_INTERVAL
+        while self.is_moving():
+            time.sleep(sleep_interval)
+
 
 
 def create_motors(motor_ports: list[Literal["A", "B", "C", "D"]] | str):
