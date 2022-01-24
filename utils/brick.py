@@ -54,16 +54,32 @@ class RevEnumeration:
 
     def __init__(self, enum):  # or *names, with no .split()
         "enum can be any type, but preferably a brickpi3.Enumeration object."
+        self.keys = []
         for attr, val in enum.__dict__.items():
             if attr.isupper():
-                setattr(self, str(val), attr)
+                self[val] = attr
+        self.keys.sort()
 
     def __getitem__(self, key):
         "Allow performing get actions such as SENSOR_CODES[0]."
-        return SENSOR_CODES.__dict__[str(key)]  # SENSOR_CODES -> self.enum?
+        return self.__dict__[str(key)]  # SENSOR_CODES -> self.enum?
 
+    def __setitem__(self, key, attr):
+        setattr(self, str(key), attr)
+        self.keys.append(str(key))
 
-SENSOR_CODES = RevEnumeration(BrickPi3.SENSOR_STATE)
+    def __repr__(self):
+        return ", ".join([ f"{key}={self[key]}" for key in self.keys])
+
+SENSOR_STATE = Enumeration("""
+        VALID_DATA,
+        NOT_CONFIGURED,
+        CONFIGURING,
+        NO_DATA,
+        I2C_ERROR,
+        INCORRECT_SENSOR_PORT,
+    """)
+SENSOR_CODES = RevEnumeration(SENSOR_STATE)
 
 BP = None
 
@@ -148,6 +164,7 @@ class Brick(BrickPi3):
         2: CONFIGURING
         3: NO_DATA
         4: I2C_ERROR
+        5: INCORRECT_SENSOR_PORT
         """
         if port == self.PORT_1:
             message_type = self.BPSPI_MESSAGE_TYPE.GET_SENSOR_1
@@ -172,7 +189,7 @@ class Brick(BrickPi3):
                 if reply[4] == self.SensorType[port_index]:
                     return reply[5]
                 else:
-                    raise SensorError("get_sensor error: Invalid sensor data")
+                    return SENSOR_STATE.INCORRECT_SENSOR_PORT
             else:
                 raise IOError("get_sensor error: No SPI response")
 
@@ -185,7 +202,7 @@ class Brick(BrickPi3):
                 if reply[4] == self.SensorType[port_index]:
                     return reply[5]
                 else:
-                    raise SensorError("get_sensor error: Invalid sensor data")
+                    return SENSOR_STATE.INCORRECT_SENSOR_PORT
             else:
                 raise IOError("get_sensor error: No SPI response")
 
@@ -205,7 +222,7 @@ class Brick(BrickPi3):
                                                                  and (reply[4] == self.SENSOR_TYPE.NXT_TOUCH or reply[4] == self.SENSOR_TYPE.EV3_TOUCH)))):
                     return reply[5]
                 else:
-                    raise SensorError("get_sensor error: Invalid sensor data")
+                    return SENSOR_STATE.INCORRECT_SENSOR_PORT
             else:
                 raise IOError("get_sensor error: No SPI response")
 
@@ -217,7 +234,7 @@ class Brick(BrickPi3):
                 if reply[4] == self.SensorType[port_index]:
                     return reply[5]
                 else:
-                    raise SensorError("get_sensor error: Invalid sensor data")
+                    return SENSOR_STATE.INCORRECT_SENSOR_PORT
             else:
                 raise IOError("get_sensor error: No SPI response")
 
@@ -237,7 +254,7 @@ class Brick(BrickPi3):
                 if reply[4] == self.SensorType[port_index]:
                     return reply[5]
                 else:
-                    raise SensorError("get_sensor error: Invalid sensor data")
+                    return SENSOR_STATE.INCORRECT_SENSOR_PORT
             else:
                 raise IOError("get_sensor error: No SPI response")
 
@@ -249,7 +266,7 @@ class Brick(BrickPi3):
                 if reply[4] == self.SensorType[port_index]:
                     return reply[5]
                 else:
-                    raise SensorError("get_sensor error: Invalid sensor data")
+                    return SENSOR_STATE.INCORRECT_SENSOR_PORT
             else:
                 raise IOError("get_sensor error: No SPI response")
 
@@ -261,7 +278,7 @@ class Brick(BrickPi3):
                 if reply[4] == self.SensorType[port_index]:
                     return reply[5]
                 else:
-                    raise SensorError("get_sensor error: Invalid sensor data")
+                    return SENSOR_STATE.INCORRECT_SENSOR_PORT
             else:
                 raise IOError("get_sensor error: No SPI response")
 
@@ -273,7 +290,7 @@ class Brick(BrickPi3):
                 if reply[4] == self.SensorType[port_index]:
                     return reply[5]
                 else:
-                    raise SensorError("get_sensor error: Invalid sensor data")
+                    return SENSOR_STATE.INCORRECT_SENSOR_PORT
             else:
                 raise IOError("get_sensor error: No SPI response")
 
@@ -284,7 +301,7 @@ class Brick(BrickPi3):
                 if reply[4] == self.SensorType[port_index]:
                     return reply[5]
                 else:
-                    raise SensorError("get_sensor error: Invalid sensor data")
+                    return SENSOR_STATE.INCORRECT_SENSOR_PORT
             else:
                 raise IOError("get_sensor error: No SPI response")
 
@@ -302,14 +319,15 @@ class Sensor:
         CONFIGURING = "CONFIGURING"
         NO_DATA = "NO_DATA"
         I2C_ERROR = "I2C_ERROR"
+        INCORRECT_SENSOR_PORT = "INCORRECT_SENSOR_PORT"
 
-    ALL_SENSORS = []
+    ALL_SENSORS = {key:None for key in '1 2 3 4'.split(' ')}
 
     def __init__(self, port: Literal[1, 2, 3, 4]):
         "Initialize sensor with a given port (1, 2, 3, or 4)."
         self.brick = Brick()
         self.port = PORTS[str(port).upper()]
-        Sensor.ALL_SENSORS.append(self)
+        Sensor.ALL_SENSORS[str(port)] = self
 
     def get_status(self):
         """
@@ -349,9 +367,14 @@ class Sensor:
             time.sleep(WAIT_READY_INTERVAL)
 
 
-def wait_ready_sensors():
-    for sensor in Sensor.ALL_SENSORS:
-        sensor.wait_ready()
+def wait_ready_sensors(debug=False):
+    for port, sensor in Sensor.ALL_SENSORS.items():
+        if sensor is not None:
+            if debug:
+                print(f"Initializing Port {port}:", type(sensor).__name__)
+            sensor.wait_ready()
+    if debug:
+        print("All Sensors Initialized")
 
 
 class TouchSensor(Sensor):
