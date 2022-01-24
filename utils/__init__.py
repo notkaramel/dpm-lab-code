@@ -1,1 +1,1 @@
-from . import brick, filter, sound, telemetry
+from . import brick, filters, sound, telemetry

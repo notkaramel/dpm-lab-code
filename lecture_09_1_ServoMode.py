@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""DPM Hands On Example 3 (Lecture 10) - MotorDemo
+"""DPM Hands On Example 3 (Lecture 9) - MotorDemo
 
 A simple interactive program that allows the user to specify the rotation and 
 speed for an EV3 Large Motor. Prgoram operates a loop until ^C entered.

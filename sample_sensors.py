@@ -1,7 +1,24 @@
+"""sample_sensors
+
+This file serves as a list of example code using the sensors. It is 
+meant to be run with the following attached sensors:
+
+Port 1 - TouchSensor
+Port 2 - EV3ColorSensor
+Port 3 - EV3UltrasonicSensor
+
+It uses 'input' calls to let you get ready to position a sensor and take data.
+Usually, sensor data is sampled continuously in a while loop, using a 
+time.sleep(seconds) to create an interval between taking sensor sample data.
+
+Author: Ryan Au
+January 24th, 2022
+"""
+
 from utils.brick import wait_ready_sensors, EV3ColorSensor, EV3UltrasonicSensor, TouchSensor
 
-color = EV3ColorSensor(1) # port S1
-touch = TouchSensor(2) # port S2
+touch = TouchSensor(1) # port S1
+color = EV3ColorSensor(2) # port S2
 ultra = EV3UltrasonicSensor(3) # port S3
 
 # waits until every previously defined sensor is ready
@@ -23,6 +40,8 @@ ultra.get_raw_value() # usually distance, centimeters
 ### TOUCH DETECTION ###
 ###                 ###
 #######################
+
+input("Waiting. Press Enter to take Touch Data")
 """Touch sensor has no real setup necessary. One method, returns True/False boolean."""
 print(touch.is_pressed())
 
@@ -32,7 +51,7 @@ print(touch.is_pressed())
 ### COLOR DETECTION ###
 ###                 ###
 #######################
-
+input("Waiting. Press Enter to take Color ID Value")
 """The color sensor has several modes to detect colors, here are two useful ones"""
 
 """
@@ -47,6 +66,7 @@ Returns "unknown" when facing an error, or an unkown color
 color_name = color.get_color_name()
 print(color_name)
 
+input("Waiting. Press Enter to take Color Component Data")
 """
 {Component mode} gives RGB values, a list of Red, Green, and Blue
 * reliable, more info
@@ -66,13 +86,16 @@ print(rgb_list)
 ############################
 """The Ultrasonic Sensor has two main modes, and one extra that we don't use generally"""
 
+input("Waiting. Press Enter to take Ultrasonic CM Distance")
 """{Centimeter mode} reads the distance in centimeters. Returns a float value."""
 distance = ultra.get_cm()
 print(distance)
 
+input("Waiting. Press Enter to take Ultrasonic IN Distance")
 """{Inches mode} still reads distance but gives back inches. Also a float value."""
 distance = ultra.get_inches()
 print(distance)
 
+input("Waiting. Press Enter to take Ultrasonic Detection value")
 """{Detection mode} uses ultrasonic sensor to detect any other ultrasonic sensors nearby. Output boolean."""
-ultra.detects_other_us_sensor()
+print(ultra.detects_other_us_sensor())
