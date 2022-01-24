@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""DPM Hands On Example 4 (Lecture 11) - SquareDriver
+"""DPM Hands On Example 4 (Lecture 10) - SquareDriver
 
 A simple program that drives a two-wheeled robot along a square trajectory
 with size specified by the suer. Program will execute prompt-drive loop

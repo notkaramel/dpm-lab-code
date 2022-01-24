@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""DPM Hands on Example 1 (Lecture 8) - StopOnSw
+"""DPM Hands on Example 1 (Lecture 7) - StopOnSw
 
 A simple program to move a two-wheeled robot forward until the touch sensor is tripped.
 

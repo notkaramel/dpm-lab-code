@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""DPM Hands on Example 5 (Lecture 11) - WallFollower
+"""DPM Hands on Example 5 (Lecture 10) - WallFollower
 
 A striaghtforward implementation of the Wall Follower described in the slides for Lecture 12.
 The program prompts the user to override default values of wall distance, forward speed,
