@@ -383,22 +383,22 @@ class TouchSensor(Sensor):
     Gives values 0 to 1, with 1 meaning the button is being pressed.
     """
 
-    def __init__(self, port: Literal[1, 2, 3, 4], mode="touch"):
+    def __init__(self, port: Literal[1, 2, 3, 4], mode:str="touch"):
         """
         Initialize touch sensor with a given port number.
         mode does not need to be set and actually does nothing here.
         """
         super(TouchSensor, self).__init__(port)
-        self.set_mode(mode)
+        self.set_mode(mode.lower())
 
-    def set_mode(self, mode="touch"):
+    def set_mode(self, mode:str="touch"):
         """
         Touch sensor only has one mode, and does not require an input.
         This method is useless unless you wish to re-initialize the sensor.
         """
         try:
-            self.mode = mode
             self.brick.set_sensor_type(self.port, BrickPi3.SENSOR_TYPE.TOUCH)
+            self.mode = mode.lower()
             return True
         except SensorError as error:
             return error
@@ -427,7 +427,7 @@ class EV3UltrasonicSensor(Sensor):
         super(EV3UltrasonicSensor, self).__init__(port)
         self.set_mode(mode)
 
-    def set_mode(self, mode):
+    def set_mode(self, mode:str):
         """
         Set ultrasonic sensor mode. Return True if mode change successful.
         cm - centimeter measure (0 to 255)
@@ -435,7 +435,6 @@ class EV3UltrasonicSensor(Sensor):
         listen - 0 or 1, 1 means another ultrasonic sensor is detected
         """
         try:
-            self.mode = mode
             if mode.lower() == self.Mode.CM:
                 self.brick.set_sensor_type(
                     self.port, BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_CM)
@@ -447,6 +446,7 @@ class EV3UltrasonicSensor(Sensor):
                     self.port, BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_LISTEN)
             else:
                 return False
+            self.mode = mode.lower()
             return True
         except SensorError as error:
             return error
@@ -493,7 +493,7 @@ class EV3ColorSensor(Sensor):
         super(EV3ColorSensor, self).__init__(port)
         self.set_mode(mode)
 
-    def set_mode(self, mode):
+    def set_mode(self, mode:str):
         """
         Sets color sensor mode. Return True if mode change successful.
 
@@ -504,7 +504,7 @@ class EV3ColorSensor(Sensor):
         id - provide a single integer value based on the sensor's guess of detected color
         """
         try:
-            self.mode = mode
+
             if mode.lower() == self.Mode.COMPONENT:
                 self.brick.set_sensor_type(
                     self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_COLOR_COMPONENTS)
@@ -522,6 +522,7 @@ class EV3ColorSensor(Sensor):
                     self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_COLOR)
             else:
                 return False
+            self.mode = mode.lower()
             return True
         except SensorError as error:
             return error
@@ -540,6 +541,13 @@ class EV3ColorSensor(Sensor):
             self.wait_ready()
         val = self.get_value()
         return val[:-1] if val is not None else [None, None, None]
+
+    def get_red(self) -> float:
+        "Returns the red light detected by the sensor. Only red light turns on."
+        if self.mode != self.Mode.RED:
+            self.set_mode(self.Mode.RED)
+            self.wait_ready()
+        return self.get_value()
 
     def get_color_name(self) -> str:
         "Return the closest detected color by name. This will switch the sensor to id mode."
@@ -568,7 +576,7 @@ class EV3GyroSensor(Sensor):
         super(EV3GyroSensor, self).__init__(port)
         self.set_mode(mode)
 
-    def set_mode(self, mode):
+    def set_mode(self, mode:str):
         """
         Change gyro sensor mode.
 
@@ -577,21 +585,24 @@ class EV3GyroSensor(Sensor):
         both - list of [abs, dps] values
         """
         try:
-            self.mode = mode
-            if mode == self.Mode.ABS:
+            if mode.lower() == self.Mode.ABS:
                 self.brick.set_sensor_type(
                     self.port, BrickPi3.SENSOR_TYPE.EV3_GYRO_ABS)
-            elif mode == self.Mode.DPS:
+            elif mode.lower() == self.Mode.DPS:
                 self.brick.set_sensor_type(
                     self.port, BrickPi3.SENSOR_TYPE.EV3_GYRO_DPS)
-            elif mode == self.Mode.BOTH:
+            elif mode.lower() == self.Mode.BOTH:
                 self.brick.set_sensor_type(
                     self.port, BrickPi3.SENSOR_TYPE.EV3_GYRO_ABS_DPS)
             else:
                 return False
+            self.mode = mode.lower()
             return True
         except SensorError as error:
             return error
+
+    def reset_measure(self):
+        return self.set_mode(self.mode.lower())
 
     def get_abs_measure(self):
         if self.mode != self.Mode.ABS:
