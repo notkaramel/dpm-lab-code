@@ -15,7 +15,7 @@ January 24th, 2022
 ### Power-based Control ###
 ###########################
 
-from utils.brick import Motor, WAIT_READY_INTERVAL
+from utils.brick import Motor
 
 motor_left = Motor("A")
 
@@ -23,7 +23,9 @@ motor_left.set_power(50)
 print("motor_left.set_power(50)")
 input("# Press any key to continue...")
 
-motor_left.set_limits(power=20) # limits used for position movement, not power movement
+# limits are used for position movement, not power movement
+motor_left.set_limits(power=20)
+
 motor_left.set_power(70) # increase to 70% instead of 20%
 print("motor_left.set_power(70)")
 input("# Press any key to continue...")
@@ -32,7 +34,8 @@ motor_left.set_power(0) # always do 0% to stop motor
 print("motor_left.set_power(0)")
 input("# Press any key to continue...")
 
-motor_left.float_motor() # float_motor lets it move freely. 0% power resists movement.
+# float_motor lets it move freely. 0% power resists movement.
+motor_left.float_motor()
 print("motor_left.float_motor()")
 input("# Press any key to continue...")
 
@@ -46,7 +49,7 @@ import time
 motor_left = Motor("A")
 
 # Set target speed first, 360 deg/sec
-# Reset power limit to limitless, default values:(power=0, dps=0)
+# Reset power limit to limitless with 0, default values:(power=0, dps=0)
 motor_left.set_limits(dps=360)
 
 # set current position to absolute pos 0deg
