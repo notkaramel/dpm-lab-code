@@ -79,7 +79,7 @@ def _parse_freq(value: Union[str, float]):
     return 0
 
 
-def gen_wave(duration=1, volume=0.2, pitch: Union[str, float] = "A4", mod_f: Union[str, float] = 0, mod_k=0, amp_f: Union[str, float] = 0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000):
+def gen_wave(duration=1, volume=40, pitch: Union[str, float] = "A4", mod_f: Union[str, float] = 0, mod_k=0, amp_f: Union[str, float] = 0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000):
     # Process frequencies, factors
     pitch = _parse_freq(pitch)
     mod_f = _parse_freq(mod_f)
@@ -132,7 +132,7 @@ def _gen_wave(duration, volume, pitch, mod_f, mod_k, amp_f, amp_ka, amp_ac, cuto
 
 
 class Sound:
-    def __init__(self, duration=1, volume=0.2, pitch="A4", mod_f=0, mod_k=0, amp_f=0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000):
+    def __init__(self, duration=1, volume=40, pitch="A4", mod_f=0, mod_k=0, amp_f=0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000):
         self.player = None
         self._fs = fs  # needs a default value
         self.set_volume(volume)
@@ -456,7 +456,7 @@ NOTE_NAMES = sorted(list(
     NOTES.keys()), key=lambda x: x[-1] + _note_order[x[0]] + _note_order[x[1:-1]])
 
 
-def preload_all_pitches(duration=1, volume=0.2, mod_f=0, mod_k=0, amp_f=0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000):
+def preload_all_pitches(duration=1, volume=40, mod_f=0, mod_k=0, amp_f=0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000):
     return {key: Sound(pitch=key, duration=duration, volume=volume, mod_f=mod_f, mod_k=mod_k, amp_f=amp_f, amp_ka=amp_ka, amp_ac=amp_ac, cutoff=cutoff, fs=fs) for key in NOTE_NAMES}
 
 
