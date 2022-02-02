@@ -8,7 +8,7 @@
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="utils.html"><font color="#ffffff">utils</font></a>.sound</strong></big></big></font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Caurya%5Cprogramming%5Cdpm-lab-code%5Cutils%5Csound.py">c:\users\aurya\programming\dpm-lab-code\utils\sound.py</a></font></td></tr></table>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:d%3A%5Cprogrammingd%5Cschoold%5Clab-code-development%5Cutils%5Csound.py">d:\programmingd\schoold\lab-code-development\utils\sound.py</a></font></td></tr></table>
     <p><tt>Module&nbsp;for&nbsp;creating&nbsp;and&nbsp;generating&nbsp;sine&nbsp;wave&nbsp;based&nbsp;sound.&nbsp;<br>
 Includes&nbsp;Frequency&nbsp;modulation&nbsp;and&nbsp;Amplitude&nbsp;modulation.<br>
 &nbsp;<br>
@@ -48,12 +48,12 @@ Authors:&nbsp;Ryan&nbsp;Au&nbsp;and&nbsp;Younes&nbsp;Boubekaur</tt></p>
 <font color="#000000" face="helvetica, arial"><a name="Sound">class <strong>Sound</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt><a href="#Sound">Sound</a>(duration=1,&nbsp;volume=0.2,&nbsp;pitch='A4',&nbsp;mod_f=0,&nbsp;mod_k=0,&nbsp;amp_f=0,&nbsp;amp_ka=0,&nbsp;amp_ac=1,&nbsp;cutoff=0.01,&nbsp;fs=8000)<br>
+<td colspan=2><tt><a href="#Sound">Sound</a>(duration=1,&nbsp;volume=40,&nbsp;pitch='A4',&nbsp;mod_f=0,&nbsp;mod_k=0,&nbsp;amp_f=0,&nbsp;amp_ka=0,&nbsp;amp_ac=1,&nbsp;cutoff=0.01,&nbsp;fs=8000)<br>
 &nbsp;<br>
 <br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%">Methods defined here:<br>
-<dl><dt><a name="Sound-__init__"><strong>__init__</strong></a>(self, duration=1, volume=0.2, pitch='A4', mod_f=0, mod_k=0, amp_f=0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+<dl><dt><a name="Sound-__init__"><strong>__init__</strong></a>(self, duration=1, volume=40, pitch='A4', mod_f=0, mod_k=0, amp_f=0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
 
 <dl><dt><a name="Sound-alter_wave"><strong>alter_wave</strong></a>(self, func: Callable[[float, int], int])</dt><dd><tt>Apply&nbsp;a&nbsp;function&nbsp;to&nbsp;change&nbsp;the&nbsp;currently&nbsp;playing/prepared&nbsp;audio&nbsp;wave.<br>
 &nbsp;<br>
@@ -159,9 +159,9 @@ Data descriptors defined here:<br>
  <dl><dt><a name="-cos"><strong>cos</strong></a>(x: float) -&gt; float</dt></dl>
  <dl><dt><a name="-db_to_amp"><strong>db_to_amp</strong></a>(db: float, ref_amp: float) -&gt; float</dt><dd><tt>Converts&nbsp;decibels&nbsp;to&nbsp;a&nbsp;next&nbsp;amplitude.<br>
 ref_amp&nbsp;is&nbsp;the&nbsp;reference&nbsp;amplitude&nbsp;to&nbsp;start&nbsp;at.</tt></dd></dl>
- <dl><dt><a name="-gen_wave"><strong>gen_wave</strong></a>(duration=1, volume=0.2, pitch: Union[str, float] = 'A4', mod_f: Union[str, float] = 0, mod_k=0, amp_f: Union[str, float] = 0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000)</dt></dl>
+ <dl><dt><a name="-gen_wave"><strong>gen_wave</strong></a>(duration=1, volume=40, pitch: Union[str, float] = 'A4', mod_f: Union[str, float] = 0, mod_k=0, amp_f: Union[str, float] = 0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000)</dt></dl>
  <dl><dt><a name="-load_all_pitches_file"><strong>load_all_pitches_file</strong></a>(filename='sounds')</dt></dl>
- <dl><dt><a name="-preload_all_pitches"><strong>preload_all_pitches</strong></a>(duration=1, volume=0.2, mod_f=0, mod_k=0, amp_f=0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000)</dt></dl>
+ <dl><dt><a name="-preload_all_pitches"><strong>preload_all_pitches</strong></a>(duration=1, volume=40, mod_f=0, mod_k=0, amp_f=0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000)</dt></dl>
  <dl><dt><a name="-save_all_pitches_file"><strong>save_all_pitches_file</strong></a>(sounds, filename='sounds')</dt></dl>
  <dl><dt><a name="-sin"><strong>sin</strong></a>(x: float) -&gt; float</dt></dl>
  <dl><dt><a name="-time"><strong>time</strong></a>(...)</dt><dd><tt><a href="#-time">time</a>()&nbsp;-&gt;&nbsp;floating&nbsp;point&nbsp;number<br>
