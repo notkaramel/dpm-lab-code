@@ -5,7 +5,7 @@ sensors and motors.
 Authors: Ryan Au, Younes Boubekeur
 """
 
-from __future__ import annotations  # not required in Python 3.10+
+from __future__ import annotations
 try:
     from brickpi3 import *
 except ModuleNotFoundError:
@@ -913,7 +913,5 @@ def reset_brick(*args):
 # Reset brick when the program exits
 try:
     atexit.register(reset_brick)
-    signal.signal(signal.SIGTERM, reset_brick)
-    signal.signal(signal.SIGINT, reset_brick)  # Ctrl-C
 except ValueError as err:
     print(err, "Must import brick in main thread", file=sys.stderr)
