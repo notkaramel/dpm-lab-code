@@ -18,7 +18,7 @@ MOTOR_POLL_DELAY = 0.05
 
 SQUARE_LENGTH = 0.5     # (meters) Side length of square in
 WHEEL_RADIUS = 0.028    # (meters) Radius of one wheel
-AXLE_LENGTH = 0.04      # (meters) Distance between wheel contact with ground
+AXLE_LENGTH = 0.10      # (meters) Distance between wheel contact with ground
 
 DIST_TO_DEG = 180/(math.pi*WHEEL_RADIUS)   # (degrees / meter) Convert distance to wheel degrees
 ORIENT_TO_DEG = AXLE_LENGTH / WHEEL_RADIUS # Convert whole robot rotation to wheel rotation
@@ -98,7 +98,7 @@ try:
         side_length = SQUARE_LENGTH # Assume default side length
         resp = input('Override default side length {:0.2f}m? y/n (q for quit): '.format(side_length))
         if resp.lower() == 'y':
-            FWD_SPEED = float(input('Enter square side length (m): '))
+            AXLE_LENGTH = float(input('Enter square side length (m): '))
         if resp.lower() == 'q':
             BP.reset_all()
             exit()
