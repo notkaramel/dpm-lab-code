@@ -18,13 +18,13 @@ MOTOR_POLL_DELAY = 0.05
 
 SQUARE_LENGTH = 0.5     # (meters) Side length of square in
 WHEEL_RADIUS = 0.028    # (meters) Radius of one wheel
-AXLE_LENGTH = 0.12      # (meters) Distance between wheel contact with ground
+AXLE_LENGTH = 0.04      # (meters) Distance between wheel contact with ground
 
 DIST_TO_DEG = 180/(math.pi*WHEEL_RADIUS)   # (degrees / meter) Convert distance to wheel degrees
 ORIENT_TO_DEG = AXLE_LENGTH / WHEEL_RADIUS # Convert whole robot rotation to wheel rotation
 
 FWD_SPEED = 10  # (deg per sec) Moving forward speed
-TRN_SPEED = 90   # (deg per sec) Turning a corner speed
+TRN_SPEED = 180   # (deg per sec) Turning a corner speed
 
 LEFT_MOTOR = Motor("A")  # Left motor in Port A
 RIGHT_MOTOR = Motor("D") # Right motor in Port D
