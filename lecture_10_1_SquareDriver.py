@@ -9,6 +9,7 @@ Author: F.P. Ferrie, Ryan Au
 Date: January 13th, 2022
 """
 
+from cmath import isclose
 import time
 import math
 from utils import brick
@@ -34,9 +35,9 @@ SPEED_LIMIT = 720        # Speed limit = 720dps
 
 def wait_for_motor(motor: Motor):
     "Function to block until motor completion"
-    while motor.get_speed() == 0:    # Wait for motor to spin up   (start)
+    while math.isclose(motor.get_speed(), 0):    # Wait for motor to spin up   (start)
         time.sleep(MOTOR_POLL_DELAY)
-    while motor.get_speed() != 0:    # Wait for motor to spin down (stop)
+    while math.isclose(motor.get_speed(), 0):    # Wait for motor to spin down (stop)
         time.sleep(MOTOR_POLL_DELAY)
 
 
