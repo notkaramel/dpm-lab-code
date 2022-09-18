@@ -23,7 +23,7 @@ AXLE_LENGTH = 0.15      # (meters) Distance between wheel contact with ground
 DIST_TO_DEG = 180/(math.pi*WHEEL_RADIUS)   # (degrees / meter) Convert distance to wheel degrees
 ORIENT_TO_DEG = AXLE_LENGTH / WHEEL_RADIUS # Convert whole robot rotation to wheel rotation
 
-FWD_SPEED = 10  # (deg per sec) Moving forward speed
+FWD_SPEED = 0  # (deg per sec) Moving forward speed
 TRN_SPEED = 90   # (deg per sec) Turning a corner speed
 
 LEFT_MOTOR = Motor("A")  # Left motor in Port A
