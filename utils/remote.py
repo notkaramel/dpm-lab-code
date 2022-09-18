@@ -1,12 +1,161 @@
 import brick
 import socket
+import pickle
 import socketserver
+import threading
+import time
 from .. import brickpi3
+
+TIMEOUT = socket.getdefaulttimeout()
+DEFAULT_PORT = 2110
+THREAD_SLEEP = 0.100
+BUSY_WAITING = 0.100
+
+
+class Message:
+    def __init__(self, text, password):
+        self.text = text
+        self.password = password
+
+
+class Command:
+    def __init__(self, func_name, password, *args, **kwargs):
+        self.func_name = func_name
+        self.password = password
+        self.args = args
+        self.kwargs = kwargs
+        self.id = id(self)
+
+
+class RemoteBrickServer(object):
+    def __init__(self, port=None, password="password"):
+        pass
 
 class RemoteBrick(object):
     def __init__(self, address, password="password"):
-        # self.server = socketserver.
-        pass
+        self.messages = []
+        self.buffer = {}
+        self.lock_message = threading.Lock()
+        self.lock_buffer = threading.Lock()
+        self.lock_sock = threading.Lock()
+        self.run_event = threading.Event()
+        self._status = None
+
+        self.address = address
+        self.password = password
+
+        self._restart()
+
+    def get_remote_status(self):
+        return self._status, self.run_event.is_set()
+
+    def _restart(self):
+        self.run_event.clear()
+        self.lock_sock.acquire()
+        self.sock = socket.create_connection(
+            (self.address, DEFAULT_PORT), TIMEOUT)
+        self.run_event.set()
+
+        self.lock_sock.release()
+        self.thread = threading.Thread(
+            target=RemoteBrick._thread_func, args=(self,), daemon=True)
+
+    def _thread_func(self):
+        while self.run_event.is_set():
+            try:
+                o = pickle.loads(self.sock.recv(4096))
+                if isinstance(o, Message):
+                    self.lock_message.acquire()
+                    self.messages.append(o)
+                    self.lock_message.release()
+                elif isinstance(o, Command):
+                    self.lock_buffer.acquire()
+                    self.buffer[o.cid] = o
+                    self.lock_buffer.release()
+                else:
+                    pass
+            except socket.error as err:
+                self._status = err
+                break
+            except pickle.UnpicklingError as err:
+                self._status = err
+
+            time.sleep(THREAD_SLEEP)
+        self.lock_sock.acquire()
+        self.sock.shutdown()
+        self.sock.close()
+        self.lock_sock.release()
+
+    def _send(self, data, tries=5, err=None):
+        if tries <= 0 and err is not None:
+            raise err
+
+        try:
+            self.lock_sock.acquire()
+            self.sock.send(data)
+            self.lock_sock.release()
+        except ConnectionResetError as err:
+            self._restart()
+            self._send(data, tries-1, err)
+
+    def __del__(self):
+        self.sock.close()
+
+    def send_message(self, text):
+        self._send(pickle.dumps(Message(text, self.password)))
+
+    def get_messages(self, count=0):
+        """Gets the specified number of messages from the message buffer.
+        Thread-safe.
+        """
+        # Receiving messages in the listener thread for this RemoteBrick socket
+        self.lock_message.acquire()
+
+        result = []
+        if count <= 0:
+            result = self.messages.copy()
+            self.messages.clear()
+        elif count > 0 and len(self.messages) >= count:
+            result = self.messages[:count]
+            for i in range(count):
+                del self.messages[0]
+
+        self.lock_message.release()
+        return result
+
+    def get_message(self):
+        """Gets the one message from the message buffer, or None if none present.
+        Thread-safe.
+        """
+        m = self.get_messages(1)
+        if type(m) == list and len(m) > 0:
+            return m[0]
+        else:
+            return None
+
+    def _send_command(self, func, *args, wait_for_data=True, **kwargs):
+        """Send a command object to the other brick.
+        Thread-safe.
+        """
+        c = Command(func, self.password ** args, **kwargs)
+        self._send(pickle.dumps(c))
+        return self._get_result(c.id, wait_for_data)
+
+    def _get_result(self, cid, wait_for_data=True):
+        """Get the result of the following command id.
+        Thread-safe.
+        """
+
+        self.lock_buffer.acquire()
+        while wait_for_data and cid not in self.buffer:
+            self.lock_buffer.release()
+            time.sleep(BUSY_WAITING)
+            self.lock_buffer.acquire()
+
+        o = self.buffer.get(cid, None)
+        self.lock_buffer.release()
+        return o
+
 
 class Enumeration(object):
     def __init__(self, names):  # or *names, with no .split()
@@ -27,16 +176,19 @@ class Enumeration(object):
                     name = name[:name.find("=")]
 
                 # optionally print to confirm that it's working correctly
-                #print "%40s has a value of %d" % (name, number)
+                # print "%40s has a value of %d" % (name, number)
 
                 setattr(self, name, number)
                 number = number + 1
 
+
 class FirmwareVersionError(Exception):
     """Exception raised if the BrickPi3 firmware needs to be updated"""
 
+
 class SensorError(Exception):
     """Exception raised if a sensor is not yet configured when trying to read it with get_sensor"""
+
 
 class BrickPi3(brickpi3.BrickPi3):
     PORT_1 = 0x01
@@ -195,13 +347,13 @@ class BrickPi3(brickpi3.BrickPi3):
         Enable the analog/digital converter on pin 6.
     """
 
-    SENSOR_CUSTOM.PIN1_9V    = 0x0002
-    SENSOR_CUSTOM.PIN5_OUT   = 0x0010
+    SENSOR_CUSTOM.PIN1_9V = 0x0002
+    SENSOR_CUSTOM.PIN5_OUT = 0x0010
     SENSOR_CUSTOM.PIN5_STATE = 0x0020
-    SENSOR_CUSTOM.PIN6_OUT   = 0x0100
+    SENSOR_CUSTOM.PIN6_OUT = 0x0100
     SENSOR_CUSTOM.PIN6_STATE = 0x0200
-    SENSOR_CUSTOM.PIN1_ADC   = 0x1000
-    SENSOR_CUSTOM.PIN6_ADC   = 0x4000
+    SENSOR_CUSTOM.PIN1_ADC = 0x1000
+    SENSOR_CUSTOM.PIN6_ADC = 0x4000
 
     SENSOR_I2C_SETTINGS = Enumeration("""
         MID_CLOCK,
@@ -211,88 +363,123 @@ class BrickPi3(brickpi3.BrickPi3):
         ALLOW_STRETCH_ANY,
     """)
 
-    SENSOR_I2C_SETTINGS.MID_CLOCK         = 0x01 # Send the clock pulse between reading and writing. Required by the NXT US sensor.
-    SENSOR_I2C_SETTINGS.PIN1_9V           = 0x02 # 9v pullup on pin 1
-    SENSOR_I2C_SETTINGS.SAME              = 0x04 # Keep performing the same transaction e.g. keep polling a sensor
+    # Send the clock pulse between reading and writing. Required by the NXT US sensor.
+    SENSOR_I2C_SETTINGS.MID_CLOCK = 0x01
+    SENSOR_I2C_SETTINGS.PIN1_9V = 0x02  # 9v pullup on pin 1
+    # Keep performing the same transaction e.g. keep polling a sensor
+    SENSOR_I2C_SETTINGS.SAME = 0x04
 
     MOTOR_STATUS_FLAG = Enumeration("""
         LOW_VOLTAGE_FLOAT,
         OVERLOADED,
     """)
 
-    MOTOR_STATUS_FLAG.LOW_VOLTAGE_FLOAT = 0x01 # If the motors are floating due to low battery voltage
-    MOTOR_STATUS_FLAG.OVERLOADED        = 0x02 # If the motors aren't close to the target (applies to position control and dps speed control).
+    # If the motors are floating due to low battery voltage
+    MOTOR_STATUS_FLAG.LOW_VOLTAGE_FLOAT = 0x01
+    # If the motors aren't close to the target (applies to position control and dps speed control).
+    MOTOR_STATUS_FLAG.OVERLOADED = 0x02
 
     #SUCCESS = 0
     #SPI_ERROR = 1
     #SENSOR_ERROR = 2
     #SENSOR_TYPE_ERROR = 3
 
-    def __init__(self, addr = 1, detect = True):
+    def __init__(self, addr=1, detect=True):
         self.sender = None
         pass
+
     def spi_transfer_array(self, data_out):
         pass
+
     def spi_write_8(self, MessageType, Value):
         pass
+
     def spi_read_16(self, MessageType):
         pass
+
     def spi_write_16(self, MessageType, Value):
         pass
+
     def spi_write_24(self, MessageType, Value):
         pass
+
     def spi_read_32(self, MessageType):
         pass
+
     def spi_write_32(self, MessageType, Value):
         pass
+
     def get_manufacturer(self):
         pass
+
     def get_board(self):
         pass
+
     def get_version_hardware(self):
         pass
+
     def get_version_firmware(self):
         pass
+
     def get_id(self):
         pass
+
     def set_led(self, value):
         pass
+
     def get_voltage_3v3(self):
         pass
+
     def get_voltage_5v(self):
         pass
+
     def get_voltage_9v(self):
         pass
+
     def get_voltage_battery(self):
         pass
-    def set_sensor_type(self, port, type, params = 0):
-        pass
-    def transact_i2c(self, port, Address, OutArray, InBytes):
-        pass
-    def get_sensor(self, port):
-        pass
-    def set_motor_power(self, port, power):
-        pass
-    def set_motor_position(self, port, position):
-        pass
-    def set_motor_position_relative(self, port, degrees):
-        pass
-    def set_motor_position_kp(self, port, kp = 25):
-        pass
-    def set_motor_position_kd(self, port, kd = 70):
-        pass
-    def set_motor_dps(self, port, dps):
-        pass
-    def set_motor_limits(self, port, power = 0, dps = 0):
-        pass
-    def get_motor_status(self, port):
-        pass
-    def get_motor_encoder(self, port):
-        pass
-    def offset_motor_encoder(self, port, position):
-        pass
-    def reset_motor_encoder(self, port):
-        pass
-    def reset_all(self):
+
+    def set_sensor_type(self, port, type, params=0):
         pass
 
+    def transact_i2c(self, port, Address, OutArray, InBytes):
+        pass
+
+    def get_sensor(self, port):
+        pass
+
+    def set_motor_power(self, port, power):
+        pass
+
+    def set_motor_position(self, port, position):
+        pass
+
+    def set_motor_position_relative(self, port, degrees):
+        pass
+
+    def set_motor_position_kp(self, port, kp=25):
+        pass
+
+    def set_motor_position_kd(self, port, kd=70):
+        pass
+
+    def set_motor_dps(self, port, dps):
+        pass
+
+    def set_motor_limits(self, port, power=0, dps=0):
+        pass
+
+    def get_motor_status(self, port):
+        pass
+
+    def get_motor_encoder(self, port):
+        pass
+
+    def offset_motor_encoder(self, port, position):
+        pass
+
+    def reset_motor_encoder(self, port):
+        pass
+
+    def reset_all(self):
+        pass

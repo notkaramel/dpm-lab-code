@@ -143,10 +143,13 @@ class Brick(BrickPi3):
     Wrapper class for the BrickPi3 class. Comes with additional methods such get_sensor_status.
     """
 
-    def __init__(self):
-        self.bp = BP
+    def __init__(self, bp=None):
+        if bp is None:
+            self.bp = BP
+        else:
+            self.bp = bp
         child = self.__dict__
-        parent = BP.__dict__
+        parent = self.bp.__dict__
         for key in parent.keys():
             setattr(self, str(key), child.get(key, parent.get(key)))
 
