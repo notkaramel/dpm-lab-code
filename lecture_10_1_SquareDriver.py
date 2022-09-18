@@ -98,7 +98,7 @@ try:
         side_length = SQUARE_LENGTH # Assume default side length
         resp = input('Override default side length 0.5m? y/n (q for quit): ')
         if resp.lower() == 'y':
-            side_length = float(input('Enter square side length (m): '))
+            FWD_SPEED = float(input('Enter square side length (m): '))
         if resp.lower() == 'q':
             BP.reset_all()
             exit()
