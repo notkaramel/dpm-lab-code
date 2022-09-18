@@ -96,7 +96,7 @@ try:
     # Prompt for drive loop
     while True:
         side_length = SQUARE_LENGTH # Assume default side length
-        resp = input('Override default side length 0.5m? y/n (q for quit): ')
+        resp = input('Override default side length {:0.2f}m? y/n (q for quit): '.format(side_length))
         if resp.lower() == 'y':
             FWD_SPEED = float(input('Enter square side length (m): '))
         if resp.lower() == 'q':
