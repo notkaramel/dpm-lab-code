@@ -11,7 +11,7 @@ Date: January 13th, 2022
 from utils.brick import BP, TouchSensor, Motor, wait_ready_sensors, SensorError
 import time
 
-FORWARD_SPEED = 10          # speed constant = 30% power
+FORWARD_SPEED = 30          # speed constant = 30% power
 SENSOR_POLL_SLEEP = 0.05    # Polling rate = 50 msec
 
 T_SENSOR = TouchSensor(1)   # Touch Sensor in Port S1
