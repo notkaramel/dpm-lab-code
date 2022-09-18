@@ -19,7 +19,7 @@ MOTOR_POLL_DELAY = 0.05
 
 SQUARE_LENGTH = 0.5     # (meters) Side length of square in
 WHEEL_RADIUS = 0.028    # (meters) Radius of one wheel
-AXLE_LENGTH = 0.10      # (meters) Distance between wheel contact with ground
+AXLE_LENGTH = 0.11      # (meters) Distance between wheel contact with ground
 
 DIST_TO_DEG = 180/(math.pi*WHEEL_RADIUS)   # (degrees / meter) Convert distance to wheel degrees
 ORIENT_TO_DEG = AXLE_LENGTH / WHEEL_RADIUS # Convert whole robot rotation to wheel rotation
@@ -37,7 +37,7 @@ def wait_for_motor(motor: Motor):
     "Function to block until motor completion"
     while math.isclose(motor.get_speed(), 0):    # Wait for motor to spin up   (start)
         time.sleep(MOTOR_POLL_DELAY)
-    while math.isclose(motor.get_speed(), 0):    # Wait for motor to spin down (stop)
+    while not math.isclose(motor.get_speed(), 0):    # Wait for motor to spin down (stop)
         time.sleep(MOTOR_POLL_DELAY)
 
 
