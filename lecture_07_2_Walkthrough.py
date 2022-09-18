@@ -15,7 +15,7 @@ FORWARD_SPEED = 30           # speed constant = 30% power
 SENSOR_POLL_SLEEP = 0.05     # Polling rate = 50 msec
 
 T_SENSOR = TouchSensor(1)    # Touch Sensor in Port S1
-C_SENSOR = EV3ColorSensor(2) # Color Sensor in Port S2
+C_SENSOR = EV3ColorSensor(3) # Color Sensor in Port S2
 
 LEFT_MOTOR = Motor("A")      # Left motor in Port A
 RIGHT_MOTOR = Motor("D")     # Right motor in Port D
