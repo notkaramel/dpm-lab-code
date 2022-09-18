@@ -18,7 +18,7 @@ MOTOR_POLL_DELAY = 0.05
 
 SQUARE_LENGTH = 0.5     # (meters) Side length of square in
 WHEEL_RADIUS = 0.028    # (meters) Radius of one wheel
-AXLE_LENGTH = 0.09      # (meters) Distance between wheel contact with ground
+AXLE_LENGTH = 0.012      # (meters) Distance between wheel contact with ground
 
 DIST_TO_DEG = 180/(math.pi*WHEEL_RADIUS)   # (degrees / meter) Convert distance to wheel degrees
 ORIENT_TO_DEG = AXLE_LENGTH / WHEEL_RADIUS # Convert whole robot rotation to wheel rotation
