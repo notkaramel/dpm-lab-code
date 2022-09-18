@@ -9,7 +9,7 @@ from __future__ import annotations
 try:
     from brickpi3 import *
 except ModuleNotFoundError:
-    from .brickpi3 import *
+    from .remote import *
 
 from typing import Literal, Type
 import math

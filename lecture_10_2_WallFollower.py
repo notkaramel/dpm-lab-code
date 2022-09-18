@@ -27,7 +27,7 @@ SPEED_LIMIT = 720          # Motor Speed limit = 720dps
 LEFT_MOTOR = Motor("A")             # Left motor on Port A
 RIGHT_MOTOR = Motor("D")            # Right motor on Port D
 T_SENSOR = TouchSensor(1)           # Touch sensor on Port S1
-US_SENSOR = EV3UltrasonicSensor(2)  # Ultrasonic on Port S2
+US_SENSOR = EV3UltrasonicSensor(3)  # Ultrasonic on Port S2
 
 
 # Initialization
