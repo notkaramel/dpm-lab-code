@@ -29,7 +29,7 @@ ultra = brick.EV3UltrasonicSensor(2)
 result = []
 try:
     while True:
-        time.sleep(0.05)
+        time.sleep(0.20)
         print(ultra.get_value())
         result.append(ultra.get_value())
 except KeyboardInterrupt:
