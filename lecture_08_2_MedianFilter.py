@@ -27,11 +27,13 @@ import time
 ultra = brick.EV3UltrasonicSensor(2)
 
 result = []
-while True:
-    time.sleep(0.05)
-    print(ultra.get_value())
-    result.append(ultra.get_value())
-
+try:
+    while True:
+        time.sleep(0.05)
+        print(ultra.get_value())
+        result.append(ultra.get_value())
+except KeyboardInterrupt:
+    pass
 
 """
 A simple median filter (Python)
