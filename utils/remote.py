@@ -66,28 +66,32 @@ class Connection:
                 self.lock_listener.acquire()
 
                 if isinstance(o, PasswordProtected) and o.verify_password(self.password):
-                    for key, listener in self.listeners.items():
+                    for key, val in self.listeners.items():
+                        listener, args = val
                         try:
-                            listener(o)
+                            listener(*args, o)
                         except Exception as err:
-                            print(f"Error: Listener {key} - {err}")
+                            print(f"Error: Listener {key} - {err}", val)
                 self.lock_listener.release()
-            except:
-                pass
+            except Exception as err:
+                print(err)
 
     def send(self, obj):
         if isinstance(obj, PasswordProtected):
             obj.password = self.password
             self.sock.send(pickle.dumps(obj))
 
-    def register_listener(self, name, listener):
+    def register_listener(self, name, listener, args=None):
         """Expects a listener of function type:
         def func(obj)
 
         where obj is the unpickled object, at the time
         """
+        if args is None:
+            args = tuple()
+
         self.lock_listener.acquire()
-        self.listeners[name] = listener
+        self.listeners[name] = (listener, args)
         self.lock_listener.release()
 
 
@@ -110,7 +114,7 @@ class RemoteBrick(object):
         self.address = address
         self.password = self.conn.password
 
-        self.conn.register_listener(self._listener)
+        self.conn.register_listener('main', RemoteBrick._listener, (self,))
 
     def _listener(self, obj):
         if isinstance(obj, Message):
@@ -125,7 +129,13 @@ class RemoteBrick(object):
             pass
 
     def send_message(self, text):
-        self.conn.send(pickle.dumps(Message(text, self.password)))
+        self.conn.send(Message(text))
+
+    def num_messages(self):
+        self.lock_messages.acquire()
+        r = len(self.messages)
+        self.lock_messages.release()
+        return r
 
     def get_messages(self, count=0):
         """Gets the specified number of messages from the message buffer.
@@ -152,7 +162,7 @@ class RemoteBrick(object):
         """
         m = self.get_messages(1)
         if type(m) == list and len(m) > 0:
-            return m[0]
+            return str(m[0])
         else:
             return None
 
@@ -160,8 +170,8 @@ class RemoteBrick(object):
         """Send a command object to the other brick.
         Thread-safe.
         """
-        c = Command(func, self.password ** args, **kwargs)
-        self.conn.send(pickle.dumps(c))
+        c = Command(func, * args, **kwargs)
+        self.conn.send(c)
         return self._get_result(c.id, wait_for_data)
 
     def _get_result(self, cid, wait_for_data=True):
@@ -176,10 +186,15 @@ class RemoteBrick(object):
 
         o = self.buffer.get(cid, None)
         self.lock_buffer.release()
-        return o
+        if o is None:
+            return None
+        elif isinstance(o, Command):
+            return o.result
+        else:
+            return o  # Unexpected result if it is a Command or Message object!
 
 
-class RemoteBrick(object):
+class RemoteBrickOld(object):
     def __init__(self, address, password="password", sock=None):
         self.messages = []
         self.buffer = {}

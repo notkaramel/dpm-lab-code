@@ -1,4 +1,4 @@
-from utils.remote import Connection, Command, Message, socket
+from utils.remote import Connection, Command, Message, RemoteBrick, socket
 import unittest
 import time
 
@@ -85,6 +85,24 @@ class TestConnection(unittest.TestCase):
         for dat in tst.get('data'):
             self.assertEqual(m, dat)
 
+
+class TestRemoteBrick(unittest.TestCase):
+    def setUp(self):
+        s1, s2 = FakeSocket.create_pair()
+        self.rem1 = RemoteBrick("", None, sock=s1)
+        self.rem2 = RemoteBrick("", None, sock=s2)
+    
+    def test_01(self):
+        m = "Hey there buddy"
+        self.rem1.send_message(m)
+
+        # for i in range(10):
+        while True:
+            time.sleep(0.1)
+            if self.rem2.num_messages() > 0:
+                break
+            
+        self.assertEqual(m, self.rem2.get_message())
 
 if __name__ == '__main__':
     unittest.main()

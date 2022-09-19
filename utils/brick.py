@@ -87,11 +87,13 @@ BP = None
 try:
     import spidev
     BP = BrickPi3()  # The BrickPi3 instance
+    # Save process ID of this program so we can force stop it later if needed
+    os.system(f"echo {os.getpid()} > ~/brickpi3_pid")
 except ModuleNotFoundError as err:
     class _FakeBP():
         def reset_all(self):
             pass
-    print('spidev not found, unable to initialize BP', file=sys.stderr)
+    print('spidev not found, intializing dummy BP', file=sys.stderr)
     BP = _FakeBP()
 
 
@@ -902,10 +904,6 @@ def configure_ports(*,
     if print_status:
         print("Port configuration complete!")
     return sensors + motors
-
-
-# Save process ID of this program so we can force stop it later if needed
-os.system(f"echo {os.getpid()} > ~/brickpi3_pid")
 
 
 def reset_brick(*args):
