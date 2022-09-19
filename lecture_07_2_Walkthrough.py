@@ -44,7 +44,8 @@ try:
         except SensorError as error:
             # On exception or error, print error code
             print(error)
+            exit()
 
 except KeyboardInterrupt:                  # Allows program to be stopped on keyboard interrupt
-    f.close()
+    f.close() # SAVE THE FILE
     BP.reset_all()

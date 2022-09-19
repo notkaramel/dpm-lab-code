@@ -20,13 +20,26 @@ def simple_median_filter(samples, width):
     
     return result
 
-print(simple_median_filter([1,2,3,4,5,6,7,8,9,10,11], 3))
+print("Median Example", simple_median_filter([1,2,3,4,5,6,7,8,9,10,11], 5))
+
+from utils import brick
+import time
+ultra = brick.EV3UltrasonicSensor(2)
+
+result = []
+while True:
+    time.sleep(0.05)
+    print(ultra.get_value())
+    result.append(ultra.get_value())
+
 
 """
 A simple median filter (Python)
 
 Author: F.P. Ferrie, Ryan Au
 Date: January 13th, 2022
+"""
+
 """
 from statistics import median
 
@@ -43,3 +56,4 @@ def median_filter(samples, width):
 print(median_filter([1,2,3,4,5,6,7,8,9,10,11], 3))
 
 
+"""
