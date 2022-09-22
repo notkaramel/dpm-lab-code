@@ -1,9 +1,11 @@
-from utils.remote import Connection, Command, Message, RemoteBrick, socket
+from utils.remote import BUSY_WAITING, Connection, Command, Message, RemoteBrick, RemoteBrickServer, socket, DEFAULT_PORT, _MethodCaller
 import unittest
 import time
 import threading
 
-DEFAULT_PORT = 2112
+
+DEFAULT_PORT = 2116
+
 
 class FakeSocket:
     @staticmethod
@@ -127,8 +129,10 @@ class TestIntegrationRemoteBrick(unittest.TestCase):
         self.s2 = conn
 
     def setUp(self):
-        t = threading.Thread(target=TestIntegrationRemoteBrick._thread_func, args=(self,), daemon=True)
+        t = threading.Thread(
+            target=TestIntegrationRemoteBrick._thread_func, args=(self,), daemon=True)
         t.start()
+        time.sleep(BUSY_WAITING)
         self.s2 = None
         self.s1 = socket.create_connection(('127.0.0.1', DEFAULT_PORT))
         for i in range(8):
@@ -150,8 +154,8 @@ class TestIntegrationRemoteBrick(unittest.TestCase):
             time.sleep(0.1)
             if self.rem2.num_messages() > 0:
                 break
-
-        self.assertEqual(m, self.rem2.get_message())
+        received = self.rem2.get_message()
+        self.assertEqual(m, received)
 
     def test_02(self):
         func = 'verify'
@@ -172,8 +176,54 @@ class TestIntegrationRemoteBrick(unittest.TestCase):
         self.rem2.close()
 
 
+class _FakeRemoteBP:
+    def action1(self, a1, a2, a3=None):
+        return (a1, a2, a3)
+
+
 class TestRemoteBrickServer(unittest.TestCase):
-    pass
+    def setUp(self) -> None:
+        self.server = RemoteBrickServer(password='password')
+        self.fake = _FakeRemoteBP()
+        self.server._caller = _MethodCaller(self.fake)
+        self.conn1 = RemoteBrick('127.0.0.1', 'password')
+        self.conn2 = RemoteBrick('127.0.0.1', None)
+
+    def test_01(self):
+        res = self.conn1._send_command('verify', wait_for_data=5)
+        self.assertNotEqual(None, res)
+        self.assertEqual(
+            f"I am sending back the command for {res.id}", res.result)
+
+    def test_02(self):
+        res = self.conn1._send_command('verify', wait_for_data=5)
+        self.assertNotEqual(None, res)
+        self.assertEqual(
+            f"I am sending back the command for {res.id}", res.result)
+
+        res = self.conn2._send_command('verify', wait_for_data=5)
+        self.assertNotEqual(None, res)
+        self.assertEqual(
+            f"I am sending back the command for {res.id}", res.result)
+
+    def test_03(self):
+        res = self.conn1._send_command('action1', 1, 2, wait_for_data=5, a3=45)
+        self.assertNotEqual(None, res)
+        self.assertEqual((1, 2, 45), res.result)
+        res = self.conn2._send_command('action1', wait_for_data=5)
+        err = None
+        try:
+            self.fake.action1()
+        except Exception as e:
+            err = e
+        self.assertNotEqual(None, res)
+        self.assertEqual(err, res.result)
+
+    def tearDown(self) -> None:
+        self.server.close()
+        self.conn1.close()
+        self.conn2.close()
+
 
 if __name__ == '__main__':
     unittest.main()

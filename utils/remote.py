@@ -6,7 +6,10 @@ import time
 from collections import deque
 from typing import List
 
+import json
+
 from . import brick
+from . import dummy
 
 TIMEOUT = socket.getdefaulttimeout()
 DEFAULT_PORT = 2110
@@ -14,6 +17,50 @@ THREAD_SLEEP = 0.100
 BUSY_WAITING = 0.100
 DEFAULT_PASSWORD = 'password'
 SERVER_START_RETRIES = 5
+DEBUG_DEFAULT = True
+
+
+class UnsupportedCommand(Exception):
+    pass
+
+
+class brickle:
+    class UnpicklingError(Exception):
+        pass
+    def dumps(obj):
+        try:
+            res = {}
+            if isinstance(obj, PasswordProtected):
+                return brickle._dumps(obj)
+            else:
+                pass
+            return json.dumps(res)
+        except Exception as err:
+            raise brickle.UnpicklingError(err)
+
+    def _dumps(obj):
+        res = vars(obj).copy()
+        res['__class__'] = obj.__class__.__name__
+        return res
+
+    def loads(self, data):
+        try:
+            data = json.loads(data)
+            if data['__class__'] == 'Command':
+                c = Command(data['func_name'])
+                return brickle._loads(c, data)
+            elif data['__class__'] == 'Message':
+                m = Message(data['text'])
+                return brickle._loads(m, data)
+            else:
+                return None
+        except Exception as err:
+            raise brickle.UnpicklingError(err)
+    def _loads(obj, data):
+        # Specific to this implementation
+        del data['__class__']
+        obj.__dict__.update(data)
+        return obj
 
 
 class PasswordProtected:
@@ -28,6 +75,7 @@ class PasswordProtected:
 
 class Message(PasswordProtected):
     def __init__(self, text):
+        super(Message, self).__init__()
         self.text = text
 
     def __repr__(self):
@@ -36,6 +84,7 @@ class Message(PasswordProtected):
 
 class Command(PasswordProtected):
     def __init__(self, func_name, *args, **kwargs):
+        super(Command, self).__init__()
         self.func_name = func_name
         self.args = args
         self.kwargs = kwargs
@@ -47,12 +96,23 @@ class Command(PasswordProtected):
 
 
 class Connection:
-    def __init__(self, sock, password="password"):
+    DEBUG_ALL = {}
+    DEBUG_COUNTER = 0
+
+    def __init__(self, sock, password="password", debug=None):
+        self.debug = DEBUG_DEFAULT if debug is None else debug
+        if self.debug:
+            i = id(self)
+            if i not in self.__class__.DEBUG_ALL:
+                self.__class__.DEBUG_ALL[i] = f'{self.__class__.__name__}{self.__class__.DEBUG_COUNTER}'
+                self.__class__.DEBUG_COUNTER += 1
+
         self.sock: socket.socket = sock
         self.listeners = {}
         self.run_event = threading.Event()
         self.lock_listener = threading.Lock()
-        self._status = None
+        self.lock_send = threading.Lock()
+        self._isclosed = False
 
         self.password = password
         self.run_event.set()
@@ -60,28 +120,54 @@ class Connection:
                              args=(self,), daemon=True)
         t.start()
 
+    def _debug(self, text):
+        if self.debug:
+            i = self.__class__.DEBUG_ALL[id(self)]
+            print(f'>>> ({i}) {text}\t', file=sys.stderr)
+
     def _func(self):
-        self._status = True
+        self._debug('starting connection thread')
         while self.run_event.is_set():
             try:
-                o = pickle.loads(self.sock.recv(4096))
+                self._debug('start receiving')
+                d = self.sock.recv(4096)
+                self._debug('received. loading...')
+                o = brickle.loads(d)
+                self._debug('received. loaded...')
+
                 self.lock_listener.acquire()
 
                 if isinstance(o, PasswordProtected) and o.verify_password(self.password):
                     for key, val in self.listeners.items():
                         listener, args = val
                         try:
+                            self._debug(f'running listener "{key}"')
                             listener(*args, o, self)
+                            self._debug(f'completed listener "{key}"')
                         except Exception as err:
-                            print(f"Error: Listener {key} - {err}", val)
+                            print(
+                                f"Error: Listener {key} - {err}", val, file=sys.stderr)
                 self.lock_listener.release()
+            except OSError as err:
+                if self.isclosed():
+                    return
+                print('Warning:', err, file=sys.stderr)
+            except brickle.UnpicklingError as err:
+                print('Data Unpickling Error:', err, file=sys.stderr)
             except Exception as err:
-                print(err)
+                print('Bad Error:', err, file=sys.stderr)
+        self._debug(f'connection thread ended')
 
     def send(self, obj):
         if isinstance(obj, PasswordProtected):
+            self.lock_send.acquire()
             obj.password = self.password
-            self.sock.send(pickle.dumps(obj))
+            self._debug(f'dumping data ({str(obj)})')
+            d = brickle.dumps(obj)
+            self._debug(f'sending data dump ({str(obj)})')
+            self.sock.send(d)
+            self._debug(f'data sent ({str(obj)})')
+            self.lock_send.release()
 
     def register_listener(self, name, listener, args=None):
         """Expects a listener of function type:
@@ -101,19 +187,42 @@ class Connection:
 
     def close(self):
         try:
+            self.run_event.clear()
             self.sock.shutdown()
             self.sock.close()
         except:
             pass
 
-class MessageSender(object): # Somewhat abstract class that needs self.conn
+        self._isclosed = True
+
+    def isclosed(self):
+        return self._isclosed
+
+
+class _MethodCaller:
+    def __init__(self, obj):
+        self.cls = obj.__class__
+        self.obj = obj
+        self.methods = {func_name: getattr(self.cls, func_name) for func_name in dir(
+            self.cls) if callable(getattr(self.cls, func_name)) and not func_name.startswith("__")}
+
+    def supports_command(self, command: Command):
+        return command.func_name in self.methods
+
+    def execute(self, command: Command):
+        if command.func_name in self.methods:
+            try:
+                command.result = self.methods[command.func_name](self.obj,
+                                                                 *command.args, **command.kwargs)
+            except Exception as err:
+                command.result = err
+        return command
+
+
+class MessageReceiver(object):  # Somewhat abstract class that needs self.conn
     def __init__(self):
         self.messages = deque()
         self.lock_messages = threading.Lock()
-        self.conn: Connection = None
-    
-    def send_message(self, text):
-        self.conn.send(Message(text))
 
     def num_messages(self):
         self.lock_messages.acquire()
@@ -141,17 +250,23 @@ class MessageSender(object): # Somewhat abstract class that needs self.conn
         return result
 
     def get_message(self):
+        m = self._get_message()
+        return str(m) if m is not None else m
+
+    def _get_message(self):
         """Gets the one message from the message buffer, or None if none present.
         Thread-safe.
         """
-        m = self.get_messages(1)
-        if type(m) == list and len(m) > 0:
-            return str(m[0])
-        else:
-            return None
+        self.lock_messages.acquire()
+        try:
+            m = self.messages.popleft()
+        except:
+            m = None
+        self.lock_messages.release()
+        return m
 
 
-class RemoteBrick(MessageSender):
+class RemoteBrick(MessageReceiver):
     def __init__(self, address, password, sock=None):
         super(RemoteBrick, self).__init__()
         self.buffer = {}
@@ -160,16 +275,19 @@ class RemoteBrick(MessageSender):
         self.status = None
 
         if sock is None:
-            self.sock = socket.create_connection(
-                (address, DEFAULT_PORT), TIMEOUT)
+            self.sock = socket.create_connection((address, DEFAULT_PORT))
         else:
             self.sock = sock
 
-        self.conn = Connection(sock, password)
+        self.conn = Connection(self.sock, password)
         self.address = address
         self.password = self.conn.password
 
         self.conn.register_listener('main', RemoteBrick._listener, (self,))
+        # self._send_command('__initialize', wait_for_data=False)
+
+    def send_message(self, text):
+        self.conn.send(Message(text))
 
     def __del__(self):
         self.close()
@@ -213,10 +331,11 @@ class RemoteBrick(MessageSender):
 
         while wait_for_data:
             if type(wait_for_data) == int:
-                wait_for_data = min(wait_for_data - 1, 0)
+                wait_for_data = max(wait_for_data - 1, 0)
 
             self.lock_buffer.acquire()
             if cid in self.buffer:
+                self.lock_buffer.release()
                 break
             self.lock_buffer.release()
 
@@ -228,136 +347,13 @@ class RemoteBrick(MessageSender):
         return o
 
 
-class RemoteBrickOld(object):
-    def __init__(self, address, password="password", sock=None):
-        self.messages = []
-        self.buffer = {}
-        self.lock_message = threading.Lock()
-        self.lock_buffer = threading.Lock()
-        self.lock_sock = threading.Lock()
-        self.run_event = threading.Event()
-        self._status = None
-
-        self.address = address
-        self.password = password
-
-        if sock is None:
-            self.sock = socket.create_connection(
-                (self.address, DEFAULT_PORT), TIMEOUT)
-        else:
-            self.sock = sock
-
-        self.thread = threading.Thread(
-            target=RemoteBrick._thread_func, args=(self,), daemon=True)
-
-    def _thread_func(self):
-        self._status = True
-        while self.run_event.is_set():
-            try:
-                o = pickle.loads(self.sock.recv(4096))
-                if isinstance(o, Message):
-                    self.lock_message.acquire()
-                    self.messages.append(o)
-                    self.lock_message.release()
-                elif isinstance(o, Command):
-                    self.lock_buffer.acquire()
-                    self.buffer[o.cid] = o
-                    self.lock_buffer.release()
-                else:
-                    pass
-            except socket.error as err:
-                self._status = err
-                break
-            except pickle.UnpicklingError as err:
-                self._status = err
-
-            time.sleep(THREAD_SLEEP)
-        self.sock.shutdown()
-        self.sock.close()
-        if self._status is True:
-            self._status = False
-
-    def _send(self, data):
-        self.lock_sock.acquire()
-        self.sock.send(data)
-        self.lock_sock.release()
-
-    def __del__(self):
-        try:
-            self.sock.shutdown()
-            self.sock.close()
-        except:
-            pass
-
-    def get_remote_status(self):
-        if self._status is None:
-            return "Unstarted"
-        elif self._status is True:
-            return "Running"
-        elif self._status is False:
-            return "Stopped"
-        else:
-            return f"Error: {self._status}"
-
-    def send_message(self, text):
-        self._send(pickle.dumps(Message(text, self.password)))
-
-    def get_messages(self, count=0):
-        """Gets the specified number of messages from the message buffer.
-        Thread-safe.
-        """
-        # Receiving messages in the listener thread for this RemoteBrick socket
-        self.lock_message.acquire()
-
-        result = []
-        if count <= 0:
-            result = self.messages.copy()
-            self.messages.clear()
-        elif count > 0 and len(self.messages) >= count:
-            result = self.messages[:count]
-            for i in range(count):
-                del self.messages[0]
-
-        self.lock_message.release()
-        return result
-
-    def get_message(self):
-        """Gets the one message from the message buffer, or None if none present.
-        Thread-safe.
-        """
-        m = self.get_messages(1)
-        if type(m) == list and len(m) > 0:
-            return m[0]
-        else:
-            return None
-
-    def _send_command(self, func, *args, wait_for_data=True, **kwargs):
-        """Send a command object to the other brick.
-        Thread-safe.
-        """
-        c = Command(func, self.password ** args, **kwargs)
-        self._send(pickle.dumps(c))
-        return self._get_result(c.id, wait_for_data)
-
-    def _get_result(self, cid, wait_for_data=True):
-        """Get the result of the following command id.
-        Thread-safe.
-        """
-
-        self.lock_buffer.acquire()
-        while wait_for_data and cid not in self.buffer:
-            self.lock_buffer.release()
-            time.sleep(BUSY_WAITING)
-            self.lock_buffer.acquire()
-
-        o = self.buffer.get(cid, None)
-        self.lock_buffer.release()
-        return o
-
-
-class RemoteBrickServer(MessageSender):
+class RemoteBrickServer(MessageReceiver):
     def __init__(self, port=None, password=None):
         super(RemoteBrickServer, self).__init__()
+
+        self._caller = _MethodCaller(brick.BP)
+
+        self._isclosed = False
 
         self.connections: List[RemoteBrick] = []
         self.password = DEFAULT_PASSWORD if password is None else password
@@ -373,37 +369,44 @@ class RemoteBrickServer(MessageSender):
 
         self.run_event.set()
 
-        self.t1 = threading.Thread(target=self._thread_server, args=(self,))
+        self.t1 = threading.Thread(target=self._thread_server)
         self.t1.start()
 
     def _thread_server(self):
         retries = SERVER_START_RETRIES
         while self.run_event.is_set():
             try:
-                try:
-                    self.sock.close()
-                except:
-                    pass  # Make sure it's closed before recreating the server
+                self.sock.close()
+            except:
+                pass  # Make sure it's closed before recreating the server
 
+            try:
                 self.sock = socket.create_server(('0.0.0.0', self.port))
-                retries = SERVER_START_RETRIES
-                while self.run_event.is_set():
-                    conn, addr = self.sock.accept()  # blocking, don't need time sleep
-                    conn.setblocking(False)
-                    self.lock_connections.acquire()
-                    connection = Connection(conn, self.password)
-                    connection.register_listener(
-                        'main', self._thread_listener, (self,))
-                    self.connections.append(connection)
-                    self.lock_connections.release()
-                    if not self.run_event.is_set():
-                        self.sock.close()
-                        break
             except OSError as err:
                 if retries <= 0:
                     return
-                print(err, file=sys.stderr)
+                print('Server Creation Error:', err, file=sys.stderr)
                 retries -= 1
+                continue
+            retries = SERVER_START_RETRIES
+            while self.run_event.is_set():
+                try:
+                    conn, addr = self.sock.accept()  # blocking, don't need time sleep
+                except OSError as err:
+                    if retries <= 0 or self.isclosed():
+                        return
+                    print('Warning:', err, file=sys.stderr)
+                    break  # go for retrying the server creation
+
+                self.lock_connections.acquire()
+                connection = Connection(conn, self.password)
+                connection.register_listener(
+                    'main', self._thread_listener)
+                self.connections.append(connection)
+                self.lock_connections.release()
+                if not self.run_event.is_set():
+                    self.sock.close()
+                    break
 
     def _thread_listener(self, obj, conn):
         if isinstance(obj, Command):
@@ -415,6 +418,35 @@ class RemoteBrickServer(MessageSender):
             self.messages.append(obj)
             self.lock_commands.release()
 
-    def execute(self, conn, command):
+    def execute(self, conn: Connection, command: Command):
         """Executes a command and sends the result back to the remote brick (rem)"""
-        pass
+        if self._caller.supports_command(command):
+            self._caller.execute(command)
+            print('\n', command)
+            conn.send(command)
+        elif command.func_name == '__initialize':
+            pass
+        elif command.func_name == '__verify':
+            command.result = (
+                f"I am sending back the command for {command.id}")
+            conn.send(command)
+        else:
+            command.result = UnsupportedCommand(
+                f"Command '{command.func_name}' is not supported.")
+
+    def __del__(self):
+        self.close()
+
+    def close(self):
+        self._isclosed = True
+        self.run_event.clear()
+        self.lock_connections.acquire()
+        c = self.connections
+        self.connections = []
+        self.lock_connections.release()
+        for conn in c:
+            conn.close()
+        self.sock.close()
+
+    def isclosed(self):
+        return self._isclosed
