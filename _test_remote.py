@@ -2,9 +2,9 @@ from utils.remote import BUSY_WAITING, Connection, Command, Message, RemoteBrick
 import unittest
 import time
 import threading
+from collections import deque
 
-
-DEFAULT_PORT = 2116
+DEFAULT_PORT = 2117
 
 
 class FakeSocket:
@@ -18,7 +18,7 @@ class FakeSocket:
 
     def __init__(self):
         self.other: FakeSocket = None
-        self.buffer = []
+        self.buffer = deque()
 
     def send(self, obj):
         self.other.buffer.append(obj)
@@ -27,9 +27,7 @@ class FakeSocket:
         while len(self.buffer) <= 0:
             time.sleep(0.1)
 
-        o = self.buffer[0]
-        del self.buffer[0]
-        return o
+        return self.buffer.popleft()
 
 
 class TestFakeSocket(unittest.TestCase):
@@ -43,6 +41,20 @@ class TestFakeSocket(unittest.TestCase):
         s2.send('charlie')
         o = s1.recv(1)
         self.assertEqual('charlie', o)
+
+    def test_performance(self):
+        avg = 0
+        N = 100
+        s1, s2 = FakeSocket.create_pair()
+
+        for i in range(100):
+            start = time.perf_counter_ns()
+            s1.send('bob')
+            o = s2.recv(0)
+            end = time.perf_counter_ns()
+            avg += (end - start)
+
+        self.assertGreater(1, avg / N / 1e9)
 
 
 class TestConnection(unittest.TestCase):
@@ -89,6 +101,27 @@ class TestConnection(unittest.TestCase):
         for dat in tst.get('data'):
             self.assertEqual(m, dat)
 
+    def test_performance(self):
+        avg = 0
+        N = 20
+        d = []
+
+        def listener(obj, conn):
+            d.append(obj)
+        self.conn2.register_listener("messages", listener)
+        for i in range(N):
+            start = time.perf_counter_ns()
+            self.conn1.send(Message('hi'))
+            while not d:
+                time.sleep(0.001)
+                pass
+            end = time.perf_counter_ns()
+            d.clear()
+            avg += (end - start)
+
+        self.assertGreater(1, avg / N / 1e9)
+        # print(f'average Connection send-recv time was {avg / N / 1e9}')
+
 
 class TestRemoteBrick(unittest.TestCase):
     def setUp(self):
@@ -120,6 +153,22 @@ class TestRemoteBrick(unittest.TestCase):
         self.assertNotEqual(None, res)
         self.assertEqual(res.func_name, func)
         self.assertEqual(res.id, cid)
+
+    def test_performance(self):
+        avg = 0
+        N = 20
+
+        for i in range(N):
+            start = time.perf_counter_ns()
+
+            cid = self.rem1._send_command('verify', wait_for_data=False)
+            res = self.rem2._get_result(cid, wait_for_data=True)
+
+            end = time.perf_counter_ns()
+            avg += (end - start)
+
+        self.assertGreater(1, avg / N / 1e9)
+        # print(f'average Connection send-recv time was {avg / N / 1e9}')
 
 
 class TestIntegrationRemoteBrick(unittest.TestCase):
@@ -170,6 +219,22 @@ class TestIntegrationRemoteBrick(unittest.TestCase):
         self.assertEqual(res.func_name, func)
         self.assertEqual(res.id, cid)
 
+    def test_performance(self):
+        avg = 0
+        N = 100
+
+        for i in range(N):
+            start = time.perf_counter_ns()
+
+            cid = self.rem1._send_command('verify', wait_for_data=False)
+            res = self.rem2._get_result(cid, wait_for_data=True)
+
+            end = time.perf_counter_ns()
+            avg += (end - start)
+
+        self.assertGreater(1, avg / N / 1e9)
+        # print(f'average Connection send-recv time for sockets was {avg / N / 1e9}')
+
     def tearDown(self):
         self.server.close()
         self.rem1.close()
@@ -187,37 +252,52 @@ class TestRemoteBrickServer(unittest.TestCase):
         self.fake = _FakeRemoteBP()
         self.server._caller = _MethodCaller(self.fake)
         self.conn1 = RemoteBrick('127.0.0.1', 'password')
-        self.conn2 = RemoteBrick('127.0.0.1', None)
+        self.conn2 = RemoteBrick('127.0.0.1', 'password')
 
     def test_01(self):
-        res = self.conn1._send_command('verify', wait_for_data=5)
+        res = self.conn1._send_command('__verify', wait_for_data=1)
         self.assertNotEqual(None, res)
         self.assertEqual(
             f"I am sending back the command for {res.id}", res.result)
 
     def test_02(self):
-        res = self.conn1._send_command('verify', wait_for_data=5)
+        res = self.conn1._send_command('__verify', wait_for_data=1)
         self.assertNotEqual(None, res)
         self.assertEqual(
             f"I am sending back the command for {res.id}", res.result)
 
-        res = self.conn2._send_command('verify', wait_for_data=5)
+        res = self.conn2._send_command('__verify', wait_for_data=1)
         self.assertNotEqual(None, res)
         self.assertEqual(
             f"I am sending back the command for {res.id}", res.result)
 
     def test_03(self):
-        res = self.conn1._send_command('action1', 1, 2, wait_for_data=5, a3=45)
+        res = self.conn1._send_command('action1', 1, 2, wait_for_data=1, a3=45)
         self.assertNotEqual(None, res)
         self.assertEqual((1, 2, 45), res.result)
-        res = self.conn2._send_command('action1', wait_for_data=5)
+        res = self.conn2._send_command('action1', wait_for_data=1)
         err = None
         try:
             self.fake.action1()
         except Exception as e:
-            err = e
+            err = str(e)
         self.assertNotEqual(None, res)
         self.assertEqual(err, res.result)
+
+    def test_performance(self):
+        avg = 0
+        N = 1
+
+        for i in range(N):
+            start = time.perf_counter_ns()
+
+            cid = self.conn1._send_command('__verify', wait_for_data=1)
+
+            end = time.perf_counter_ns()
+            avg += (end - start)
+
+        self.assertGreater(1, avg / N / 1e9)
+        print(f'average Connection send-recv time for brick-server was {avg / N / 1e9}')
 
     def tearDown(self) -> None:
         self.server.close()

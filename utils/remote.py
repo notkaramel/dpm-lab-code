@@ -1,5 +1,5 @@
+from math import inf
 import socket
-import pickle
 import sys
 import threading
 import time
@@ -7,34 +7,43 @@ from collections import deque
 from typing import List
 
 import json
+import marshal
+import pickle  # using one of these three to parse data for sending
 
 from . import brick
 from . import dummy
 
 TIMEOUT = socket.getdefaulttimeout()
 DEFAULT_PORT = 2110
-THREAD_SLEEP = 0.100
-BUSY_WAITING = 0.100
+THREAD_SLEEP = 0.001
+BUSY_WAITING = 0.001
 DEFAULT_PASSWORD = 'password'
 SERVER_START_RETRIES = 5
-DEBUG_DEFAULT = True
+DEBUG_DEFAULT = False
+
+class IdentifyingException(Exception):
+    def __repr__(self):
+        return f'{self.__class__.__name__}: {super(IdentifyingException, self).__repr__()}'
 
 
-class UnsupportedCommand(Exception):
+class UnsupportedCommand(IdentifyingException):
     pass
 
 
 class brickle:
-    class UnpicklingError(Exception):
+    _parser = marshal
+
+    class UnpicklingError(IdentifyingException):
         pass
+
     def dumps(obj):
         try:
             res = {}
             if isinstance(obj, PasswordProtected):
-                return brickle._dumps(obj)
+                res = brickle._dumps(obj)
             else:
                 pass
-            return json.dumps(res)
+            return brickle._parser.dumps(res)
         except Exception as err:
             raise brickle.UnpicklingError(err)
 
@@ -43,9 +52,9 @@ class brickle:
         res['__class__'] = obj.__class__.__name__
         return res
 
-    def loads(self, data):
+    def loads(data):
         try:
-            data = json.loads(data)
+            data = brickle._parser.loads(data)
             if data['__class__'] == 'Command':
                 c = Command(data['func_name'])
                 return brickle._loads(c, data)
@@ -56,6 +65,7 @@ class brickle:
                 return None
         except Exception as err:
             raise brickle.UnpicklingError(err)
+
     def _loads(obj, data):
         # Specific to this implementation
         del data['__class__']
@@ -95,11 +105,11 @@ class Command(PasswordProtected):
         return f"{self.id}: {self.func_name}({self.args},{self.kwargs})"
 
 
-class Connection:
+class Debuggable:
     DEBUG_ALL = {}
     DEBUG_COUNTER = 0
 
-    def __init__(self, sock, password="password", debug=None):
+    def __init__(self, debug=None):
         self.debug = DEBUG_DEFAULT if debug is None else debug
         if self.debug:
             i = id(self)
@@ -107,6 +117,19 @@ class Connection:
                 self.__class__.DEBUG_ALL[i] = f'{self.__class__.__name__}{self.__class__.DEBUG_COUNTER}'
                 self.__class__.DEBUG_COUNTER += 1
 
+    def _debug(self, text):
+        if self.debug:
+            i = self.__class__.DEBUG_ALL[id(self)]
+            print(f'>>> ({i}) {text}\t', file=sys.stderr)
+
+class ConnectionError(IdentifyingException):
+    pass
+
+class ConnectionFatalError(IdentifyingException):
+    pass
+
+class Connection:
+    def __init__(self, sock, password="password", debug=None):
         self.sock: socket.socket = sock
         self.listeners = {}
         self.run_event = threading.Event()
@@ -120,20 +143,15 @@ class Connection:
                              args=(self,), daemon=True)
         t.start()
 
-    def _debug(self, text):
-        if self.debug:
-            i = self.__class__.DEBUG_ALL[id(self)]
-            print(f'>>> ({i}) {text}\t', file=sys.stderr)
-
     def _func(self):
-        self._debug('starting connection thread')
+        # self._debug('starting connection thread')
         while self.run_event.is_set():
             try:
-                self._debug('start receiving')
+                # self._debug('start receiving')
                 d = self.sock.recv(4096)
-                self._debug('received. loading...')
+                # self._debug('received. loading...')
                 o = brickle.loads(d)
-                self._debug('received. loaded...')
+                # self._debug('received. loaded...')
 
                 self.lock_listener.acquire()
 
@@ -141,12 +159,12 @@ class Connection:
                     for key, val in self.listeners.items():
                         listener, args = val
                         try:
-                            self._debug(f'running listener "{key}"')
+                            # self._debug(f'running listener "{key}"')
                             listener(*args, o, self)
-                            self._debug(f'completed listener "{key}"')
+                            # self._debug(f'completed listener "{key}"')
                         except Exception as err:
-                            print(
-                                f"Error: Listener {key} - {err}", val, file=sys.stderr)
+                            c = ConnectionError(f"Error: Listener {key} - {err} {val}")
+                            print(c, file=sys.stderr)
                 self.lock_listener.release()
             except OSError as err:
                 if self.isclosed():
@@ -155,18 +173,19 @@ class Connection:
             except brickle.UnpicklingError as err:
                 print('Data Unpickling Error:', err, file=sys.stderr)
             except Exception as err:
-                print('Bad Error:', err, file=sys.stderr)
-        self._debug(f'connection thread ended')
+                c = ConnectionFatalError(f'Bad Error: {err}')
+                print(c, file=sys.stderr)
+        # self._debug(f'connection thread ended')
 
     def send(self, obj):
         if isinstance(obj, PasswordProtected):
             self.lock_send.acquire()
             obj.password = self.password
-            self._debug(f'dumping data ({str(obj)})')
+            # self._debug(f'dumping data ({str(obj)})')
             d = brickle.dumps(obj)
-            self._debug(f'sending data dump ({str(obj)})')
+            # self._debug(f'sending data dump ({str(obj)})')
             self.sock.send(d)
-            self._debug(f'data sent ({str(obj)})')
+            # self._debug(f'data sent ({str(obj)})')
             self.lock_send.release()
 
     def register_listener(self, name, listener, args=None):
@@ -199,6 +218,10 @@ class Connection:
         return self._isclosed
 
 
+class MethodCallerException(IdentifyingException):
+    pass
+
+
 class _MethodCaller:
     def __init__(self, obj):
         self.cls = obj.__class__
@@ -215,7 +238,7 @@ class _MethodCaller:
                 command.result = self.methods[command.func_name](self.obj,
                                                                  *command.args, **command.kwargs)
             except Exception as err:
-                command.result = err
+                command.result = str(MethodCallerException(err))
         return command
 
 
@@ -325,14 +348,13 @@ class RemoteBrick(MessageReceiver):
         """Get the result of the following command id.
         Thread-safe.
         """
-        if isinstance(wait_for_data, (int, float)):
-            wait_for_data /= BUSY_WAITING
-            wait_for_data = int(wait_for_data)
+        waiting = not not wait_for_data
+        if not isinstance(wait_for_data, (int, float)):
+            wait_for_data = inf
 
-        while wait_for_data:
-            if type(wait_for_data) == int:
-                wait_for_data = max(wait_for_data - 1, 0)
-
+        start = time.perf_counter()
+        end = time.perf_counter()
+        while waiting and wait_for_data > (end-start):
             self.lock_buffer.acquire()
             if cid in self.buffer:
                 self.lock_buffer.release()
@@ -340,6 +362,7 @@ class RemoteBrick(MessageReceiver):
             self.lock_buffer.release()
 
             time.sleep(BUSY_WAITING)
+            end = time.perf_counter()
 
         self.lock_buffer.acquire()
         o = self.buffer.get(cid, None)
@@ -422,7 +445,6 @@ class RemoteBrickServer(MessageReceiver):
         """Executes a command and sends the result back to the remote brick (rem)"""
         if self._caller.supports_command(command):
             self._caller.execute(command)
-            print('\n', command)
             conn.send(command)
         elif command.func_name == '__initialize':
             pass
@@ -431,8 +453,7 @@ class RemoteBrickServer(MessageReceiver):
                 f"I am sending back the command for {command.id}")
             conn.send(command)
         else:
-            command.result = UnsupportedCommand(
-                f"Command '{command.func_name}' is not supported.")
+            command.result = str(UnsupportedCommand(f"Command '{command.func_name}' is not supported."))
 
     def __del__(self):
         self.close()
