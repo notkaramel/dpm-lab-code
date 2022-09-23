@@ -81,21 +81,23 @@ SENSOR_STATE = Enumeration("""
     """)
 SENSOR_CODES = RevEnumeration(SENSOR_STATE)
 
-BP = None
-
 
 try:
     import spidev
-    BP = BrickPi3()  # The BrickPi3 instance
     # Save process ID of this program so we can force stop it later if needed
     os.system(f"echo {os.getpid()} > ~/brickpi3_pid")
 except ModuleNotFoundError as err:
-    class _FakeBP():
-        def reset_all(self):
-            pass
     print('spidev not found, intializing dummy BP', file=sys.stderr)
-    BP = _FakeBP()
 
+BP = BrickPi3()  # The BrickPi3 instance
+_OLD_BP = BP
+
+def restore_default_brick(bp=None):
+    global BP
+    if bp is None:
+        BP = _OLD_BP
+    else:
+        BP=bp
 
 class ColorMapping:
     """
@@ -328,9 +330,9 @@ class Sensor:
 
     ALL_SENSORS = {key:None for key in '1 2 3 4'.split(' ')}
 
-    def __init__(self, port: Literal[1, 2, 3, 4]):
+    def __init__(self, port: Literal[1, 2, 3, 4], bp=None):
         "Initialize sensor with a given port (1, 2, 3, or 4)."
-        self.brick = Brick()
+        self.brick = Brick(bp=bp)
         self.port = PORTS[str(port).upper()]
         Sensor.ALL_SENSORS[str(port)] = self
 
@@ -388,12 +390,12 @@ class TouchSensor(Sensor):
     Gives values 0 to 1, with 1 meaning the button is being pressed.
     """
 
-    def __init__(self, port: Literal[1, 2, 3, 4], mode:str="touch"):
+    def __init__(self, port: Literal[1, 2, 3, 4], mode:str="touch", bp=None):
         """
         Initialize touch sensor with a given port number.
         mode does not need to be set and actually does nothing here.
         """
-        super(TouchSensor, self).__init__(port)
+        super(TouchSensor, self).__init__(port, bp)
         self.set_mode(mode.lower())
 
     def set_mode(self, mode:str="touch"):
@@ -428,8 +430,8 @@ class EV3UltrasonicSensor(Sensor):
         IN = "in"
         LISTEN = "listen"
 
-    def __init__(self, port: Literal[1, 2, 3, 4], mode="cm"):
-        super(EV3UltrasonicSensor, self).__init__(port)
+    def __init__(self, port: Literal[1, 2, 3, 4], mode="cm", bp=None):
+        super(EV3UltrasonicSensor, self).__init__(port, bp)
         self.set_mode(mode)
 
     def set_mode(self, mode:str):
@@ -494,8 +496,8 @@ class EV3ColorSensor(Sensor):
         RAW_RED = "rawred"
         ID = "id"
 
-    def __init__(self, port, mode="component"):
-        super(EV3ColorSensor, self).__init__(port)
+    def __init__(self, port, mode="component", bp=None):
+        super(EV3ColorSensor, self).__init__(port, bp)
         self.set_mode(mode)
 
     def set_mode(self, mode:str):
@@ -577,8 +579,8 @@ class EV3GyroSensor(Sensor):
         DPS = "dps"
         BOTH = "both"
 
-    def __init__(self, port: Literal[1, 2, 3, 4], mode="both"):
-        super(EV3GyroSensor, self).__init__(port)
+    def __init__(self, port: Literal[1, 2, 3, 4], mode="both", bp=None):
+        super(EV3GyroSensor, self).__init__(port, bp)
         self.set_mode(mode)
 
     def set_mode(self, mode:str):
@@ -634,13 +636,13 @@ class Motor:
     MAX_SPEED = 1560 # positive or negative degree per second speed
     MAX_POWER = 100 # positive or negative percent power
 
-    def __init__(self, port: Literal["A", "B", "C", "D"] | list[str]):
+    def __init__(self, port: Literal["A", "B", "C", "D"] | list[str], bp=None):
         """
         Initialize this Motor object with the ports "A", "B", "C", or "D".
         You may also provide a list of these ports such as ["A", "C"] to run
         both motors at the exact same time (exact combined behavior unknown).
         """
-        self.brick = BP
+        self.brick = Brick(bp)
         self.set_port(port)
 
     def set_port(self, port):

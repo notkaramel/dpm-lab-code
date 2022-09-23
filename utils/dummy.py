@@ -1,3 +1,6 @@
+from typing import Literal
+
+
 class Enumeration(object):
     def __init__(self, names):  # or *names, with no .split()
         number = 0
@@ -226,7 +229,6 @@ class BrickPi3():
     #SENSOR_TYPE_ERROR = 3
 
     def __init__(self, addr=1, detect=True):
-        self.sender = None
         pass
 
     def spi_transfer_array(self, data_out):
@@ -323,4 +325,16 @@ class BrickPi3():
         pass
 
     def reset_all(self):
+        pass
+
+
+class Brick(BrickPi3):
+    """
+    Wrapper class for the BrickPi3 class. Comes with additional methods such get_sensor_status.
+    """
+
+    def __init__(self):
+        pass
+
+    def get_sensor_status(self, port: Literal[1, 2, 4, 8]):
         pass

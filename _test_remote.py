@@ -1,10 +1,11 @@
-from utils.remote import BUSY_WAITING, Connection, Command, Message, RemoteBrick, RemoteBrickServer, socket, DEFAULT_PORT, _MethodCaller
+from utils.remote import BUSY_WAITING, Connection, Command, Message, RemoteBrick, RemoteBrickServer, socket, DEFAULT_PORT, _MethodCaller, _RemoteCaller
+from utils import dummy, brick
 import unittest
 import time
 import threading
 from collections import deque
 
-DEFAULT_PORT = 2117
+DEFAULT_PORT = 2110
 
 
 class FakeSocket:
@@ -297,12 +298,65 @@ class TestRemoteBrickServer(unittest.TestCase):
             avg += (end - start)
 
         self.assertGreater(1, avg / N / 1e9)
-        print(f'average Connection send-recv time for brick-server was {avg / N / 1e9}')
+        # print(
+        #     f'average Connection send-recv time for brick-server was {avg / N / 1e9}')
 
     def tearDown(self) -> None:
         self.server.close()
         self.conn1.close()
         self.conn2.close()
+
+
+class TestRemoteCaller(unittest.TestCase):
+    class FakeRemoteBrick:
+        def __init__(self):
+            self.command = None
+
+        def _send_command(self, func, *args, wait_for_data=True, **kwargs):
+            self.command = Command(
+                func, *args, wait_for_data=wait_for_data, **kwargs)
+            return self.command
+
+    def setUp(self) -> None:
+        self.fake = TestRemoteCaller.FakeRemoteBrick()
+        self.obj: dummy.Brick = _RemoteCaller.create_caller(
+            dummy.Brick(), self.fake)
+
+    def test_01(self):
+        # The method that goes through _RemoteCaller
+        c = self.obj.get_sensor('Fake Port 1')
+        self.assertNotEqual(None, c)  # Checking that there is output
+        # print(c, self.fake.command)
+        self.assertEqual(c, self.fake.command)  # Checking equivavlence
+
+
+class TestRemoteCallerIntegration(unittest.TestCase):
+    def setUp(self) -> None:
+        self.fake = TestRemoteCaller.FakeRemoteBrick()
+        self.obj: dummy.Brick = _RemoteCaller.create_caller(
+            brick.Brick(), self.fake)
+
+    def test_01(self):
+        ultra = brick.EV3UltrasonicSensor(1)
+        ultra.brick = self.obj
+        c = ultra.get_raw_value()
+        self.assertNotEqual(None, c)
+        self.assertEqual(c, self.fake.command)
+        self.assertTrue(isinstance(c, Command))
+
+    def test_02(self):
+        ultra = brick.EV3UltrasonicSensor(1)
+        brick.restore_default_brick(self.obj)
+        c = ultra.get_raw_value()
+        self.assertEqual(None, c)
+
+    def test_03(self):
+        brick.restore_default_brick(self.obj)
+        ultra = brick.EV3UltrasonicSensor(1)
+        c = ultra.get_raw_value()
+        self.assertNotEqual(None, c)
+        self.assertEqual(c, self.fake.command)
+        self.assertTrue(isinstance(c, Command))
 
 
 if __name__ == '__main__':

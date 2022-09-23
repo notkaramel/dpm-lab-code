@@ -21,6 +21,7 @@ DEFAULT_PASSWORD = 'password'
 SERVER_START_RETRIES = 5
 DEBUG_DEFAULT = False
 
+
 class IdentifyingException(Exception):
     def __repr__(self):
         return f'{self.__class__.__name__}: {super(IdentifyingException, self).__repr__()}'
@@ -122,11 +123,14 @@ class Debuggable:
             i = self.__class__.DEBUG_ALL[id(self)]
             print(f'>>> ({i}) {text}\t', file=sys.stderr)
 
+
 class ConnectionError(IdentifyingException):
     pass
 
+
 class ConnectionFatalError(IdentifyingException):
     pass
+
 
 class Connection:
     def __init__(self, sock, password="password", debug=None):
@@ -163,7 +167,8 @@ class Connection:
                             listener(*args, o, self)
                             # self._debug(f'completed listener "{key}"')
                         except Exception as err:
-                            c = ConnectionError(f"Error: Listener {key} - {err} {val}")
+                            c = ConnectionError(
+                                f"Error: Listener {key} - {err} {val}")
                             print(c, file=sys.stderr)
                 self.lock_listener.release()
             except OSError as err:
@@ -289,9 +294,31 @@ class MessageReceiver(object):  # Somewhat abstract class that needs self.conn
         return m
 
 
+class _RemoteCaller:
+    def create_caller(obj, remote_brick):
+        caller = _RemoteCaller(remote_brick)
+
+        for name in dir(obj):
+            attr = getattr(obj, name)
+            if callable(attr) and not name.startswith('__'):
+                setattr(obj, name, caller._generate(name))
+
+        obj.__remote__ = caller
+        return obj
+
+    def __init__(self, remote_brick):
+        self.remote_brick = remote_brick
+
+    def _generate(self, func_name):
+        def func(*args, wait_for_data=60, **kwargs):
+            return self.remote_brick._send_command(func_name, *args, wait_for_data=wait_for_data, **kwargs)
+        return func
+
+
 class RemoteBrick(MessageReceiver):
     def __init__(self, address, password, sock=None):
         super(RemoteBrick, self).__init__()
+        self._brick = _RemoteCaller.create_caller(dummy.Brick(), self)
         self.buffer = {}
         self.lock_buffer = threading.Lock()
 
@@ -307,10 +334,32 @@ class RemoteBrick(MessageReceiver):
         self.password = self.conn.password
 
         self.conn.register_listener('main', RemoteBrick._listener, (self,))
-        # self._send_command('__initialize', wait_for_data=False)
 
     def send_message(self, text):
         self.conn.send(Message(text))
+
+    def make_remote(self, sensor_or_motor: type, *args) -> brick.Sensor | brick.Motor:
+        """Creates a remote sensor or motor that is attached to the remote brick.
+        sensor_or_motor - A class, such as Motor or EV3UltrasonicSensor
+        *args - any of the normal arguments that would be used to create the object locally
+
+        Returns None if you gave the wrong class.
+        """
+        if sensor_or_motor == brick.Sensor or sensor_or_motor == brick.Motor:
+            return sensor_or_motor(*args, bp=self._brick)
+        return None
+
+    def set_default_brick(self):
+        """Sets this RemoteBrick to be the default brick for all newly initialized motors or sensors.
+        Use brick.restore_default_brick() to reset back to normal.
+
+        This will only apply to newly created devices.
+
+        Normal defined as:
+        - The useless dummy brick on PCs
+        - The actual BrickPi itself, if running this code on the BrickPi
+        """
+        brick.BP = self._brick
 
     def __del__(self):
         self.close()
@@ -453,7 +502,8 @@ class RemoteBrickServer(MessageReceiver):
                 f"I am sending back the command for {command.id}")
             conn.send(command)
         else:
-            command.result = str(UnsupportedCommand(f"Command '{command.func_name}' is not supported."))
+            command.result = str(UnsupportedCommand(
+                f"Command '{command.func_name}' is not supported."))
 
     def __del__(self):
         self.close()
