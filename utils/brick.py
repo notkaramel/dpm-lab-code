@@ -69,7 +69,8 @@ class RevEnumeration:
         self.keys.append(str(key))
 
     def __repr__(self):
-        return ", ".join([ f"{key}={self[key]}" for key in self.keys])
+        return ", ".join([f"{key}={self[key]}" for key in self.keys])
+
 
 SENSOR_STATE = Enumeration("""
         VALID_DATA,
@@ -92,12 +93,14 @@ except ModuleNotFoundError as err:
 BP = BrickPi3()  # The BrickPi3 instance
 _OLD_BP = BP
 
+
 def restore_default_brick(bp=None):
     global BP
     if bp is None:
         BP = _OLD_BP
     else:
-        BP=bp
+        BP = bp
+
 
 class ColorMapping:
     """
@@ -328,7 +331,7 @@ class Sensor:
         I2C_ERROR = "I2C_ERROR"
         INCORRECT_SENSOR_PORT = "INCORRECT_SENSOR_PORT"
 
-    ALL_SENSORS = {key:None for key in '1 2 3 4'.split(' ')}
+    ALL_SENSORS = {key: None for key in '1 2 3 4'.split(' ')}
 
     def __init__(self, port: Literal[1, 2, 3, 4], bp=None):
         "Initialize sensor with a given port (1, 2, 3, or 4)."
@@ -390,7 +393,7 @@ class TouchSensor(Sensor):
     Gives values 0 to 1, with 1 meaning the button is being pressed.
     """
 
-    def __init__(self, port: Literal[1, 2, 3, 4], mode:str="touch", bp=None):
+    def __init__(self, port: Literal[1, 2, 3, 4], mode: str = "touch", bp=None):
         """
         Initialize touch sensor with a given port number.
         mode does not need to be set and actually does nothing here.
@@ -398,7 +401,7 @@ class TouchSensor(Sensor):
         super(TouchSensor, self).__init__(port, bp)
         self.set_mode(mode.lower())
 
-    def set_mode(self, mode:str="touch"):
+    def set_mode(self, mode: str = "touch"):
         """
         Touch sensor only has one mode, and does not require an input.
         This method is useless unless you wish to re-initialize the sensor.
@@ -434,7 +437,7 @@ class EV3UltrasonicSensor(Sensor):
         super(EV3UltrasonicSensor, self).__init__(port, bp)
         self.set_mode(mode)
 
-    def set_mode(self, mode:str):
+    def set_mode(self, mode: str):
         """
         Set ultrasonic sensor mode. Return True if mode change successful.
         cm - centimeter measure (0 to 255)
@@ -500,7 +503,7 @@ class EV3ColorSensor(Sensor):
         super(EV3ColorSensor, self).__init__(port, bp)
         self.set_mode(mode)
 
-    def set_mode(self, mode:str):
+    def set_mode(self, mode: str):
         """
         Sets color sensor mode. Return True if mode change successful.
 
@@ -583,7 +586,7 @@ class EV3GyroSensor(Sensor):
         super(EV3GyroSensor, self).__init__(port, bp)
         self.set_mode(mode)
 
-    def set_mode(self, mode:str):
+    def set_mode(self, mode: str):
         """
         Change gyro sensor mode.
 
@@ -633,8 +636,8 @@ class EV3GyroSensor(Sensor):
 class Motor:
     "Motor class for any motor."
     INF = INF
-    MAX_SPEED = 1560 # positive or negative degree per second speed
-    MAX_POWER = 100 # positive or negative percent power
+    MAX_SPEED = 1560  # positive or negative degree per second speed
+    MAX_POWER = 100  # positive or negative percent power
 
     def __init__(self, port: Literal["A", "B", "C", "D"] | list[str], bp=None):
         """
@@ -837,19 +840,17 @@ class Motor:
                 result.append(Motor(port))
         return tuple(result)
 
-
-    def wait_is_moving(self, sleep_interval:float=None):
+    def wait_is_moving(self, sleep_interval: float = None):
         if sleep_interval is None:
             sleep_interval = WAIT_READY_INTERVAL
         while not self.is_moving():
             time.sleep(sleep_interval)
 
-    def wait_is_stopped(self, sleep_interval:float=None):
+    def wait_is_stopped(self, sleep_interval: float = None):
         if sleep_interval is None:
             sleep_interval = WAIT_READY_INTERVAL
         while self.is_moving():
             time.sleep(sleep_interval)
-
 
 
 def create_motors(motor_ports: list[Literal["A", "B", "C", "D"]] | str):
