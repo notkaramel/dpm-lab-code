@@ -4,8 +4,9 @@ import unittest
 import time
 import threading
 from collections import deque
+import uuid
 
-DEFAULT_PORT = 2110
+DEFAULT_PORT = 2111
 _RemoteCaller.TESTING = True
 
 class FakeSocket:
@@ -251,7 +252,7 @@ class TestRemoteBrickServer(unittest.TestCase):
     def setUp(self) -> None:
         self.server = RemoteBrickServer(password='password', port=DEFAULT_PORT)
         self.fake = _FakeRemoteBP()
-        self.server._caller = _MethodCaller(self.fake)
+        self.server.register_object(self.fake)
         self.conn1 = RemoteBrick('127.0.0.1', 'password', port=DEFAULT_PORT)
         self.conn2 = RemoteBrick('127.0.0.1', 'password', port=DEFAULT_PORT)
 
