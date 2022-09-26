@@ -12,11 +12,11 @@ Date: January 13th, 2022
 from utils.brick import BP, Motor, TouchSensor, EV3ColorSensor, wait_ready_sensors, SensorError
 import time
 
-FORWARD_SPEED = 30           # speed constant = 30% power
+FORWARD_SPEED = 20           # speed constant = 30% power
 SENSOR_POLL_SLEEP = 0.05     # Polling rate = 50 msec
 
 T_SENSOR = TouchSensor(1)    # Touch Sensor in Port S1
-C_SENSOR = EV3ColorSensor(2) # Color Sensor in Port S2
+C_SENSOR = EV3ColorSensor(3) # Color Sensor in Port S2
 
 try:
     f = open("colorSensor.csv", "w")              # Open a file for writing
