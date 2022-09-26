@@ -6,7 +6,7 @@ import threading
 from collections import deque
 
 DEFAULT_PORT = 2110
-
+_RemoteCaller.TESTING = True
 
 class FakeSocket:
     @staticmethod
@@ -192,8 +192,8 @@ class TestIntegrationRemoteBrick(unittest.TestCase):
         self.assertNotEqual(None, self.s1)
         self.assertNotEqual(None, self.s2)
 
-        self.rem1 = RemoteBrick('127.0.0.1', None, self.s1)
-        self.rem2 = RemoteBrick('127.0.0.1', None, self.s2)
+        self.rem1 = RemoteBrick('127.0.0.1', None, sock=self.s1)
+        self.rem2 = RemoteBrick('127.0.0.1', None, sock=self.s2)
 
     def test_01(self):
         m = "Hey there buddy"
@@ -249,11 +249,11 @@ class _FakeRemoteBP:
 
 class TestRemoteBrickServer(unittest.TestCase):
     def setUp(self) -> None:
-        self.server = RemoteBrickServer(password='password')
+        self.server = RemoteBrickServer(password='password', port=DEFAULT_PORT)
         self.fake = _FakeRemoteBP()
         self.server._caller = _MethodCaller(self.fake)
-        self.conn1 = RemoteBrick('127.0.0.1', 'password')
-        self.conn2 = RemoteBrick('127.0.0.1', 'password')
+        self.conn1 = RemoteBrick('127.0.0.1', 'password', port=DEFAULT_PORT)
+        self.conn2 = RemoteBrick('127.0.0.1', 'password', port=DEFAULT_PORT)
 
     def test_01(self):
         res = self.conn1._send_command('__verify', wait_for_data=1)
@@ -357,6 +357,44 @@ class TestRemoteCallerIntegration(unittest.TestCase):
         self.assertNotEqual(None, c)
         self.assertEqual(c, self.fake.command)
         self.assertTrue(isinstance(c, Command))
+
+
+class TestRemoteBrickSystemTest(unittest.TestCase):
+    class FakeBP():
+        def get_sensor(self, *args, **kwargs) -> str:
+            return "You got me! The sensor!"
+        def set_sensor_type(self, *args, **kwargs) -> None:
+            return None
+
+    def setUp(self) -> None:
+        self.answer = TestRemoteBrickSystemTest.FakeBP()
+        brick.restore_default_brick(self.answer)
+        self.remote_brick_server = RemoteBrickServer(
+            "password", port=DEFAULT_PORT)  # Actual Remote BrickServer
+        self.remote_brick = RemoteBrick(
+            "127.0.0.1", "password", port=DEFAULT_PORT)
+
+    def test_01(self):
+        res = self.remote_brick.get_brick().get_sensor(1)
+        self.assertNotEqual(None, res)
+        self.assertEqual(self.answer.get_sensor(), res.result)
+    def test_01_01(self):
+        _RemoteCaller.TESTING = False
+        res = self.remote_brick.get_brick().get_sensor(1)
+        _RemoteCaller.TESTING = True
+        self.assertNotEqual(None, res)
+        self.assertEqual(self.answer.get_sensor(), res)
+
+    def test_02(self):
+        sensor = self.remote_brick.make_remote(brick.EV3UltrasonicSensor, 1)
+        res = sensor.get_value()
+        self.assertNotEqual(None, res)
+        self.assertEqual(self.answer.get_sensor(), res.result)
+
+    def tearDown(self) -> None:
+        brick.restore_default_brick()  # For the fake_server_brick setting
+        self.remote_brick.close()
+        self.remote_brick_server.close()
 
 
 if __name__ == '__main__':

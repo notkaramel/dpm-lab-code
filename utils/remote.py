@@ -21,6 +21,14 @@ DEFAULT_PASSWORD = 'password'
 SERVER_START_RETRIES = 5
 DEBUG_DEFAULT = False
 
+def isrelatedclass(original, lst):
+    if type(lst) == type:
+        lst = [lst]
+    
+    for t in lst:
+        if original == lst or issubclass(original, lst) or issubclass(lst, original):
+            return True
+    return False
 
 class IdentifyingException(Exception):
     def __repr__(self):
@@ -295,6 +303,7 @@ class MessageReceiver(object):  # Somewhat abstract class that needs self.conn
 
 
 class _RemoteCaller:
+    TESTING = False
     def create_caller(obj, remote_brick):
         caller = _RemoteCaller(remote_brick)
 
@@ -311,42 +320,56 @@ class _RemoteCaller:
 
     def _generate(self, func_name):
         def func(*args, wait_for_data=60, **kwargs):
-            return self.remote_brick._send_command(func_name, *args, wait_for_data=wait_for_data, **kwargs)
+            res = self.remote_brick._send_command(func_name, *args, wait_for_data=wait_for_data, **kwargs)
+            if _RemoteCaller.TESTING:
+                return res
+            else:
+                if hasattr(res, 'result'):
+                    return res.result
+                else:
+                    return res
         return func
 
 
 class RemoteBrick(MessageReceiver):
-    def __init__(self, address, password, sock=None):
+    def __init__(self, address, password, port=None, sock=None):
         super(RemoteBrick, self).__init__()
-        self._brick = _RemoteCaller.create_caller(dummy.Brick(), self)
+
+        self.address = address
+        self.password = DEFAULT_PASSWORD if password is None else password
+
+        self._brick: dummy.Brick = _RemoteCaller.create_caller(
+            dummy.Brick(), self)
         self.buffer = {}
         self.lock_buffer = threading.Lock()
 
         self.status = None
 
         if sock is None:
-            self.sock = socket.create_connection((address, DEFAULT_PORT))
+            self.sock = socket.create_connection((self.address, DEFAULT_PORT))
         else:
             self.sock = sock
 
-        self.conn = Connection(self.sock, password)
-        self.address = address
-        self.password = self.conn.password
+        self.conn = Connection(self.sock, self.password)
 
         self.conn.register_listener('main', RemoteBrick._listener, (self,))
 
     def send_message(self, text):
         self.conn.send(Message(text))
 
-    def make_remote(self, sensor_or_motor: type, *args) -> brick.Sensor | brick.Motor:
+    def get_brick(self):
+        return self._brick
+
+    def make_remote(self, sensor_or_motor, *args, **kwargs) -> brick.Sensor | brick.Motor:
         """Creates a remote sensor or motor that is attached to the remote brick.
         sensor_or_motor - A class, such as Motor or EV3UltrasonicSensor
         *args - any of the normal arguments that would be used to create the object locally
 
         Returns None if you gave the wrong class.
         """
-        if sensor_or_motor == brick.Sensor or sensor_or_motor == brick.Motor:
-            return sensor_or_motor(*args, bp=self._brick)
+        if isrelatedclass(sensor_or_motor, (brick.Motor, brick.Sensor)):
+            kwargs.update({'bp':self._brick})
+            return sensor_or_motor(*args, **kwargs)
         return None
 
     def set_default_brick(self):
@@ -420,25 +443,19 @@ class RemoteBrick(MessageReceiver):
 
 
 class RemoteBrickServer(MessageReceiver):
-    def __init__(self, port=None, password=None):
+    def __init__(self, password, port=None):
         super(RemoteBrickServer, self).__init__()
+        self.password = (DEFAULT_PASSWORD if password is None else password)
+        self.port = (DEFAULT_PORT if port is None else port)
 
         self._caller = _MethodCaller(brick.BP)
 
         self._isclosed = False
-
         self.connections: List[RemoteBrick] = []
-        self.password = DEFAULT_PASSWORD if password is None else password
-
         self.commands = []
-
         self.lock_commands = threading.Lock()
-
-        self.port = (DEFAULT_PORT if port is None else port)
-
         self.lock_connections = threading.Lock()
         self.run_event = threading.Event()
-
         self.run_event.set()
 
         self.t1 = threading.Thread(target=self._thread_server)
@@ -504,6 +521,7 @@ class RemoteBrickServer(MessageReceiver):
         else:
             command.result = str(UnsupportedCommand(
                 f"Command '{command.func_name}' is not supported."))
+            conn.send(command)
 
     def __del__(self):
         self.close()
