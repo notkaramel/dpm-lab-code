@@ -182,6 +182,9 @@ class Connection:
                     self.close()
                     break
                 # self._debug('received. loading...')
+                if len(d) <= 0:
+                    self.run_event.clear()
+                    break
                 o = brickle.loads(d)
                 # self._debug('received. loaded...')
 
@@ -376,7 +379,7 @@ class RemoteClient(MessageReceiver):
         self.status = None
 
         if sock is None:
-            self.sock = socket.create_connection((self.address, port))
+            self.sock = socket.create_connection((self.address, self.port))
         else:
             self.sock = sock
 
@@ -502,7 +505,7 @@ class RemoteServer(MessageReceiver):
         if isinstance(obj, Message):
             self.lock_messages.acquire()
             self.messages.append(obj)
-            self.lock_commands.release()
+            self.lock_messages.release()
 
     def register_object(self, obj):
         caller = _MethodCaller(obj)
