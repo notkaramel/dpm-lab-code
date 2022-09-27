@@ -403,7 +403,7 @@ class RemoteClient(MessageReceiver):
         else:
             pass
 
-    def _send_command(self, func, *args, wait_for_data=True, **kwargs) -> int | Command:
+    def _send_command(self, func, *args, wait_for_data=True, **kwargs):
         """Send a command object to the other brick.
         Thread-safe.
         """
