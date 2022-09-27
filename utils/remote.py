@@ -175,7 +175,12 @@ class Connection:
         while self.run_event.is_set():
             try:
                 # self._debug('start receiving')
-                d = self.sock.recv(4096)
+                try:
+                    d = self.sock.recv(4096)
+                except:
+                    # The read failed because the connection probably died.
+                    self.close()
+                    break
                 # self._debug('received. loading...')
                 o = brickle.loads(d)
                 # self._debug('received. loaded...')
@@ -411,7 +416,7 @@ class RemoteClient(MessageReceiver):
         self.conn.send(c)
         if wait_for_data:
             res = self._get_result(c.id, wait_for_data)
-            if res._result_exception and not TESTING:
+            if res._result_exception and not RemoteClient.TESTING:
                 raise RemoteException(res.result)
         else:
             res = c.id
@@ -463,7 +468,7 @@ class RemoteServer(MessageReceiver):
         self.run_event = threading.Event()
         self.run_event.set()
 
-        self.t1 = threading.Thread(target=self._thread_server)
+        self.t1 = threading.Thread(target=self._thread_server, daemon=True)
         self.t1.start()
 
     def _thread_server(self):
@@ -493,6 +498,9 @@ class RemoteServer(MessageReceiver):
                     break  # go for retrying the server creation
 
                 self.lock_connections.acquire()
+
+                self.connections = list(filter(lambda s : not s.isclosed(), self.connections))
+
                 connection = Connection(conn, self.password)
                 connection.register_listener(
                     'main', self._thread_listener)
