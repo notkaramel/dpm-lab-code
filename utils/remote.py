@@ -467,27 +467,21 @@ class RemoteServer(MessageReceiver):
         self.lock_connections = threading.Lock()
         self.run_event = threading.Event()
         self.run_event.set()
-        self.dead_socks = []
 
         self.sock = socket.create_server(('0.0.0.0', self.port))
         self.t1 = threading.Thread(target=self._thread_server, daemon=True)
         self.t1.start()
 
     def _thread_server(self):
-        retries = SERVER_START_RETRIES
-        self.dead_socks.append(self.sock)
         while self.run_event.is_set():
             while self.run_event.is_set():
                 try:
                     conn, addr = self.sock.accept()  # blocking, don't need time sleep
-                except OSError as err:
-                    if retries <= 0 or self.isclosed():
-                        return
-                    print('Warning:', err, file=sys.stderr)
-                    break  # go for retrying the server creation
+                except OSError:
+                    self.run_event.clear()
+                    break
 
                 self.lock_connections.acquire()
-
                 self.connections = list(
                     filter(lambda s: not s.isclosed(), self.connections))
 
@@ -496,30 +490,10 @@ class RemoteServer(MessageReceiver):
                     'main', self._thread_listener)
                 self.connections.append(connection)
                 self.lock_connections.release()
+                
                 if not self.run_event.is_set():
-                    self.sock.close()
                     break
-
-            # Make sure previous sockets are closed before recreating the server
-            for s in self.dead_socks:
-                try:
-                    s.close()
-                except:
-                    pass
-            ###
-
-            # Recreate Server
-            try:
-                self.sock = socket.create_server(('0.0.0.0', self.port))
-                self.dead_socks.append(self.sock)
-            except OSError as err:
-                if retries <= 0:
-                    return
-                print('Server Creation Error:', err, file=sys.stderr)
-                retries -= 1
-                continue
-            retries = SERVER_START_RETRIES
-            ###
+        self.close()
 
     def _thread_listener(self, obj, conn):
         if isinstance(obj, Command):
@@ -585,13 +559,10 @@ class RemoteServer(MessageReceiver):
         for conn in c:
             try:
                 conn.close()
+                del conn
             except:
                 pass
-        for s in self.dead_socks:
-            try:
-                s.close()
-            except:
-                pass
+        c.clear()
         try:
             self.sock.close()
         except:

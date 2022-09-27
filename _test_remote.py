@@ -254,45 +254,50 @@ class _FakeRemoteBP:
 
 
 class TestRemoteBrickServer(unittest.TestCase):
-    def setUp(self) -> None:
-        self.server = RemoteBrickServer(password='password', port=DEFAULT_PORT)
-        self.fake = _FakeRemoteBP()
-        self.server.register_object(self.fake)
-        self.conn1 = RemoteBrick('127.0.0.1', 'password', port=DEFAULT_PORT)
-        self.conn2 = RemoteBrick('127.0.0.1', 'password', port=DEFAULT_PORT)
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.server = RemoteBrickServer(password='password', port=DEFAULT_PORT)
+        cls.fake = _FakeRemoteBP()
+        cls.server.register_object(cls.fake)
+        cls.conn1 = RemoteBrick('127.0.0.1', 'password', port=DEFAULT_PORT)
+        cls.conn2 = RemoteBrick('127.0.0.1', 'password', port=DEFAULT_PORT)
         RemoteClient.TESTING = True
 
     def test_01(self):
-        res = self.conn1._send_command('__verify', wait_for_data=1)
+        cls = TestRemoteBrickServer
+        res = cls.conn1._send_command('__verify', wait_for_data=1)
         self.assertNotEqual(None, res)
         self.assertEqual(
             f"I am sending back the command for {res.id}", res.result)
 
     def test_02(self):
-        res = self.conn1._send_command('__verify', wait_for_data=1)
+        cls = TestRemoteBrickServer
+        res = cls.conn1._send_command('__verify', wait_for_data=1)
         self.assertNotEqual(None, res)
         self.assertEqual(
             f"I am sending back the command for {res.id}", res.result)
 
-        res = self.conn2._send_command('__verify', wait_for_data=1)
+        res = cls.conn2._send_command('__verify', wait_for_data=1)
         self.assertNotEqual(None, res)
         self.assertEqual(
             f"I am sending back the command for {res.id}", res.result)
 
     def test_03(self):
-        res = self.conn1._send_command('action1', 1, 2, wait_for_data=1, a3=45)
+        cls = TestRemoteBrickServer
+        res = cls.conn1._send_command('action1', 1, 2, wait_for_data=1, a3=45)
         self.assertNotEqual(None, res)
         self.assertEqual((1, 2, 45), res.result)
-        res = self.conn2._send_command('action1', wait_for_data=1)
+        res = cls.conn2._send_command('action1', wait_for_data=1)
         err = None
         try:
-            self.fake.action1()
+            cls.fake.action1()
         except Exception as e:
             err = str(e)
         self.assertNotEqual(None, res)
         self.assertEqual(err, res.result)
 
     def test_performance(self):
+        cls = TestRemoteBrickServer
         avg = 0
         N = 1
 
@@ -308,11 +313,12 @@ class TestRemoteBrickServer(unittest.TestCase):
         # print(
         #     f'average Connection send-recv time for brick-server was {avg / N / 1e9}')
 
-    def tearDown(self) -> None:
+    @classmethod
+    def tearDownClass(cls) -> None:
         RemoteClient.TESTING = False
-        self.server.close()
-        self.conn1.close()
-        self.conn2.close()
+        cls.server.close()
+        cls.conn1.close()
+        cls.conn2.close()
 
 
 class TestRemoteCaller(unittest.TestCase):
