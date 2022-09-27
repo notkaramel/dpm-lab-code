@@ -15,6 +15,8 @@ import signal
 import time
 import sys
 
+class IOError(OSError):
+    pass
 
 # Save process ID of this program so we can force stop it later if needed
 os.system(f"echo {os.getpid()} > ~/brickpi3_pid")
