@@ -142,6 +142,95 @@ class Sound:
         self.set_amplitude_modulation(amp_f, amp_ka, amp_ac)
         self.update_duration(duration, fs)
 
+    def reset(self):
+        """Fully resets the underlying audio of this Sound object.
+        The sound must be stopped, or this will give unexpected behavior
+
+        see Sound.reset_audio
+        """
+        return self.reset_audio()
+
+    def reset_audio(self):
+        """Fully resets the underlying audio data of this Sound object.
+        The sound must be stopped, or this will give unexpected behavior
+        """
+        return self.update_audio(True)
+
+    def append(self, other, spacing=0):
+        """Takes the underlying audio data of another Sound object, other, and appends all of it
+        to the underlying audio data of this Sound object.
+
+        This does not alter any base attributes of this Sound object, and a 'reset' will undo these appends
+        
+        see Sound.append_sound
+        """
+        return self.append_sound(other, spacing)
+
+    def append_sound(self, other, spacing=0):
+        """Takes the underlying audio data of another Sound object, other, and appends all of it
+        to the underlying audio data of this Sound object.
+
+        This does not alter any base attributes of this Sound object, and a 'reset' will undo these appends
+        """
+        spacing = float(spacing)
+        if spacing < 0:
+            spacing = 0
+        spacing_n = int(spacing * self._fs)
+
+        if not self.is_playing():
+            src = list(self.audio)
+            dst = list(other.audio)
+            spacer = [0 for i in range(spacing_n)]
+
+            self.audio = array.array('h', src + spacer + dst)
+        else:
+            raise RuntimeError(
+                "Cannot alter this sound object for repetition while playing this sound.")
+        return self
+
+    def repeat_sound(self, repeat_times=1, repeat_interval=0):
+        """Alters the underlying audio data of this Sound object, such that the main sound will:
+        - repeat equal to the value of repeat_times. It should be an integer value.
+        - each time the original sound is repeated, there will be an interval of silence for 'repeat_interval' seconds.
+            Expects either int or float value, of seconds for the interval. Default is 0 seconds.
+
+        Explanation of Potential Usage:
+        You may utilize the concept of BPM or "beats per minute" to help you with creating a tempo for your songs.
+            If you want a sound repeated at 120bpm, that would be 2 times/sec, 0.5 seconds per sound played.
+            If the original sound has duration 0.1 seconds, then the silence spacing would have to be 0.4 seconds, such that
+            every sound starts playing every 0.5 seconds, matching 120bpm. The end of this repeated Sound object will be a 
+            sound playing for 0.1 seconds, and then no silence spacing afterwards. This is desired behavior. You can then perform 
+            a time.sleep(0.4) seconds before replaying this Sound object. BUT there is sometimes latency in "starting" a sound, 
+            so the time sleep may need to be smaller, such as 0.35 seconds instead.
+        """
+        repeat_times = int(
+            repeat_times)  # This can cause an error, which is desired
+        if repeat_times < 1:
+            repeat_times = 1
+
+        repeat_interval = float(repeat_interval)
+        if repeat_times < 0:
+            repeat_times = 0
+
+        fs = self._fs
+        interval_n = int(fs * repeat_interval)
+
+        if not self.is_playing():
+            src = list(self.audio)
+            src_n = len(src)
+            end_n = src_n * repeat_times + (repeat_times - 1) * interval_n
+            spacer = [0 for i in range(interval_n)]
+            n = src_n + interval_n
+            arr = []
+            tmp = src + spacer
+            for i in range(end_n):
+                arr.append(tmp[i % n])
+            self.audio = array.array('h', arr)
+        else:
+            raise RuntimeError(
+                "Cannot alter this sound object for repetition while playing this sound.")
+        return self
+
     def set_volume(self, volume):
         """Set the volume level of this sound.
         **Must use Sound.update_audio() to apply all changes**
