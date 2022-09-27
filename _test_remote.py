@@ -1,4 +1,4 @@
-from utils.remote import BUSY_WAITING, Connection, Command, Message, RemoteBrick, RemoteBrickServer, socket, DEFAULT_PORT, _MethodCaller, _RemoteCaller
+from utils.remote import BUSY_WAITING, Connection, Command, Message, RemoteBrick, RemoteBrickServer, RemoteClient, socket, DEFAULT_PORT, _MethodCaller, _RemoteCaller
 from utils import dummy, brick
 import unittest
 import time
@@ -255,6 +255,7 @@ class TestRemoteBrickServer(unittest.TestCase):
         self.server.register_object(self.fake)
         self.conn1 = RemoteBrick('127.0.0.1', 'password', port=DEFAULT_PORT)
         self.conn2 = RemoteBrick('127.0.0.1', 'password', port=DEFAULT_PORT)
+        RemoteClient.TESTING = True
 
     def test_01(self):
         res = self.conn1._send_command('__verify', wait_for_data=1)
@@ -303,6 +304,7 @@ class TestRemoteBrickServer(unittest.TestCase):
         #     f'average Connection send-recv time for brick-server was {avg / N / 1e9}')
 
     def tearDown(self) -> None:
+        RemoteClient.TESTING = False
         self.server.close()
         self.conn1.close()
         self.conn2.close()
