@@ -579,7 +579,7 @@ class RemoteBrick(RemoteClient):
     def get_brick(self):
         return self._brick
 
-    def make_remote(self, sensor_or_motor, *args, **kwargs) -> brick.Sensor | brick.Motor:
+    def make_remote(self, sensor_or_motor, *args, **kwargs):
         """Creates a remote sensor or motor that is attached to the remote brick.
         sensor_or_motor - A class, such as Motor or EV3UltrasonicSensor
         *args - any of the normal arguments that would be used to create the object locally
