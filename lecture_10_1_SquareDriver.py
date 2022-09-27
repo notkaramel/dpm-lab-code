@@ -9,6 +9,7 @@ Author: F.P. Ferrie, Ryan Au
 Date: January 13th, 2022
 """
 
+from cmath import isclose
 import time
 import math
 from utils import brick
@@ -18,13 +19,13 @@ MOTOR_POLL_DELAY = 0.05
 
 SQUARE_LENGTH = 0.5     # (meters) Side length of square in
 WHEEL_RADIUS = 0.028    # (meters) Radius of one wheel
-AXLE_LENGTH = 0.09      # (meters) Distance between wheel contact with ground
+AXLE_LENGTH = 0.11      # (meters) Distance between wheel contact with ground
 
 DIST_TO_DEG = 180/(math.pi*WHEEL_RADIUS)   # (degrees / meter) Convert distance to wheel degrees
 ORIENT_TO_DEG = AXLE_LENGTH / WHEEL_RADIUS # Convert whole robot rotation to wheel rotation
 
-FWD_SPEED = 180  # (deg per sec) Moving forward speed
-TRN_SPEED = 90   # (deg per sec) Turning a corner speed
+FWD_SPEED = 100  # (deg per sec) Moving forward speed
+TRN_SPEED = 180   # (deg per sec) Turning a corner speed
 
 LEFT_MOTOR = Motor("A")  # Left motor in Port A
 RIGHT_MOTOR = Motor("D") # Right motor in Port D
@@ -34,9 +35,9 @@ SPEED_LIMIT = 720        # Speed limit = 720dps
 
 def wait_for_motor(motor: Motor):
     "Function to block until motor completion"
-    while motor.get_speed() == 0:    # Wait for motor to spin up   (start)
+    while math.isclose(motor.get_speed(), 0):    # Wait for motor to spin up   (start)
         time.sleep(MOTOR_POLL_DELAY)
-    while motor.get_speed() != 0:    # Wait for motor to spin down (stop)
+    while not math.isclose(motor.get_speed(), 0):    # Wait for motor to spin down (stop)
         time.sleep(MOTOR_POLL_DELAY)
 
 
@@ -96,9 +97,9 @@ try:
     # Prompt for drive loop
     while True:
         side_length = SQUARE_LENGTH # Assume default side length
-        resp = input('Override default side length 0.5m? y/n (q for quit): ')
+        resp = input('Override default side length {:0.2f}m? y/n (q for quit): '.format(side_length))
         if resp.lower() == 'y':
-            side_length = float(input('Enter square side length (m): '))
+            AXLE_LENGTH = float(input('Enter square side length (m): '))
         if resp.lower() == 'q':
             BP.reset_all()
             exit()

@@ -11,11 +11,11 @@ Date: January 13th, 2022
 from utils.brick import BP, Motor, TouchSensor, EV3ColorSensor, wait_ready_sensors, SensorError
 import time
 
-FORWARD_SPEED = 30           # speed constant = 30% power
+FORWARD_SPEED = 20           # speed constant = 30% power
 SENSOR_POLL_SLEEP = 0.05     # Polling rate = 50 msec
 
 T_SENSOR = TouchSensor(1)    # Touch Sensor in Port S1
-C_SENSOR = EV3ColorSensor(2) # Color Sensor in Port S2
+C_SENSOR = EV3ColorSensor(3) # Color Sensor in Port S2
 
 LEFT_MOTOR = Motor("A")      # Left motor in Port A
 RIGHT_MOTOR = Motor("D")     # Right motor in Port D
@@ -44,7 +44,8 @@ try:
         except SensorError as error:
             # On exception or error, print error code
             print(error)
+            exit()
 
 except KeyboardInterrupt:                  # Allows program to be stopped on keyboard interrupt
-    f.close()
+    f.close() # SAVE THE FILE
     BP.reset_all()
