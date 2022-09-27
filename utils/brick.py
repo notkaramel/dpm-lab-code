@@ -6,10 +6,6 @@ Authors: Ryan Au, Younes Boubekeur
 """
 
 from __future__ import annotations
-try:
-    from brickpi3 import *
-except ModuleNotFoundError:
-    from .dummy import *
 
 from typing import Literal, Type
 import math
@@ -18,6 +14,30 @@ import os
 import signal
 import time
 import sys
+
+
+# Save process ID of this program so we can force stop it later if needed
+os.system(f"echo {os.getpid()} > ~/brickpi3_pid")
+BP = None
+try:
+    from brickpi3 import Enumeration, FirmwareVersionError, SensorError, BrickPi3
+    import spidev
+    BP = BrickPi3()  # The BrickPi3 instance
+except (ModuleNotFoundError, IOError) as err:
+    print('A BrickPi module is missing, or BrickPi is missing, intializing dummy BP', file=sys.stderr)
+    print(f'Warning: {err.__class__.__name__}({err})', file=sys.stderr)
+    from .dummy import Enumeration, FirmwareVersionError, SensorError, BrickPi3
+    BP = BrickPi3()  # The BrickPi3 instance
+
+_OLD_BP = BP
+
+def restore_default_brick(bp=None):
+    global BP
+    if bp is None:
+        BP = _OLD_BP
+    else:
+        BP = bp
+
 
 WAIT_READY_INTERVAL = 0.01
 INF = float("inf")
@@ -81,25 +101,6 @@ SENSOR_STATE = Enumeration("""
         INCORRECT_SENSOR_PORT,
     """)
 SENSOR_CODES = RevEnumeration(SENSOR_STATE)
-
-
-try:
-    import spidev
-    # Save process ID of this program so we can force stop it later if needed
-    os.system(f"echo {os.getpid()} > ~/brickpi3_pid")
-except ModuleNotFoundError as err:
-    print('spidev not found, intializing dummy BP', file=sys.stderr)
-
-BP = BrickPi3()  # The BrickPi3 instance
-_OLD_BP = BP
-
-
-def restore_default_brick(bp=None):
-    global BP
-    if bp is None:
-        BP = _OLD_BP
-    else:
-        BP = bp
 
 
 class ColorMapping:
