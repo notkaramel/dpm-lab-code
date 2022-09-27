@@ -468,31 +468,30 @@ class RemoteServer(MessageReceiver):
         self.run_event = threading.Event()
         self.run_event.set()
 
-        self.sock = socket.create_server(('0.0.0.0', self.port))
+        self.sock = None
         self.t1 = threading.Thread(target=self._thread_server, daemon=True)
         self.t1.start()
 
     def _thread_server(self):
         while self.run_event.is_set():
-            while self.run_event.is_set():
-                try:
-                    conn, addr = self.sock.accept()  # blocking, don't need time sleep
-                except OSError:
-                    self.run_event.clear()
-                    break
+            with socket.create_server(('0.0.0.0', self.port)) as server:
+                self.sock = server
+                while self.run_event.is_set():
+                    try:
+                        conn, addr = self.sock.accept()  # blocking, don't need time sleep
+                    except OSError:
+                        self.run_event.clear()
+                        break
 
-                self.lock_connections.acquire()
-                self.connections = list(
-                    filter(lambda s: not s.isclosed(), self.connections))
+                    self.lock_connections.acquire()
+                    self.connections = list(
+                        filter(lambda s: not s.isclosed(), self.connections))
 
-                connection = Connection(conn, self.password)
-                connection.register_listener(
-                    'main', self._thread_listener)
-                self.connections.append(connection)
-                self.lock_connections.release()
-                
-                if not self.run_event.is_set():
-                    break
+                    connection = Connection(conn, self.password)
+                    connection.register_listener(
+                        'main', self._thread_listener)
+                    self.connections.append(connection)
+                    self.lock_connections.release()
         self.close()
 
     def _thread_listener(self, obj, conn):
