@@ -710,7 +710,8 @@ class Motor:
 
     def set_dps(self, dps):
         """
-        Set the motor target speed in degrees per second.
+        Set the motor target speed in degrees per second. 
+        The motor will move at this speed consistently, once this function is run.
 
         Keyword arguments:
         port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
