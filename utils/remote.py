@@ -468,14 +468,13 @@ class RemoteServer(MessageReceiver):
         self.run_event = threading.Event()
         self.run_event.set()
         self.dead_socks = []
-        self.sock = None
 
+        self.sock = socket.create_server(('0.0.0.0', self.port))
         self.t1 = threading.Thread(target=self._thread_server, daemon=True)
         self.t1.start()
 
     def _thread_server(self):
         retries = SERVER_START_RETRIES
-        self.sock = socket.create_server(('0.0.0.0', self.port))
         self.dead_socks.append(self.sock)
         while self.run_event.is_set():
             while self.run_event.is_set():
