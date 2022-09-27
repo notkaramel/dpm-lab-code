@@ -374,35 +374,40 @@ class TestRemoteBrickSystemTest(unittest.TestCase):
         def set_sensor_type(self, *args, **kwargs) -> None:
             return None
 
-    def setUp(self) -> None:
-        self.answer = TestRemoteBrickSystemTest.FakeBP()
-        brick.restore_default_brick(self.answer)
-        self.remote_brick_server = RemoteBrickServer(
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.answer = TestRemoteBrickSystemTest.FakeBP()
+        brick.restore_default_brick(cls.answer)
+        cls.remote_brick_server = RemoteBrickServer(
             "password", port=DEFAULT_PORT)  # Actual Remote BrickServer
-        self.remote_brick = RemoteBrick(
+        cls.remote_brick = RemoteBrick(
             "127.0.0.1", "password", port=DEFAULT_PORT)
 
     def test_01(self):
-        res = self.remote_brick.get_brick().get_sensor(1)
+        cls = TestRemoteBrickSystemTest
+        res = cls.remote_brick.get_brick().get_sensor(1)
         self.assertNotEqual(None, res)
-        self.assertEqual(self.answer.get_sensor(), res.result)
+        self.assertEqual(cls.answer.get_sensor(), res.result)
     def test_01_01(self):
+        cls = TestRemoteBrickSystemTest
         _RemoteCaller.TESTING = False
-        res = self.remote_brick.get_brick().get_sensor(1)
+        res = cls.remote_brick.get_brick().get_sensor(1)
         _RemoteCaller.TESTING = True
         self.assertNotEqual(None, res)
-        self.assertEqual(self.answer.get_sensor(), res)
+        self.assertEqual(cls.answer.get_sensor(), res)
 
     def test_02(self):
-        sensor = self.remote_brick.make_remote(brick.EV3UltrasonicSensor, 1)
+        cls = TestRemoteBrickSystemTest
+        sensor = cls.remote_brick.make_remote(brick.EV3UltrasonicSensor, 1)
         res = sensor.get_value()
         self.assertNotEqual(None, res)
-        self.assertEqual(self.answer.get_sensor(), res.result)
+        self.assertEqual(cls.answer.get_sensor(), res.result)
 
-    def tearDown(self) -> None:
+    @classmethod
+    def tearDownClass(cls) -> None:
         brick.restore_default_brick()  # For the fake_server_brick setting
-        self.remote_brick.close()
-        self.remote_brick_server.close()
+        cls.remote_brick_server.close()
+        cls.remote_brick.close()
 
 
 if __name__ == '__main__':
