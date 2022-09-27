@@ -238,9 +238,14 @@ class TestIntegrationRemoteBrick(unittest.TestCase):
         # print(f'average Connection send-recv time for sockets was {avg / N / 1e9}')
 
     def tearDown(self):
-        self.server.close()
-        self.rem1.close()
-        self.rem2.close()
+        try:
+            self.server.close()
+            self.rem1.close()
+            self.rem2.close()
+            self.s1.close()
+            self.s2.close()
+        except:
+            pass
 
 
 class _FakeRemoteBP:
