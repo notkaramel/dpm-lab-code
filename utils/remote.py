@@ -1,4 +1,8 @@
-from math import inf
+try:
+    from math import inf
+except:
+    inf = float('inf')
+from queue import Queue
 import socket
 import sys
 import threading
@@ -285,6 +289,20 @@ class MessageReceiver(object):  # Somewhat abstract class that needs self.conn
         self.messages = deque()
         self.lock_messages = threading.Lock()
 
+    def wait_messages(self, timeout=None, wait_interval=None):
+        if timeout is None:
+            timeout = inf
+        if wait_interval is None:
+            wait_interval = BUSY_WAITING
+
+        while timeout > 0 and not self.has_messages():
+            timeout -= 1
+            time.sleep(wait_interval)
+        return True
+
+    def has_messages(self):
+        return self.num_messages() > 0
+
     def num_messages(self):
         self.lock_messages.acquire()
         r = len(self.messages)
@@ -310,7 +328,9 @@ class MessageReceiver(object):  # Somewhat abstract class that needs self.conn
         self.lock_messages.release()
         return result
 
-    def get_message(self):
+    def get_message(self, wait=False):
+        if wait:
+            self.wait_messages()
         m = self._get_message()
         return str(m) if m is not None else m
 
