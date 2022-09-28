@@ -4,6 +4,7 @@ except:
     inf = float('inf')
 from queue import Queue
 import socket
+import _socket
 import sys
 import threading
 import time
@@ -496,8 +497,12 @@ class RemoteServer(MessageReceiver):
         self.t1.start()
 
     def _thread_server(self):
+        # True or False flag for server restartability on Linux.
+        # Must be False on systems that don't support it e.g. Windows
+        reuse_port = (hasattr(_socket, "SO_REUSEPORT")) 
+
         while self.run_event.is_set():
-            with socket.create_server(('0.0.0.0', self.port)) as server:
+            with socket.create_server(('0.0.0.0', self.port), reuse_port=reuse_port) as server:
                 self.sock = server
                 while self.run_event.is_set():
                     try:

@@ -6,7 +6,7 @@ import threading
 from collections import deque
 import uuid
 
-DEFAULT_PORT = 2111
+DEFAULT_PORT = 2112
 _RemoteCaller.TESTING = True
 
 class FakeSocket:
