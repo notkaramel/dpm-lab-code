@@ -189,6 +189,7 @@ class Connection:
                 # self._debug('received. loading...')
                 if len(d) <= 0:
                     self.run_event.clear()
+                    self.close()
                     break
                 o = brickle.loads(d)
                 # self._debug('received. loaded...')
@@ -520,7 +521,8 @@ class RemoteServer(MessageReceiver):
                         'main', self._thread_listener)
                     self.connections.append(connection)
                     self.lock_connections.release()
-        self.close()
+                self.close_connections()
+            self.close()
 
     def _thread_listener(self, obj, conn):
         if isinstance(obj, Command):
@@ -575,9 +577,7 @@ class RemoteServer(MessageReceiver):
     def __del__(self):
         self.close()
 
-    def close(self):
-        self._isclosed = True
-        self.run_event.clear()
+    def close_connections(self):
         self.lock_connections.acquire()
         c = self.connections
         self.connections = []
@@ -590,6 +590,11 @@ class RemoteServer(MessageReceiver):
             except:
                 pass
         c.clear()
+
+    def close(self):
+        self._isclosed = True
+        self.run_event.clear()
+        self.close_connections()
         try:
             self.sock.close()
         except:
