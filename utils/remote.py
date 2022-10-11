@@ -577,6 +577,16 @@ class RemoteServer(MessageReceiver):
     def __del__(self):
         self.close()
 
+    def broadcast_message(self, text):
+        m = Message(text)
+        self.lock_connections.acquire()
+        for conn in self.connections:
+            try:
+                conn.send_message(m)
+            except:
+                pass
+        self.lock_connections.release()
+
     def close_connections(self):
         self.lock_connections.acquire()
         c = self.connections
