@@ -42,7 +42,8 @@ Your options include:
 2 - Add a Wifi network (those that only uses a single password)
 3 - Make this Brick connect to another Host Brick's Wifi Hotspot only
 4 - Connect to a Wifi Network if Available (this action exits this script)
-5 - Exit this script
+5 - List the current networks that are available
+6 - Exit this script
 
 Input your choice: '''
 def main():
@@ -61,8 +62,8 @@ def main():
                 try:
                     print("(WARNING: This will store the network's password in plaintext)")
                     input("Okay? (Press Enter to Continue...)")
-                    ssid = input("What is the network's name?")
-                    psk  = input("What is the network's password?")
+                    ssid = input("What is the network's name? ")
+                    psk  = input("What is the network's password? ")
                     add_network(ssid, psk)
                     print("Command successful.")
                 except KeyboardInterrupt:
@@ -74,13 +75,17 @@ def main():
                     print("Resetting all known Wifi Networks...")
                     reset_wpa()
                     print("Reset successful.")
-                    brick_num = 'What is the number of the Host BrickPi you wish to connect to?'
+                    brick_num = input('What is the number of the Host BrickPi you wish to connect to? ')
                     print(f"Adding new network: 'dpm-{brick_num}-hotspot'")
                     add_network(f'dpm-{brick_num}-hotspot', '1234567890')
                     print("Command successful.")
                 except KeyboardInterrupt:
                     print("Add Network Cancelled...")
             elif choice == '4':
+                reset_autohotspot()
+            elif choice == '5':
+                print(get_wpa())
+            elif choice == '6':
                 print("Script ended.")
                 return
             else:
