@@ -391,7 +391,7 @@ class RemoteClient(MessageReceiver):
     def __init__(self, address, password, port=None, sock=None):
         super(RemoteClient, self).__init__()
 
-        self.address = address
+        self.address = socket.gethostbyname(address)
         self.password = DEFAULT_PASSWORD if password is None else password
         self.port = DEFAULT_PORT if port is None else port
 
