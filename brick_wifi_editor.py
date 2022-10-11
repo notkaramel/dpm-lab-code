@@ -83,6 +83,8 @@ def main():
                     print("Add Network Cancelled...")
             elif choice == '4':
                 reset_autohotspot()
+                print("Script ended.")
+                return
             elif choice == '5':
                 print(get_wpa())
             elif choice == '6':
