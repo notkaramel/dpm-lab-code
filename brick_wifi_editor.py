@@ -14,7 +14,7 @@ def reset_autohotspot():
     os.system("printf '6\n1\nrobots1234\n8\n' | ~/Autohotspot/autohotspot-setup.sh")
 
 def reset_wpa():
-    os.system(f"printf '{ORIGINAL_WPA}' | sudo tee -a /etc/wpa_supplicant/wpa_supplicant.new.conf")
+    os.system(f"printf '{ORIGINAL_WPA}' | sudo tee -a /etc/wpa_supplicant/wpa_supplicant.conf")
 
 def set_wpa(text):
     os.system(f"printf '{text}' | sudo tee /etc/wpa_supplicant/wpa_supplicant.conf")
