@@ -4,7 +4,6 @@ class List(list):
     CUSTOM=[
         '__len__',
         '__contains__',
-        '__iter__',
         '__getitem__',
         '__setitem__',
         '__repr__',
@@ -15,8 +14,6 @@ class List(list):
         return self.__len__()
     def __contains__(self, key):
         return self.__contains__(key)
-    def __iter__(self):
-        return self.__iter__()
     def __getitem__(self, key):
         return self.__getitem__(key)
     def __setitem__(self, key, value):
@@ -33,4 +30,4 @@ if __name__=='__main__':
 
     ls = List()
 
-    remote_ls = client.create_caller(ls, custom=List.CUSTOM)
+    remote_ls = client.create_caller(ls, custom=List.CUSTOM, var_name='ls')

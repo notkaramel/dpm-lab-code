@@ -7,5 +7,5 @@ if __name__=='__main__':
     server = remote.RemoteServer('password')
 
     ls = []
-    server.register_object(ls, custom=List.CUSTOM)
+    server.register_object(ls, custom=List.CUSTOM, var_name='ls')
 

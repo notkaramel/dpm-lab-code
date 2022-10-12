@@ -14,7 +14,7 @@ import uuid
 
 import json
 import marshal
-import pickle  # using one of these three to parse data for sending
+import pickle
 
 from . import brick
 from . import dummy
@@ -280,13 +280,15 @@ class MethodCallerException(IdentifyingException):
 
 
 class _MethodCaller:
-    def __init__(self, obj, custom=None):
+    def __init__(self, obj, custom=None, var_name=''):
         if custom is None:
             custom = []
 
         self.cls = obj.__class__
         self.obj = obj
-        self.methods = {func_name: getattr(self.cls, func_name) for func_name in dir(
+        self.var_name = var_name
+
+        self.methods = {f'{self.var_name}.{func_name}': getattr(self.cls, func_name) for func_name in dir(
             self.cls) if func_name in custom or (callable(getattr(self.cls, func_name)) and not func_name.startswith("__"))}
 
     def supports_command(self, command: Command):
@@ -368,8 +370,8 @@ class MessageReceiver(object):  # Somewhat abstract class that needs self.conn t
 class _RemoteCaller:
     TESTING = False
 
-    def create_caller(obj, remote_client, custom=None):
-        caller = _RemoteCaller(remote_client)
+    def create_caller(obj, remote_client, custom=None, var_name=''):
+        caller = _RemoteCaller(remote_client, var_name)
         
         if custom is None:
             custom = []
@@ -382,12 +384,14 @@ class _RemoteCaller:
         obj.__remote__ = caller
         return obj
 
-    def __init__(self, remote_brick):
-        self.remote_brick = remote_brick
+    def __init__(self, remote_client, var_name):
+        self.remote_client = remote_client
+        self.var_name = var_name
 
     def _generate(self, func_name):
+        func_name = f'{self.var_name}.{func_name}'
         def func(*args, wait_for_data=60, **kwargs):
-            res = self.remote_brick._send_command(
+            res = self.remote_client._send_command(
                 func_name, *args, wait_for_data=wait_for_data, **kwargs)
             if _RemoteCaller.TESTING:
                 return res
@@ -428,8 +432,8 @@ class RemoteClient(MessageReceiver):
 
         self.conn.register_listener('main', RemoteClient._listener, (self,))
 
-    def create_caller(self, obj, custom=None):
-        return _RemoteCaller.create_caller(obj, self, custom=custom)
+    def create_caller(self, obj, custom=None, var_name=''):
+        return _RemoteCaller.create_caller(obj, self, custom=custom, var_name=var_name)
 
     def send_message(self, text):
         self.conn.send(Message(text))
@@ -558,8 +562,8 @@ class RemoteServer(MessageReceiver):
             self.messages.append(obj)
             self.lock_messages.release()
 
-    def register_object(self, obj, custom=None):
-        caller = _MethodCaller(obj, custom=custom)
+    def register_object(self, obj, custom=None, var_name=''):
+        caller = _MethodCaller(obj, custom=custom, var_name=var_name)
         for method in caller.methods:
             self._caller_methods[method] = caller
         self._callers.append(caller)
