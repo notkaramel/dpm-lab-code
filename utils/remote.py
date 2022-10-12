@@ -109,17 +109,19 @@ class PasswordProtected:
     def verify_password(self, test):
         return test == self.password
 
+
 class MessageReplyException(IdentifyingException):
     pass
+
 
 class Message(PasswordProtected):
     def __init__(self, text):
         super(Message, self).__init__()
         self.text = text
         self.sender = None
-    
+
     def reply(self, text):
-        # Intended for Connection objects, but can apply to anything 
+        # Intended for Connection objects, but can apply to anything
         # that has a send method that can handle a Message obj
         if self.sender is not None and hasattr(self.sender, 'send') and callable(getattr(self.sender, 'send')):
             self.sender.send(Message(text))
@@ -297,7 +299,7 @@ class _MethodCaller:
         return command
 
 
-class MessageReceiver(object):  # Somewhat abstract class that needs self.conn
+class MessageReceiver(object):  # Somewhat abstract class that needs self.conn to be set
     def __init__(self):
         self.messages = deque()
         self.lock_messages = threading.Lock()
@@ -512,7 +514,7 @@ class RemoteServer(MessageReceiver):
     def _thread_server(self):
         # True or False flag for server restartability on Linux.
         # Must be False on systems that don't support it e.g. Windows
-        reuse_port = (hasattr(_socket, "SO_REUSEPORT")) 
+        reuse_port = (hasattr(_socket, "SO_REUSEPORT"))
 
         while self.run_event.is_set():
             with socket.create_server(('0.0.0.0', self.port), reuse_port=reuse_port) as server:
