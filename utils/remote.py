@@ -117,7 +117,7 @@ class MessageReplyException(IdentifyingException):
 class Message(PasswordProtected):
     def __init__(self, text):
         super(Message, self).__init__()
-        self.text = text
+        self.text = str(text)
         self.sender = None
 
     def reply(self, text):

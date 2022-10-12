@@ -1,4 +1,4 @@
-from utils import remote, brick
+from utils import remote
 from _test_remote_client import List
 # server = remote.RemoteBrickServer("password")
 # input(">>> Press Enter to End the Server")

@@ -1,4 +1,4 @@
-from utils import remote, brick
+from utils import remote
 
 class List(list):
     CUSTOM=[
