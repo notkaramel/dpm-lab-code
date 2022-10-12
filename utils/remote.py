@@ -109,11 +109,22 @@ class PasswordProtected:
     def verify_password(self, test):
         return test == self.password
 
+class MessageReplyException(IdentifyingException):
+    pass
 
 class Message(PasswordProtected):
     def __init__(self, text):
         super(Message, self).__init__()
         self.text = text
+        self.sender = None
+    
+    def reply(self, text):
+        # Intended for Connection objects, but can apply to anything 
+        # that has a send method that can handle a Message obj
+        if self.sender is not None and hasattr(self.sender, 'send') and callable(getattr(self.sender, 'send')):
+            self.sender.send(Message(text))
+        else:
+            raise MessageReplyException("No sender available")
 
     def __repr__(self):
         return self.text
@@ -334,7 +345,7 @@ class MessageReceiver(object):  # Somewhat abstract class that needs self.conn
         if wait:
             self.wait_messages()
         m = self._get_message()
-        return str(m) if m is not None else m
+        return m
 
     def _get_message(self):
         """Gets the one message from the message buffer, or None if none present.
@@ -424,6 +435,7 @@ class RemoteClient(MessageReceiver):
     def _listener(self, obj, conn):
         if isinstance(obj, Message):
             self.lock_messages.acquire()
+            obj.sender = conn
             self.messages.append(obj)
             self.lock_messages.release()
         elif isinstance(obj, Command):
@@ -531,6 +543,7 @@ class RemoteServer(MessageReceiver):
             self.lock_commands.release()
         if isinstance(obj, Message):
             self.lock_messages.acquire()
+            obj.sender = conn
             self.messages.append(obj)
             self.lock_messages.release()
 
