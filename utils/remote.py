@@ -264,7 +264,7 @@ class Connection:
     def close(self):
         try:
             self.run_event.clear()
-            self.sock.shutdown()
+            self.sock.shutdown(socket.SHUT_RDWR)
             self.sock.close()
         except:
             pass
@@ -280,11 +280,14 @@ class MethodCallerException(IdentifyingException):
 
 
 class _MethodCaller:
-    def __init__(self, obj):
+    def __init__(self, obj, custom=None):
+        if custom is None:
+            custom = []
+
         self.cls = obj.__class__
         self.obj = obj
         self.methods = {func_name: getattr(self.cls, func_name) for func_name in dir(
-            self.cls) if callable(getattr(self.cls, func_name)) and not func_name.startswith("__")}
+            self.cls) if func_name in custom or (callable(getattr(self.cls, func_name)) and not func_name.startswith("__"))}
 
     def supports_command(self, command: Command):
         return command.func_name in self.methods
@@ -365,12 +368,15 @@ class MessageReceiver(object):  # Somewhat abstract class that needs self.conn t
 class _RemoteCaller:
     TESTING = False
 
-    def create_caller(obj, remote_brick):
-        caller = _RemoteCaller(remote_brick)
+    def create_caller(obj, remote_client, custom=None):
+        caller = _RemoteCaller(remote_client)
+        
+        if custom is None:
+            custom = []
 
         for name in dir(obj):
             attr = getattr(obj, name)
-            if callable(attr) and not name.startswith('__'):
+            if name in custom or (callable(attr) and not name.startswith('__')):
                 setattr(obj, name, caller._generate(name))
 
         obj.__remote__ = caller
@@ -421,6 +427,9 @@ class RemoteClient(MessageReceiver):
         self.conn = Connection(self.sock, self.password)
 
         self.conn.register_listener('main', RemoteClient._listener, (self,))
+
+    def create_caller(self, obj, custom=None):
+        return _RemoteCaller.create_caller(obj, self, custom=custom)
 
     def send_message(self, text):
         self.conn.send(Message(text))
@@ -541,7 +550,7 @@ class RemoteServer(MessageReceiver):
     def _thread_listener(self, obj, conn):
         if isinstance(obj, Command):
             self.lock_commands.acquire()
-            self.execute(conn, obj)
+            self._execute(conn, obj)
             self.lock_commands.release()
         if isinstance(obj, Message):
             self.lock_messages.acquire()
@@ -549,8 +558,8 @@ class RemoteServer(MessageReceiver):
             self.messages.append(obj)
             self.lock_messages.release()
 
-    def register_object(self, obj):
-        caller = _MethodCaller(obj)
+    def register_object(self, obj, custom=None):
+        caller = _MethodCaller(obj, custom=custom)
         for method in caller.methods:
             self._caller_methods[method] = caller
         self._callers.append(caller)
@@ -564,7 +573,7 @@ class RemoteServer(MessageReceiver):
     def _caller_execute(self, command: Command):
         return self._caller_methods[command.func_name].execute(command)
 
-    def execute(self, conn: Connection, command: Command):
+    def _execute(self, conn: Connection, command: Command):
         """Executes a command and sends the result back to the remote brick (rem)"""
         command._result_given = True
 
@@ -621,6 +630,7 @@ class RemoteServer(MessageReceiver):
         self.run_event.clear()
         self.close_connections()
         try:
+            self.sock.shutdown(socket.SHUT_RDWR)
             self.sock.close()
         except:
             pass
@@ -632,8 +642,7 @@ class RemoteServer(MessageReceiver):
 class RemoteBrick(RemoteClient):
     def __init__(self, address, password, port=None, sock=None):
         super(RemoteBrick, self).__init__(address, password, port, sock)
-        self._brick: dummy.Brick = _RemoteCaller.create_caller(
-            dummy.Brick(), self)
+        self._brick: dummy.Brick = self.create_caller(dummy.Brick())
 
     def get_brick(self):
         return self._brick
