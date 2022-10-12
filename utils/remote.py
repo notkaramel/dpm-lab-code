@@ -646,7 +646,7 @@ class RemoteServer(MessageReceiver):
 class RemoteBrick(RemoteClient):
     def __init__(self, address, password, port=None, sock=None):
         super(RemoteBrick, self).__init__(address, password, port, sock)
-        self._brick: dummy.Brick = self.create_caller(dummy.Brick())
+        self._brick: dummy.Brick = self.create_caller(dummy.Brick(), var_name='brick')
 
     def get_brick(self):
         return self._brick
@@ -679,4 +679,4 @@ class RemoteBrick(RemoteClient):
 class RemoteBrickServer(RemoteServer):
     def __init__(self, password, port=None):
         super(RemoteBrickServer, self).__init__(password, port)
-        self.register_object(brick.BP)
+        self.register_object(brick.BP, var_name='brick')
