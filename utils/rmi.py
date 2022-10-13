@@ -548,7 +548,7 @@ class RemoteClient(MessageReceiver):
         self.conn.register_listener('main', RemoteClient._listener, (self,))
 
     def create_caller(self, obj, custom=None, var_name=''):
-        """Alters the given object (obj) such it represents a Remote Object.
+        """Alters the given object (obj) such that it represents a Remote Object.
 
         Its functions will be modified to instead send Command objects through the RemoteClient (remote_client).
 
