@@ -350,8 +350,10 @@ class _MethodCaller:
             try:
                 command.result = self.methods[command.func_name](self.obj,
                                                                  *command.args, **command.kwargs)
+                command._result_given = True
             except Exception as err:
                 command.result = str(MethodCallerException(err))
+                command._result_exception = True
         return command
 
 
@@ -588,7 +590,7 @@ class RemoteClient(MessageReceiver):
         if wait_for_data:
             res = self._get_result(c.id, wait_for_data)
             if res._result_exception and not RemoteClient.TESTING:
-                raise RemoteException(res.result)
+                raise RemoteException(str(res.result))
         else:
             res = c.id
 
