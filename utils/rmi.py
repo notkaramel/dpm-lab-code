@@ -82,7 +82,7 @@ class brickle:
     def loads(data):
         """Only accepts data of the bytes-like format used by this class. 
         Outputs objects that are of the Command or Message type.
-        
+
         Returns None for any other type.
         """
         try:
@@ -122,9 +122,10 @@ class MessageReplyException(IdentifyingException):
 
 class Message(PasswordProtected):
     """Objects of this class are used as a wrapper around text messages sent over a TCP socket.
-    
+
     Utilized mainly by the Connection, RemoteClient, and RemoteServer classes in this module.
     """
+
     def __init__(self, text):
         super(Message, self).__init__()
         self.text = str(text)
@@ -132,9 +133,9 @@ class Message(PasswordProtected):
 
     def reply(self, text):
         """Sends a reply to the original sender of this message. Accepts a string text message.
-        
+
         This action is not always available, and would raise a MessageReplyException if it isn't available.
-        
+
         The underlying sender is intended to be Connection objects, but can apply to anything
         that has a send method that can handle a Message obj.
         """
@@ -150,9 +151,10 @@ class Message(PasswordProtected):
 class Command(PasswordProtected):
     """An object that represents a function call along with its arguments.
     It is intended for usage in communicating the data of remote function calls over sockets.
-    
+
     Utilized mainly by the Connection, RemoteClient, and RemoteServer classes in this module.
     """
+
     def __init__(self, func_name, *args, **kwargs):
         """Accepts the function name and arguments of the function call."""
         super(Command, self).__init__()
@@ -201,6 +203,7 @@ class Connection:
     """Objects that wrap TCP sockets and create a thread to listen for received data.
     It also allows for listeners to be added, that process the data when it is received.
     """
+
     def __init__(self, sock, password="password", debug=None):
         self.sock: socket.socket = sock
         self.listeners = {}
@@ -312,14 +315,15 @@ class MethodCallerException(IdentifyingException):
 
 class _MethodCaller:
     """A class that wraps an object for remote method control.
-    
+
     This MethodCaller object will accept Command objects, and execute the 
     Command's function call on the underlying wrapped object.
     """
+
     def __init__(self, obj, custom=None, var_name=''):
         """Create the wrapper around the object to be exposed for remote method control.
         By default, excludes any methods starting with two underscores '__'
-        
+
         obj - the object to wrap
         custom - Either None (default), or a list of string names of functions that would
             also be included in the functions being exposed for remote method control.
@@ -341,7 +345,7 @@ class _MethodCaller:
 
     def execute(self, command: Command):
         """Executes the Command on the underlying wrapped object. 
-        
+
         If the command is not supported, the result is not set.
         If an exception occurs during execution, the Command's 
             result is set to the string representation of the Exception.
@@ -360,10 +364,11 @@ class _MethodCaller:
 class MessageReceiver(object):
     """Subclass this class to add a thread-safe message buffer structure.
     Only provides methods for retrieving messages.
-    
+
     Similar to a mixin, that addes the messages and lock_messages attributes, 
     and related functions for retrieving.
     """
+
     def __init__(self):
         self.messages = deque()
         self.lock_messages = threading.Lock()
@@ -373,7 +378,7 @@ class MessageReceiver(object):
 
         timeout - the number of seconds to wait for in total
         wait_interval - the sleep interval for a single iteration
-        
+
         returns True whenever the function returns.
         """
         if timeout is None:
@@ -442,7 +447,7 @@ class MessageReceiver(object):
 
 class _RemoteCaller:
     """A class that wraps a representative object to be the remote method controller.
-    
+
     Usual method calls on this RemoteCaller object will send a Command object 
     through the associated RemoteClient object, instead of executing the usual method call.
     It will then wait for a response from the RemoteClient object, and return the result of that instead.
@@ -451,7 +456,7 @@ class _RemoteCaller:
 
     def create_caller(obj, remote_client, custom=None, var_name=''):
         """Alters the given object (obj) such it represents a Remote Object.
-        
+
         Its functions will be modified to instead send Command objects through the RemoteClient (remote_client).
 
         obj - the object to be altered to represent the Remote Object. Should be of the same type as the Remote Object.
@@ -462,7 +467,7 @@ class _RemoteCaller:
         var_name - Acts as a key, that can represent the Remote Object. Helps avoid name conflicts.
         """
         caller = _RemoteCaller(remote_client, var_name)
-        
+
         if custom is None:
             custom = []
 
@@ -481,6 +486,7 @@ class _RemoteCaller:
     def _generate(self, func_name):
         """Creates special methods that replace the existing methods in the remote object."""
         func_name = f'{self.var_name}.{func_name}'
+
         def func(*args, wait_for_data=60, **kwargs):
             res = self.remote_client._send_command(
                 func_name, *args, wait_for_data=wait_for_data, **kwargs)
@@ -501,7 +507,7 @@ class RemoteException(Exception):
 
 class RemoteClient(MessageReceiver):
     """The client for remote method invocation.
-    
+
     Objects of this class can send and receive textual messages 
     to the host, and create remote objects using the RemoteClient.create_caller method.
     create_caller takes in an object (ideally of the same type as the remote object) and 
@@ -513,7 +519,7 @@ class RemoteClient(MessageReceiver):
 
     def __init__(self, address, password, port=None, sock=None):
         """Creates the client for remote method invocation.
-        
+
         address - a string of either IP Address or Hostname of the Remote host
         password - the password used by the remote host
         port - None sets port to DEFAULT_PORT. Otherwise expects an integer value for port
@@ -543,7 +549,7 @@ class RemoteClient(MessageReceiver):
 
     def create_caller(self, obj, custom=None, var_name=''):
         """Alters the given object (obj) such it represents a Remote Object.
-        
+
         Its functions will be modified to instead send Command objects through the RemoteClient (remote_client).
 
         obj - the object to be altered to represent the Remote Object. Should be of the same type as the Remote Object.
@@ -626,7 +632,7 @@ class RemoteClient(MessageReceiver):
 
 class RemoteServer(MessageReceiver):
     """The client for remote method invocation.
-    
+
     Objects of this class can broadcast and receive textual messages 
     to and from clients. Can accept objects to expose them 
     for remote control by clients through the register_object method. 
@@ -634,9 +640,10 @@ class RemoteServer(MessageReceiver):
     Messages received from clients, will have the sender attribute set, 
     such that through these Message objects one can reply to the client.
     """
+
     def __init__(self, password, port=None):
         """Simply accepts the password to authenticate received objects.
-        
+
         Optionally accepts a different port number. Expects type integer.
         Defualts to DEFAULT_PORT when port=None.
         """
@@ -699,7 +706,7 @@ class RemoteServer(MessageReceiver):
 
     def register_object(self, obj, custom=None, var_name=''):
         """Accepts an object to be controlled by this remote method invocation host.
-        
+
         Does not modify the object given.
 
         obj - the object to control
