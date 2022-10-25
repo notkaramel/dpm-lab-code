@@ -1,3 +1,4 @@
+from numpy import minimum
 from utils import brick, telemetry
 import statistics as stats
 import time
@@ -11,14 +12,46 @@ MOTOR_POS = 0
 
 IS_SPEED_MODE = True
 
-positions = [-70, -160, -255, -360, -450, -545] # 0 is starting pos. use 90dps.
-reset_distance = 600
+# 0 is starting pos. use 90dps.
+POSITIONS = [-70, -160, -255, -360, -450, -545]
+RESET_DISTANCE = 600
 
-colors = {
+
+COLORS = {
     'red': ((0.9720, 0.1305, 0.1947), (0.003706, 0.01108, 0.01371)),
-    'blue': ((), ())
+    'blue': ((0.1782, 0.3947, 0.9006), (0.02419, 0.02570, 0.01359)),
+    'green': ((0.1633, 0.8940, 0.4161), (0.02180, 0.009301, 0.02003)),
+    'purple': ((0.4383, 0.3476, 0.8280), (0.02114, 0.02571, 0.01800)),
+    'yellow': ((0.7897, 0.6028, 0.1118), (0.01153, 0.01698, 0.01152)),
+    'orange': ((0.9284, 0.2587, 0.2658), (0.005521, 0.01204, 0.01703))
+}
+
+
+def dist(a, b, c):
+    return math.sqrt(a*a + b*b + c*c)
+
+
+def color_dist(rgb, threshold=3):
+    """Returns a color string of the closest color by standard deviations.
     
-    }
+    threshold - the maximum allowable number of standard deviations.
+    If all values are beyond this threshold, this color is considered to be 
+    too far from any color mean, and should be counted as an unknown.
+
+    """
+    color_order = []
+    distances = []
+    for color, (mean, std) in COLORS.items():
+        r, g, b = [abs(c-m)/s for c, m, s in zip(rgb, mean, std)]
+        distances.append(dist(r, g, b))
+        color_order.append(color)
+    
+    minimum = min(distances)
+    if minimum > threshold:
+        return "unknown"
+    i = distances.index(minimum)
+    return color_order[i]
+
 
 def window_start():
     telemetry.start()
@@ -37,10 +70,10 @@ def window_start():
         global IS_SPEED_MODE
         if button.is_pressed():
             IS_SPEED_MODE = not IS_SPEED_MODE
-            telemetry.label("Motor Mode", "speed" if IS_SPEED_MODE else "pos", True)
+            telemetry.label(
+                "Motor Mode", "speed" if IS_SPEED_MODE else "pos", True)
             while button.is_pressed():
                 time.sleep(0.1)
-        
 
     switcher = telemetry.create_button("switch mode", func=update_speed_mode)
     forward = telemetry.create_button("/\\")
@@ -62,12 +95,12 @@ if __name__ == '__main__':
     brick.wait_ready_sensors(True)
 
     mean = 0
-    std  = 0
+    std = 0
     data = []
 
-    def normalize(r,g,b):
+    def normalize(r, g, b):
         if r is None or g is None or b is None:
-            return 0,0,0
+            return 0, 0, 0
 
         n = math.sqrt(r*r + g*g + b*b)
         n = 1/n if n != 0 else 0
@@ -81,7 +114,7 @@ if __name__ == '__main__':
         while True:
             if not telemetry.isopen():
                 break
-            
+
             if forward.is_pressed():
                 sample = normalize(*color.get_rgb())
                 if sample[0] > 0 and sample[1] > 0 and sample[2] > 0:
@@ -90,12 +123,13 @@ if __name__ == '__main__':
                 data.pop()
             if stopper.is_pressed():
                 data.clear()
-            
-            mean = rgb_func(data, stats.mean) if data else (0,0,0)
-            std = rgb_func(data, stats.stdev) if len(data) > 1 else (0,0,0)
+
+            mean = rgb_func(data, stats.mean) if data else (0, 0, 0)
+            std = rgb_func(data, stats.stdev) if len(data) > 1 else (0, 0, 0)
 
             telemetry.label("MOTOR_SPEED", mean, True)
             telemetry.label("MOTOR_POS", std, True)
+            telemetry.label("Color", color_dist(color.get_rgb()))
             telemetry.update()
             time.sleep(0.2)
     except KeyboardInterrupt:
