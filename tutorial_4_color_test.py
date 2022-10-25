@@ -93,13 +93,10 @@ if __name__ == '__main__':
             
             mean = rgb_func(data, stats.mean) if data else (0,0,0)
             std = rgb_func(data, stats.stdev) if len(data) > 1 else (0,0,0)
-            time.sleep(1)
 
-
-            
             telemetry.label("MOTOR_SPEED", mean, True)
             telemetry.label("MOTOR_POS", std, True)
             telemetry.update()
-            time.sleep(0.1)
+            time.sleep(1)
     except KeyboardInterrupt:
         exit(0)
