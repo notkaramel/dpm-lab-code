@@ -1,13 +1,15 @@
 from utils import brick, telemetry
 import time
 
-SLIDER = [1, 360, 90]  # min, max, value
+SLIDER = [0, 720, 90]  # min, max, value
 
 MOTOR_SPEED = 0
 LAST_SPEED = 0
 MOTOR_POS = 0
 
 IS_SPEED_MODE = True
+
+positions = [0, -70, -160, -255, -355, -555, -645] # 0 is starting pos. use 90dps.
 
 def window_start():
     telemetry.start()
