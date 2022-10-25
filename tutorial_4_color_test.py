@@ -1,4 +1,3 @@
-from numpy import minimum
 from utils import brick, telemetry
 import statistics as stats
 import time
