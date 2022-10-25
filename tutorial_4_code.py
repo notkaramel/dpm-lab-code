@@ -78,12 +78,12 @@ if __name__ == '__main__':
                     motor.set_position(-slider_adjust.get_value())
                 elif stopper.is_pressed():
                     motor.reset_encoder()
-                time.sleep(0.1)
+                # time.sleep(0.1)
 
             
             telemetry.label("MOTOR_SPEED", MOTOR_SPEED, True)
             telemetry.label("MOTOR_POS", MOTOR_POS, True)
             telemetry.update()
-            time.sleep(0.01)
+            time.sleep(0.1)
     except KeyboardInterrupt:
         exit(0)
