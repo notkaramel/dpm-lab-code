@@ -67,6 +67,10 @@ if __name__ == '__main__':
         n = 1/n if n != 0 else 0
         return r*n, g*n, b*n
 
+    def rgb_func(data, func):
+        r, g, b = zip(*data)
+        return func(r), func(g), func(b)
+
     try:
         while True:
             if not telemetry.isopen():
@@ -81,8 +85,8 @@ if __name__ == '__main__':
             if stopper.is_pressed():
                 data.clear()
             
-            mean = stats.mean(data) if data else 0
-            std = stats.stdev(data) if data else 0
+            mean = rgb_func(data, stats.mean) if data else (0,0,0)
+            std = rgb_func(data, stats.stdev) if data else (0,0,0)
             time.sleep(1)
 
 
