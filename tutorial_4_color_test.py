@@ -14,6 +14,12 @@ IS_SPEED_MODE = True
 positions = [-70, -160, -255, -360, -450, -545] # 0 is starting pos. use 90dps.
 reset_distance = 600
 
+colors = {
+    'red': ((0.9720, 0.1305, 0.1947), (0.003706, 0.01108, 0.01371)),
+    'blue': ((), ())
+    
+    }
+
 def window_start():
     telemetry.start()
     telemetry.resize(500, 500)
@@ -81,7 +87,7 @@ if __name__ == '__main__':
                 if sample[0] > 0 and sample[1] > 0 and sample[2] > 0:
                     data.append(sample)
             if backward.is_pressed():
-                data.remove()
+                data.pop()
             if stopper.is_pressed():
                 data.clear()
             
