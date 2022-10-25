@@ -63,7 +63,7 @@ if __name__ == '__main__':
                     MOTOR_SPEED = 0
 
                 if MOTOR_SPEED != 0:
-                    LAST_SPEED = abs(MOTOR_SPEED)
+                    motor.set_limits(dps=abs(MOTOR_SPEED))
                 motor.set_dps(MOTOR_SPEED)
             else:
                 ...
