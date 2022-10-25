@@ -62,7 +62,7 @@ if __name__ == '__main__':
             motor.set_position(pos)
             motor.wait_is_moving()
             motor.wait_is_stopped()
-            pusher.set_position_relative(360)
+            pusher.set_position_relative(-360)
             time.sleep(1)
         motor.set_position(0)
         motor.wait_is_moving()
