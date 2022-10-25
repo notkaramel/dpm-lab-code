@@ -80,8 +80,9 @@ if __name__ == '__main__':
                 data.remove()
             if stopper.is_pressed():
                 data.clear()
-            mean = stats.mean(data)
-            std = stats.stdev(data)
+            
+            mean = stats.mean(data) if data else 0
+            std = stats.stdev(data) if data else 0
             time.sleep(1)
 
 
