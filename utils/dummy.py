@@ -1,4 +1,7 @@
+from math import inf
+import threading
 from typing import Literal
+import time
 
 
 class Enumeration(object):
@@ -32,6 +35,110 @@ class FirmwareVersionError(Exception):
 
 class SensorError(Exception):
     """Exception raised if a sensor is not yet configured when trying to read it with get_sensor"""
+
+
+class _FakeMotor:
+    MAX_SPEED = 1050
+    MAX_POS = 65536
+    THREAD_INTERVAL = 0.2
+
+    def __init__(self):
+        self.event = threading.Event()
+        self.thread = threading.Thread(target=self._listener, daemon=True)
+
+        self.position_goal = None
+        self.state = 0
+
+        self.position = 0
+        self.speed = 0  # Maximum is 1050dps
+        self.power = 0  # Maximum is 1050dps
+
+        self.set_limits()
+
+    def start(self):
+        self.event.set()
+        self.thread.start()
+
+    @staticmethod
+    def limit(val, lower, upper):
+        return min(max(val, lower), upper)
+
+    @staticmethod
+    def abs_limit(val, limit):
+        limit = abs(limit)
+        return _FakeMotor.limit(val, -limit, limit)
+
+    def _listener(self, *args):
+        while self.event.is_set():
+            if self.position_goal is not None:
+                if self.state == 0:
+                    self.state = -1 if self.position_goal < self.position else 1
+                best_speed = self.state * min(self.speed_limit,
+                                         self.power_limit/100*self.MAX_SPEED)
+                self.speed = best_speed
+                self.power = best_speed * 100 / self.MAX_SPEED
+
+                if (self.state == -1 and self.position <= self.position_goal) or (self.state == 1 and self.position >= self.position_goal):
+                    self.set_position(self.position_goal)
+                    self.position_goal = None
+                    self.state = 0
+                    self.speed = 0
+                    self.power = 0
+            else:
+                self.state = 0
+            delta_pos = self.speed * self.THREAD_INTERVAL
+            self.set_position(self.position + delta_pos)
+            time.sleep(self.THREAD_INTERVAL)
+
+    def go_position(self, goal):
+        self.stop()
+        self.position_goal = self.abs_limit(goal, self.MAX_POS)
+
+    def stop(self):
+        self.speed = 0
+        self.power = 0
+        self.state = 0
+        self.position_goal = None
+
+    def power_to_speed(self):
+        self.speed = self.power / 100 * self.MAX_SPEED
+
+    def speed_to_power(self):
+        self.power = self.speed / self.MAX_SPEED * 100
+
+    def set_limits(self, power=0, speed=0):
+        power = abs(power)
+        speed = abs(speed)
+        if power == 0:
+            self.power_limit = 100
+        else:
+            self.power_limit = self.limit(power, 0, 100)
+        if speed == 0:
+            self.speed_limit = self.MAX_SPEED
+        else:
+            self.speed_limit = self.limit(speed, 0, self.MAX_SPEED)
+
+    def set_power(self, power):
+        self.stop()
+        self.power = power
+        self.power_to_speed()
+
+    def set_speed(self, speed):
+        self.stop()
+        self.speed = speed
+        self.speed_to_power()
+
+    def set_position(self, pos):
+        if pos is None:
+            self.position = 0
+        self.position = round((self.abs_limit(pos, self.MAX_POS) +
+                               self.MAX_POS) % (131072+1) - self.MAX_POS, 1)
+
+    def shutdown(self):
+        self.event.clear()
+
+    def __del__(self):
+        self.shutdown()
 
 
 class BrickPi3():
@@ -228,11 +335,78 @@ class BrickPi3():
     #SENSOR_ERROR = 2
     #SENSOR_TYPE_ERROR = 3
 
+    @classmethod
+    def _convert_port(cls, port):
+        if port == cls.PORT_1:
+            message_type = cls.BPSPI_MESSAGE_TYPE.GET_SENSOR_1
+            port_index = 0
+        elif port == cls.PORT_2:
+            message_type = cls.BPSPI_MESSAGE_TYPE.GET_SENSOR_2
+            port_index = 1
+        elif port == cls.PORT_3:
+            message_type = cls.BPSPI_MESSAGE_TYPE.GET_SENSOR_3
+            port_index = 2
+        elif port == cls.PORT_4:
+            message_type = cls.BPSPI_MESSAGE_TYPE.GET_SENSOR_4
+            port_index = 3
+        else:
+            raise IOError(
+                "get_sensor error. Must be one sensor port at a time. PORT_1, PORT_2, PORT_3, or PORT_4.")
+        return (port_index, message_type)
+
     def __init__(self, addr=1, detect=True):
-        pass
+        self.SPI_Address = 1
+        self.SensorType = [None for i in range(4)]
+        self.Motors = [_FakeMotor() for i in range(4)]
+        self.SPI_Messages = {self._convert_port(2**i)[1]: i for i in range(4)}
+        for mot in self.Motors:
+            mot.start()
+
+        self._internal_data = {
+            BrickPi3.SENSOR_TYPE.TOUCH: 0,
+            BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_CM: 255.0,
+            BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_INCHES: 100.0,
+            BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_LISTEN: 0,
+            BrickPi3.SENSOR_TYPE.EV3_COLOR_COLOR_COMPONENTS: (0, 0, 0, 0),
+            BrickPi3.SENSOR_TYPE.EV3_COLOR_AMBIENT: (0, 0, 0, 0),
+            BrickPi3.SENSOR_TYPE.EV3_COLOR_REFLECTED: 0,
+            BrickPi3.SENSOR_TYPE.EV3_COLOR_RAW_REFLECTED: 0,
+            BrickPi3.SENSOR_TYPE.EV3_COLOR_COLOR: 0,
+            BrickPi3.SENSOR_TYPE.EV3_GYRO_ABS: 0,
+            BrickPi3.SENSOR_TYPE.EV3_GYRO_DPS: 0,
+            BrickPi3.SENSOR_TYPE.EV3_GYRO_ABS_DPS: (0, 0)
+        }
+
+    def __del__(self):
+        for mot in self.Motors:
+            mot.shutdown()
 
     def spi_transfer_array(self, data_out):
-        pass
+        """Used by Brick.get_sensor_status"""
+        """
+        [self.SPI_Address, message_type, 0, 0, 0, 0, 0, 0, 0, 0]
+        => [0,0,0,0xA5,self.SensorType[i],status]
+
+        [self.SPI_Address, message_type, 0, 0, 0, 0]
+        => [0,0,0,0xA5,self.SensorType[i],status]
+
+        [self.SPI_Address, message_type, 0, 0, 0, 0, 0]
+        => [0,0,0,0xA5,self.SensorType[i],status]
+
+        [self.SPI_Address, message_type, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        => [0,0,0,0xA5,self.SensorType[i],status]
+        """
+        SENSOR_STATUS = 0  # Valid Data
+        BAD_REPLY = [0, 0, 0, 0, 0, 0]
+
+        data = list(data_out)
+        if len(data) < 2:
+            return BAD_REPLY
+
+        i = self.SPI_Messages.get(data[1], -1)
+        GOOD_REPLY = [0, 0, 0, 0xA5, self.SensorType[i], SENSOR_STATUS]
+
+        return GOOD_REPLY
 
     def spi_write_8(self, MessageType, Value):
         pass
@@ -283,22 +457,36 @@ class BrickPi3():
         pass
 
     def set_sensor_type(self, port, type, params=0):
-        pass
+        i, _ = self._convert_port(port)
+        self.SensorType[i] = type
 
     def transact_i2c(self, port, Address, OutArray, InBytes):
         pass
 
+    def set_sensor(self, port, value):
+        """A special method only available to dummy.BrickPi3.
+        Used to change the internal value of the fake sensors."""
+        i, _ = self._convert_port(port)
+        sensorType = self.SensorType[i]
+        self._internal_data[sensorType] = value
+
     def get_sensor(self, port):
-        pass
+        i, _ = self._convert_port(port)
+        sensorType = self.SensorType[i]
+
+        return self._internal_data[sensorType]
 
     def set_motor_power(self, port, power):
-        pass
+        i, _ = self._convert_port(port)
+        self.Motors[i].set_power(power)
 
     def set_motor_position(self, port, position):
-        pass
+        i, _ = self._convert_port(port)
+        self.Motors[i].go_position(position)
 
     def set_motor_position_relative(self, port, degrees):
-        pass
+        pos = self.get_motor_encoder()
+        self.set_motor_position(pos + degrees)
 
     def set_motor_position_kp(self, port, kp=25):
         pass
@@ -307,22 +495,27 @@ class BrickPi3():
         pass
 
     def set_motor_dps(self, port, dps):
-        pass
+        i, _ = self._convert_port(port)
+        self.Motors[i].set_speed(dps)
 
     def set_motor_limits(self, port, power=0, dps=0):
-        pass
+        i, _ = self._convert_port(port)
+        self.Motors[i].set_limits(power, dps)
 
     def get_motor_status(self, port):
-        pass
+        return [0, self.power, self.position, self.speed]
 
     def get_motor_encoder(self, port):
-        pass
+        i, _ = self._convert_port(port)
+        return self.Motors[i].position
 
     def offset_motor_encoder(self, port, position):
-        pass
+        i, _ = self._convert_port(port)
+        self.Motors[i].set_position(position)
 
     def reset_motor_encoder(self, port):
-        pass
+        i, _ = self._convert_port(port)
+        self.Motors[i].set_position(0)
 
     def reset_all(self):
         pass
@@ -337,4 +530,8 @@ class Brick(BrickPi3):
         pass
 
     def get_sensor_status(self, port: Literal[1, 2, 4, 8]):
-        pass
+        if port not in self.SensorType:
+            return 5  # INCORRECT_SENSOR_PORT
+        if self.SensorType[port] is None:
+            return 1  # NOT_CONFIGURED
+        return 0  # VALID_DATA
