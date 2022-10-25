@@ -503,7 +503,8 @@ class BrickPi3():
         self.Motors[i].set_limits(power, dps)
 
     def get_motor_status(self, port):
-        return [0, self.power, self.position, self.speed]
+        i, _ = self._convert_port(port)
+        return [0, self.Motors[i].power, self.Motors[i].position, self.Motors[i].speed]
 
     def get_motor_encoder(self, port):
         i, _ = self._convert_port(port)

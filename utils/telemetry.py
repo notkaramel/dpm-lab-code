@@ -69,6 +69,14 @@ def remote(func, *args):
     c = _COMMANDQUEUE.put_func(func, args)
     return c.wait_done()
 
+def remote_capable(func):
+    def inner(*args):
+        if threading.current_thread().name == 'MainThread':
+            func(*args)
+        else:
+            remote(func, *args)
+    return inner
+
 def _on_closing():
     """Private method: cleans up internal values on window destruction"""
     global WINDOW, _EXIT_FLAG, LABELS
@@ -206,7 +214,7 @@ def create_button(name, func=None):
 
     return _Button(name, func)
 
-
+@remote_capable
 def label(key, data, showkey=False):
     """Adds/Sets data by a key to the telemetry window"""
     add(key, data, showkey)

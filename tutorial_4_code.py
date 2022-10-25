@@ -1,50 +1,84 @@
-from utils import fakebrick, telemetry
+from utils import brick, telemetry
 import time
 
-MOTOR_SPEED = [1440, 1, 10, 1440 // 2, 0]
-MOTOR_POS   = [720, 1, 10, 90, 0]
+SLIDER = [1, 360, 90]  # min, max, value
+
+MOTOR_SPEED = 0
+LAST_SPEED = 0
+MOTOR_POS = 0
+
+IS_SPEED_MODE = True
 
 def window_start():
     telemetry.start()
-    telemetry.resize(500,500)
+    telemetry.resize(500, 500)
 
-    telemetry.label("Speed Delta", MOTOR_SPEED[3], True)
-    telemetry.label("Speed Current", MOTOR_SPEED[4], True)
-    telemetry.label("Pos Delta", MOTOR_SPEED[4], True)
-    telemetry.label("Pos Current", MOTOR_SPEED[4], True)
+    telemetry.label("SLIDER_VAL", SLIDER[2], True)
+    telemetry.label("MOTOR_SPEED", MOTOR_SPEED, True)
+    telemetry.label("MOTOR_POS", MOTOR_POS, True)
+    telemetry.label("Motor Mode", "speed" if IS_SPEED_MODE else "pos", True)
 
-    def update_speed_delta(slider:telemetry._Slider, *args):
-        MOTOR_SPEED[3] = telemetry.remote(slider.get_value)
-        telemetry.remote(telemetry.label, "Speed Delta", MOTOR_SPEED[3], True)
+    def update_slider(slider: telemetry._Slider, *args):
+        SLIDER[2] = telemetry.remote(slider.get_value)
+        telemetry.label("SLIDER_VAL", SLIDER[2], True)
 
-    def update_pos_delta(slider:telemetry._Slider, *args):
-        MOTOR_POS[3] = telemetry.remote(slider.get_value)
-        telemetry.remote(telemetry.label, "Pos Delta", MOTOR_POS[3], True)
+    def update_speed_mode(button: telemetry._Button, *args):
+        global IS_SPEED_MODE
+        if button.is_pressed():
+            IS_SPEED_MODE = not IS_SPEED_MODE
+            telemetry.label("Motor Mode", "speed" if IS_SPEED_MODE else "pos", True)
+            while button.is_pressed():
+                time.sleep(0.1)
+        
 
+    switcher = telemetry.create_button("switch mode", func=update_speed_mode)
     forward = telemetry.create_button("/\\")
+    stopper = telemetry.create_button("-stop-")
     backward = telemetry.create_button("\\/")
-    speed_adjust = telemetry.create_slider(MOTOR_SPEED[1], MOTOR_SPEED[0], MOTOR_SPEED[3], func=update_speed_delta)
-    pos_adjust = telemetry.create_slider(MOTOR_POS[1], MOTOR_POS[0], MOTOR_POS[3], func=update_pos_delta)
-    return forward, backward, speed_adjust
+    slider_adjust = telemetry.create_slider(*SLIDER, func=update_slider)
+    return switcher, forward, stopper, backward, slider_adjust
 
-if __name__=='__main__':
-    forward, backward, speed_adjust = window_start()
 
-    motor = Motor('A')
+if __name__ == '__main__':
+    switcher, forward, stopper, backward, slider_adjust = window_start()
+
+    ultra = brick.EV3UltrasonicSensor(3)
+    pusher = brick.Motor('D')
+    selector = brick.Motor('C')
+
+    motor = selector
 
     try:
         while True:
             if not telemetry.isopen():
                 break
-            MOTOR_SPEED[4] = 0
-            if forward.is_pressed():
-                MOTOR_SPEED[4] += MOTOR_SPEED[3]
-            if backward.is_pressed():
-                MOTOR_SPEED[4] -= MOTOR_SPEED[3]
-            telemetry.label("Speed Current", MOTOR_SPEED[4], True)
+            
+            if IS_SPEED_MODE:
+                MOTOR_POS = motor.get_position()
+                if forward.is_pressed():
+                    MOTOR_SPEED = slider_adjust.get_value()
+                elif backward.is_pressed():
+                    MOTOR_SPEED = -slider_adjust.get_value()
+                elif stopper.is_pressed():
+                    MOTOR_SPEED = 0
 
+                if MOTOR_SPEED != 0:
+                    LAST_SPEED = abs(MOTOR_SPEED)
+                motor.set_dps(MOTOR_SPEED)
+            else:
+                ...
+                MOTOR_POS = motor.get_position()
+                MOTOR_SPEED = motor.get_speed()
+                if forward.is_pressed():
+                    motor.set_position(slider_adjust.get_value())
+                elif backward.is_pressed():
+                    motor.set_position(-slider_adjust.get_value())
+                elif stopper.is_pressed():
+                    motor.set_dps(0)
 
-
+            
+            telemetry.label("MOTOR_SPEED", MOTOR_SPEED, True)
+            telemetry.label("MOTOR_POS", MOTOR_POS, True)
             telemetry.update()
             time.sleep(0.001)
     except KeyboardInterrupt:
