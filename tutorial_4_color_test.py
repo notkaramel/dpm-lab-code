@@ -97,6 +97,6 @@ if __name__ == '__main__':
             telemetry.label("MOTOR_SPEED", mean, True)
             telemetry.label("MOTOR_POS", std, True)
             telemetry.update()
-            time.sleep(1)
+            time.sleep(0.2)
     except KeyboardInterrupt:
         exit(0)
