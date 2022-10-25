@@ -42,7 +42,7 @@ def window_start():
 if __name__ == '__main__':
     switcher, forward, stopper, backward, slider_adjust = window_start()
 
-    ultra = brick.EV3UltrasonicSensor(3)
+    ultra = brick.EV3ColorSensor(3)
     pusher = brick.Motor('D')
     selector = brick.Motor('C')
 
@@ -74,7 +74,7 @@ if __name__ == '__main__':
                 elif backward.is_pressed():
                     motor.set_position(-slider_adjust.get_value())
                 elif stopper.is_pressed():
-                    motor.set_dps(0)
+                    motor.reset_encoder()
 
             
             telemetry.label("MOTOR_SPEED", MOTOR_SPEED, True)
