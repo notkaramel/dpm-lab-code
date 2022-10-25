@@ -9,7 +9,7 @@ MOTOR_POS = 0
 
 IS_SPEED_MODE = True
 
-positions = [0, -70, -160, -255, -360, -450, -545] # 0 is starting pos. use 90dps.
+positions = [-70, -160, -255, -360, -450, -545] # 0 is starting pos. use 90dps.
 reset_distance = 600
 
 def window_start():
@@ -63,7 +63,7 @@ if __name__ == '__main__':
             motor.wait_is_moving()
             motor.wait_is_stopped()
             pusher.set_position_relative(-360)
-            time.sleep(1)
+            time.sleep(3)
         motor.set_position(0)
         motor.wait_is_moving()
         motor.wait_is_stopped()
