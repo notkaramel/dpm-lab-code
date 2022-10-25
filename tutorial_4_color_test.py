@@ -17,13 +17,13 @@ POSITIONS = [-70, -160, -255, -360, -450, -545]
 RESET_DISTANCE = 600
 
 
-COLORS = {
-    'red': ((0.9720, 0.1305, 0.1947), (0.003706, 0.01108, 0.01371)),
-    'blue': ((0.1782, 0.3947, 0.9006), (0.02419, 0.02570, 0.01359)),
-    'green': ((0.1633, 0.8940, 0.4161), (0.02180, 0.009301, 0.02003)),
-    'purple': ((0.4383, 0.3476, 0.8280), (0.02114, 0.02571, 0.01800)),
-    'yellow': ((0.7897, 0.6028, 0.1118), (0.01153, 0.01698, 0.01152)),
-    'orange': ((0.9284, 0.2587, 0.2658), (0.005521, 0.01204, 0.01703))
+COLORS = { # means, stdevs, threshold on stdev distance
+    'red': ((0.9720, 0.1305, 0.1947), (0.003706, 0.01108, 0.01371), 3),
+    'blue': ((0.1782, 0.3947, 0.9006), (0.02419, 0.02570, 0.01359), 3),
+    'green': ((0.1633, 0.8940, 0.4161), (0.02180, 0.009301, 0.02003), 3),
+    'purple': ((0.4383, 0.3476, 0.8280), (0.02114, 0.02571, 0.01800), 3),
+    'yellow': ((0.7897, 0.6028, 0.1118), (0.01153, 0.01698, 0.01152), 3),
+    'orange': ((0.9284, 0.2587, 0.2658), (0.005521, 0.01204, 0.01703), 3)
 }
 
 
@@ -31,25 +31,41 @@ def dist(a, b, c):
     return math.sqrt(a*a + b*b + c*c)
 
 
-def color_dist(rgb, threshold=3):
-    """Returns a color string of the closest color by standard deviations.
+def color_dist(rgb):
+    """Returns a color string of the closest color using standard deviation-scaled distance.
     
-    threshold - the maximum allowable number of standard deviations.
-    If all values are beyond this threshold, this color is considered to be 
-    too far from any color mean, and should be counted as an unknown.
+    The given rgb value, treated as a vector, is converted to stdev_distance by the formula:
+        stdev_components = abs(rgb-mean)/stdev
+        stdev_distance = sqrt(stdev_components**2)
+
+    What this does is convert every rgb component value into direct distance to 
+    the mean rgb components of the previously collected color data, then converts 
+    these units into "number of standard deviations from r, g, and b means". Now 
+    that the units are in standard deviations, we treat this as a vector too, and 
+    get its length. With this stdev_distance, we can rely on statistics to tell 
+    us that if it is under the value 3, the original point, rgb, is completely 
+    within the curves of the collected color.
+
+    If the stdev_distance to all colors is farther than 3, then we can assume 
+    that this rgb value is not within any of the existing learned colors.
+
+    (This value of 3 is treated as a max threshold, and can be adjusted for each 
+    color individually)
 
     """
     color_order = []
     distances = []
-    for color, (mean, std) in COLORS.items():
+    rgb = normalize(*rgb)
+    for color, (mean, std, threshold) in COLORS.items():
         r, g, b = [abs(c-m)/s for c, m, s in zip(rgb, mean, std)]
-        distances.append(dist(r, g, b))
-        color_order.append(color)
-    
-    minimum = min(distances)
-    if minimum > threshold:
+        d = dist(r, g, b)
+        if d <= threshold:
+            distances.append(d)
+            color_order.append(color)
+
+    if len(distances) == 0:
         return "unknown"
-    i = distances.index(minimum)
+    i = distances.index(min(distances))
     return color_order[i]
 
 
@@ -82,6 +98,17 @@ def window_start():
     slider_adjust = telemetry.create_slider(*SLIDER, func=update_slider)
     return switcher, forward, stopper, backward, slider_adjust
 
+def normalize(r, g, b):
+    if r is None or g is None or b is None:
+        return 0, 0, 0
+
+    n = math.sqrt(r*r + g*g + b*b)
+    n = 1/n if n != 0 else 0
+    return r*n, g*n, b*n
+
+def rgb_func(data, func):
+    r, g, b = zip(*data)
+    return func(r), func(g), func(b)
 
 if __name__ == '__main__':
     switcher, forward, stopper, backward, slider_adjust = window_start()
@@ -97,18 +124,6 @@ if __name__ == '__main__':
     mean = 0
     std = 0
     data = []
-
-    def normalize(r, g, b):
-        if r is None or g is None or b is None:
-            return 0, 0, 0
-
-        n = math.sqrt(r*r + g*g + b*b)
-        n = 1/n if n != 0 else 0
-        return r*n, g*n, b*n
-
-    def rgb_func(data, func):
-        r, g, b = zip(*data)
-        return func(r), func(g), func(b)
 
     try:
         while True:
