@@ -63,12 +63,13 @@ if __name__ == '__main__':
                     MOTOR_SPEED = 0
 
                 if MOTOR_SPEED != 0:
-                    motor.set_limits(dps=abs(MOTOR_SPEED))
+                    # print(MOTOR_SPEED)
+                    LAST_SPEED = abs(MOTOR_SPEED)
                 motor.set_dps(MOTOR_SPEED)
             else:
-                ...
                 MOTOR_POS = motor.get_position()
                 MOTOR_SPEED = motor.get_speed()
+                motor.set_limits(dps=LAST_SPEED)
                 if forward.is_pressed():
                     motor.set_position(slider_adjust.get_value())
                 elif backward.is_pressed():
@@ -80,6 +81,6 @@ if __name__ == '__main__':
             telemetry.label("MOTOR_SPEED", MOTOR_SPEED, True)
             telemetry.label("MOTOR_POS", MOTOR_POS, True)
             telemetry.update()
-            time.sleep(0.001)
+            time.sleep(0.01)
     except KeyboardInterrupt:
         exit(0)
