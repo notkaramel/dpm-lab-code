@@ -76,6 +76,7 @@ if __name__ == '__main__':
                     motor.set_position(-slider_adjust.get_value())
                 elif stopper.is_pressed():
                     motor.reset_encoder()
+                time.sleep(0.1)
 
             
             telemetry.label("MOTOR_SPEED", MOTOR_SPEED, True)
