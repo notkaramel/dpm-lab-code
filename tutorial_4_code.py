@@ -54,12 +54,15 @@ if __name__ == '__main__':
     try:
         motor.set_limits(dps=90)
         motor.set_position_relative(600)
+        motor.wait_is_moving()
         motor.wait_is_stopped()
         motor.reset_encoder()
         for pos in positions:
             motor.set_position(pos)
+            motor.wait_is_moving()
             motor.wait_is_stopped()
         motor.set_position(0)
+        motor.wait_is_moving()
         motor.wait_is_stopped()
 
         while True:
