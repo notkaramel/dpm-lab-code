@@ -2,6 +2,8 @@ from utils import sound
 import threading
 import time
 
+sound_latency = 0.69
+
 VOLUME = 40
 duration1 = 0.4
 SOUND1 = [
@@ -43,14 +45,14 @@ def play_sound2():
 
 def play_sound_timed():
     i = 0
-    n = len(SOUND2)
+    n = len(SOUND1)
     try:
         while True:
             start = time.time()
-            SOUND2[i].play()
-            SOUND2[i].wait_done()
+            SOUND1[i].play()
+            SOUND1[i].wait_done()
             end = time.time()
-            print(f'{start}->{end} = {end-start} for {SOUND2[i]._duration}')
+            print(f'{start}->{end} = {end-start} for {SOUND1[i]._duration}')
             i = (i+1) % n
     except KeyboardInterrupt:
         return
