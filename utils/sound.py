@@ -17,6 +17,12 @@ import array
 
 LIMIT_MAX_VOLUME = True
 
+def change_volume(percentage):
+    try:
+        command = f'sudo amixer cset numid=1 {int(percentage)}%'
+        os.system(command)
+    except OSError:
+        return
 
 @functools.lru_cache()
 def sin(x: float) -> float:
