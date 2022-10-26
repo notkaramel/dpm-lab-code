@@ -17,6 +17,7 @@ import array
 
 LIMIT_MAX_VOLUME = True
 
+
 def change_volume(percentage):
     vol = abs(int(percentage))
     vol = min(100, max(0, vol))
@@ -25,6 +26,7 @@ def change_volume(percentage):
         os.system(command)
     except OSError:
         return
+
 
 @functools.lru_cache()
 def sin(x: float) -> float:
@@ -169,7 +171,7 @@ class Sound:
         to the underlying audio data of this Sound object.
 
         This does not alter any base attributes of this Sound object, and a 'reset' will undo these appends
-        
+
         see Sound.append_sound
         """
         return self.append_sound(other, spacing)
@@ -388,6 +390,108 @@ class Sound:
             self.player.wait_done()
         return self
 
+
+class Synthesizer:
+    """Creates a special player object, that can play Sound objects
+     quickly for long periods of time.
+
+    Example Usage:
+
+    # Set cutoff to zero for continuous synth
+    sound1 = Sound(duration=1, pitch="B4", cutoff=0)
+
+    # Set cutoff to sec/2 to for rhythm
+    sound2 = Sound(duration=1, pitch="G4", cutoff=0.5)
+
+    synth = Synthesizer(seconds=180) # default timespan, can be increased
+    synth.play_sound(sound2)         # Prepare sound ahead of time
+    synth.start()                    # Start synth
+    time.sleep(2)
+    synth.play_sound(sound1)         # Change sound being played
+    time.sleep(2)
+    synth.stop()                     # Stops and resets the duration of synth
+    """
+    MIN_VOLUME, MAX_VOLUME = -32_767, +32_767
+
+    @staticmethod
+    def create_silence(seconds=180):
+        """A helper method to create a special Sound object 
+        containing silence of given duration.
+        """
+        import array
+        core = Sound(duration=1)
+        core.audio = array.array('h', [0 for i in range(core._fs*seconds)])
+
+        return core
+
+    def __init__(self, seconds=180):
+        """Create a Synthesizer object.
+        seconds - maximum duration of the Synthesizer. Longer duration
+            creates more potential latency when playing sounds.
+        """
+        self.core = self.create_silence(seconds)
+        self.n = len(self.core.audio)
+
+    def start(self):
+        """Starts the Synthesizer. It plays silence by default.
+
+        Has latency on startup. Will stop by itself after the 
+            Synthesizer duration has ended (defined in init)
+
+        If Synthesizer.play_sound(s1) was done already, then Synthesizer.start()
+            will play the given sound s1 to begin with.
+        """
+        self.core.play()
+
+    def stop(self):
+        """Stops the Synthesizer. Keeps the last sound that was 
+        used in Synthesizer.play_sound(s1)
+
+        """
+        self.core.stop()
+
+    def is_active(self):
+        """Returns True if the Synthesizer is active.
+
+        Active means that it would play sound, when the 
+            Synthesizer.play_sound(s1) function is called.
+        """
+        return self.core.is_playing()
+
+    def play_sound(self, obj: Sound, factor=1.0):
+        """Plays Sound objects continuously with small startup latency.
+
+        Accepts any Sound object as input obj, and tries 
+        to play that Sound on repeat up to the Synthesizer's 
+        maximum duration.
+
+        obj - the Sound object to play
+        factor - a scale to be applied to the Sound object given.
+            if factor is too high, the produced sound may crackle.
+
+        RECOMMENDATIONS:
+        When creating Sound objects for a Synthesizer, here are tips:
+          cutoff=0 gives a purely continuous consistent note
+          cutoff=x/2 gives a moment of silence (x seconds long) between notes
+            but the note would then be (duration-x) seconds in total.
+          do not change fs
+          any modulation will carry over properly, so you can use that.
+        """
+        n = len(obj.audio)
+        for i in range(self.n):
+            self.core.audio[i] = int(obj.audio[i % n] * factor)
+
+    def silence(self):
+        """Makes the synthesizer silent without stopping it entirely.
+
+        Subsequent calls to Synthesizer.play_sound(s1) will start
+            playing sound quickly with little startup latency.
+        """
+        for i in range(self.n):
+            self.core.audio[i] = 0
+
+    def __del__(self):
+        self.stop()
 
 NOTES = {
     "C0": 16.35,
