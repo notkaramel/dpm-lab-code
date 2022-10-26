@@ -18,8 +18,10 @@ import array
 LIMIT_MAX_VOLUME = True
 
 def change_volume(percentage):
+    vol = abs(int(percentage))
+    vol = min(100, max(0, vol))
     try:
-        command = f'sudo amixer cset numid=1 {int(percentage)}%'
+        command = f'sudo amixer cset numid=1 {vol}%'
         os.system(command)
     except OSError:
         return
