@@ -52,21 +52,20 @@ def play_sound_timed():
     i = 0
     n = len(SOUND1)
     song = Song()
+    song.extend(SOUND1)
+    song.extend(SOUND2)
+    song *= 2
+    song.compile()
     song.play()
     try:
-        while True:
-            start = time.time()
-            song.play_sound(SOUND1[i])
-            time.sleep(SOUND1[i]._duration)
-            end = time.time()
-            print(f'{start}->{end} = {end-start} for {SOUND1[i]._duration}')
-            i = (i+1) % n
+        song.wait_done()
     except KeyboardInterrupt:
         song.stop()
+    return song
 
 
 if __name__ == '__main__':
-    play_sound_timed()
+    song = play_sound_timed()
     # t1 = threading.Thread(target=play_sound1, daemon=True)
     # t2 = threading.Thread(target=play_sound2, daemon=True)
 

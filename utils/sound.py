@@ -436,7 +436,7 @@ class Song(list):
         Sounds can be added with Song.append(sound)
         """
         super().__init__()
-        self.core = self.create_silence()  # Default silence
+        self.core = self.create_silence(1)  # Default silence
         self.duration = self.core._duration
 
         self.extend(sounds)
