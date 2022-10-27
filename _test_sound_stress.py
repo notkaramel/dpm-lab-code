@@ -1,10 +1,10 @@
 from utils import sound
-from utils.sound import Sound, Synthesizer
+from utils.sound import Sound, Song
 import threading
 import time
 
 sound_latency = 0.69
-sound_lat = 0.25 # synth
+sound_lat = 0.25 # song
 
 VOLUME = 40
 duration1 = 0.4
@@ -51,18 +51,18 @@ def play_sound2():
 def play_sound_timed():
     i = 0
     n = len(SOUND1)
-    synth = Synthesizer()
-    synth.start()
+    song = Song()
+    song.play()
     try:
         while True:
             start = time.time()
-            synth.play_sound(SOUND1[i])
+            song.play_sound(SOUND1[i])
             time.sleep(SOUND1[i]._duration)
             end = time.time()
             print(f'{start}->{end} = {end-start} for {SOUND1[i]._duration}')
             i = (i+1) % n
     except KeyboardInterrupt:
-        synth.stop()
+        song.stop()
 
 
 if __name__ == '__main__':

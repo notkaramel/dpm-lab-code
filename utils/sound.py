@@ -6,8 +6,8 @@ Includes Frequency modulation and Amplitude modulation.
 Authors: Ryan Au and Younes Boubekaur
 """
 
-from typing import Callable, Iterable, SupportsIndex, Tuple, overload, Union
-from time import time
+from typing import Callable, Iterable, SupportsIndex, Tuple, Union
+import time
 import os
 import pickle
 import simpleaudio as sa
@@ -390,108 +390,138 @@ class Sound:
             self.player.wait_done()
         return self
 
+    def __repr__(self):
+        return f'Sound({self.pitch}, {self._duration}secs, {self.volume}%, {self.mod_f}mod)'
 
-class Synthesizer:
+
+class Song(list):
     """Creates a special player object, that can play Sound objects
      quickly for long periods of time.
 
     Example Usage:
 
-    # Set cutoff to zero for continuous synth
-    sound1 = Sound(duration=1, pitch="B4", cutoff=0)
+    s0 = Song.create_silence(seconds=0.5)
+    s1 = Sound(duration=1, pitch="A4")
+    s2 = Sound(duration=1, pitch="B4")
 
-    # Set cutoff to sec/2 to for rhythm
-    sound2 = Sound(duration=1, pitch="G4", cutoff=0.5)
+    song = Song([s1, s0, s2, s0])
+    song *= 4 # repeat the song 4 times over
 
-    synth = Synthesizer(seconds=180) # default timespan, can be increased
-    synth.play_sound(sound2)         # Prepare sound ahead of time
-    synth.start()                    # Start synth
-    time.sleep(2)
-    synth.play_sound(sound1)         # Change sound being played
-    time.sleep(2)
-    synth.stop()                     # Stops and resets the duration of synth
+    song.compile() # Slow process, several seconds latency
+
+    song.play() # Faster, ~0.7 seconds latency
+    time.sleep(song.duration)
+    song.stop()
     """
     MIN_VOLUME, MAX_VOLUME = -32_767, +32_767
 
     @staticmethod
-    def create_silence(seconds=180):
+    def create_silence(seconds=1):
         """A helper method to create a special Sound object 
         containing silence of given duration.
         """
-        import array
+
         core = Sound(duration=1)
-        core.audio = array.array('h', [0 for i in range(core._fs*seconds)])
+        core.audio = array.array(
+            'h', [0 for i in range(int(core._fs*seconds))])
 
         return core
 
-    def __init__(self, seconds=180):
-        """Create a Synthesizer object.
-        seconds - maximum duration of the Synthesizer. Longer duration
-            creates more potential latency when playing sounds.
-        """
-        self.core = self.create_silence(seconds)
-        self.n = len(self.core.audio)
+    def __init__(self, sounds=()):
+        """Creates a Song with that plays silence for 1 second by default.
 
-    def start(self):
-        """Starts the Synthesizer. It plays silence by default.
+        Can be initialized with a list of existing sounds.
+        This is optional.
+
+        Sounds can be added with Song.append(sound)
+        """
+        super().__init__()
+        self.core = self.create_silence()  # Default silence
+        self.duration = self.core._duration
+
+        self.extend(sounds)
+
+    def append(self, obj):
+        """Add a Sound object to this Song.
+
+        Must be of type Sound."""
+        if not isinstance(obj, Sound):
+            raise ValueError("Cannot append objects that are not type Sound")
+        super().append(obj)
+
+    def extend(self, ls):
+        """Adds all the Sounds of ls to this Song. 
+        This can work for lists of Sounds, any iterable containing Sounds, 
+        or another Song.
+
+        Ignores non-Sound objects.
+        """
+        for el in ls:
+            if isinstance(el, Sound):
+                self.append(el)
+
+    def compile(self):
+        """Compiles the appended sounds to create the song.
+
+        After this is set, then it can be played using Song.play()
+        """
+        sounds = [s for s in self if isinstance(s, Sound)]
+        self.duration = sum([s._duration for s in sounds])
+        self._samples = sum([len(s.audio) for s in sounds])
+        self.core = Sound(duration=1)
+        self.core.audio = array.array(
+            'h', [0 for i in range(int(self._samples))])
+        ptr = 0
+        for s in sounds:
+            n = len(s.audio)
+            for i in range(n):
+                self.core.audio[min(ptr, self._samples-1)] = s.audio[i]
+                ptr += 1
+
+    def play(self):
+        """Starts the Song. It plays silence by default.
 
         Has latency on startup. Will stop by itself after the 
-            Synthesizer duration has ended (defined in init)
+            Song duration has ended (defined in init)
 
-        If Synthesizer.play_sound(s1) was done already, then Synthesizer.start()
+        If Song.play_sound(s1) was done already, then Song.start()
             will play the given sound s1 to begin with.
         """
         self.core.play()
 
     def stop(self):
-        """Stops the Synthesizer. Keeps the last sound that was 
-        used in Synthesizer.play_sound(s1)
+        """Stops the Song. Keeps the last sound that was 
+        used in Song.play_sound(s1)
 
         """
         self.core.stop()
 
-    def is_active(self):
-        """Returns True if the Synthesizer is active.
+    def is_playing(self):
+        """Returns True if the Song is active.
 
         Active means that it would play sound, when the 
-            Synthesizer.play_sound(s1) function is called.
+            Song.play_sound(s1) function is called.
         """
         return self.core.is_playing()
 
-    def play_sound(self, obj: Sound, factor=1.0):
-        """Plays Sound objects continuously with small startup latency.
+    def wait_done(self):
+        """Uses a while-loop to keep checking until the song is done playing.
 
-        Accepts any Sound object as input obj, and tries 
-        to play that Sound on repeat up to the Synthesizer's 
-        maximum duration.
-
-        obj - the Sound object to play
-        factor - a scale to be applied to the Sound object given.
-            if factor is too high, the produced sound may crackle.
-
-        RECOMMENDATIONS:
-        When creating Sound objects for a Synthesizer, here are tips:
-          cutoff=0 gives a purely continuous consistent note
-          cutoff=x/2 gives a moment of silence (x seconds long) between notes
-            but the note would then be (duration-x) seconds in total.
-          do not change fs
-          any modulation will carry over properly, so you can use that.
+        Reliable, un-interruptible.
         """
-        n = len(obj.audio)
-        for i in range(self.n):
-            self.core.audio[i] = int(obj.audio[i % n] * factor)
+        while self.is_playing():
+            time.sleep(0.01)
 
-    def silence(self):
-        """Makes the synthesizer silent without stopping it entirely.
+    def sleep_done(self):
+        """Uses a time.sleep to wait for the duration of the song.
 
-        Subsequent calls to Synthesizer.play_sound(s1) will start
-            playing sound quickly with little startup latency.
+        Interruptable, less reliable.
         """
-        for i in range(self.n):
-            self.core.audio[i] = 0
+        time.sleep(self.duration)
 
     def __del__(self):
         self.stop()
+
 
 NOTES = {
     "C0": 16.35,
