@@ -5,9 +5,11 @@ import time
 import threading
 from collections import deque
 import uuid
+import os
 
 DEFAULT_PORT = 2112
 _RemoteCaller.TESTING = True
+
 
 class FakeSocket:
     @staticmethod
@@ -418,3 +420,4 @@ class TestRemoteBrickSystemTest(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
