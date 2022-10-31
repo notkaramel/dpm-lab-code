@@ -24,7 +24,7 @@ class List(list):
         return self.__str__()
 
 if __name__=='__main__':
-    # client = remote.RemoteBrick("127.0.0.1", "password")
+    # client = remote.RemoteBrickClient("127.0.0.1", "password")
 
     client = remote.RemoteClient('127.0.0.1', 'password')
 

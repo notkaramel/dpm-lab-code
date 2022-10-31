@@ -1,4 +1,4 @@
-from utils.remote import BUSY_WAITING, Connection, Command, Message, RemoteBrick, RemoteBrickServer, RemoteClient, socket, DEFAULT_PORT, _MethodCaller, _RemoteCaller
+from utils.remote import BUSY_WAITING, Connection, Command, Message, RemoteBrickClient, RemoteBrickServer, RemoteClient, socket, DEFAULT_PORT, _MethodCaller, _RemoteCaller
 from utils import dummy, brick
 import unittest
 import time
@@ -130,8 +130,8 @@ class TestConnection(unittest.TestCase):
 class TestRemoteBrick(unittest.TestCase):
     def setUp(self):
         s1, s2 = FakeSocket.create_pair()
-        self.rem1 = RemoteBrick("0.0.0.0", None, sock=s1)
-        self.rem2 = RemoteBrick("0.0.0.0", None, sock=s2)
+        self.rem1 = RemoteBrickClient("0.0.0.0", None, sock=s1)
+        self.rem2 = RemoteBrickClient("0.0.0.0", None, sock=s2)
 
     def test_01(self):
         m = "Hey there buddy"
@@ -195,8 +195,8 @@ class TestIntegrationRemoteBrick(unittest.TestCase):
         self.assertNotEqual(None, self.s1)
         self.assertNotEqual(None, self.s2)
 
-        self.rem1 = RemoteBrick('127.0.0.1', None, sock=self.s1)
-        self.rem2 = RemoteBrick('127.0.0.1', None, sock=self.s2)
+        self.rem1 = RemoteBrickClient('127.0.0.1', None, sock=self.s1)
+        self.rem2 = RemoteBrickClient('127.0.0.1', None, sock=self.s2)
 
     def test_01(self):
         m = "Hey there buddy"
@@ -261,8 +261,8 @@ class TestRemoteBrickServer(unittest.TestCase):
         cls.server = RemoteBrickServer(password='password', port=DEFAULT_PORT)
         cls.fake = _FakeRemoteBP()
         cls.server.register_object(cls.fake)
-        cls.conn1 = RemoteBrick('127.0.0.1', 'password', port=DEFAULT_PORT)
-        cls.conn2 = RemoteBrick('127.0.0.1', 'password', port=DEFAULT_PORT)
+        cls.conn1 = RemoteBrickClient('127.0.0.1', 'password', port=DEFAULT_PORT)
+        cls.conn2 = RemoteBrickClient('127.0.0.1', 'password', port=DEFAULT_PORT)
         RemoteClient.TESTING = True
 
     def test_01(self):
@@ -388,7 +388,7 @@ class TestRemoteBrickSystemTest(unittest.TestCase):
         brick.restore_default_brick(cls.answer)
         cls.remote_brick_server = RemoteBrickServer(
             "password", port=DEFAULT_PORT)  # Actual Remote BrickServer
-        cls.remote_brick = RemoteBrick(
+        cls.remote_brick = RemoteBrickClient(
             "127.0.0.1", "password", port=DEFAULT_PORT)
 
     def test_01(self):
