@@ -120,6 +120,7 @@ def determine_color(color_sensor: brick.EV3ColorSensor, window=10):
             time.sleep(0.01)
         counter.update(sample_set)
         if len(counter) == 1 or counter.most_common()[0][1] > counter.most_common()[1][1]:
+            print(counter.most_common())
             return counter.most_common()[0][0]
 
 
