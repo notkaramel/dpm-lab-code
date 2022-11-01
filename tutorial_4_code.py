@@ -138,7 +138,7 @@ def sort_cubes(sorting_list, selector: brick.Motor, color_sensor: brick.EV3Color
 def retrieve_cube(index: int, selector: brick.Motor, pusher: brick.Motor):
     def inner():
         block_position(selector, POSITIONS[index])
-        block_position_relative(pusher, 360)
+        block_position_relative(pusher, -360)
     thread = threading.Thread(target=inner)
     thread.setDaemon(True)
     # thread.is_alive()
