@@ -157,6 +157,7 @@ class _Slider(_Updatable):
         if func is not None:
             self.set_updater(func, self)
 
+    @remote_capable
     def get_value(self):
         return self.s.get()
     
@@ -201,6 +202,7 @@ class _Button(_Updatable):
     def _on_release(self, *args):
         self._is_pressed = False
 
+    @remote_capable
     def is_pressed(self):
         return self._is_pressed
 

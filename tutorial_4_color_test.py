@@ -30,6 +30,15 @@ def dist(a, b, c):
     return math.sqrt(a*a + b*b + c*c)
 
 
+def normalize(r, g, b):
+    if r is None or g is None or b is None:
+        return 0, 0, 0
+
+    n = math.sqrt(r*r + g*g + b*b)
+    n = 1/n if n != 0 else 0
+    return r*n, g*n, b*n
+
+
 def color_dist(rgb):
     """Returns a color string of the closest color using standard deviation-scaled distance.
     
@@ -96,14 +105,6 @@ def window_start():
     backward = telemetry.create_button("\\/")
     slider_adjust = telemetry.create_slider(*SLIDER, func=update_slider)
     return switcher, forward, stopper, backward, slider_adjust
-
-def normalize(r, g, b):
-    if r is None or g is None or b is None:
-        return 0, 0, 0
-
-    n = math.sqrt(r*r + g*g + b*b)
-    n = 1/n if n != 0 else 0
-    return r*n, g*n, b*n
 
 def rgb_func(data, func):
     r, g, b = zip(*data)
