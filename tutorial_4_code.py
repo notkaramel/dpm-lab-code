@@ -92,8 +92,9 @@ def block_position_relative(motor: brick.Motor, degrees, dps=90, threshold=2):
     time.sleep(0.1)
 
     # Keep waiting until we are at the position and stopped
-    while abs(motor.get_position() - end) > threshold or motor.get_speed() > 1:
+    while abs(end - motor.get_position()) > threshold or motor.get_speed() > 1:
         time.sleep(0.1)
+    motor.set_power(0)
     time.sleep(0.5)
 
 
@@ -106,6 +107,7 @@ def block_position(motor: brick.Motor, degrees, dps=90, threshold=2):
     # Keep waiting until we are at the position and stopped
     while abs(motor.get_position() - degrees) > threshold or motor.get_speed() > 1:
         time.sleep(0.1)
+    motor.set_power(0)
     time.sleep(0.5)
 
 
