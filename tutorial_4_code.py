@@ -85,27 +85,27 @@ def window_start():
     return sort_button, color_buttons
 
 
-def block_position_relative(motor: brick.Motor, degrees, dps=90, threshold=2):
+def block_position_relative(motor: brick.Motor, degrees, dps=90, threshold=0.5):
     motor.set_limits(dps=dps)
     end = motor.get_position() + degrees
     motor.set_position_relative(degrees)
     time.sleep(0.1)
 
     # Keep waiting until we are at the position and stopped
-    while abs(end - motor.get_position()) > threshold or motor.get_speed() > 1:
+    while abs(end - motor.get_position()) > threshold or motor.get_speed() > 0.5:
         time.sleep(0.1)
     motor.set_power(0)
     time.sleep(0.5)
 
 
-def block_position(motor: brick.Motor, degrees, dps=90, threshold=2):
+def block_position(motor: brick.Motor, degrees, dps=90, threshold=0.5):
     motor.set_limits(dps=dps)
 
     motor.set_position(degrees)
     time.sleep(0.1)
 
     # Keep waiting until we are at the position and stopped
-    while abs(motor.get_position() - degrees) > threshold or motor.get_speed() > 1:
+    while abs(motor.get_position() - degrees) > threshold or motor.get_speed() > 0.5:
         time.sleep(0.1)
     motor.set_power(0)
     time.sleep(0.5)
@@ -163,7 +163,7 @@ if __name__ == '__main__':
         selector.set_limits(dps=90)
         pusher.set_limits(dps=90)
         # Reset to starting position
-        block_position_relative(selector, RESET_DISTANCE, threshold=20)
+        # block_position_relative(selector, RESET_DISTANCE, threshold=20)
         selector.reset_encoder()  # Set this position to be the 0th position
 
         MODE = None
