@@ -67,13 +67,16 @@ def color_dist(rgb):
     for color, (mean, std, threshold) in COLORS.items():
         r, g, b = [abs(c-m)/s for c, m, s in zip(rgb, mean, std)]
         d = dist(r, g, b)
-        if d <= threshold:
-            distances.append(d)
-            color_order.append(color)
+        
+        distances.append(d)
+        color_order.append(color)
 
     if len(distances) == 0:
         return "unknown"
-    i = distances.index(min(distances))
+    d = min(distances)
+    if d <= threshold:
+        return f"unknown({round(d, 2)})"
+    i = distances.index(d)
     return color_order[i]
 
 
