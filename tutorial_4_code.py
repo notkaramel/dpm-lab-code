@@ -123,13 +123,12 @@ def determine_color(color_sensor: brick.EV3ColorSensor, window=10):
 
 def sort_cubes(sorting_list, selector: brick.Motor, color_sensor: brick.EV3ColorSensor):
     def inner():
-        for i, position in POSITIONS:
+        for i, position in enumerate(POSITIONS):
             block_position(selector, position)
             color = determine_color(color_sensor)
-            sorting_list.append()
+            sorting_list.append(color)
 
-    thread = threading.Thread(target=inner)
-    thread.setDaemon(True)
+    thread = threading.Thread(target=inner, daemon=True)
 
     thread.start()
     return thread
@@ -139,8 +138,7 @@ def retrieve_cube(index: int, selector: brick.Motor, pusher: brick.Motor):
     def inner():
         block_position(selector, POSITIONS[index])
         block_position_relative(pusher, -360)
-    thread = threading.Thread(target=inner)
-    thread.setDaemon(True)
+    thread = threading.Thread(target=inner, daemon=True)
     # thread.is_alive()
     thread.start()
     return thread
@@ -153,10 +151,15 @@ if __name__ == '__main__':
     pusher = brick.Motor('D')
     selector = brick.Motor('C')
 
+    if hasattr(brick.BP, "set_sensor"):
+        # Then we are using the dummy test brick
+        brick.BP.set_sensor(0x04, (0.9720, 0.1305, 0.1947, 0))
+
     try:
         pusher.set_dps(0)  # Should be phyiscally in the correct position
 
         selector.set_limits(dps=90)
+        pusher.set_limits(dps=90)
         # Reset to starting position
         block_position_relative(selector, RESET_DISTANCE)
         selector.reset_encoder()  # Set this position to be the 0th position
@@ -165,22 +168,28 @@ if __name__ == '__main__':
         SORTING_LIST = []
         MAX_CUBES = len(POSITIONS)
         REQUESTED_COLOR = None  # index in the SORTING_LIST
-
+        REQUESTED_COLOR_NAME = None
         current_thread = None  # The current action being executed
+        brick.wait_ready_sensors(True)
+        telemetry.label("STATUS", "Sorter is Ready", True)
         while True:
             if not telemetry.isopen():
                 break
 
             # MODE is stuck on None, until we press the sort_button
             if sort_button.is_pressed() and MODE is None:
-                MODE == "Sorting"
+                telemetry.label("STATUS", "Sort Initiated", True)
+                MODE = "Sorting"
 
             # MODE will be stuck on Sorting, until the SORTING_LIST is full
             if MODE == "Sorting":
                 # Do the sort action once
-                current_thread = sort_cubes(
-                    SORTING_LIST, selector, color_sensor)
+                if current_thread is None:
+                    telemetry.label("STATUS", "Sort Active", True)
+                    current_thread = sort_cubes(
+                        SORTING_LIST, selector, color_sensor)
                 if not current_thread.is_alive() and len(SORTING_LIST) == MAX_CUBES:
+                    telemetry.label("STATUS", f"Sort Finished: {SORTING_LIST}", True)
                     MODE = "Retrieving"
                     current_thread = None
                 elif len(SORTING_LIST) > MAX_CUBES:
@@ -194,12 +203,16 @@ if __name__ == '__main__':
                 for color, button in color_buttons.items():
                     if button.is_pressed():
                         if color in SORTING_LIST and REQUESTED_COLOR is None:
+                            REQUESTED_COLOR_NAME = color
                             REQUESTED_COLOR = SORTING_LIST.index(
                                 color)  # We retrieve this color
                             SORTING_LIST[REQUESTED_COLOR] = None
+                            telemetry.label("STATUS", f"Chosen {color}", True)
                         elif color not in SORTING_LIST:
+                            telemetry.label("STATUS", f"{color} is not available on the robot", True)
                             pass  # WARNING: color not available in robot
                         elif REQUESTED_COLOR is not None:
+                            telemetry.label("STATUS", f"Cube #{REQUESTED_COLOR}: {REQUESTED_COLOR_NAME} is currently being retrieved", True)
                             pass  # WARNING: color currently being retrieved
                         # A slight pause, to press button only once
                         time.sleep(0.5)
@@ -207,13 +220,15 @@ if __name__ == '__main__':
                 # Uses REQUESTED_COLOR
                 if REQUESTED_COLOR is not None and current_thread is None:
                     # Start retrieval
+                    telemetry.label("STATUS", f"Retrieving Cube #{REQUESTED_COLOR}: {REQUESTED_COLOR_NAME}", True)
                     current_thread = retrieve_cube(
                         REQUESTED_COLOR, selector, pusher)
                 if REQUESTED_COLOR is not None and not current_thread.is_alive():
                     # Retrieval has completed
+                    telemetry.label("STATUS", f"Finished retrieving {REQUESTED_COLOR_NAME} | {SORTING_LIST}", True)
                     REQUESTED_COLOR = None
                     current_thread = None
-
+            telemetry.label("Stored Colors", f"{SORTING_LIST}", True)
             telemetry.update()
             time.sleep(0.1)
     except KeyboardInterrupt:

@@ -72,9 +72,9 @@ def remote(func, *args):
 def remote_capable(func):
     def inner(*args):
         if threading.current_thread().name == 'MainThread':
-            func(*args)
+            return func(*args)
         else:
-            remote(func, *args)
+            return remote(func, *args)
     return inner
 
 def _on_closing():

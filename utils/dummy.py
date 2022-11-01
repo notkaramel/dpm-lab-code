@@ -485,8 +485,8 @@ class BrickPi3():
         self.Motors[i].go_position(position)
 
     def set_motor_position_relative(self, port, degrees):
-        pos = self.get_motor_encoder()
-        self.set_motor_position(pos + degrees)
+        pos = self.get_motor_encoder(port)
+        self.set_motor_position(port, pos + degrees)
 
     def set_motor_position_kp(self, port, kp=25):
         pass
