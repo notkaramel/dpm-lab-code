@@ -5,7 +5,7 @@ import math
 import threading
 
 # 0 is starting pos. use 90dps.
-POSITIONS = [-70, -160, -255, -360, -450, -545]
+POSITIONS = [-90, -180, -275, -380, -470, -565]
 RESET_DISTANCE = 600
 
 
