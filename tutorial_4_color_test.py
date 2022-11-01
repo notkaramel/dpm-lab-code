@@ -74,7 +74,7 @@ def color_dist(rgb):
     if len(distances) == 0:
         return "unknown"
     d = min(distances)
-    if d <= threshold:
+    if d > threshold:
         return f"unknown({round(d, 2)})"
     i = distances.index(d)
     return color_order[i]
