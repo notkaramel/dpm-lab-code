@@ -75,9 +75,9 @@ def color_dist(rgb):
         return "unknown"
     d = min(distances)
     if d > threshold:
-        return f"unknown({round(d, 2)})"
+        return "unknown", round(d, 2)
     i = distances.index(d)
-    return color_order[i]
+    return color_order[i], round(d, 2)
 
 
 def window_start():
@@ -147,7 +147,8 @@ if __name__ == '__main__':
 
             telemetry.label("MOTOR_SPEED", mean, True)
             telemetry.label("MOTOR_POS", std, True)
-            telemetry.label("Color", color_dist(color.get_rgb()))
+            detect_color = color_dist(color.get_rgb())
+            telemetry.label("Color", detect_color[0]+str(detect_color[1]))
             telemetry.update()
             time.sleep(0.2)
     except KeyboardInterrupt:

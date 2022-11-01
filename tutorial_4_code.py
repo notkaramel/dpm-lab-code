@@ -67,12 +67,12 @@ def color_dist(rgb):
         color_order.append(color)
 
     if len(distances) == 0:
-        return "unknown"
+        return "unknown", 0
     d = min(distances)
     if d > threshold:
-        return f"unknown({round(d, 2)})"
+        return "unknown", round(d, 2)
     i = distances.index(d)
-    return color_order[i]
+    return color_order[i], round(d, 2)
 
 
 def window_start():
@@ -119,7 +119,8 @@ def determine_color(color_sensor: brick.EV3ColorSensor, window=10):
     while True:
         sample_set = []
         for i in range(window):
-            sample_set.append(color_dist(color_sensor.get_rgb()))
+            detected, _ = color_dist(color_sensor.get_rgb())
+            sample_set.append(detected)
             time.sleep(0.01)
         counter.update(sample_set)
         if len(counter) == 1 or counter.most_common()[0][1] > counter.most_common()[1][1]:
