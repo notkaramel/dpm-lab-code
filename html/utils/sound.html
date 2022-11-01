@@ -1,0 +1,2161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>utils.sound API documentation</title>
+<meta name="description" content="Module for creating and generating sine wave based sound.
+Includes Frequency modulation and Amplitude modulation …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>utils.sound</code></h1>
+</header>
+<section id="section-intro">
+<p>Module for creating and generating sine wave based sound.
+Includes Frequency modulation and Amplitude modulation.</p>
+<p>Authors: Ryan Au and Younes Boubekaur</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">#!/usr/bin/env python3
+&#34;&#34;&#34;
+Module for creating and generating sine wave based sound. 
+Includes Frequency modulation and Amplitude modulation.
+
+Authors: Ryan Au and Younes Boubekaur
+&#34;&#34;&#34;
+
+from typing import Callable, Iterable, SupportsIndex, Tuple, Union
+import time
+import os
+import pickle
+import simpleaudio as sa
+import math
+import functools
+import array
+
+LIMIT_MAX_VOLUME = True
+
+
+def change_volume(percentage):
+    vol = abs(int(percentage))
+    vol = min(100, max(0, vol))
+    try:
+        command = f&#39;sudo amixer cset numid=1 {vol}%&#39;
+        os.system(command)
+    except OSError:
+        return
+
+
+@functools.lru_cache()
+def sin(x: float) -&gt; float:
+    return math.sin(x)
+
+
+def cos(x: float) -&gt; float:
+    return math.cos(x)
+
+
+def clip(x: float, bot: float, top: float, nomax=False) -&gt; float:
+    # Ensures that x is no lesser than bot and no greater than top
+    return max(x, bot) if nomax else max(min(x, top), bot)
+
+
+def _amp_to_db(p0: float, p1: float) -&gt; float:
+    &#34;&#34;&#34;Converts the relative amplitude to decibels.
+    p0 is the reference amplitude, p1 is the next value
+    &#34;&#34;&#34;
+    return 20 * math.log10(p1/p0)
+
+
+def db_to_amp(db: float, ref_amp: float) -&gt; float:
+    &#34;&#34;&#34;Converts decibels to a next amplitude.
+    ref_amp is the reference amplitude to start at.
+    &#34;&#34;&#34;
+    return 10**(db/20) * ref_amp
+
+
+HIGHEST_VOLUME = 100  # Custom value. Could be 100, 1.0, 50, doesn&#39;t matter.
+_LOWEST_AMPLITUDE = 0.0001  # must be non-zero, but low
+_HIGHEST_AMPLITUDE = 1.0  # acts as a scalar factor, should be 0 to 1
+_HIGHEST_DECIBEL = _amp_to_db(_LOWEST_AMPLITUDE, _HIGHEST_AMPLITUDE)
+
+
+def vol_to_amp(vol: float) -&gt; float:
+    &#34;&#34;&#34;Converts a volume level to an amplitude scalar factor.
+    Input would range from 0 to HIGHEST_VOLUME (default:100).
+    Output ranges from 0 to 1
+
+    Furthermore, the output behaves similarly to the volume on a listening device,
+    when setting the volume. If the max is 100% level, then 50% feels half as loud.
+
+    Note: 0 is not absolutely silent, it is just extremely quiet, and is audible.
+    Note 2: this volume is dependent on the system volume.
+        Loudness = program volume * system volume (if in percentage)
+    &#34;&#34;&#34;
+    db = clip(vol, 0, HIGHEST_VOLUME, nomax=LIMIT_MAX_VOLUME) * \
+        _HIGHEST_DECIBEL / HIGHEST_VOLUME
+    amp = db_to_amp(db, _LOWEST_AMPLITUDE)
+    return clip(amp, 0, _HIGHEST_AMPLITUDE, nomax=LIMIT_MAX_VOLUME)
+
+
+def _parse_freq(value: Union[str, float]):
+    if type(value) == str:
+        if value in NOTES:
+            return NOTES[value]
+    if type(value) == int or type(value) == float:
+        return float(value)
+    return 0
+
+
+def gen_wave(duration=1, volume=40, pitch: Union[str, float] = &#34;A4&#34;, mod_f: Union[str, float] = 0, mod_k=0, amp_f: Union[str, float] = 0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000):
+    # Process frequencies, factors
+    pitch = _parse_freq(pitch)
+    mod_f = _parse_freq(mod_f)
+    amp_f = _parse_freq(amp_f)
+
+    # Convert volume using decibel underneath
+    volume = vol_to_amp(volume)
+
+    return _gen_wave(duration, volume, pitch, mod_f, mod_k, amp_f, amp_ka, amp_ac, cutoff, fs)
+
+
+def _gen_wave(duration, volume, pitch, mod_f, mod_k, amp_f, amp_ka, amp_ac, cutoff, fs):
+    n = int(duration * fs)
+    t = [0 for i in range(n)]  # comprehension faster than append
+    maximum = -2**31
+    for i in range(0, n):
+        x = i / fs
+        # create carrier wave (float division is faster)
+        c = (2 * math.pi * x * pitch)
+        # frequncy modulate
+        m = mod_k * sin(2 * math.pi * mod_f * x)
+        y = cos(c + m)
+        # amplitude modulate
+        a = amp_ac * (1 + (amp_ka * sin(2 * math.pi * amp_f * x)))
+        y = y * a
+        if maximum &lt; (_abs := abs(y)):
+            maximum = _abs
+        # no append (which is marginally slow)
+        t[i] = y
+
+    # do volume and cutoff calculation
+    max16 = (2**15 - 1)
+    cutoff = min(int(n/2), int(fs * cutoff))
+    k = (1/3) * (1/math.log(2))
+    for i in range(len(t)):
+        # apply volume
+        y = t[i] * volume
+
+        # # apply cutoff
+        if 0 &lt;= i and i &lt; cutoff:
+            y *= math.log(i / cutoff * 7 + 1) * k
+        elif n - cutoff &lt;= i and i &lt; n:
+            j = n - i - 1
+            y *= math.log(j / cutoff * 7 + 1) * k
+
+        # pull down value to int16
+        t[i] = clip(int(y * max16 / maximum), -32768, 32767, nomax=False)
+
+    return array.array(&#39;h&#39;, t)
+
+
+class Sound:
+    def __init__(self, duration=1, volume=40, pitch=&#34;A4&#34;, mod_f=0, mod_k=0, amp_f=0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000):
+        self.player = None
+        self._fs = fs  # needs a default value
+        self.set_volume(volume)
+        self.set_pitch(pitch)
+        self.set_cutoff(cutoff)
+        self.set_frequency_modulation(mod_f, mod_k)
+        self.set_amplitude_modulation(amp_f, amp_ka, amp_ac)
+        self.update_duration(duration, fs)
+
+    def reset(self):
+        &#34;&#34;&#34;Fully resets the underlying audio of this Sound object.
+        The sound must be stopped, or this will give unexpected behavior
+
+        see Sound.reset_audio
+        &#34;&#34;&#34;
+        return self.reset_audio()
+
+    def reset_audio(self):
+        &#34;&#34;&#34;Fully resets the underlying audio data of this Sound object.
+        The sound must be stopped, or this will give unexpected behavior
+        &#34;&#34;&#34;
+        return self.update_audio(True)
+
+    def append(self, other, spacing=0):
+        &#34;&#34;&#34;Takes the underlying audio data of another Sound object, other, and appends all of it
+        to the underlying audio data of this Sound object.
+
+        This does not alter any base attributes of this Sound object, and a &#39;reset&#39; will undo these appends
+
+        see Sound.append_sound
+        &#34;&#34;&#34;
+        return self.append_sound(other, spacing)
+
+    def append_sound(self, other, spacing=0):
+        &#34;&#34;&#34;Takes the underlying audio data of another Sound object, other, and appends all of it
+        to the underlying audio data of this Sound object.
+
+        This does not alter any base attributes of this Sound object, and a &#39;reset&#39; will undo these appends
+        &#34;&#34;&#34;
+        spacing = float(spacing)
+        if spacing &lt; 0:
+            spacing = 0
+        spacing_n = int(spacing * self._fs)
+
+        if not self.is_playing():
+            src = list(self.audio)
+            dst = list(other.audio)
+            spacer = [0 for i in range(spacing_n)]
+
+            self.audio = array.array(&#39;h&#39;, src + spacer + dst)
+        else:
+            raise RuntimeError(
+                &#34;Cannot alter this sound object for repetition while playing this sound.&#34;)
+        return self
+
+    def repeat_sound(self, repeat_times=1, repeat_interval=0):
+        &#34;&#34;&#34;Alters the underlying audio data of this Sound object, such that the main sound will:
+        - repeat equal to the value of repeat_times. It should be an integer value.
+        - each time the original sound is repeated, there will be an interval of silence for &#39;repeat_interval&#39; seconds.
+            Expects either int or float value, of seconds for the interval. Default is 0 seconds.
+
+        Explanation of Potential Usage:
+        You may utilize the concept of BPM or &#34;beats per minute&#34; to help you with creating a tempo for your songs.
+            If you want a sound repeated at 120bpm, that would be 2 times/sec, 0.5 seconds per sound played.
+            If the original sound has duration 0.1 seconds, then the silence spacing would have to be 0.4 seconds, such that
+            every sound starts playing every 0.5 seconds, matching 120bpm. The end of this repeated Sound object will be a 
+            sound playing for 0.1 seconds, and then no silence spacing afterwards. This is desired behavior. You can then perform 
+            a time.sleep(0.4) seconds before replaying this Sound object. BUT there is sometimes latency in &#34;starting&#34; a sound, 
+            so the time sleep may need to be smaller, such as 0.35 seconds instead.
+        &#34;&#34;&#34;
+        repeat_times = int(
+            repeat_times)  # This can cause an error, which is desired
+        if repeat_times &lt; 1:
+            repeat_times = 1
+
+        repeat_interval = float(repeat_interval)
+        if repeat_times &lt; 0:
+            repeat_times = 0
+
+        fs = self._fs
+        interval_n = int(fs * repeat_interval)
+
+        if not self.is_playing():
+            src = list(self.audio)
+            src_n = len(src)
+            end_n = src_n * repeat_times + (repeat_times - 1) * interval_n
+            spacer = [0 for i in range(interval_n)]
+            n = src_n + interval_n
+            arr = []
+            tmp = src + spacer
+            for i in range(end_n):
+                arr.append(tmp[i % n])
+            self.audio = array.array(&#39;h&#39;, arr)
+        else:
+            raise RuntimeError(
+                &#34;Cannot alter this sound object for repetition while playing this sound.&#34;)
+        return self
+
+    def set_volume(self, volume):
+        &#34;&#34;&#34;Set the volume level of this sound.
+        **Must use Sound.update_audio() to apply all changes**
+
+        Enter a value from (0-100).
+        &#34;&#34;&#34;
+        self.volume = volume
+        return self
+
+    def set_pitch(self, pitch: Union[str, float]):
+        &#34;&#34;&#34;Set the pitch or frequency of this sound.
+        **Must use Sound.update_audio() to apply all changes**
+
+        Enter a Hertz value within audible human range:
+            minimum: 0
+            maximum: ~7500
+        &#34;&#34;&#34;
+        self.pitch = pitch
+        return self
+
+    def set_cutoff(self, cutoff):
+        &#34;&#34;&#34;Set the &#39;cutoff&#39;, the duration of the lead-in and fade-out for each sound wave.
+        **Must use Sound.update_audio() to apply all changes**
+
+        Enter a value in seconds, default: 0.01s
+
+        Notable Effects:
+        a value of 0s may lead to a &#39;pop/crackle&#39; noise at the beginning and end of a sound.
+        a value greater than or equal to the duration (also &lt;1s) may lead to a pulse-like noise.
+        a value greater than or equal to duration (also &gt;1s) may lead to a &#39;coming and going&#39; feeling.
+        &#34;&#34;&#34;
+        self.cutoff = cutoff
+        return self
+
+    def set_frequency_modulation(self, mod_f: Union[str, float], mod_k):
+        &#34;&#34;&#34;Set the frequency(mod_f) and strength(mod_k) of Frequency Modulation.
+        This modulation gives special effects to your sounds.
+        **Must use Sound.update_audio() to apply all changes**
+
+        Enter a value of frequency for mod_f
+        Enter any positive integer for mod_k, a multiplication factor
+
+        Notable Effects:
+        mod_f=0, mod_k=0 - no modulation. This is default settings.
+        mod_f=(1-10Hz), mod_k=(1-10) - mild modulation, sounding wavy, possibly crackly.
+        mod_f=&#39;A4&#39;, mod_k=(1-50) - increasing levels of graininess observed, with increasing k factor.
+
+        *Swapping mod_f and the pitch leads to new effects*
+        mod_f=pitch, pitch=1, mod_k=1 - Sounds like a pipe organ, where mod_f becomes the new pitch setting.
+        &#34;&#34;&#34;
+        self.mod_f = mod_f
+        self.mod_k = mod_k
+        return self
+
+    def set_amplitude_modulation(self, amp_f: Union[str, float], amp_ka, amp_ac):
+        &#34;&#34;&#34;Set the frequency(amp_f), ka factor(amp_ka), and ac factor(amp_ac) of Amplitude Modulation.
+        Effect is most similar to &#39;vibrato&#39; altering the volume in a wobbling sense.
+        **Must use Sound.update_audio() to apply all changes**
+
+        amp_ka - wobbling factor. 0 is no wobble. &gt;0 provides wobble.
+        amp_ac - factor to change strength of wobble overall. See Notable Effects to understand this.
+
+        Constraints:
+        (resultant volume is % of the set volume of this Sound object)
+        highest % of volume = amp_ac * (1 + amp_ka)
+        lowest  % of volume = amp_ac * (1 - amp_ka)
+
+        Notable Effects:
+        amp_f=1Hz - wobbles 1 time per second
+        amp_f=10Hz - wobbles 10 times per second
+
+        amp_ka=0, amp_ac=1 - no wobble. The default settings.
+        amp_ka=1, amp_ac=0.5 - alternates volume from 100% to 0% according to amp_f frequency.
+        amp_ka=0.5, amp_ac=0.5 - alternates volume from 25% to 75% according to amp_f frequency.
+        &#34;&#34;&#34;
+        self.amp_f = amp_f
+        self.amp_ka = amp_ka
+        self.amp_ac = amp_ac
+        return self
+
+    def update_duration(self, duration, fs: int = None):
+        &#34;&#34;&#34;Change the duration of this Sound (seconds).
+        Cannot change duration of currently playing sounds.
+
+        Only affects the next played sound.
+
+        fs - Sample rate of sound wave. Default 8000 as lowest.
+            Increased &#39;quality&#39; with higher rate.
+        &#34;&#34;&#34;
+        if fs is not None:
+            self._fs = fs
+        self._duration = duration
+
+        if not self.is_playing():
+            self.update_audio(True)
+        else:
+            raise RuntimeError(
+                &#34;Cannot change duration or sample rate while playing sound.&#34;)
+        return self
+
+    def update_audio(self, overwrite: bool = False):
+        &#34;&#34;&#34;Updates the audio to be played, based on current Sound attributes.
+
+        - if overwrite=False and is_playing()==True, the playing audio will be updated
+        - if overwrite=True and is_playing()==True, changes are present only in next play()
+        &#34;&#34;&#34;
+        arr = gen_wave(self._duration, self.volume, self.pitch, self.mod_f,
+                       self.mod_k, self.amp_f, self.amp_ka, self.amp_ac, self.cutoff, self._fs)
+        if not overwrite:
+            for i in range(min(len(self.audio), len(arr))):
+                self.audio[i] = arr[i]
+        else:
+            self.audio = arr
+        return self
+
+    def alter_wave(self, func: Callable[[float, int], int]):
+        &#34;&#34;&#34;Apply a function to change the currently playing/prepared audio wave.
+
+        func is of the format: func(x:float, y:int16) -&gt; y:int16
+
+        Given an xy-coordinate plane with the sound wave being centered on y=0,
+        x is time in seconds, and y is amplitude in the range [-32768, 32767]
+
+
+        &#34;&#34;&#34;
+        for i in range(len(self.audio)):
+            # func(x:float, y:int16) -&gt; y:int16
+            self.audio[i] = clip(
+                func(i/self._fs, self.audio[i]), -32768, 32767)
+        return self
+
+    def play(self):
+        self.stop()
+        self.player = sa.play_buffer(self.audio, 1, 2, self._fs)
+        return self
+
+    def stop(self):
+        if self.is_playing():
+            self.player.stop()
+        return self
+
+    def is_playing(self) -&gt; bool:
+        return self.player is not None and self.player.is_playing()
+
+    def wait_done(self):
+        if self.is_playing():
+            self.player.wait_done()
+        return self
+
+    def __repr__(self):
+        return f&#39;Sound({self.pitch}, {self._duration}secs, {self.volume}%, {self.mod_f}mod)&#39;
+
+
+class Song(list):
+    &#34;&#34;&#34;Creates a special player object, that can play Sound objects
+     quickly for long periods of time.
+
+    Example Usage:
+
+    s0 = Song.create_silence(seconds=0.5)
+    s1 = Sound(duration=1, pitch=&#34;A4&#34;)
+    s2 = Sound(duration=1, pitch=&#34;B4&#34;)
+
+    song = Song([s1, s0, s2, s0])
+    song *= 4 # repeat the song 4 times over
+
+    song.compile() # Slow process, several seconds latency
+
+    song.play() # Faster, ~0.7 seconds latency
+    time.sleep(song.duration)
+    song.stop()
+    &#34;&#34;&#34;
+    MIN_VOLUME, MAX_VOLUME = -32_767, +32_767
+
+    @staticmethod
+    def create_silence(seconds=1):
+        &#34;&#34;&#34;A helper method to create a special Sound object 
+        containing silence of given duration.
+        &#34;&#34;&#34;
+
+        core = Sound(duration=1)
+        core.audio = array.array(
+            &#39;h&#39;, [0 for i in range(int(core._fs*seconds))])
+
+        return core
+
+    def __init__(self, sounds=()):
+        &#34;&#34;&#34;Creates a Song with that plays silence for 1 second by default.
+
+        Can be initialized with a list of existing sounds.
+        This is optional.
+
+        Sounds can be added with Song.append(sound)
+        &#34;&#34;&#34;
+        super().__init__()
+        self.core = self.create_silence(1)  # Default silence
+        self.duration = self.core._duration
+
+        self.extend(sounds)
+
+    def append(self, obj):
+        &#34;&#34;&#34;Add a Sound object to this Song.
+
+        Must be of type Sound.&#34;&#34;&#34;
+        if not isinstance(obj, Sound):
+            raise ValueError(&#34;Cannot append objects that are not type Sound&#34;)
+        super().append(obj)
+
+    def extend(self, ls):
+        &#34;&#34;&#34;Adds all the Sounds of ls to this Song. 
+        This can work for lists of Sounds, any iterable containing Sounds, 
+        or another Song.
+
+        Ignores non-Sound objects.
+        &#34;&#34;&#34;
+        for el in ls:
+            if isinstance(el, Sound):
+                self.append(el)
+
+    def compile(self):
+        &#34;&#34;&#34;Compiles the appended sounds to create the song.
+
+        After this is set, then it can be played using Song.play()
+        &#34;&#34;&#34;
+        sounds = [s for s in self if isinstance(s, Sound)]
+        self.duration = sum([s._duration for s in sounds])
+        self._samples = sum([len(s.audio) for s in sounds])
+        self.core = Sound(duration=1)
+        self.core.audio = array.array(
+            &#39;h&#39;, [0 for i in range(int(self._samples))])
+        ptr = 0
+        for s in sounds:
+            n = len(s.audio)
+            for i in range(n):
+                self.core.audio[min(ptr, self._samples-1)] = s.audio[i]
+                ptr += 1
+
+    def play(self):
+        &#34;&#34;&#34;Starts the Song. It plays silence by default.
+
+        Has latency on startup. Will stop by itself after the 
+            Song duration has ended (defined in init)
+
+        If Song.play_sound(s1) was done already, then Song.start()
+            will play the given sound s1 to begin with.
+        &#34;&#34;&#34;
+        self.core.play()
+
+    def stop(self):
+        &#34;&#34;&#34;Stops the Song. Keeps the last sound that was 
+        used in Song.play_sound(s1)
+
+        &#34;&#34;&#34;
+        self.core.stop()
+
+    def is_playing(self):
+        &#34;&#34;&#34;Returns True if the Song is active.
+
+        Active means that it would play sound, when the 
+            Song.play_sound(s1) function is called.
+        &#34;&#34;&#34;
+        return self.core.is_playing()
+
+    def wait_done(self):
+        &#34;&#34;&#34;Uses a while-loop to keep checking until the song is done playing.
+
+        Reliable, un-interruptible.
+        &#34;&#34;&#34;
+        while self.is_playing():
+            time.sleep(0.01)
+
+    def sleep_done(self):
+        &#34;&#34;&#34;Uses a time.sleep to wait for the duration of the song.
+
+        Interruptable, less reliable.
+        &#34;&#34;&#34;
+        time.sleep(self.duration)
+
+    def __del__(self):
+        self.stop()
+
+
+NOTES = {
+    &#34;C0&#34;: 16.35,
+    &#34;D0&#34;: 18.35,
+    &#34;E0&#34;: 20.60,
+    &#34;F0&#34;: 21.83,
+    &#34;G0&#34;: 24.50,
+    &#34;A0&#34;: 27.50,
+    &#34;B0&#34;: 30.87,
+    &#34;C1&#34;: 32.70,
+    &#34;D1&#34;: 36.71,
+    &#34;E1&#34;: 41.20,
+    &#34;F1&#34;: 43.65,
+    &#34;G1&#34;: 49.00,
+    &#34;A1&#34;: 55.00,
+    &#34;B1&#34;: 61.74,
+    &#34;C2&#34;: 65.41,
+    &#34;D2&#34;: 73.42,
+    &#34;E2&#34;: 82.41,
+    &#34;F2&#34;: 87.31,
+    &#34;G2&#34;: 98.00,
+    &#34;A2&#34;: 110.00,
+    &#34;B2&#34;: 123.47,
+    &#34;C3&#34;: 130.81,
+    &#34;D3&#34;: 146.83,
+    &#34;E3&#34;: 164.81,
+    &#34;F3&#34;: 174.61,
+    &#34;G3&#34;: 196.00,
+    &#34;A3&#34;: 220.00,
+    &#34;B3&#34;: 246.94,
+    &#34;C4&#34;: 261.63,
+    &#34;D4&#34;: 293.66,
+    &#34;E4&#34;: 329.63,
+    &#34;F4&#34;: 349.23,
+    &#34;G4&#34;: 392.00,
+    &#34;A4&#34;: 440.00,
+    &#34;B4&#34;: 493.88,
+    &#34;C5&#34;: 523.25,
+    &#34;D5&#34;: 587.33,
+    &#34;E5&#34;: 659.25,
+    &#34;F5&#34;: 698.46,
+    &#34;G5&#34;: 783.99,
+    &#34;A5&#34;: 880.00,
+    &#34;B5&#34;: 987.77,
+    &#34;C6&#34;: 1046.50,
+    &#34;D6&#34;: 1174.66,
+    &#34;E6&#34;: 1318.51,
+    &#34;F6&#34;: 1396.91,
+    &#34;G6&#34;: 1567.98,
+    &#34;A6&#34;: 1760.00,
+    &#34;B6&#34;: 1975.53,
+    &#34;C7&#34;: 2093.00,
+    &#34;D7&#34;: 2349.32,
+    &#34;E7&#34;: 2637.02,
+    &#34;F7&#34;: 2793.83,
+    &#34;G7&#34;: 3135.96,
+    &#34;A7&#34;: 3520.00,
+    &#34;B7&#34;: 3951.07,
+    &#34;C8&#34;: 4186.01,
+    &#34;D8&#34;: 4698.63,
+    &#34;E8&#34;: 5274.04,
+    &#34;F8&#34;: 5587.65,
+    &#34;G8&#34;: 6271.93,
+    &#34;A8&#34;: 7040.00,
+    &#34;B8&#34;: 7902.13,
+    &#34;C#0&#34;: 17.32,
+    &#34;Db0&#34;: 17.32,
+    &#34;D#0&#34;: 19.45,
+    &#34;Eb0&#34;: 19.45,
+    &#34;F#0&#34;: 23.12,
+    &#34;Gb0&#34;: 23.12,
+    &#34;G#0&#34;: 25.96,
+    &#34;Ab0&#34;: 25.96,
+    &#34;A#0&#34;: 29.14,
+    &#34;Bb0&#34;: 29.14,
+    &#34;C#1&#34;: 34.65,
+    &#34;Db1&#34;: 34.65,
+    &#34;D#1&#34;: 38.89,
+    &#34;Eb1&#34;: 38.89,
+    &#34;F#1&#34;: 46.25,
+    &#34;Gb1&#34;: 46.25,
+    &#34;G#1&#34;: 51.91,
+    &#34;Ab1&#34;: 51.91,
+    &#34;A#1&#34;: 58.27,
+    &#34;Bb1&#34;: 58.27,
+    &#34;C#2&#34;: 69.30,
+    &#34;Db2&#34;: 69.30,
+    &#34;D#2&#34;: 77.78,
+    &#34;Eb2&#34;: 77.78,
+    &#34;F#2&#34;: 92.50,
+    &#34;Gb2&#34;: 92.50,
+    &#34;G#2&#34;: 103.83,
+    &#34;Ab2&#34;: 103.83,
+    &#34;A#2&#34;: 116.54,
+    &#34;Bb2&#34;: 116.54,
+    &#34;C#3&#34;: 138.59,
+    &#34;Db3&#34;: 138.59,
+    &#34;D#3&#34;: 155.56,
+    &#34;Eb3&#34;: 155.56,
+    &#34;F#3&#34;: 185.00,
+    &#34;Gb3&#34;: 185.00,
+    &#34;G#3&#34;: 207.65,
+    &#34;Ab3&#34;: 207.65,
+    &#34;A#3&#34;: 233.08,
+    &#34;Bb3&#34;: 233.08,
+    &#34;C#4&#34;: 277.18,
+    &#34;Db4&#34;: 277.18,
+    &#34;D#4&#34;: 311.13,
+    &#34;Eb4&#34;: 311.13,
+    &#34;F#4&#34;: 369.99,
+    &#34;Gb4&#34;: 369.99,
+    &#34;G#4&#34;: 415.30,
+    &#34;Ab4&#34;: 415.30,
+    &#34;A#4&#34;: 466.16,
+    &#34;Bb4&#34;: 466.16,
+    &#34;C#5&#34;: 554.37,
+    &#34;Db5&#34;: 554.37,
+    &#34;D#5&#34;: 622.25,
+    &#34;Eb5&#34;: 622.25,
+    &#34;F#5&#34;: 739.99,
+    &#34;Gb5&#34;: 739.99,
+    &#34;G#5&#34;: 830.61,
+    &#34;Ab5&#34;: 830.61,
+    &#34;A#5&#34;: 932.33,
+    &#34;Bb5&#34;: 932.33,
+    &#34;C#6&#34;: 1108.73,
+    &#34;Db6&#34;: 1108.73,
+    &#34;D#6&#34;: 1244.51,
+    &#34;Eb6&#34;: 1244.51,
+    &#34;F#6&#34;: 1479.98,
+    &#34;Gb6&#34;: 1479.98,
+    &#34;G#6&#34;: 1661.22,
+    &#34;Ab6&#34;: 1661.22,
+    &#34;A#6&#34;: 1864.66,
+    &#34;Bb6&#34;: 1864.66,
+    &#34;C#7&#34;: 2217.46,
+    &#34;Db7&#34;: 2217.46,
+    &#34;D#7&#34;: 2489.02,
+    &#34;Eb7&#34;: 2489.02,
+    &#34;F#7&#34;: 2959.96,
+    &#34;Gb7&#34;: 2959.96,
+    &#34;G#7&#34;: 3322.44,
+    &#34;Ab7&#34;: 3322.44,
+    &#34;A#7&#34;: 3729.31,
+    &#34;Bb7&#34;: 3729.31,
+    &#34;C#8&#34;: 4434.92,
+    &#34;Db8&#34;: 4434.92,
+    &#34;D#8&#34;: 4978.03,
+    &#34;Eb8&#34;: 4978.03,
+    &#34;F#8&#34;: 5919.91,
+    &#34;Gb8&#34;: 5919.91,
+    &#34;G#8&#34;: 6644.88,
+    &#34;Ab8&#34;: 6644.88,
+    &#34;A#8&#34;: 7458.62,
+    &#34;Bb8&#34;: 7458.62,
+}
+
+_note_order = {
+    &#39;b&#39;: &#39;x&#39;, &#39;&#39;: &#39;y&#39;, &#39;#&#39;: &#39;z&#39;,
+    &#39;C&#39;: &#39;0&#39;, &#39;D&#39;: &#39;1&#39;, &#39;E&#39;: &#39;2&#39;, &#39;F&#39;: &#39;3&#39;, &#39;G&#39;: &#39;4&#39;, &#39;A&#39;: &#39;5&#39;, &#39;B&#39;: &#39;6&#39;, }
+
+NOTE_NAMES = sorted(list(
+    NOTES.keys()), key=lambda x: x[-1] + _note_order[x[0]] + _note_order[x[1:-1]])
+
+
+def preload_all_pitches(duration=1, volume=40, mod_f=0, mod_k=0, amp_f=0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000):
+    return {key: Sound(pitch=key, duration=duration, volume=volume, mod_f=mod_f, mod_k=mod_k, amp_f=amp_f, amp_ka=amp_ka, amp_ac=amp_ac, cutoff=cutoff, fs=fs) for key in NOTE_NAMES}
+
+
+def save_all_pitches_file(sounds, filename=&#34;sounds&#34;):
+    path = os.path.join(os.path.dirname(
+        os.path.realpath(__file__)), str(filename) + &#34;.pickle&#34;)
+    with open(path, &#34;rb&#34;) as f:
+        pickle.dump(sounds, f)
+
+
+def load_all_pitches_file(filename=&#34;sounds&#34;):
+    path = os.path.join(os.path.dirname(
+        os.path.realpath(__file__)), str(filename) + &#34;.pickle&#34;)
+    with open(path, &#34;rb&#34;) as f:
+        return pickle.load(f)
+
+
+SAMPLE_RATES = [
+    8000,
+    11025,
+    16000,
+    22050,
+    24000,
+    32000,
+    44100,
+    48000,
+    88200,
+    96000,
+    192000,
+]
+
+
+def _test1():
+    a = Sound()  # Basic 1sec A4 Note at 20% vol
+    a.play()
+    input(&#34;Press any button to continue to new pitch...&#34;)
+    b = Sound(pitch=&#34;C4&#34;)  # Now a C4 note
+    b.play()
+    input(&#34;Press any button to continue to reuse and play two notes...&#34;)
+    a.play()
+    b.play()
+    input(&#34;Press any button to continue to play strange notes...&#34;)
+    c = Sound(mod_f=10, mod_k=10)
+    c.play()
+    input(&#34;Press any button to continue to play a different basic sound...&#34;)
+    # swap mod_f and pitch for new effect
+    d = Sound(mod_f=&#34;A4&#34;, mod_k=1, pitch=1)
+    d.play()
+    input(&#34;Press any button to continue to stop...&#34;)
+
+
+def _test_vol1():
+    Sound(volume=.001).play().wait_done()
+    while (ans := input(&#34;Enter volume (100-0): &#34;)) and ans.count(&#39;.&#39;) &lt;= 1 and ans.replace(&#39;.&#39;, &#39;&#39;).isnumeric():
+        Sound(volume=float(ans)).play().wait_done()
+
+
+if __name__ == &#39;__main__&#39;:
+    _test_vol1()</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="utils.sound.change_volume"><code class="name flex">
+<span>def <span class="ident">change_volume</span></span>(<span>percentage)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def change_volume(percentage):
+    vol = abs(int(percentage))
+    vol = min(100, max(0, vol))
+    try:
+        command = f&#39;sudo amixer cset numid=1 {vol}%&#39;
+        os.system(command)
+    except OSError:
+        return</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.clip"><code class="name flex">
+<span>def <span class="ident">clip</span></span>(<span>x: float, bot: float, top: float, nomax=False) ‑> float</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def clip(x: float, bot: float, top: float, nomax=False) -&gt; float:
+    # Ensures that x is no lesser than bot and no greater than top
+    return max(x, bot) if nomax else max(min(x, top), bot)</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.cos"><code class="name flex">
+<span>def <span class="ident">cos</span></span>(<span>x: float) ‑> float</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cos(x: float) -&gt; float:
+    return math.cos(x)</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.db_to_amp"><code class="name flex">
+<span>def <span class="ident">db_to_amp</span></span>(<span>db: float, ref_amp: float) ‑> float</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Converts decibels to a next amplitude.
+ref_amp is the reference amplitude to start at.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def db_to_amp(db: float, ref_amp: float) -&gt; float:
+    &#34;&#34;&#34;Converts decibels to a next amplitude.
+    ref_amp is the reference amplitude to start at.
+    &#34;&#34;&#34;
+    return 10**(db/20) * ref_amp</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.gen_wave"><code class="name flex">
+<span>def <span class="ident">gen_wave</span></span>(<span>duration=1, volume=40, pitch: Union[str, float] = 'A4', mod_f: Union[str, float] = 0, mod_k=0, amp_f: Union[str, float] = 0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def gen_wave(duration=1, volume=40, pitch: Union[str, float] = &#34;A4&#34;, mod_f: Union[str, float] = 0, mod_k=0, amp_f: Union[str, float] = 0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000):
+    # Process frequencies, factors
+    pitch = _parse_freq(pitch)
+    mod_f = _parse_freq(mod_f)
+    amp_f = _parse_freq(amp_f)
+
+    # Convert volume using decibel underneath
+    volume = vol_to_amp(volume)
+
+    return _gen_wave(duration, volume, pitch, mod_f, mod_k, amp_f, amp_ka, amp_ac, cutoff, fs)</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.load_all_pitches_file"><code class="name flex">
+<span>def <span class="ident">load_all_pitches_file</span></span>(<span>filename='sounds')</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def load_all_pitches_file(filename=&#34;sounds&#34;):
+    path = os.path.join(os.path.dirname(
+        os.path.realpath(__file__)), str(filename) + &#34;.pickle&#34;)
+    with open(path, &#34;rb&#34;) as f:
+        return pickle.load(f)</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.preload_all_pitches"><code class="name flex">
+<span>def <span class="ident">preload_all_pitches</span></span>(<span>duration=1, volume=40, mod_f=0, mod_k=0, amp_f=0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def preload_all_pitches(duration=1, volume=40, mod_f=0, mod_k=0, amp_f=0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000):
+    return {key: Sound(pitch=key, duration=duration, volume=volume, mod_f=mod_f, mod_k=mod_k, amp_f=amp_f, amp_ka=amp_ka, amp_ac=amp_ac, cutoff=cutoff, fs=fs) for key in NOTE_NAMES}</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.save_all_pitches_file"><code class="name flex">
+<span>def <span class="ident">save_all_pitches_file</span></span>(<span>sounds, filename='sounds')</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def save_all_pitches_file(sounds, filename=&#34;sounds&#34;):
+    path = os.path.join(os.path.dirname(
+        os.path.realpath(__file__)), str(filename) + &#34;.pickle&#34;)
+    with open(path, &#34;rb&#34;) as f:
+        pickle.dump(sounds, f)</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.sin"><code class="name flex">
+<span>def <span class="ident">sin</span></span>(<span>x: float) ‑> float</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@functools.lru_cache()
+def sin(x: float) -&gt; float:
+    return math.sin(x)</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.vol_to_amp"><code class="name flex">
+<span>def <span class="ident">vol_to_amp</span></span>(<span>vol: float) ‑> float</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Converts a volume level to an amplitude scalar factor.
+Input would range from 0 to HIGHEST_VOLUME (default:100).
+Output ranges from 0 to 1</p>
+<p>Furthermore, the output behaves similarly to the volume on a listening device,
+when setting the volume. If the max is 100% level, then 50% feels half as loud.</p>
+<p>Note: 0 is not absolutely silent, it is just extremely quiet, and is audible.
+Note 2: this volume is dependent on the system volume.
+Loudness = program volume * system volume (if in percentage)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def vol_to_amp(vol: float) -&gt; float:
+    &#34;&#34;&#34;Converts a volume level to an amplitude scalar factor.
+    Input would range from 0 to HIGHEST_VOLUME (default:100).
+    Output ranges from 0 to 1
+
+    Furthermore, the output behaves similarly to the volume on a listening device,
+    when setting the volume. If the max is 100% level, then 50% feels half as loud.
+
+    Note: 0 is not absolutely silent, it is just extremely quiet, and is audible.
+    Note 2: this volume is dependent on the system volume.
+        Loudness = program volume * system volume (if in percentage)
+    &#34;&#34;&#34;
+    db = clip(vol, 0, HIGHEST_VOLUME, nomax=LIMIT_MAX_VOLUME) * \
+        _HIGHEST_DECIBEL / HIGHEST_VOLUME
+    amp = db_to_amp(db, _LOWEST_AMPLITUDE)
+    return clip(amp, 0, _HIGHEST_AMPLITUDE, nomax=LIMIT_MAX_VOLUME)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="utils.sound.Song"><code class="flex name class">
+<span>class <span class="ident">Song</span></span>
+<span>(</span><span>sounds=())</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Creates a special player object, that can play Sound objects
+quickly for long periods of time.</p>
+<p>Example Usage:</p>
+<p>s0 = Song.create_silence(seconds=0.5)
+s1 = Sound(duration=1, pitch="A4")
+s2 = Sound(duration=1, pitch="B4")</p>
+<p>song = Song([s1, s0, s2, s0])
+song *= 4 # repeat the song 4 times over</p>
+<p>song.compile() # Slow process, several seconds latency</p>
+<p>song.play() # Faster, ~0.7 seconds latency
+time.sleep(song.duration)
+song.stop()</p>
+<p>Creates a Song with that plays silence for 1 second by default.</p>
+<p>Can be initialized with a list of existing sounds.
+This is optional.</p>
+<p>Sounds can be added with Song.append(sound)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Song(list):
+    &#34;&#34;&#34;Creates a special player object, that can play Sound objects
+     quickly for long periods of time.
+
+    Example Usage:
+
+    s0 = Song.create_silence(seconds=0.5)
+    s1 = Sound(duration=1, pitch=&#34;A4&#34;)
+    s2 = Sound(duration=1, pitch=&#34;B4&#34;)
+
+    song = Song([s1, s0, s2, s0])
+    song *= 4 # repeat the song 4 times over
+
+    song.compile() # Slow process, several seconds latency
+
+    song.play() # Faster, ~0.7 seconds latency
+    time.sleep(song.duration)
+    song.stop()
+    &#34;&#34;&#34;
+    MIN_VOLUME, MAX_VOLUME = -32_767, +32_767
+
+    @staticmethod
+    def create_silence(seconds=1):
+        &#34;&#34;&#34;A helper method to create a special Sound object 
+        containing silence of given duration.
+        &#34;&#34;&#34;
+
+        core = Sound(duration=1)
+        core.audio = array.array(
+            &#39;h&#39;, [0 for i in range(int(core._fs*seconds))])
+
+        return core
+
+    def __init__(self, sounds=()):
+        &#34;&#34;&#34;Creates a Song with that plays silence for 1 second by default.
+
+        Can be initialized with a list of existing sounds.
+        This is optional.
+
+        Sounds can be added with Song.append(sound)
+        &#34;&#34;&#34;
+        super().__init__()
+        self.core = self.create_silence(1)  # Default silence
+        self.duration = self.core._duration
+
+        self.extend(sounds)
+
+    def append(self, obj):
+        &#34;&#34;&#34;Add a Sound object to this Song.
+
+        Must be of type Sound.&#34;&#34;&#34;
+        if not isinstance(obj, Sound):
+            raise ValueError(&#34;Cannot append objects that are not type Sound&#34;)
+        super().append(obj)
+
+    def extend(self, ls):
+        &#34;&#34;&#34;Adds all the Sounds of ls to this Song. 
+        This can work for lists of Sounds, any iterable containing Sounds, 
+        or another Song.
+
+        Ignores non-Sound objects.
+        &#34;&#34;&#34;
+        for el in ls:
+            if isinstance(el, Sound):
+                self.append(el)
+
+    def compile(self):
+        &#34;&#34;&#34;Compiles the appended sounds to create the song.
+
+        After this is set, then it can be played using Song.play()
+        &#34;&#34;&#34;
+        sounds = [s for s in self if isinstance(s, Sound)]
+        self.duration = sum([s._duration for s in sounds])
+        self._samples = sum([len(s.audio) for s in sounds])
+        self.core = Sound(duration=1)
+        self.core.audio = array.array(
+            &#39;h&#39;, [0 for i in range(int(self._samples))])
+        ptr = 0
+        for s in sounds:
+            n = len(s.audio)
+            for i in range(n):
+                self.core.audio[min(ptr, self._samples-1)] = s.audio[i]
+                ptr += 1
+
+    def play(self):
+        &#34;&#34;&#34;Starts the Song. It plays silence by default.
+
+        Has latency on startup. Will stop by itself after the 
+            Song duration has ended (defined in init)
+
+        If Song.play_sound(s1) was done already, then Song.start()
+            will play the given sound s1 to begin with.
+        &#34;&#34;&#34;
+        self.core.play()
+
+    def stop(self):
+        &#34;&#34;&#34;Stops the Song. Keeps the last sound that was 
+        used in Song.play_sound(s1)
+
+        &#34;&#34;&#34;
+        self.core.stop()
+
+    def is_playing(self):
+        &#34;&#34;&#34;Returns True if the Song is active.
+
+        Active means that it would play sound, when the 
+            Song.play_sound(s1) function is called.
+        &#34;&#34;&#34;
+        return self.core.is_playing()
+
+    def wait_done(self):
+        &#34;&#34;&#34;Uses a while-loop to keep checking until the song is done playing.
+
+        Reliable, un-interruptible.
+        &#34;&#34;&#34;
+        while self.is_playing():
+            time.sleep(0.01)
+
+    def sleep_done(self):
+        &#34;&#34;&#34;Uses a time.sleep to wait for the duration of the song.
+
+        Interruptable, less reliable.
+        &#34;&#34;&#34;
+        time.sleep(self.duration)
+
+    def __del__(self):
+        self.stop()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.list</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="utils.sound.Song.MAX_VOLUME"><code class="name">var <span class="ident">MAX_VOLUME</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.sound.Song.MIN_VOLUME"><code class="name">var <span class="ident">MIN_VOLUME</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="utils.sound.Song.create_silence"><code class="name flex">
+<span>def <span class="ident">create_silence</span></span>(<span>seconds=1)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>A helper method to create a special Sound object
+containing silence of given duration.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def create_silence(seconds=1):
+    &#34;&#34;&#34;A helper method to create a special Sound object 
+    containing silence of given duration.
+    &#34;&#34;&#34;
+
+    core = Sound(duration=1)
+    core.audio = array.array(
+        &#39;h&#39;, [0 for i in range(int(core._fs*seconds))])
+
+    return core</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="utils.sound.Song.append"><code class="name flex">
+<span>def <span class="ident">append</span></span>(<span>self, obj)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Add a Sound object to this Song.</p>
+<p>Must be of type Sound.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def append(self, obj):
+    &#34;&#34;&#34;Add a Sound object to this Song.
+
+    Must be of type Sound.&#34;&#34;&#34;
+    if not isinstance(obj, Sound):
+        raise ValueError(&#34;Cannot append objects that are not type Sound&#34;)
+    super().append(obj)</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.Song.compile"><code class="name flex">
+<span>def <span class="ident">compile</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Compiles the appended sounds to create the song.</p>
+<p>After this is set, then it can be played using Song.play()</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def compile(self):
+    &#34;&#34;&#34;Compiles the appended sounds to create the song.
+
+    After this is set, then it can be played using Song.play()
+    &#34;&#34;&#34;
+    sounds = [s for s in self if isinstance(s, Sound)]
+    self.duration = sum([s._duration for s in sounds])
+    self._samples = sum([len(s.audio) for s in sounds])
+    self.core = Sound(duration=1)
+    self.core.audio = array.array(
+        &#39;h&#39;, [0 for i in range(int(self._samples))])
+    ptr = 0
+    for s in sounds:
+        n = len(s.audio)
+        for i in range(n):
+            self.core.audio[min(ptr, self._samples-1)] = s.audio[i]
+            ptr += 1</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.Song.extend"><code class="name flex">
+<span>def <span class="ident">extend</span></span>(<span>self, ls)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Adds all the Sounds of ls to this Song.
+This can work for lists of Sounds, any iterable containing Sounds,
+or another Song.</p>
+<p>Ignores non-Sound objects.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def extend(self, ls):
+    &#34;&#34;&#34;Adds all the Sounds of ls to this Song. 
+    This can work for lists of Sounds, any iterable containing Sounds, 
+    or another Song.
+
+    Ignores non-Sound objects.
+    &#34;&#34;&#34;
+    for el in ls:
+        if isinstance(el, Sound):
+            self.append(el)</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.Song.is_playing"><code class="name flex">
+<span>def <span class="ident">is_playing</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns True if the Song is active.</p>
+<p>Active means that it would play sound, when the
+Song.play_sound(s1) function is called.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_playing(self):
+    &#34;&#34;&#34;Returns True if the Song is active.
+
+    Active means that it would play sound, when the 
+        Song.play_sound(s1) function is called.
+    &#34;&#34;&#34;
+    return self.core.is_playing()</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.Song.play"><code class="name flex">
+<span>def <span class="ident">play</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Starts the Song. It plays silence by default.</p>
+<p>Has latency on startup. Will stop by itself after the
+Song duration has ended (defined in init)</p>
+<p>If Song.play_sound(s1) was done already, then Song.start()
+will play the given sound s1 to begin with.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def play(self):
+    &#34;&#34;&#34;Starts the Song. It plays silence by default.
+
+    Has latency on startup. Will stop by itself after the 
+        Song duration has ended (defined in init)
+
+    If Song.play_sound(s1) was done already, then Song.start()
+        will play the given sound s1 to begin with.
+    &#34;&#34;&#34;
+    self.core.play()</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.Song.sleep_done"><code class="name flex">
+<span>def <span class="ident">sleep_done</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Uses a time.sleep to wait for the duration of the song.</p>
+<p>Interruptable, less reliable.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def sleep_done(self):
+    &#34;&#34;&#34;Uses a time.sleep to wait for the duration of the song.
+
+    Interruptable, less reliable.
+    &#34;&#34;&#34;
+    time.sleep(self.duration)</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.Song.stop"><code class="name flex">
+<span>def <span class="ident">stop</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Stops the Song. Keeps the last sound that was
+used in Song.play_sound(s1)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def stop(self):
+    &#34;&#34;&#34;Stops the Song. Keeps the last sound that was 
+    used in Song.play_sound(s1)
+
+    &#34;&#34;&#34;
+    self.core.stop()</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.Song.wait_done"><code class="name flex">
+<span>def <span class="ident">wait_done</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Uses a while-loop to keep checking until the song is done playing.</p>
+<p>Reliable, un-interruptible.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def wait_done(self):
+    &#34;&#34;&#34;Uses a while-loop to keep checking until the song is done playing.
+
+    Reliable, un-interruptible.
+    &#34;&#34;&#34;
+    while self.is_playing():
+        time.sleep(0.01)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="utils.sound.Sound"><code class="flex name class">
+<span>class <span class="ident">Sound</span></span>
+<span>(</span><span>duration=1, volume=40, pitch='A4', mod_f=0, mod_k=0, amp_f=0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Sound:
+    def __init__(self, duration=1, volume=40, pitch=&#34;A4&#34;, mod_f=0, mod_k=0, amp_f=0, amp_ka=0, amp_ac=1, cutoff=0.01, fs=8000):
+        self.player = None
+        self._fs = fs  # needs a default value
+        self.set_volume(volume)
+        self.set_pitch(pitch)
+        self.set_cutoff(cutoff)
+        self.set_frequency_modulation(mod_f, mod_k)
+        self.set_amplitude_modulation(amp_f, amp_ka, amp_ac)
+        self.update_duration(duration, fs)
+
+    def reset(self):
+        &#34;&#34;&#34;Fully resets the underlying audio of this Sound object.
+        The sound must be stopped, or this will give unexpected behavior
+
+        see Sound.reset_audio
+        &#34;&#34;&#34;
+        return self.reset_audio()
+
+    def reset_audio(self):
+        &#34;&#34;&#34;Fully resets the underlying audio data of this Sound object.
+        The sound must be stopped, or this will give unexpected behavior
+        &#34;&#34;&#34;
+        return self.update_audio(True)
+
+    def append(self, other, spacing=0):
+        &#34;&#34;&#34;Takes the underlying audio data of another Sound object, other, and appends all of it
+        to the underlying audio data of this Sound object.
+
+        This does not alter any base attributes of this Sound object, and a &#39;reset&#39; will undo these appends
+
+        see Sound.append_sound
+        &#34;&#34;&#34;
+        return self.append_sound(other, spacing)
+
+    def append_sound(self, other, spacing=0):
+        &#34;&#34;&#34;Takes the underlying audio data of another Sound object, other, and appends all of it
+        to the underlying audio data of this Sound object.
+
+        This does not alter any base attributes of this Sound object, and a &#39;reset&#39; will undo these appends
+        &#34;&#34;&#34;
+        spacing = float(spacing)
+        if spacing &lt; 0:
+            spacing = 0
+        spacing_n = int(spacing * self._fs)
+
+        if not self.is_playing():
+            src = list(self.audio)
+            dst = list(other.audio)
+            spacer = [0 for i in range(spacing_n)]
+
+            self.audio = array.array(&#39;h&#39;, src + spacer + dst)
+        else:
+            raise RuntimeError(
+                &#34;Cannot alter this sound object for repetition while playing this sound.&#34;)
+        return self
+
+    def repeat_sound(self, repeat_times=1, repeat_interval=0):
+        &#34;&#34;&#34;Alters the underlying audio data of this Sound object, such that the main sound will:
+        - repeat equal to the value of repeat_times. It should be an integer value.
+        - each time the original sound is repeated, there will be an interval of silence for &#39;repeat_interval&#39; seconds.
+            Expects either int or float value, of seconds for the interval. Default is 0 seconds.
+
+        Explanation of Potential Usage:
+        You may utilize the concept of BPM or &#34;beats per minute&#34; to help you with creating a tempo for your songs.
+            If you want a sound repeated at 120bpm, that would be 2 times/sec, 0.5 seconds per sound played.
+            If the original sound has duration 0.1 seconds, then the silence spacing would have to be 0.4 seconds, such that
+            every sound starts playing every 0.5 seconds, matching 120bpm. The end of this repeated Sound object will be a 
+            sound playing for 0.1 seconds, and then no silence spacing afterwards. This is desired behavior. You can then perform 
+            a time.sleep(0.4) seconds before replaying this Sound object. BUT there is sometimes latency in &#34;starting&#34; a sound, 
+            so the time sleep may need to be smaller, such as 0.35 seconds instead.
+        &#34;&#34;&#34;
+        repeat_times = int(
+            repeat_times)  # This can cause an error, which is desired
+        if repeat_times &lt; 1:
+            repeat_times = 1
+
+        repeat_interval = float(repeat_interval)
+        if repeat_times &lt; 0:
+            repeat_times = 0
+
+        fs = self._fs
+        interval_n = int(fs * repeat_interval)
+
+        if not self.is_playing():
+            src = list(self.audio)
+            src_n = len(src)
+            end_n = src_n * repeat_times + (repeat_times - 1) * interval_n
+            spacer = [0 for i in range(interval_n)]
+            n = src_n + interval_n
+            arr = []
+            tmp = src + spacer
+            for i in range(end_n):
+                arr.append(tmp[i % n])
+            self.audio = array.array(&#39;h&#39;, arr)
+        else:
+            raise RuntimeError(
+                &#34;Cannot alter this sound object for repetition while playing this sound.&#34;)
+        return self
+
+    def set_volume(self, volume):
+        &#34;&#34;&#34;Set the volume level of this sound.
+        **Must use Sound.update_audio() to apply all changes**
+
+        Enter a value from (0-100).
+        &#34;&#34;&#34;
+        self.volume = volume
+        return self
+
+    def set_pitch(self, pitch: Union[str, float]):
+        &#34;&#34;&#34;Set the pitch or frequency of this sound.
+        **Must use Sound.update_audio() to apply all changes**
+
+        Enter a Hertz value within audible human range:
+            minimum: 0
+            maximum: ~7500
+        &#34;&#34;&#34;
+        self.pitch = pitch
+        return self
+
+    def set_cutoff(self, cutoff):
+        &#34;&#34;&#34;Set the &#39;cutoff&#39;, the duration of the lead-in and fade-out for each sound wave.
+        **Must use Sound.update_audio() to apply all changes**
+
+        Enter a value in seconds, default: 0.01s
+
+        Notable Effects:
+        a value of 0s may lead to a &#39;pop/crackle&#39; noise at the beginning and end of a sound.
+        a value greater than or equal to the duration (also &lt;1s) may lead to a pulse-like noise.
+        a value greater than or equal to duration (also &gt;1s) may lead to a &#39;coming and going&#39; feeling.
+        &#34;&#34;&#34;
+        self.cutoff = cutoff
+        return self
+
+    def set_frequency_modulation(self, mod_f: Union[str, float], mod_k):
+        &#34;&#34;&#34;Set the frequency(mod_f) and strength(mod_k) of Frequency Modulation.
+        This modulation gives special effects to your sounds.
+        **Must use Sound.update_audio() to apply all changes**
+
+        Enter a value of frequency for mod_f
+        Enter any positive integer for mod_k, a multiplication factor
+
+        Notable Effects:
+        mod_f=0, mod_k=0 - no modulation. This is default settings.
+        mod_f=(1-10Hz), mod_k=(1-10) - mild modulation, sounding wavy, possibly crackly.
+        mod_f=&#39;A4&#39;, mod_k=(1-50) - increasing levels of graininess observed, with increasing k factor.
+
+        *Swapping mod_f and the pitch leads to new effects*
+        mod_f=pitch, pitch=1, mod_k=1 - Sounds like a pipe organ, where mod_f becomes the new pitch setting.
+        &#34;&#34;&#34;
+        self.mod_f = mod_f
+        self.mod_k = mod_k
+        return self
+
+    def set_amplitude_modulation(self, amp_f: Union[str, float], amp_ka, amp_ac):
+        &#34;&#34;&#34;Set the frequency(amp_f), ka factor(amp_ka), and ac factor(amp_ac) of Amplitude Modulation.
+        Effect is most similar to &#39;vibrato&#39; altering the volume in a wobbling sense.
+        **Must use Sound.update_audio() to apply all changes**
+
+        amp_ka - wobbling factor. 0 is no wobble. &gt;0 provides wobble.
+        amp_ac - factor to change strength of wobble overall. See Notable Effects to understand this.
+
+        Constraints:
+        (resultant volume is % of the set volume of this Sound object)
+        highest % of volume = amp_ac * (1 + amp_ka)
+        lowest  % of volume = amp_ac * (1 - amp_ka)
+
+        Notable Effects:
+        amp_f=1Hz - wobbles 1 time per second
+        amp_f=10Hz - wobbles 10 times per second
+
+        amp_ka=0, amp_ac=1 - no wobble. The default settings.
+        amp_ka=1, amp_ac=0.5 - alternates volume from 100% to 0% according to amp_f frequency.
+        amp_ka=0.5, amp_ac=0.5 - alternates volume from 25% to 75% according to amp_f frequency.
+        &#34;&#34;&#34;
+        self.amp_f = amp_f
+        self.amp_ka = amp_ka
+        self.amp_ac = amp_ac
+        return self
+
+    def update_duration(self, duration, fs: int = None):
+        &#34;&#34;&#34;Change the duration of this Sound (seconds).
+        Cannot change duration of currently playing sounds.
+
+        Only affects the next played sound.
+
+        fs - Sample rate of sound wave. Default 8000 as lowest.
+            Increased &#39;quality&#39; with higher rate.
+        &#34;&#34;&#34;
+        if fs is not None:
+            self._fs = fs
+        self._duration = duration
+
+        if not self.is_playing():
+            self.update_audio(True)
+        else:
+            raise RuntimeError(
+                &#34;Cannot change duration or sample rate while playing sound.&#34;)
+        return self
+
+    def update_audio(self, overwrite: bool = False):
+        &#34;&#34;&#34;Updates the audio to be played, based on current Sound attributes.
+
+        - if overwrite=False and is_playing()==True, the playing audio will be updated
+        - if overwrite=True and is_playing()==True, changes are present only in next play()
+        &#34;&#34;&#34;
+        arr = gen_wave(self._duration, self.volume, self.pitch, self.mod_f,
+                       self.mod_k, self.amp_f, self.amp_ka, self.amp_ac, self.cutoff, self._fs)
+        if not overwrite:
+            for i in range(min(len(self.audio), len(arr))):
+                self.audio[i] = arr[i]
+        else:
+            self.audio = arr
+        return self
+
+    def alter_wave(self, func: Callable[[float, int], int]):
+        &#34;&#34;&#34;Apply a function to change the currently playing/prepared audio wave.
+
+        func is of the format: func(x:float, y:int16) -&gt; y:int16
+
+        Given an xy-coordinate plane with the sound wave being centered on y=0,
+        x is time in seconds, and y is amplitude in the range [-32768, 32767]
+
+
+        &#34;&#34;&#34;
+        for i in range(len(self.audio)):
+            # func(x:float, y:int16) -&gt; y:int16
+            self.audio[i] = clip(
+                func(i/self._fs, self.audio[i]), -32768, 32767)
+        return self
+
+    def play(self):
+        self.stop()
+        self.player = sa.play_buffer(self.audio, 1, 2, self._fs)
+        return self
+
+    def stop(self):
+        if self.is_playing():
+            self.player.stop()
+        return self
+
+    def is_playing(self) -&gt; bool:
+        return self.player is not None and self.player.is_playing()
+
+    def wait_done(self):
+        if self.is_playing():
+            self.player.wait_done()
+        return self
+
+    def __repr__(self):
+        return f&#39;Sound({self.pitch}, {self._duration}secs, {self.volume}%, {self.mod_f}mod)&#39;</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="utils.sound.Sound.alter_wave"><code class="name flex">
+<span>def <span class="ident">alter_wave</span></span>(<span>self, func: Callable[[float, int], int])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Apply a function to change the currently playing/prepared audio wave.</p>
+<p>func is of the format: func(x:float, y:int16) -&gt; y:int16</p>
+<p>Given an xy-coordinate plane with the sound wave being centered on y=0,
+x is time in seconds, and y is amplitude in the range [-32768, 32767]</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def alter_wave(self, func: Callable[[float, int], int]):
+    &#34;&#34;&#34;Apply a function to change the currently playing/prepared audio wave.
+
+    func is of the format: func(x:float, y:int16) -&gt; y:int16
+
+    Given an xy-coordinate plane with the sound wave being centered on y=0,
+    x is time in seconds, and y is amplitude in the range [-32768, 32767]
+
+
+    &#34;&#34;&#34;
+    for i in range(len(self.audio)):
+        # func(x:float, y:int16) -&gt; y:int16
+        self.audio[i] = clip(
+            func(i/self._fs, self.audio[i]), -32768, 32767)
+    return self</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.Sound.append"><code class="name flex">
+<span>def <span class="ident">append</span></span>(<span>self, other, spacing=0)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Takes the underlying audio data of another Sound object, other, and appends all of it
+to the underlying audio data of this Sound object.</p>
+<p>This does not alter any base attributes of this Sound object, and a 'reset' will undo these appends</p>
+<p>see Sound.append_sound</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def append(self, other, spacing=0):
+    &#34;&#34;&#34;Takes the underlying audio data of another Sound object, other, and appends all of it
+    to the underlying audio data of this Sound object.
+
+    This does not alter any base attributes of this Sound object, and a &#39;reset&#39; will undo these appends
+
+    see Sound.append_sound
+    &#34;&#34;&#34;
+    return self.append_sound(other, spacing)</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.Sound.append_sound"><code class="name flex">
+<span>def <span class="ident">append_sound</span></span>(<span>self, other, spacing=0)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Takes the underlying audio data of another Sound object, other, and appends all of it
+to the underlying audio data of this Sound object.</p>
+<p>This does not alter any base attributes of this Sound object, and a 'reset' will undo these appends</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def append_sound(self, other, spacing=0):
+    &#34;&#34;&#34;Takes the underlying audio data of another Sound object, other, and appends all of it
+    to the underlying audio data of this Sound object.
+
+    This does not alter any base attributes of this Sound object, and a &#39;reset&#39; will undo these appends
+    &#34;&#34;&#34;
+    spacing = float(spacing)
+    if spacing &lt; 0:
+        spacing = 0
+    spacing_n = int(spacing * self._fs)
+
+    if not self.is_playing():
+        src = list(self.audio)
+        dst = list(other.audio)
+        spacer = [0 for i in range(spacing_n)]
+
+        self.audio = array.array(&#39;h&#39;, src + spacer + dst)
+    else:
+        raise RuntimeError(
+            &#34;Cannot alter this sound object for repetition while playing this sound.&#34;)
+    return self</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.Sound.is_playing"><code class="name flex">
+<span>def <span class="ident">is_playing</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_playing(self) -&gt; bool:
+    return self.player is not None and self.player.is_playing()</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.Sound.play"><code class="name flex">
+<span>def <span class="ident">play</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def play(self):
+    self.stop()
+    self.player = sa.play_buffer(self.audio, 1, 2, self._fs)
+    return self</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.Sound.repeat_sound"><code class="name flex">
+<span>def <span class="ident">repeat_sound</span></span>(<span>self, repeat_times=1, repeat_interval=0)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Alters the underlying audio data of this Sound object, such that the main sound will:
+- repeat equal to the value of repeat_times. It should be an integer value.
+- each time the original sound is repeated, there will be an interval of silence for 'repeat_interval' seconds.
+Expects either int or float value, of seconds for the interval. Default is 0 seconds.</p>
+<p>Explanation of Potential Usage:
+You may utilize the concept of BPM or "beats per minute" to help you with creating a tempo for your songs.
+If you want a sound repeated at 120bpm, that would be 2 times/sec, 0.5 seconds per sound played.
+If the original sound has duration 0.1 seconds, then the silence spacing would have to be 0.4 seconds, such that
+every sound starts playing every 0.5 seconds, matching 120bpm. The end of this repeated Sound object will be a
+sound playing for 0.1 seconds, and then no silence spacing afterwards. This is desired behavior. You can then perform
+a time.sleep(0.4) seconds before replaying this Sound object. BUT there is sometimes latency in "starting" a sound,
+so the time sleep may need to be smaller, such as 0.35 seconds instead.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def repeat_sound(self, repeat_times=1, repeat_interval=0):
+    &#34;&#34;&#34;Alters the underlying audio data of this Sound object, such that the main sound will:
+    - repeat equal to the value of repeat_times. It should be an integer value.
+    - each time the original sound is repeated, there will be an interval of silence for &#39;repeat_interval&#39; seconds.
+        Expects either int or float value, of seconds for the interval. Default is 0 seconds.
+
+    Explanation of Potential Usage:
+    You may utilize the concept of BPM or &#34;beats per minute&#34; to help you with creating a tempo for your songs.
+        If you want a sound repeated at 120bpm, that would be 2 times/sec, 0.5 seconds per sound played.
+        If the original sound has duration 0.1 seconds, then the silence spacing would have to be 0.4 seconds, such that
+        every sound starts playing every 0.5 seconds, matching 120bpm. The end of this repeated Sound object will be a 
+        sound playing for 0.1 seconds, and then no silence spacing afterwards. This is desired behavior. You can then perform 
+        a time.sleep(0.4) seconds before replaying this Sound object. BUT there is sometimes latency in &#34;starting&#34; a sound, 
+        so the time sleep may need to be smaller, such as 0.35 seconds instead.
+    &#34;&#34;&#34;
+    repeat_times = int(
+        repeat_times)  # This can cause an error, which is desired
+    if repeat_times &lt; 1:
+        repeat_times = 1
+
+    repeat_interval = float(repeat_interval)
+    if repeat_times &lt; 0:
+        repeat_times = 0
+
+    fs = self._fs
+    interval_n = int(fs * repeat_interval)
+
+    if not self.is_playing():
+        src = list(self.audio)
+        src_n = len(src)
+        end_n = src_n * repeat_times + (repeat_times - 1) * interval_n
+        spacer = [0 for i in range(interval_n)]
+        n = src_n + interval_n
+        arr = []
+        tmp = src + spacer
+        for i in range(end_n):
+            arr.append(tmp[i % n])
+        self.audio = array.array(&#39;h&#39;, arr)
+    else:
+        raise RuntimeError(
+            &#34;Cannot alter this sound object for repetition while playing this sound.&#34;)
+    return self</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.Sound.reset"><code class="name flex">
+<span>def <span class="ident">reset</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Fully resets the underlying audio of this Sound object.
+The sound must be stopped, or this will give unexpected behavior</p>
+<p>see Sound.reset_audio</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def reset(self):
+    &#34;&#34;&#34;Fully resets the underlying audio of this Sound object.
+    The sound must be stopped, or this will give unexpected behavior
+
+    see Sound.reset_audio
+    &#34;&#34;&#34;
+    return self.reset_audio()</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.Sound.reset_audio"><code class="name flex">
+<span>def <span class="ident">reset_audio</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Fully resets the underlying audio data of this Sound object.
+The sound must be stopped, or this will give unexpected behavior</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def reset_audio(self):
+    &#34;&#34;&#34;Fully resets the underlying audio data of this Sound object.
+    The sound must be stopped, or this will give unexpected behavior
+    &#34;&#34;&#34;
+    return self.update_audio(True)</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.Sound.set_amplitude_modulation"><code class="name flex">
+<span>def <span class="ident">set_amplitude_modulation</span></span>(<span>self, amp_f: Union[str, float], amp_ka, amp_ac)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set the frequency(amp_f), ka factor(amp_ka), and ac factor(amp_ac) of Amplitude Modulation.
+Effect is most similar to 'vibrato' altering the volume in a wobbling sense.
+<strong>Must use Sound.update_audio() to apply all changes</strong></p>
+<p>amp_ka - wobbling factor. 0 is no wobble. &gt;0 provides wobble.
+amp_ac - factor to change strength of wobble overall. See Notable Effects to understand this.</p>
+<p>Constraints:
+(resultant volume is % of the set volume of this Sound object)
+highest % of volume = amp_ac * (1 + amp_ka)
+lowest
+% of volume = amp_ac * (1 - amp_ka)</p>
+<p>Notable Effects:
+amp_f=1Hz - wobbles 1 time per second
+amp_f=10Hz - wobbles 10 times per second</p>
+<p>amp_ka=0, amp_ac=1 - no wobble. The default settings.
+amp_ka=1, amp_ac=0.5 - alternates volume from 100% to 0% according to amp_f frequency.
+amp_ka=0.5, amp_ac=0.5 - alternates volume from 25% to 75% according to amp_f frequency.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_amplitude_modulation(self, amp_f: Union[str, float], amp_ka, amp_ac):
+    &#34;&#34;&#34;Set the frequency(amp_f), ka factor(amp_ka), and ac factor(amp_ac) of Amplitude Modulation.
+    Effect is most similar to &#39;vibrato&#39; altering the volume in a wobbling sense.
+    **Must use Sound.update_audio() to apply all changes**
+
+    amp_ka - wobbling factor. 0 is no wobble. &gt;0 provides wobble.
+    amp_ac - factor to change strength of wobble overall. See Notable Effects to understand this.
+
+    Constraints:
+    (resultant volume is % of the set volume of this Sound object)
+    highest % of volume = amp_ac * (1 + amp_ka)
+    lowest  % of volume = amp_ac * (1 - amp_ka)
+
+    Notable Effects:
+    amp_f=1Hz - wobbles 1 time per second
+    amp_f=10Hz - wobbles 10 times per second
+
+    amp_ka=0, amp_ac=1 - no wobble. The default settings.
+    amp_ka=1, amp_ac=0.5 - alternates volume from 100% to 0% according to amp_f frequency.
+    amp_ka=0.5, amp_ac=0.5 - alternates volume from 25% to 75% according to amp_f frequency.
+    &#34;&#34;&#34;
+    self.amp_f = amp_f
+    self.amp_ka = amp_ka
+    self.amp_ac = amp_ac
+    return self</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.Sound.set_cutoff"><code class="name flex">
+<span>def <span class="ident">set_cutoff</span></span>(<span>self, cutoff)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set the 'cutoff', the duration of the lead-in and fade-out for each sound wave.
+<strong>Must use Sound.update_audio() to apply all changes</strong></p>
+<p>Enter a value in seconds, default: 0.01s</p>
+<p>Notable Effects:
+a value of 0s may lead to a 'pop/crackle' noise at the beginning and end of a sound.
+a value greater than or equal to the duration (also &lt;1s) may lead to a pulse-like noise.
+a value greater than or equal to duration (also &gt;1s) may lead to a 'coming and going' feeling.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_cutoff(self, cutoff):
+    &#34;&#34;&#34;Set the &#39;cutoff&#39;, the duration of the lead-in and fade-out for each sound wave.
+    **Must use Sound.update_audio() to apply all changes**
+
+    Enter a value in seconds, default: 0.01s
+
+    Notable Effects:
+    a value of 0s may lead to a &#39;pop/crackle&#39; noise at the beginning and end of a sound.
+    a value greater than or equal to the duration (also &lt;1s) may lead to a pulse-like noise.
+    a value greater than or equal to duration (also &gt;1s) may lead to a &#39;coming and going&#39; feeling.
+    &#34;&#34;&#34;
+    self.cutoff = cutoff
+    return self</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.Sound.set_frequency_modulation"><code class="name flex">
+<span>def <span class="ident">set_frequency_modulation</span></span>(<span>self, mod_f: Union[str, float], mod_k)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set the frequency(mod_f) and strength(mod_k) of Frequency Modulation.
+This modulation gives special effects to your sounds.
+<strong>Must use Sound.update_audio() to apply all changes</strong></p>
+<p>Enter a value of frequency for mod_f
+Enter any positive integer for mod_k, a multiplication factor</p>
+<p>Notable Effects:
+mod_f=0, mod_k=0 - no modulation. This is default settings.
+mod_f=(1-10Hz), mod_k=(1-10) - mild modulation, sounding wavy, possibly crackly.
+mod_f='A4', mod_k=(1-50) - increasing levels of graininess observed, with increasing k factor.</p>
+<p><em>Swapping mod_f and the pitch leads to new effects</em>
+mod_f=pitch, pitch=1, mod_k=1 - Sounds like a pipe organ, where mod_f becomes the new pitch setting.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_frequency_modulation(self, mod_f: Union[str, float], mod_k):
+    &#34;&#34;&#34;Set the frequency(mod_f) and strength(mod_k) of Frequency Modulation.
+    This modulation gives special effects to your sounds.
+    **Must use Sound.update_audio() to apply all changes**
+
+    Enter a value of frequency for mod_f
+    Enter any positive integer for mod_k, a multiplication factor
+
+    Notable Effects:
+    mod_f=0, mod_k=0 - no modulation. This is default settings.
+    mod_f=(1-10Hz), mod_k=(1-10) - mild modulation, sounding wavy, possibly crackly.
+    mod_f=&#39;A4&#39;, mod_k=(1-50) - increasing levels of graininess observed, with increasing k factor.
+
+    *Swapping mod_f and the pitch leads to new effects*
+    mod_f=pitch, pitch=1, mod_k=1 - Sounds like a pipe organ, where mod_f becomes the new pitch setting.
+    &#34;&#34;&#34;
+    self.mod_f = mod_f
+    self.mod_k = mod_k
+    return self</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.Sound.set_pitch"><code class="name flex">
+<span>def <span class="ident">set_pitch</span></span>(<span>self, pitch: Union[str, float])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set the pitch or frequency of this sound.
+<strong>Must use Sound.update_audio() to apply all changes</strong></p>
+<p>Enter a Hertz value within audible human range:
+minimum: 0
+maximum: ~7500</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_pitch(self, pitch: Union[str, float]):
+    &#34;&#34;&#34;Set the pitch or frequency of this sound.
+    **Must use Sound.update_audio() to apply all changes**
+
+    Enter a Hertz value within audible human range:
+        minimum: 0
+        maximum: ~7500
+    &#34;&#34;&#34;
+    self.pitch = pitch
+    return self</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.Sound.set_volume"><code class="name flex">
+<span>def <span class="ident">set_volume</span></span>(<span>self, volume)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set the volume level of this sound.
+<strong>Must use Sound.update_audio() to apply all changes</strong></p>
+<p>Enter a value from (0-100).</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_volume(self, volume):
+    &#34;&#34;&#34;Set the volume level of this sound.
+    **Must use Sound.update_audio() to apply all changes**
+
+    Enter a value from (0-100).
+    &#34;&#34;&#34;
+    self.volume = volume
+    return self</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.Sound.stop"><code class="name flex">
+<span>def <span class="ident">stop</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def stop(self):
+    if self.is_playing():
+        self.player.stop()
+    return self</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.Sound.update_audio"><code class="name flex">
+<span>def <span class="ident">update_audio</span></span>(<span>self, overwrite: bool = False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Updates the audio to be played, based on current Sound attributes.</p>
+<ul>
+<li>if overwrite=False and is_playing()==True, the playing audio will be updated</li>
+<li>if overwrite=True and is_playing()==True, changes are present only in next play()</li>
+</ul></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update_audio(self, overwrite: bool = False):
+    &#34;&#34;&#34;Updates the audio to be played, based on current Sound attributes.
+
+    - if overwrite=False and is_playing()==True, the playing audio will be updated
+    - if overwrite=True and is_playing()==True, changes are present only in next play()
+    &#34;&#34;&#34;
+    arr = gen_wave(self._duration, self.volume, self.pitch, self.mod_f,
+                   self.mod_k, self.amp_f, self.amp_ka, self.amp_ac, self.cutoff, self._fs)
+    if not overwrite:
+        for i in range(min(len(self.audio), len(arr))):
+            self.audio[i] = arr[i]
+    else:
+        self.audio = arr
+    return self</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.Sound.update_duration"><code class="name flex">
+<span>def <span class="ident">update_duration</span></span>(<span>self, duration, fs: int = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Change the duration of this Sound (seconds).
+Cannot change duration of currently playing sounds.</p>
+<p>Only affects the next played sound.</p>
+<p>fs - Sample rate of sound wave. Default 8000 as lowest.
+Increased 'quality' with higher rate.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update_duration(self, duration, fs: int = None):
+    &#34;&#34;&#34;Change the duration of this Sound (seconds).
+    Cannot change duration of currently playing sounds.
+
+    Only affects the next played sound.
+
+    fs - Sample rate of sound wave. Default 8000 as lowest.
+        Increased &#39;quality&#39; with higher rate.
+    &#34;&#34;&#34;
+    if fs is not None:
+        self._fs = fs
+    self._duration = duration
+
+    if not self.is_playing():
+        self.update_audio(True)
+    else:
+        raise RuntimeError(
+            &#34;Cannot change duration or sample rate while playing sound.&#34;)
+    return self</code></pre>
+</details>
+</dd>
+<dt id="utils.sound.Sound.wait_done"><code class="name flex">
+<span>def <span class="ident">wait_done</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def wait_done(self):
+    if self.is_playing():
+        self.player.wait_done()
+    return self</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="utils" href="index.html">utils</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="utils.sound.change_volume" href="#utils.sound.change_volume">change_volume</a></code></li>
+<li><code><a title="utils.sound.clip" href="#utils.sound.clip">clip</a></code></li>
+<li><code><a title="utils.sound.cos" href="#utils.sound.cos">cos</a></code></li>
+<li><code><a title="utils.sound.db_to_amp" href="#utils.sound.db_to_amp">db_to_amp</a></code></li>
+<li><code><a title="utils.sound.gen_wave" href="#utils.sound.gen_wave">gen_wave</a></code></li>
+<li><code><a title="utils.sound.load_all_pitches_file" href="#utils.sound.load_all_pitches_file">load_all_pitches_file</a></code></li>
+<li><code><a title="utils.sound.preload_all_pitches" href="#utils.sound.preload_all_pitches">preload_all_pitches</a></code></li>
+<li><code><a title="utils.sound.save_all_pitches_file" href="#utils.sound.save_all_pitches_file">save_all_pitches_file</a></code></li>
+<li><code><a title="utils.sound.sin" href="#utils.sound.sin">sin</a></code></li>
+<li><code><a title="utils.sound.vol_to_amp" href="#utils.sound.vol_to_amp">vol_to_amp</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="utils.sound.Song" href="#utils.sound.Song">Song</a></code></h4>
+<ul class="two-column">
+<li><code><a title="utils.sound.Song.MAX_VOLUME" href="#utils.sound.Song.MAX_VOLUME">MAX_VOLUME</a></code></li>
+<li><code><a title="utils.sound.Song.MIN_VOLUME" href="#utils.sound.Song.MIN_VOLUME">MIN_VOLUME</a></code></li>
+<li><code><a title="utils.sound.Song.append" href="#utils.sound.Song.append">append</a></code></li>
+<li><code><a title="utils.sound.Song.compile" href="#utils.sound.Song.compile">compile</a></code></li>
+<li><code><a title="utils.sound.Song.create_silence" href="#utils.sound.Song.create_silence">create_silence</a></code></li>
+<li><code><a title="utils.sound.Song.extend" href="#utils.sound.Song.extend">extend</a></code></li>
+<li><code><a title="utils.sound.Song.is_playing" href="#utils.sound.Song.is_playing">is_playing</a></code></li>
+<li><code><a title="utils.sound.Song.play" href="#utils.sound.Song.play">play</a></code></li>
+<li><code><a title="utils.sound.Song.sleep_done" href="#utils.sound.Song.sleep_done">sleep_done</a></code></li>
+<li><code><a title="utils.sound.Song.stop" href="#utils.sound.Song.stop">stop</a></code></li>
+<li><code><a title="utils.sound.Song.wait_done" href="#utils.sound.Song.wait_done">wait_done</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="utils.sound.Sound" href="#utils.sound.Sound">Sound</a></code></h4>
+<ul class="">
+<li><code><a title="utils.sound.Sound.alter_wave" href="#utils.sound.Sound.alter_wave">alter_wave</a></code></li>
+<li><code><a title="utils.sound.Sound.append" href="#utils.sound.Sound.append">append</a></code></li>
+<li><code><a title="utils.sound.Sound.append_sound" href="#utils.sound.Sound.append_sound">append_sound</a></code></li>
+<li><code><a title="utils.sound.Sound.is_playing" href="#utils.sound.Sound.is_playing">is_playing</a></code></li>
+<li><code><a title="utils.sound.Sound.play" href="#utils.sound.Sound.play">play</a></code></li>
+<li><code><a title="utils.sound.Sound.repeat_sound" href="#utils.sound.Sound.repeat_sound">repeat_sound</a></code></li>
+<li><code><a title="utils.sound.Sound.reset" href="#utils.sound.Sound.reset">reset</a></code></li>
+<li><code><a title="utils.sound.Sound.reset_audio" href="#utils.sound.Sound.reset_audio">reset_audio</a></code></li>
+<li><code><a title="utils.sound.Sound.set_amplitude_modulation" href="#utils.sound.Sound.set_amplitude_modulation">set_amplitude_modulation</a></code></li>
+<li><code><a title="utils.sound.Sound.set_cutoff" href="#utils.sound.Sound.set_cutoff">set_cutoff</a></code></li>
+<li><code><a title="utils.sound.Sound.set_frequency_modulation" href="#utils.sound.Sound.set_frequency_modulation">set_frequency_modulation</a></code></li>
+<li><code><a title="utils.sound.Sound.set_pitch" href="#utils.sound.Sound.set_pitch">set_pitch</a></code></li>
+<li><code><a title="utils.sound.Sound.set_volume" href="#utils.sound.Sound.set_volume">set_volume</a></code></li>
+<li><code><a title="utils.sound.Sound.stop" href="#utils.sound.Sound.stop">stop</a></code></li>
+<li><code><a title="utils.sound.Sound.update_audio" href="#utils.sound.Sound.update_audio">update_audio</a></code></li>
+<li><code><a title="utils.sound.Sound.update_duration" href="#utils.sound.Sound.update_duration">update_duration</a></code></li>
+<li><code><a title="utils.sound.Sound.wait_done" href="#utils.sound.Sound.wait_done">wait_done</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

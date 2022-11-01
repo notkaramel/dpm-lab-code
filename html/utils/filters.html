@@ -1,0 +1,1013 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>utils.filters API documentation</title>
+<meta name="description" content="Module for list-like filters that generate statistics based on a source list.
+Changes to the source list result in changes in the filters&#39; results …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>utils.filters</code></h1>
+</header>
+<section id="section-intro">
+<p>Module for list-like filters that generate statistics based on a source list.
+Changes to the source list result in changes in the filters' results.</p>
+<p>Author: Ryan Au</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Module for list-like filters that generate statistics based on a source list. 
+Changes to the source list result in changes in the filters&#39; results.
+
+Author: Ryan Au
+&#34;&#34;&#34;
+
+import math
+from statistics import mean, median
+
+
+def range_limit(value: float, lower: float, upper: float) -&gt; float:
+    &#34;&#34;&#34;Prevents the value from going beyond the upper or lower values.
+
+    Example:
+    range_limit(40,30,50)-&gt;40 (within bounds)
+    range_limit(60,30,50)-&gt;50 (upper limit)
+    range_limit(20,30,50)-&gt;30 (lower limit)
+    &#34;&#34;&#34;
+    return min(max(value, lower), upper)
+
+
+def _wrap_index(i, l):
+    &#34;&#34;&#34;Changes an index from negative to the wrapped index based on length l.&#34;&#34;&#34;
+    if i &lt; 0:
+        return l + i
+    else:
+        return i
+
+
+class AppendingList(object):
+    def __init__(self, source: list = None):
+        if source is None:
+            self.src = []
+        else:
+            self.src = source
+
+    def __getitem__(self, key):
+        return self.src.__getitem__(key)
+
+    def __repr__(self):
+        return self.src.__repr__()
+
+    def __contains__(self, key):
+        return self.src.__contains__(key)
+
+    def __iter__(self):
+        return self.src.__iter__()
+
+    def __len__(self):
+        return self.src.__len__()
+
+    def append(self, value):
+        return self.src.append(value)
+
+
+class BaseFilter(AppendingList):
+    def __init__(self, source):
+        super().__init__(source)
+
+    def __getitem__(self, key):
+        if type(key) == int:
+            l = len(self.src)
+            key = _wrap_index(key, l)
+            return self._get_by_key_(key, l)
+        if type(key) == slice:
+            start, stop, step = key.start, key.stop, key.step
+            if start is None:
+                start = 0
+            if step is None:
+                step = 1
+            l = len(self.src)
+            start = _wrap_index(start, l)
+            stop = _wrap_index(stop, l)
+            return self._get_by_slice_(start, stop, step, l)
+
+    def _get_by_key_(self, key, l):
+        return self.src.__getitem__(key)
+
+    def _get_by_slice_(self, start, stop, step, l):
+        return self.src.__getitem__(slice(start, stop, step))
+
+    def __repr__(self):
+        return self[:len(self.src)].__repr__()
+
+    def __iter__(self):
+        return self[:len(self.src)].__iter__()
+
+    def __contains__(self, key):
+        return None
+
+
+class SimpleFunctionFilter(BaseFilter):
+    def __init__(self, source, func):
+        super().__init__(source)
+        self.func = func
+
+    def _get_by_key_(self, key, l):
+        return self.func(super()._get_by_key_(key, l))
+
+    def _get_by_slice_(self, start, stop, step, l):
+        return list(map(self.func, super()._get_by_slice_(start, stop, step, l)))
+
+
+class SectionFunctionFilter(BaseFilter):
+    def __init__(self, source, N, func):
+        super().__init__(source)
+        self.N = N
+        self.func = func
+
+    def _get_by_key_(self, key: int, length: int):
+        section = int(key // self.N * self.N)
+        return self.func(self.src[section:section+self.N])
+
+    def _get_by_slice_(self, start, stop, step, l):
+        sstart = start // self.N
+        sstop = stop // self.N
+        m = [self.func(self.src[i*self.N: i*self.N+self.N])
+             for i in range(sstart, sstop+1)]
+        return [m[i//self.N] for i in range(start, stop, step)]
+
+
+class WidthFunctionFilter(BaseFilter):
+    def __init__(self, source, width, func):
+        super().__init__(source)
+        self.width = width
+        self.func = func
+
+    def _get_by_key_(self, key: int, length: int):
+        index = range_limit(key, 0, length - self.width)
+        return self.func(self.src[index:index+self.width])
+
+    def _get_by_slice_(self, start, stop, step, l):
+        return [self._get_by_key_(i, len(self.src)) for i in range(start, stop, step)]
+
+    def __len__(self):
+        return self.src - self.width
+
+class RangeLimitFilter(SimpleFunctionFilter):
+    def __init__(self, source, lower, upper):
+        super().__init__(source, lambda x: range_limit(x, lower, upper))
+
+
+class ModulusFilter(SimpleFunctionFilter):
+    def __init__(self, source, mod):
+        super().__init__(source, lambda x: x % mod)
+
+
+class MaximumFilter(WidthFunctionFilter):
+    def __init__(self, source, N):
+        super().__init__(source, N, max)
+
+
+class MinimumFilter(WidthFunctionFilter):
+    def __init__(self, source, N):
+        super().__init__(source, N, min)
+
+
+class MeanFilter(WidthFunctionFilter):
+    def __init__(self, source, N):
+        super().__init__(source, N, mean)
+
+
+class MedianFilter(WidthFunctionFilter):
+    def __init__(self, source, N):
+        super().__init__(source, N, median)
+
+
+class SumFilter(WidthFunctionFilter):
+    def __init__(self, source, N):
+        super().__init__(source, N, sum)
+
+
+class IntegrationTracker(AppendingList):
+    &#34;&#34;&#34;IntegrationTracker is a special type of list which finds the trapezoidal integral of added values.
+
+    For Example:
+    tracker = IntegrationTracker() # instantiate tracker
+    tracker.append(0,1) # append with values (y-value, delta-x)
+    tracker.append(1)   # same as .append(1,1)
+    tracker.append(2,1)   
+    tracker.append(3,1)
+
+    print(tracker.get_original()) # gives list of added values (y,dx)
+    print(tracker)     # gives integrated values: [0, 0.5, 2, 4.5]
+    print(tracker[-1]) # gives 4.5, last added value
+    tracker[2] = 3     # will not work, only append or extend can change tracker
+
+    tracker += [0,1,2,3] # appends each element of list
+    tracker.extend([0,1,2,3]) # appends each element of list
+
+    tracker += [(0,2), (0,3)] # appends each pair from list as y and dx to tracker
+    tracker.extend([(0,2), (0,3)]) # appends each pair from list as y and dx to tracker
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__()
+        self._result = 0
+        self._last = 0
+        self._original = []
+
+    def append(self, value, dx=1):
+        if type(value) != float and type(value) != int:
+            raise ValueError(
+                &#34;Parameter &#39;value&#39; must be an acceptable numerical value, float or int&#34;)
+        if type(dx) != float and type(dx) != int:
+            raise ValueError(
+                &#34;Parameter &#39;dx&#39; must be an acceptable numerical value, float or int&#34;)
+
+        self._original.append((value, dx))
+        if len(self) &gt; 0:
+            self._result += (self._last + value) * dx * 0.5
+        self._last = value
+        super().append(self._result)
+
+    def extend(self, ls):
+        self.__iadd__(ls)
+
+    def __iadd__(self, ls):
+        ls = list(ls)
+        for o in ls:
+            try:
+                i = iter(o)
+                if len(i) &gt; 1:
+                    self.append(i[0], i[1])
+                else:
+                    self.append(i[0])
+            except TypeError:
+                self.append(o)
+        return self
+
+    def reset(self, value=0):
+        self._result = value
+        self._last = 0
+
+    def get_original(self):
+        return tuple(self._original)
+
+
+def integration(samples: list, delta_time=1):
+    &#34;&#34;&#34;Returns the trapezoidal integration of the samples, given a constant sample time interval.
+
+    Example:
+    samples = [0,1,2,3,4] and delta_time=1
+    result =&gt; [0, 0.5, 2, 4.5, 8]
+    (Equivalent of f(x)=x integrated to g(x)=x^2/2)
+
+    delta_time can be a float or a list of floats (the list must be length N-1 as samples N)
+    &#34;&#34;&#34;
+    if type(delta_time) == list:
+        if not all([type(d) == float or type(d) == int for d in delta_time]):
+            return None
+        if len(delta_time) != len(samples)-1:
+            return None
+    elif type(delta_time) == int or type(delta_time) == float:
+        m = float(delta_time)
+        delta_time = [m for m in range(len(samples)-1)]
+    else:
+        return None
+
+    N = len(samples)
+    result = 0
+    ls = [0]
+    for i in range(N-1):
+        j = i + 1
+        result += (samples[i] + samples[j]) * delta_time[i] * 0.5
+        ls.append(result)
+    return ls
+
+
+if __name__ == &#39;__main__&#39;:
+    ls = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    f = MaximumFilter(ls, 2)
+    print(f, f[2])
+    f = RangeLimitFilter(ls, 1, 7)
+    print(f, f[2])
+    tracker = IntegrationTracker()
+    tracker.append(0)
+    tracker.append(1, 1)
+    tracker.append(2, 1)
+    tracker.append(3, 1)
+    tracker.reset()
+    tracker.append(0)
+    tracker.append(1, 1)
+    tracker.append(2, 1)
+    tracker.append(3, 1)
+    print(tracker)
+    tracker.reset()
+    tracker += tracker
+    print(tracker)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="utils.filters.integration"><code class="name flex">
+<span>def <span class="ident">integration</span></span>(<span>samples: list, delta_time=1)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns the trapezoidal integration of the samples, given a constant sample time interval.</p>
+<p>Example:
+samples = [0,1,2,3,4] and delta_time=1
+result =&gt; [0, 0.5, 2, 4.5, 8]
+(Equivalent of f(x)=x integrated to g(x)=x^2/2)</p>
+<p>delta_time can be a float or a list of floats (the list must be length N-1 as samples N)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def integration(samples: list, delta_time=1):
+    &#34;&#34;&#34;Returns the trapezoidal integration of the samples, given a constant sample time interval.
+
+    Example:
+    samples = [0,1,2,3,4] and delta_time=1
+    result =&gt; [0, 0.5, 2, 4.5, 8]
+    (Equivalent of f(x)=x integrated to g(x)=x^2/2)
+
+    delta_time can be a float or a list of floats (the list must be length N-1 as samples N)
+    &#34;&#34;&#34;
+    if type(delta_time) == list:
+        if not all([type(d) == float or type(d) == int for d in delta_time]):
+            return None
+        if len(delta_time) != len(samples)-1:
+            return None
+    elif type(delta_time) == int or type(delta_time) == float:
+        m = float(delta_time)
+        delta_time = [m for m in range(len(samples)-1)]
+    else:
+        return None
+
+    N = len(samples)
+    result = 0
+    ls = [0]
+    for i in range(N-1):
+        j = i + 1
+        result += (samples[i] + samples[j]) * delta_time[i] * 0.5
+        ls.append(result)
+    return ls</code></pre>
+</details>
+</dd>
+<dt id="utils.filters.range_limit"><code class="name flex">
+<span>def <span class="ident">range_limit</span></span>(<span>value: float, lower: float, upper: float) ‑> float</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Prevents the value from going beyond the upper or lower values.</p>
+<p>Example:
+range_limit(40,30,50)-&gt;40 (within bounds)
+range_limit(60,30,50)-&gt;50 (upper limit)
+range_limit(20,30,50)-&gt;30 (lower limit)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def range_limit(value: float, lower: float, upper: float) -&gt; float:
+    &#34;&#34;&#34;Prevents the value from going beyond the upper or lower values.
+
+    Example:
+    range_limit(40,30,50)-&gt;40 (within bounds)
+    range_limit(60,30,50)-&gt;50 (upper limit)
+    range_limit(20,30,50)-&gt;30 (lower limit)
+    &#34;&#34;&#34;
+    return min(max(value, lower), upper)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="utils.filters.AppendingList"><code class="flex name class">
+<span>class <span class="ident">AppendingList</span></span>
+<span>(</span><span>source: list = None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AppendingList(object):
+    def __init__(self, source: list = None):
+        if source is None:
+            self.src = []
+        else:
+            self.src = source
+
+    def __getitem__(self, key):
+        return self.src.__getitem__(key)
+
+    def __repr__(self):
+        return self.src.__repr__()
+
+    def __contains__(self, key):
+        return self.src.__contains__(key)
+
+    def __iter__(self):
+        return self.src.__iter__()
+
+    def __len__(self):
+        return self.src.__len__()
+
+    def append(self, value):
+        return self.src.append(value)</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="utils.filters.BaseFilter" href="#utils.filters.BaseFilter">BaseFilter</a></li>
+<li><a title="utils.filters.IntegrationTracker" href="#utils.filters.IntegrationTracker">IntegrationTracker</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="utils.filters.AppendingList.append"><code class="name flex">
+<span>def <span class="ident">append</span></span>(<span>self, value)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def append(self, value):
+    return self.src.append(value)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="utils.filters.BaseFilter"><code class="flex name class">
+<span>class <span class="ident">BaseFilter</span></span>
+<span>(</span><span>source)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BaseFilter(AppendingList):
+    def __init__(self, source):
+        super().__init__(source)
+
+    def __getitem__(self, key):
+        if type(key) == int:
+            l = len(self.src)
+            key = _wrap_index(key, l)
+            return self._get_by_key_(key, l)
+        if type(key) == slice:
+            start, stop, step = key.start, key.stop, key.step
+            if start is None:
+                start = 0
+            if step is None:
+                step = 1
+            l = len(self.src)
+            start = _wrap_index(start, l)
+            stop = _wrap_index(stop, l)
+            return self._get_by_slice_(start, stop, step, l)
+
+    def _get_by_key_(self, key, l):
+        return self.src.__getitem__(key)
+
+    def _get_by_slice_(self, start, stop, step, l):
+        return self.src.__getitem__(slice(start, stop, step))
+
+    def __repr__(self):
+        return self[:len(self.src)].__repr__()
+
+    def __iter__(self):
+        return self[:len(self.src)].__iter__()
+
+    def __contains__(self, key):
+        return None</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="utils.filters.AppendingList" href="#utils.filters.AppendingList">AppendingList</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="utils.filters.SectionFunctionFilter" href="#utils.filters.SectionFunctionFilter">SectionFunctionFilter</a></li>
+<li><a title="utils.filters.SimpleFunctionFilter" href="#utils.filters.SimpleFunctionFilter">SimpleFunctionFilter</a></li>
+<li><a title="utils.filters.WidthFunctionFilter" href="#utils.filters.WidthFunctionFilter">WidthFunctionFilter</a></li>
+</ul>
+</dd>
+<dt id="utils.filters.IntegrationTracker"><code class="flex name class">
+<span>class <span class="ident">IntegrationTracker</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>IntegrationTracker is a special type of list which finds the trapezoidal integral of added values.</p>
+<p>For Example:
+tracker = IntegrationTracker() # instantiate tracker
+tracker.append(0,1) # append with values (y-value, delta-x)
+tracker.append(1)
+# same as .append(1,1)
+tracker.append(2,1) <br>
+tracker.append(3,1)</p>
+<p>print(tracker.get_original()) # gives list of added values (y,dx)
+print(tracker)
+# gives integrated values: [0, 0.5, 2, 4.5]
+print(tracker[-1]) # gives 4.5, last added value
+tracker[2] = 3
+# will not work, only append or extend can change tracker</p>
+<p>tracker += [0,1,2,3] # appends each element of list
+tracker.extend([0,1,2,3]) # appends each element of list</p>
+<p>tracker += [(0,2), (0,3)] # appends each pair from list as y and dx to tracker
+tracker.extend([(0,2), (0,3)]) # appends each pair from list as y and dx to tracker</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class IntegrationTracker(AppendingList):
+    &#34;&#34;&#34;IntegrationTracker is a special type of list which finds the trapezoidal integral of added values.
+
+    For Example:
+    tracker = IntegrationTracker() # instantiate tracker
+    tracker.append(0,1) # append with values (y-value, delta-x)
+    tracker.append(1)   # same as .append(1,1)
+    tracker.append(2,1)   
+    tracker.append(3,1)
+
+    print(tracker.get_original()) # gives list of added values (y,dx)
+    print(tracker)     # gives integrated values: [0, 0.5, 2, 4.5]
+    print(tracker[-1]) # gives 4.5, last added value
+    tracker[2] = 3     # will not work, only append or extend can change tracker
+
+    tracker += [0,1,2,3] # appends each element of list
+    tracker.extend([0,1,2,3]) # appends each element of list
+
+    tracker += [(0,2), (0,3)] # appends each pair from list as y and dx to tracker
+    tracker.extend([(0,2), (0,3)]) # appends each pair from list as y and dx to tracker
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__()
+        self._result = 0
+        self._last = 0
+        self._original = []
+
+    def append(self, value, dx=1):
+        if type(value) != float and type(value) != int:
+            raise ValueError(
+                &#34;Parameter &#39;value&#39; must be an acceptable numerical value, float or int&#34;)
+        if type(dx) != float and type(dx) != int:
+            raise ValueError(
+                &#34;Parameter &#39;dx&#39; must be an acceptable numerical value, float or int&#34;)
+
+        self._original.append((value, dx))
+        if len(self) &gt; 0:
+            self._result += (self._last + value) * dx * 0.5
+        self._last = value
+        super().append(self._result)
+
+    def extend(self, ls):
+        self.__iadd__(ls)
+
+    def __iadd__(self, ls):
+        ls = list(ls)
+        for o in ls:
+            try:
+                i = iter(o)
+                if len(i) &gt; 1:
+                    self.append(i[0], i[1])
+                else:
+                    self.append(i[0])
+            except TypeError:
+                self.append(o)
+        return self
+
+    def reset(self, value=0):
+        self._result = value
+        self._last = 0
+
+    def get_original(self):
+        return tuple(self._original)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="utils.filters.AppendingList" href="#utils.filters.AppendingList">AppendingList</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="utils.filters.IntegrationTracker.append"><code class="name flex">
+<span>def <span class="ident">append</span></span>(<span>self, value, dx=1)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def append(self, value, dx=1):
+    if type(value) != float and type(value) != int:
+        raise ValueError(
+            &#34;Parameter &#39;value&#39; must be an acceptable numerical value, float or int&#34;)
+    if type(dx) != float and type(dx) != int:
+        raise ValueError(
+            &#34;Parameter &#39;dx&#39; must be an acceptable numerical value, float or int&#34;)
+
+    self._original.append((value, dx))
+    if len(self) &gt; 0:
+        self._result += (self._last + value) * dx * 0.5
+    self._last = value
+    super().append(self._result)</code></pre>
+</details>
+</dd>
+<dt id="utils.filters.IntegrationTracker.extend"><code class="name flex">
+<span>def <span class="ident">extend</span></span>(<span>self, ls)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def extend(self, ls):
+    self.__iadd__(ls)</code></pre>
+</details>
+</dd>
+<dt id="utils.filters.IntegrationTracker.get_original"><code class="name flex">
+<span>def <span class="ident">get_original</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_original(self):
+    return tuple(self._original)</code></pre>
+</details>
+</dd>
+<dt id="utils.filters.IntegrationTracker.reset"><code class="name flex">
+<span>def <span class="ident">reset</span></span>(<span>self, value=0)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def reset(self, value=0):
+    self._result = value
+    self._last = 0</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="utils.filters.MaximumFilter"><code class="flex name class">
+<span>class <span class="ident">MaximumFilter</span></span>
+<span>(</span><span>source, N)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MaximumFilter(WidthFunctionFilter):
+    def __init__(self, source, N):
+        super().__init__(source, N, max)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="utils.filters.WidthFunctionFilter" href="#utils.filters.WidthFunctionFilter">WidthFunctionFilter</a></li>
+<li><a title="utils.filters.BaseFilter" href="#utils.filters.BaseFilter">BaseFilter</a></li>
+<li><a title="utils.filters.AppendingList" href="#utils.filters.AppendingList">AppendingList</a></li>
+</ul>
+</dd>
+<dt id="utils.filters.MeanFilter"><code class="flex name class">
+<span>class <span class="ident">MeanFilter</span></span>
+<span>(</span><span>source, N)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MeanFilter(WidthFunctionFilter):
+    def __init__(self, source, N):
+        super().__init__(source, N, mean)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="utils.filters.WidthFunctionFilter" href="#utils.filters.WidthFunctionFilter">WidthFunctionFilter</a></li>
+<li><a title="utils.filters.BaseFilter" href="#utils.filters.BaseFilter">BaseFilter</a></li>
+<li><a title="utils.filters.AppendingList" href="#utils.filters.AppendingList">AppendingList</a></li>
+</ul>
+</dd>
+<dt id="utils.filters.MedianFilter"><code class="flex name class">
+<span>class <span class="ident">MedianFilter</span></span>
+<span>(</span><span>source, N)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MedianFilter(WidthFunctionFilter):
+    def __init__(self, source, N):
+        super().__init__(source, N, median)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="utils.filters.WidthFunctionFilter" href="#utils.filters.WidthFunctionFilter">WidthFunctionFilter</a></li>
+<li><a title="utils.filters.BaseFilter" href="#utils.filters.BaseFilter">BaseFilter</a></li>
+<li><a title="utils.filters.AppendingList" href="#utils.filters.AppendingList">AppendingList</a></li>
+</ul>
+</dd>
+<dt id="utils.filters.MinimumFilter"><code class="flex name class">
+<span>class <span class="ident">MinimumFilter</span></span>
+<span>(</span><span>source, N)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MinimumFilter(WidthFunctionFilter):
+    def __init__(self, source, N):
+        super().__init__(source, N, min)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="utils.filters.WidthFunctionFilter" href="#utils.filters.WidthFunctionFilter">WidthFunctionFilter</a></li>
+<li><a title="utils.filters.BaseFilter" href="#utils.filters.BaseFilter">BaseFilter</a></li>
+<li><a title="utils.filters.AppendingList" href="#utils.filters.AppendingList">AppendingList</a></li>
+</ul>
+</dd>
+<dt id="utils.filters.ModulusFilter"><code class="flex name class">
+<span>class <span class="ident">ModulusFilter</span></span>
+<span>(</span><span>source, mod)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ModulusFilter(SimpleFunctionFilter):
+    def __init__(self, source, mod):
+        super().__init__(source, lambda x: x % mod)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="utils.filters.SimpleFunctionFilter" href="#utils.filters.SimpleFunctionFilter">SimpleFunctionFilter</a></li>
+<li><a title="utils.filters.BaseFilter" href="#utils.filters.BaseFilter">BaseFilter</a></li>
+<li><a title="utils.filters.AppendingList" href="#utils.filters.AppendingList">AppendingList</a></li>
+</ul>
+</dd>
+<dt id="utils.filters.RangeLimitFilter"><code class="flex name class">
+<span>class <span class="ident">RangeLimitFilter</span></span>
+<span>(</span><span>source, lower, upper)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RangeLimitFilter(SimpleFunctionFilter):
+    def __init__(self, source, lower, upper):
+        super().__init__(source, lambda x: range_limit(x, lower, upper))</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="utils.filters.SimpleFunctionFilter" href="#utils.filters.SimpleFunctionFilter">SimpleFunctionFilter</a></li>
+<li><a title="utils.filters.BaseFilter" href="#utils.filters.BaseFilter">BaseFilter</a></li>
+<li><a title="utils.filters.AppendingList" href="#utils.filters.AppendingList">AppendingList</a></li>
+</ul>
+</dd>
+<dt id="utils.filters.SectionFunctionFilter"><code class="flex name class">
+<span>class <span class="ident">SectionFunctionFilter</span></span>
+<span>(</span><span>source, N, func)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SectionFunctionFilter(BaseFilter):
+    def __init__(self, source, N, func):
+        super().__init__(source)
+        self.N = N
+        self.func = func
+
+    def _get_by_key_(self, key: int, length: int):
+        section = int(key // self.N * self.N)
+        return self.func(self.src[section:section+self.N])
+
+    def _get_by_slice_(self, start, stop, step, l):
+        sstart = start // self.N
+        sstop = stop // self.N
+        m = [self.func(self.src[i*self.N: i*self.N+self.N])
+             for i in range(sstart, sstop+1)]
+        return [m[i//self.N] for i in range(start, stop, step)]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="utils.filters.BaseFilter" href="#utils.filters.BaseFilter">BaseFilter</a></li>
+<li><a title="utils.filters.AppendingList" href="#utils.filters.AppendingList">AppendingList</a></li>
+</ul>
+</dd>
+<dt id="utils.filters.SimpleFunctionFilter"><code class="flex name class">
+<span>class <span class="ident">SimpleFunctionFilter</span></span>
+<span>(</span><span>source, func)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SimpleFunctionFilter(BaseFilter):
+    def __init__(self, source, func):
+        super().__init__(source)
+        self.func = func
+
+    def _get_by_key_(self, key, l):
+        return self.func(super()._get_by_key_(key, l))
+
+    def _get_by_slice_(self, start, stop, step, l):
+        return list(map(self.func, super()._get_by_slice_(start, stop, step, l)))</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="utils.filters.BaseFilter" href="#utils.filters.BaseFilter">BaseFilter</a></li>
+<li><a title="utils.filters.AppendingList" href="#utils.filters.AppendingList">AppendingList</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="utils.filters.ModulusFilter" href="#utils.filters.ModulusFilter">ModulusFilter</a></li>
+<li><a title="utils.filters.RangeLimitFilter" href="#utils.filters.RangeLimitFilter">RangeLimitFilter</a></li>
+</ul>
+</dd>
+<dt id="utils.filters.SumFilter"><code class="flex name class">
+<span>class <span class="ident">SumFilter</span></span>
+<span>(</span><span>source, N)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SumFilter(WidthFunctionFilter):
+    def __init__(self, source, N):
+        super().__init__(source, N, sum)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="utils.filters.WidthFunctionFilter" href="#utils.filters.WidthFunctionFilter">WidthFunctionFilter</a></li>
+<li><a title="utils.filters.BaseFilter" href="#utils.filters.BaseFilter">BaseFilter</a></li>
+<li><a title="utils.filters.AppendingList" href="#utils.filters.AppendingList">AppendingList</a></li>
+</ul>
+</dd>
+<dt id="utils.filters.WidthFunctionFilter"><code class="flex name class">
+<span>class <span class="ident">WidthFunctionFilter</span></span>
+<span>(</span><span>source, width, func)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class WidthFunctionFilter(BaseFilter):
+    def __init__(self, source, width, func):
+        super().__init__(source)
+        self.width = width
+        self.func = func
+
+    def _get_by_key_(self, key: int, length: int):
+        index = range_limit(key, 0, length - self.width)
+        return self.func(self.src[index:index+self.width])
+
+    def _get_by_slice_(self, start, stop, step, l):
+        return [self._get_by_key_(i, len(self.src)) for i in range(start, stop, step)]
+
+    def __len__(self):
+        return self.src - self.width</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="utils.filters.BaseFilter" href="#utils.filters.BaseFilter">BaseFilter</a></li>
+<li><a title="utils.filters.AppendingList" href="#utils.filters.AppendingList">AppendingList</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="utils.filters.MaximumFilter" href="#utils.filters.MaximumFilter">MaximumFilter</a></li>
+<li><a title="utils.filters.MeanFilter" href="#utils.filters.MeanFilter">MeanFilter</a></li>
+<li><a title="utils.filters.MedianFilter" href="#utils.filters.MedianFilter">MedianFilter</a></li>
+<li><a title="utils.filters.MinimumFilter" href="#utils.filters.MinimumFilter">MinimumFilter</a></li>
+<li><a title="utils.filters.SumFilter" href="#utils.filters.SumFilter">SumFilter</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="utils" href="index.html">utils</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="utils.filters.integration" href="#utils.filters.integration">integration</a></code></li>
+<li><code><a title="utils.filters.range_limit" href="#utils.filters.range_limit">range_limit</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="utils.filters.AppendingList" href="#utils.filters.AppendingList">AppendingList</a></code></h4>
+<ul class="">
+<li><code><a title="utils.filters.AppendingList.append" href="#utils.filters.AppendingList.append">append</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="utils.filters.BaseFilter" href="#utils.filters.BaseFilter">BaseFilter</a></code></h4>
+</li>
+<li>
+<h4><code><a title="utils.filters.IntegrationTracker" href="#utils.filters.IntegrationTracker">IntegrationTracker</a></code></h4>
+<ul class="">
+<li><code><a title="utils.filters.IntegrationTracker.append" href="#utils.filters.IntegrationTracker.append">append</a></code></li>
+<li><code><a title="utils.filters.IntegrationTracker.extend" href="#utils.filters.IntegrationTracker.extend">extend</a></code></li>
+<li><code><a title="utils.filters.IntegrationTracker.get_original" href="#utils.filters.IntegrationTracker.get_original">get_original</a></code></li>
+<li><code><a title="utils.filters.IntegrationTracker.reset" href="#utils.filters.IntegrationTracker.reset">reset</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="utils.filters.MaximumFilter" href="#utils.filters.MaximumFilter">MaximumFilter</a></code></h4>
+</li>
+<li>
+<h4><code><a title="utils.filters.MeanFilter" href="#utils.filters.MeanFilter">MeanFilter</a></code></h4>
+</li>
+<li>
+<h4><code><a title="utils.filters.MedianFilter" href="#utils.filters.MedianFilter">MedianFilter</a></code></h4>
+</li>
+<li>
+<h4><code><a title="utils.filters.MinimumFilter" href="#utils.filters.MinimumFilter">MinimumFilter</a></code></h4>
+</li>
+<li>
+<h4><code><a title="utils.filters.ModulusFilter" href="#utils.filters.ModulusFilter">ModulusFilter</a></code></h4>
+</li>
+<li>
+<h4><code><a title="utils.filters.RangeLimitFilter" href="#utils.filters.RangeLimitFilter">RangeLimitFilter</a></code></h4>
+</li>
+<li>
+<h4><code><a title="utils.filters.SectionFunctionFilter" href="#utils.filters.SectionFunctionFilter">SectionFunctionFilter</a></code></h4>
+</li>
+<li>
+<h4><code><a title="utils.filters.SimpleFunctionFilter" href="#utils.filters.SimpleFunctionFilter">SimpleFunctionFilter</a></code></h4>
+</li>
+<li>
+<h4><code><a title="utils.filters.SumFilter" href="#utils.filters.SumFilter">SumFilter</a></code></h4>
+</li>
+<li>
+<h4><code><a title="utils.filters.WidthFunctionFilter" href="#utils.filters.WidthFunctionFilter">WidthFunctionFilter</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,1767 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>utils.dummy API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>utils.dummy</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">from math import inf
+import threading
+from typing import Literal
+import time
+
+
+class Enumeration(object):
+    def __init__(self, names):  # or *names, with no .split()
+        number = 0
+        for line, name in enumerate(names.split(&#39;\n&#39;)):
+            if name.find(&#34;,&#34;) &gt;= 0:
+                # strip out the spaces
+                while(name.find(&#34; &#34;) != -1):
+                    name = name[:name.find(&#34; &#34;)] + name[(name.find(&#34; &#34;) + 1):]
+
+                # strip out the commas
+                while(name.find(&#34;,&#34;) != -1):
+                    name = name[:name.find(&#34;,&#34;)] + name[(name.find(&#34;,&#34;) + 1):]
+
+                # if the value was specified
+                if(name.find(&#34;=&#34;) != -1):
+                    number = int(float(name[(name.find(&#34;=&#34;) + 1):]))
+                    name = name[:name.find(&#34;=&#34;)]
+
+                # optionally print to confirm that it&#39;s working correctly
+                # print &#34;%40s has a value of %d&#34; % (name, number)
+
+                setattr(self, name, number)
+                number = number + 1
+
+
+class FirmwareVersionError(Exception):
+    &#34;&#34;&#34;Exception raised if the BrickPi3 firmware needs to be updated&#34;&#34;&#34;
+
+
+class SensorError(Exception):
+    &#34;&#34;&#34;Exception raised if a sensor is not yet configured when trying to read it with get_sensor&#34;&#34;&#34;
+
+
+class _FakeMotor:
+    MAX_SPEED = 1050
+    MAX_POS = 65536
+    THREAD_INTERVAL = 0.2
+
+    def __init__(self):
+        self.event = threading.Event()
+        self.thread = threading.Thread(target=self._listener, daemon=True)
+
+        self.position_goal = None
+        self.state = 0
+
+        self.position = 0
+        self.speed = 0  # Maximum is 1050dps
+        self.power = 0  # Maximum is 1050dps
+
+        self.set_limits()
+
+    def start(self):
+        self.event.set()
+        self.thread.start()
+
+    @staticmethod
+    def limit(val, lower, upper):
+        return min(max(val, lower), upper)
+
+    @staticmethod
+    def abs_limit(val, limit):
+        limit = abs(limit)
+        return _FakeMotor.limit(val, -limit, limit)
+
+    def _listener(self, *args):
+        while self.event.is_set():
+            if self.position_goal is not None:
+                if self.state == 0:
+                    self.state = -1 if self.position_goal &lt; self.position else 1
+                best_speed = self.state * min(self.speed_limit,
+                                         self.power_limit/100*self.MAX_SPEED)
+                self.speed = best_speed
+                self.power = best_speed * 100 / self.MAX_SPEED
+
+                if (self.state == -1 and self.position &lt;= self.position_goal) or (self.state == 1 and self.position &gt;= self.position_goal):
+                    self.set_position(self.position_goal)
+                    self.position_goal = None
+                    self.state = 0
+                    self.speed = 0
+                    self.power = 0
+            else:
+                self.state = 0
+            delta_pos = self.speed * self.THREAD_INTERVAL
+            self.set_position(self.position + delta_pos)
+            time.sleep(self.THREAD_INTERVAL)
+
+    def go_position(self, goal):
+        self.stop()
+        self.position_goal = self.abs_limit(goal, self.MAX_POS)
+
+    def stop(self):
+        self.speed = 0
+        self.power = 0
+        self.state = 0
+        self.position_goal = None
+
+    def power_to_speed(self):
+        self.speed = self.power / 100 * self.MAX_SPEED
+
+    def speed_to_power(self):
+        self.power = self.speed / self.MAX_SPEED * 100
+
+    def set_limits(self, power=0, speed=0):
+        power = abs(power)
+        speed = abs(speed)
+        if power == 0:
+            self.power_limit = 100
+        else:
+            self.power_limit = self.limit(power, 0, 100)
+        if speed == 0:
+            self.speed_limit = self.MAX_SPEED
+        else:
+            self.speed_limit = self.limit(speed, 0, self.MAX_SPEED)
+
+    def set_power(self, power):
+        self.stop()
+        self.power = power
+        self.power_to_speed()
+
+    def set_speed(self, speed):
+        self.stop()
+        self.speed = speed
+        self.speed_to_power()
+
+    def set_position(self, pos):
+        if pos is None:
+            self.position = 0
+        self.position = round((self.abs_limit(pos, self.MAX_POS) +
+                               self.MAX_POS) % (131072+1) - self.MAX_POS, 1)
+
+    def shutdown(self):
+        self.event.clear()
+
+    def __del__(self):
+        self.shutdown()
+
+
+class BrickPi3():
+    PORT_1 = 0x01
+    PORT_2 = 0x02
+    PORT_3 = 0x04
+    PORT_4 = 0x08
+
+    PORT_A = 0x01
+    PORT_B = 0x02
+    PORT_C = 0x04
+    PORT_D = 0x08
+
+    MOTOR_FLOAT = -128
+
+    SensorType = [0, 0, 0, 0]
+    I2CInBytes = [0, 0, 0, 0]
+
+    I2C_LENGTH_LIMIT = 16
+
+    BPSPI_MESSAGE_TYPE = Enumeration(&#34;&#34;&#34;
+        NONE,
+
+        GET_MANUFACTURER,
+        GET_NAME,
+        GET_HARDWARE_VERSION,
+        GET_FIRMWARE_VERSION,
+        GET_ID,
+        SET_LED,
+        GET_VOLTAGE_3V3,
+        GET_VOLTAGE_5V,
+        GET_VOLTAGE_9V,
+        GET_VOLTAGE_VCC,
+        SET_ADDRESS,
+
+        SET_SENSOR_TYPE,
+
+        GET_SENSOR_1,
+        GET_SENSOR_2,
+        GET_SENSOR_3,
+        GET_SENSOR_4,
+
+        I2C_TRANSACT_1,
+        I2C_TRANSACT_2,
+        I2C_TRANSACT_3,
+        I2C_TRANSACT_4,
+
+        SET_MOTOR_POWER,
+
+        SET_MOTOR_POSITION,
+
+        SET_MOTOR_POSITION_KP,
+
+        SET_MOTOR_POSITION_KD,
+
+        SET_MOTOR_DPS,
+
+        SET_MOTOR_DPS_KP,
+
+        SET_MOTOR_DPS_KD,
+
+        SET_MOTOR_LIMITS,
+
+        OFFSET_MOTOR_ENCODER,
+
+        GET_MOTOR_A_ENCODER,
+        GET_MOTOR_B_ENCODER,
+        GET_MOTOR_C_ENCODER,
+        GET_MOTOR_D_ENCODER,
+
+        GET_MOTOR_A_STATUS,
+        GET_MOTOR_B_STATUS,
+        GET_MOTOR_C_STATUS,
+        GET_MOTOR_D_STATUS,
+    &#34;&#34;&#34;)
+
+    SENSOR_TYPE = Enumeration(&#34;&#34;&#34;
+        NONE = 1,
+        I2C,
+        CUSTOM,
+
+        TOUCH,
+        NXT_TOUCH,
+        EV3_TOUCH,
+
+        NXT_LIGHT_ON,
+        NXT_LIGHT_OFF,
+
+        NXT_COLOR_RED,
+        NXT_COLOR_GREEN,
+        NXT_COLOR_BLUE,
+        NXT_COLOR_FULL,
+        NXT_COLOR_OFF,
+
+        NXT_ULTRASONIC,
+
+        EV3_GYRO_ABS,
+        EV3_GYRO_DPS,
+        EV3_GYRO_ABS_DPS,
+
+        EV3_COLOR_REFLECTED,
+        EV3_COLOR_AMBIENT,
+        EV3_COLOR_COLOR,
+        EV3_COLOR_RAW_REFLECTED,
+        EV3_COLOR_COLOR_COMPONENTS,
+
+        EV3_ULTRASONIC_CM,
+        EV3_ULTRASONIC_INCHES,
+        EV3_ULTRASONIC_LISTEN,
+
+        EV3_INFRARED_PROXIMITY,
+        EV3_INFRARED_SEEK,
+        EV3_INFRARED_REMOTE,
+    &#34;&#34;&#34;)
+
+    SENSOR_STATE = Enumeration(&#34;&#34;&#34;
+        VALID_DATA,
+        NOT_CONFIGURED,
+        CONFIGURING,
+        NO_DATA,
+        I2C_ERROR,
+    &#34;&#34;&#34;)
+
+    SENSOR_CUSTOM = Enumeration(&#34;&#34;&#34;
+        PIN1_9V,
+        PIN5_OUT,
+        PIN5_STATE,
+        PIN6_OUT,
+        PIN6_STATE,
+        PIN1_ADC,
+        PIN6_ADC,
+    &#34;&#34;&#34;)
+    &#34;&#34;&#34;
+    Flags for use with SENSOR_TYPE.CUSTOM
+
+    PIN1_9V
+        Enable 9V out on pin 1 (for LEGO NXT Ultrasonic sensor).
+
+    PIN5_OUT
+        Set pin 5 state to output. Pin 5 will be set to input if this flag is not set.
+
+    PIN5_STATE
+        If PIN5_OUT is set, this will set the state to output high, otherwise the state will
+        be output low. If PIN5_OUT is not set, this flag has no effect.
+
+    PIN6_OUT
+        Set pin 6 state to output. Pin 6 will be set to input if this flag is not set.
+
+    PIN6_STATE
+        If PIN6_OUT is set, this will set the state to output high, otherwise the state will
+        be output low. If PIN6_OUT is not set, this flag has no effect.
+
+    PIN1_ADC
+        Enable the analog/digital converter on pin 1 (e.g. for NXT analog sensors).
+
+    PIN6_ADC
+        Enable the analog/digital converter on pin 6.
+    &#34;&#34;&#34;
+
+    SENSOR_CUSTOM.PIN1_9V = 0x0002
+    SENSOR_CUSTOM.PIN5_OUT = 0x0010
+    SENSOR_CUSTOM.PIN5_STATE = 0x0020
+    SENSOR_CUSTOM.PIN6_OUT = 0x0100
+    SENSOR_CUSTOM.PIN6_STATE = 0x0200
+    SENSOR_CUSTOM.PIN1_ADC = 0x1000
+    SENSOR_CUSTOM.PIN6_ADC = 0x4000
+
+    SENSOR_I2C_SETTINGS = Enumeration(&#34;&#34;&#34;
+        MID_CLOCK,
+        PIN1_9V,
+        SAME,
+        ALLOW_STRETCH_ACK,
+        ALLOW_STRETCH_ANY,
+    &#34;&#34;&#34;)
+
+    # Send the clock pulse between reading and writing. Required by the NXT US sensor.
+    SENSOR_I2C_SETTINGS.MID_CLOCK = 0x01
+    SENSOR_I2C_SETTINGS.PIN1_9V = 0x02  # 9v pullup on pin 1
+    # Keep performing the same transaction e.g. keep polling a sensor
+    SENSOR_I2C_SETTINGS.SAME = 0x04
+
+    MOTOR_STATUS_FLAG = Enumeration(&#34;&#34;&#34;
+        LOW_VOLTAGE_FLOAT,
+        OVERLOADED,
+    &#34;&#34;&#34;)
+
+    # If the motors are floating due to low battery voltage
+    MOTOR_STATUS_FLAG.LOW_VOLTAGE_FLOAT = 0x01
+    # If the motors aren&#39;t close to the target (applies to position control and dps speed control).
+    MOTOR_STATUS_FLAG.OVERLOADED = 0x02
+
+    #SUCCESS = 0
+    #SPI_ERROR = 1
+    #SENSOR_ERROR = 2
+    #SENSOR_TYPE_ERROR = 3
+
+    @classmethod
+    def _convert_port(cls, port):
+        if port == cls.PORT_1:
+            message_type = cls.BPSPI_MESSAGE_TYPE.GET_SENSOR_1
+            port_index = 0
+        elif port == cls.PORT_2:
+            message_type = cls.BPSPI_MESSAGE_TYPE.GET_SENSOR_2
+            port_index = 1
+        elif port == cls.PORT_3:
+            message_type = cls.BPSPI_MESSAGE_TYPE.GET_SENSOR_3
+            port_index = 2
+        elif port == cls.PORT_4:
+            message_type = cls.BPSPI_MESSAGE_TYPE.GET_SENSOR_4
+            port_index = 3
+        else:
+            raise IOError(
+                &#34;get_sensor error. Must be one sensor port at a time. PORT_1, PORT_2, PORT_3, or PORT_4.&#34;)
+        return (port_index, message_type)
+
+    def __init__(self, addr=1, detect=True):
+        self.SPI_Address = 1
+        self.SensorType = [None for i in range(4)]
+        self.Motors = [_FakeMotor() for i in range(4)]
+        self.SPI_Messages = {self._convert_port(2**i)[1]: i for i in range(4)}
+        for mot in self.Motors:
+            mot.start()
+
+        self._internal_data = {
+            BrickPi3.SENSOR_TYPE.TOUCH: 0,
+            BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_CM: 255.0,
+            BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_INCHES: 100.0,
+            BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_LISTEN: 0,
+            BrickPi3.SENSOR_TYPE.EV3_COLOR_COLOR_COMPONENTS: (0, 0, 0, 0),
+            BrickPi3.SENSOR_TYPE.EV3_COLOR_AMBIENT: (0, 0, 0, 0),
+            BrickPi3.SENSOR_TYPE.EV3_COLOR_REFLECTED: 0,
+            BrickPi3.SENSOR_TYPE.EV3_COLOR_RAW_REFLECTED: 0,
+            BrickPi3.SENSOR_TYPE.EV3_COLOR_COLOR: 0,
+            BrickPi3.SENSOR_TYPE.EV3_GYRO_ABS: 0,
+            BrickPi3.SENSOR_TYPE.EV3_GYRO_DPS: 0,
+            BrickPi3.SENSOR_TYPE.EV3_GYRO_ABS_DPS: (0, 0)
+        }
+
+    def __del__(self):
+        for mot in self.Motors:
+            mot.shutdown()
+
+    def spi_transfer_array(self, data_out):
+        &#34;&#34;&#34;Used by Brick.get_sensor_status&#34;&#34;&#34;
+        &#34;&#34;&#34;
+        [self.SPI_Address, message_type, 0, 0, 0, 0, 0, 0, 0, 0]
+        =&gt; [0,0,0,0xA5,self.SensorType[i],status]
+
+        [self.SPI_Address, message_type, 0, 0, 0, 0]
+        =&gt; [0,0,0,0xA5,self.SensorType[i],status]
+
+        [self.SPI_Address, message_type, 0, 0, 0, 0, 0]
+        =&gt; [0,0,0,0xA5,self.SensorType[i],status]
+
+        [self.SPI_Address, message_type, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        =&gt; [0,0,0,0xA5,self.SensorType[i],status]
+        &#34;&#34;&#34;
+        SENSOR_STATUS = 0  # Valid Data
+        BAD_REPLY = [0, 0, 0, 0, 0, 0]
+
+        data = list(data_out)
+        if len(data) &lt; 2:
+            return BAD_REPLY
+
+        i = self.SPI_Messages.get(data[1], -1)
+        GOOD_REPLY = [0, 0, 0, 0xA5, self.SensorType[i], SENSOR_STATUS]
+
+        return GOOD_REPLY
+
+    def spi_write_8(self, MessageType, Value):
+        pass
+
+    def spi_read_16(self, MessageType):
+        pass
+
+    def spi_write_16(self, MessageType, Value):
+        pass
+
+    def spi_write_24(self, MessageType, Value):
+        pass
+
+    def spi_read_32(self, MessageType):
+        pass
+
+    def spi_write_32(self, MessageType, Value):
+        pass
+
+    def get_manufacturer(self):
+        pass
+
+    def get_board(self):
+        pass
+
+    def get_version_hardware(self):
+        pass
+
+    def get_version_firmware(self):
+        pass
+
+    def get_id(self):
+        pass
+
+    def set_led(self, value):
+        pass
+
+    def get_voltage_3v3(self):
+        pass
+
+    def get_voltage_5v(self):
+        pass
+
+    def get_voltage_9v(self):
+        pass
+
+    def get_voltage_battery(self):
+        pass
+
+    def set_sensor_type(self, port, type, params=0):
+        i, _ = self._convert_port(port)
+        self.SensorType[i] = type
+
+    def transact_i2c(self, port, Address, OutArray, InBytes):
+        pass
+
+    def set_sensor(self, port, value):
+        &#34;&#34;&#34;A special method only available to dummy.BrickPi3.
+        Used to change the internal value of the fake sensors.&#34;&#34;&#34;
+        i, _ = self._convert_port(port)
+        sensorType = self.SensorType[i]
+        self._internal_data[sensorType] = value
+
+    def get_sensor(self, port):
+        i, _ = self._convert_port(port)
+        sensorType = self.SensorType[i]
+
+        return self._internal_data[sensorType]
+
+    def set_motor_power(self, port, power):
+        i, _ = self._convert_port(port)
+        self.Motors[i].set_power(power)
+
+    def set_motor_position(self, port, position):
+        i, _ = self._convert_port(port)
+        self.Motors[i].go_position(position)
+
+    def set_motor_position_relative(self, port, degrees):
+        pos = self.get_motor_encoder()
+        self.set_motor_position(pos + degrees)
+
+    def set_motor_position_kp(self, port, kp=25):
+        pass
+
+    def set_motor_position_kd(self, port, kd=70):
+        pass
+
+    def set_motor_dps(self, port, dps):
+        i, _ = self._convert_port(port)
+        self.Motors[i].set_speed(dps)
+
+    def set_motor_limits(self, port, power=0, dps=0):
+        i, _ = self._convert_port(port)
+        self.Motors[i].set_limits(power, dps)
+
+    def get_motor_status(self, port):
+        i, _ = self._convert_port(port)
+        return [0, self.Motors[i].power, self.Motors[i].position, self.Motors[i].speed]
+
+    def get_motor_encoder(self, port):
+        i, _ = self._convert_port(port)
+        return self.Motors[i].position
+
+    def offset_motor_encoder(self, port, position):
+        i, _ = self._convert_port(port)
+        self.Motors[i].set_position(position)
+
+    def reset_motor_encoder(self, port):
+        i, _ = self._convert_port(port)
+        self.Motors[i].set_position(0)
+
+    def reset_all(self):
+        pass
+
+
+class Brick(BrickPi3):
+    &#34;&#34;&#34;
+    Wrapper class for the BrickPi3 class. Comes with additional methods such get_sensor_status.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        pass
+
+    def get_sensor_status(self, port: Literal[1, 2, 4, 8]):
+        if port not in self.SensorType:
+            return 5  # INCORRECT_SENSOR_PORT
+        if self.SensorType[port] is None:
+            return 1  # NOT_CONFIGURED
+        return 0  # VALID_DATA</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="utils.dummy.Brick"><code class="flex name class">
+<span>class <span class="ident">Brick</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Wrapper class for the BrickPi3 class. Comes with additional methods such get_sensor_status.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Brick(BrickPi3):
+    &#34;&#34;&#34;
+    Wrapper class for the BrickPi3 class. Comes with additional methods such get_sensor_status.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        pass
+
+    def get_sensor_status(self, port: Literal[1, 2, 4, 8]):
+        if port not in self.SensorType:
+            return 5  # INCORRECT_SENSOR_PORT
+        if self.SensorType[port] is None:
+            return 1  # NOT_CONFIGURED
+        return 0  # VALID_DATA</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="utils.dummy.BrickPi3" href="#utils.dummy.BrickPi3">BrickPi3</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="utils.dummy.Brick.get_sensor_status"><code class="name flex">
+<span>def <span class="ident">get_sensor_status</span></span>(<span>self, port: Literal[1, 2, 4, 8])</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_sensor_status(self, port: Literal[1, 2, 4, 8]):
+    if port not in self.SensorType:
+        return 5  # INCORRECT_SENSOR_PORT
+    if self.SensorType[port] is None:
+        return 1  # NOT_CONFIGURED
+    return 0  # VALID_DATA</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="utils.dummy.BrickPi3" href="#utils.dummy.BrickPi3">BrickPi3</a></b></code>:
+<ul class="hlist">
+<li><code><a title="utils.dummy.BrickPi3.SENSOR_CUSTOM" href="#utils.dummy.BrickPi3.SENSOR_CUSTOM">SENSOR_CUSTOM</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.set_sensor" href="#utils.dummy.BrickPi3.set_sensor">set_sensor</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.spi_transfer_array" href="#utils.dummy.BrickPi3.spi_transfer_array">spi_transfer_array</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="utils.dummy.BrickPi3"><code class="flex name class">
+<span>class <span class="ident">BrickPi3</span></span>
+<span>(</span><span>addr=1, detect=True)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class BrickPi3():
+    PORT_1 = 0x01
+    PORT_2 = 0x02
+    PORT_3 = 0x04
+    PORT_4 = 0x08
+
+    PORT_A = 0x01
+    PORT_B = 0x02
+    PORT_C = 0x04
+    PORT_D = 0x08
+
+    MOTOR_FLOAT = -128
+
+    SensorType = [0, 0, 0, 0]
+    I2CInBytes = [0, 0, 0, 0]
+
+    I2C_LENGTH_LIMIT = 16
+
+    BPSPI_MESSAGE_TYPE = Enumeration(&#34;&#34;&#34;
+        NONE,
+
+        GET_MANUFACTURER,
+        GET_NAME,
+        GET_HARDWARE_VERSION,
+        GET_FIRMWARE_VERSION,
+        GET_ID,
+        SET_LED,
+        GET_VOLTAGE_3V3,
+        GET_VOLTAGE_5V,
+        GET_VOLTAGE_9V,
+        GET_VOLTAGE_VCC,
+        SET_ADDRESS,
+
+        SET_SENSOR_TYPE,
+
+        GET_SENSOR_1,
+        GET_SENSOR_2,
+        GET_SENSOR_3,
+        GET_SENSOR_4,
+
+        I2C_TRANSACT_1,
+        I2C_TRANSACT_2,
+        I2C_TRANSACT_3,
+        I2C_TRANSACT_4,
+
+        SET_MOTOR_POWER,
+
+        SET_MOTOR_POSITION,
+
+        SET_MOTOR_POSITION_KP,
+
+        SET_MOTOR_POSITION_KD,
+
+        SET_MOTOR_DPS,
+
+        SET_MOTOR_DPS_KP,
+
+        SET_MOTOR_DPS_KD,
+
+        SET_MOTOR_LIMITS,
+
+        OFFSET_MOTOR_ENCODER,
+
+        GET_MOTOR_A_ENCODER,
+        GET_MOTOR_B_ENCODER,
+        GET_MOTOR_C_ENCODER,
+        GET_MOTOR_D_ENCODER,
+
+        GET_MOTOR_A_STATUS,
+        GET_MOTOR_B_STATUS,
+        GET_MOTOR_C_STATUS,
+        GET_MOTOR_D_STATUS,
+    &#34;&#34;&#34;)
+
+    SENSOR_TYPE = Enumeration(&#34;&#34;&#34;
+        NONE = 1,
+        I2C,
+        CUSTOM,
+
+        TOUCH,
+        NXT_TOUCH,
+        EV3_TOUCH,
+
+        NXT_LIGHT_ON,
+        NXT_LIGHT_OFF,
+
+        NXT_COLOR_RED,
+        NXT_COLOR_GREEN,
+        NXT_COLOR_BLUE,
+        NXT_COLOR_FULL,
+        NXT_COLOR_OFF,
+
+        NXT_ULTRASONIC,
+
+        EV3_GYRO_ABS,
+        EV3_GYRO_DPS,
+        EV3_GYRO_ABS_DPS,
+
+        EV3_COLOR_REFLECTED,
+        EV3_COLOR_AMBIENT,
+        EV3_COLOR_COLOR,
+        EV3_COLOR_RAW_REFLECTED,
+        EV3_COLOR_COLOR_COMPONENTS,
+
+        EV3_ULTRASONIC_CM,
+        EV3_ULTRASONIC_INCHES,
+        EV3_ULTRASONIC_LISTEN,
+
+        EV3_INFRARED_PROXIMITY,
+        EV3_INFRARED_SEEK,
+        EV3_INFRARED_REMOTE,
+    &#34;&#34;&#34;)
+
+    SENSOR_STATE = Enumeration(&#34;&#34;&#34;
+        VALID_DATA,
+        NOT_CONFIGURED,
+        CONFIGURING,
+        NO_DATA,
+        I2C_ERROR,
+    &#34;&#34;&#34;)
+
+    SENSOR_CUSTOM = Enumeration(&#34;&#34;&#34;
+        PIN1_9V,
+        PIN5_OUT,
+        PIN5_STATE,
+        PIN6_OUT,
+        PIN6_STATE,
+        PIN1_ADC,
+        PIN6_ADC,
+    &#34;&#34;&#34;)
+    &#34;&#34;&#34;
+    Flags for use with SENSOR_TYPE.CUSTOM
+
+    PIN1_9V
+        Enable 9V out on pin 1 (for LEGO NXT Ultrasonic sensor).
+
+    PIN5_OUT
+        Set pin 5 state to output. Pin 5 will be set to input if this flag is not set.
+
+    PIN5_STATE
+        If PIN5_OUT is set, this will set the state to output high, otherwise the state will
+        be output low. If PIN5_OUT is not set, this flag has no effect.
+
+    PIN6_OUT
+        Set pin 6 state to output. Pin 6 will be set to input if this flag is not set.
+
+    PIN6_STATE
+        If PIN6_OUT is set, this will set the state to output high, otherwise the state will
+        be output low. If PIN6_OUT is not set, this flag has no effect.
+
+    PIN1_ADC
+        Enable the analog/digital converter on pin 1 (e.g. for NXT analog sensors).
+
+    PIN6_ADC
+        Enable the analog/digital converter on pin 6.
+    &#34;&#34;&#34;
+
+    SENSOR_CUSTOM.PIN1_9V = 0x0002
+    SENSOR_CUSTOM.PIN5_OUT = 0x0010
+    SENSOR_CUSTOM.PIN5_STATE = 0x0020
+    SENSOR_CUSTOM.PIN6_OUT = 0x0100
+    SENSOR_CUSTOM.PIN6_STATE = 0x0200
+    SENSOR_CUSTOM.PIN1_ADC = 0x1000
+    SENSOR_CUSTOM.PIN6_ADC = 0x4000
+
+    SENSOR_I2C_SETTINGS = Enumeration(&#34;&#34;&#34;
+        MID_CLOCK,
+        PIN1_9V,
+        SAME,
+        ALLOW_STRETCH_ACK,
+        ALLOW_STRETCH_ANY,
+    &#34;&#34;&#34;)
+
+    # Send the clock pulse between reading and writing. Required by the NXT US sensor.
+    SENSOR_I2C_SETTINGS.MID_CLOCK = 0x01
+    SENSOR_I2C_SETTINGS.PIN1_9V = 0x02  # 9v pullup on pin 1
+    # Keep performing the same transaction e.g. keep polling a sensor
+    SENSOR_I2C_SETTINGS.SAME = 0x04
+
+    MOTOR_STATUS_FLAG = Enumeration(&#34;&#34;&#34;
+        LOW_VOLTAGE_FLOAT,
+        OVERLOADED,
+    &#34;&#34;&#34;)
+
+    # If the motors are floating due to low battery voltage
+    MOTOR_STATUS_FLAG.LOW_VOLTAGE_FLOAT = 0x01
+    # If the motors aren&#39;t close to the target (applies to position control and dps speed control).
+    MOTOR_STATUS_FLAG.OVERLOADED = 0x02
+
+    #SUCCESS = 0
+    #SPI_ERROR = 1
+    #SENSOR_ERROR = 2
+    #SENSOR_TYPE_ERROR = 3
+
+    @classmethod
+    def _convert_port(cls, port):
+        if port == cls.PORT_1:
+            message_type = cls.BPSPI_MESSAGE_TYPE.GET_SENSOR_1
+            port_index = 0
+        elif port == cls.PORT_2:
+            message_type = cls.BPSPI_MESSAGE_TYPE.GET_SENSOR_2
+            port_index = 1
+        elif port == cls.PORT_3:
+            message_type = cls.BPSPI_MESSAGE_TYPE.GET_SENSOR_3
+            port_index = 2
+        elif port == cls.PORT_4:
+            message_type = cls.BPSPI_MESSAGE_TYPE.GET_SENSOR_4
+            port_index = 3
+        else:
+            raise IOError(
+                &#34;get_sensor error. Must be one sensor port at a time. PORT_1, PORT_2, PORT_3, or PORT_4.&#34;)
+        return (port_index, message_type)
+
+    def __init__(self, addr=1, detect=True):
+        self.SPI_Address = 1
+        self.SensorType = [None for i in range(4)]
+        self.Motors = [_FakeMotor() for i in range(4)]
+        self.SPI_Messages = {self._convert_port(2**i)[1]: i for i in range(4)}
+        for mot in self.Motors:
+            mot.start()
+
+        self._internal_data = {
+            BrickPi3.SENSOR_TYPE.TOUCH: 0,
+            BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_CM: 255.0,
+            BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_INCHES: 100.0,
+            BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_LISTEN: 0,
+            BrickPi3.SENSOR_TYPE.EV3_COLOR_COLOR_COMPONENTS: (0, 0, 0, 0),
+            BrickPi3.SENSOR_TYPE.EV3_COLOR_AMBIENT: (0, 0, 0, 0),
+            BrickPi3.SENSOR_TYPE.EV3_COLOR_REFLECTED: 0,
+            BrickPi3.SENSOR_TYPE.EV3_COLOR_RAW_REFLECTED: 0,
+            BrickPi3.SENSOR_TYPE.EV3_COLOR_COLOR: 0,
+            BrickPi3.SENSOR_TYPE.EV3_GYRO_ABS: 0,
+            BrickPi3.SENSOR_TYPE.EV3_GYRO_DPS: 0,
+            BrickPi3.SENSOR_TYPE.EV3_GYRO_ABS_DPS: (0, 0)
+        }
+
+    def __del__(self):
+        for mot in self.Motors:
+            mot.shutdown()
+
+    def spi_transfer_array(self, data_out):
+        &#34;&#34;&#34;Used by Brick.get_sensor_status&#34;&#34;&#34;
+        &#34;&#34;&#34;
+        [self.SPI_Address, message_type, 0, 0, 0, 0, 0, 0, 0, 0]
+        =&gt; [0,0,0,0xA5,self.SensorType[i],status]
+
+        [self.SPI_Address, message_type, 0, 0, 0, 0]
+        =&gt; [0,0,0,0xA5,self.SensorType[i],status]
+
+        [self.SPI_Address, message_type, 0, 0, 0, 0, 0]
+        =&gt; [0,0,0,0xA5,self.SensorType[i],status]
+
+        [self.SPI_Address, message_type, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        =&gt; [0,0,0,0xA5,self.SensorType[i],status]
+        &#34;&#34;&#34;
+        SENSOR_STATUS = 0  # Valid Data
+        BAD_REPLY = [0, 0, 0, 0, 0, 0]
+
+        data = list(data_out)
+        if len(data) &lt; 2:
+            return BAD_REPLY
+
+        i = self.SPI_Messages.get(data[1], -1)
+        GOOD_REPLY = [0, 0, 0, 0xA5, self.SensorType[i], SENSOR_STATUS]
+
+        return GOOD_REPLY
+
+    def spi_write_8(self, MessageType, Value):
+        pass
+
+    def spi_read_16(self, MessageType):
+        pass
+
+    def spi_write_16(self, MessageType, Value):
+        pass
+
+    def spi_write_24(self, MessageType, Value):
+        pass
+
+    def spi_read_32(self, MessageType):
+        pass
+
+    def spi_write_32(self, MessageType, Value):
+        pass
+
+    def get_manufacturer(self):
+        pass
+
+    def get_board(self):
+        pass
+
+    def get_version_hardware(self):
+        pass
+
+    def get_version_firmware(self):
+        pass
+
+    def get_id(self):
+        pass
+
+    def set_led(self, value):
+        pass
+
+    def get_voltage_3v3(self):
+        pass
+
+    def get_voltage_5v(self):
+        pass
+
+    def get_voltage_9v(self):
+        pass
+
+    def get_voltage_battery(self):
+        pass
+
+    def set_sensor_type(self, port, type, params=0):
+        i, _ = self._convert_port(port)
+        self.SensorType[i] = type
+
+    def transact_i2c(self, port, Address, OutArray, InBytes):
+        pass
+
+    def set_sensor(self, port, value):
+        &#34;&#34;&#34;A special method only available to dummy.BrickPi3.
+        Used to change the internal value of the fake sensors.&#34;&#34;&#34;
+        i, _ = self._convert_port(port)
+        sensorType = self.SensorType[i]
+        self._internal_data[sensorType] = value
+
+    def get_sensor(self, port):
+        i, _ = self._convert_port(port)
+        sensorType = self.SensorType[i]
+
+        return self._internal_data[sensorType]
+
+    def set_motor_power(self, port, power):
+        i, _ = self._convert_port(port)
+        self.Motors[i].set_power(power)
+
+    def set_motor_position(self, port, position):
+        i, _ = self._convert_port(port)
+        self.Motors[i].go_position(position)
+
+    def set_motor_position_relative(self, port, degrees):
+        pos = self.get_motor_encoder()
+        self.set_motor_position(pos + degrees)
+
+    def set_motor_position_kp(self, port, kp=25):
+        pass
+
+    def set_motor_position_kd(self, port, kd=70):
+        pass
+
+    def set_motor_dps(self, port, dps):
+        i, _ = self._convert_port(port)
+        self.Motors[i].set_speed(dps)
+
+    def set_motor_limits(self, port, power=0, dps=0):
+        i, _ = self._convert_port(port)
+        self.Motors[i].set_limits(power, dps)
+
+    def get_motor_status(self, port):
+        i, _ = self._convert_port(port)
+        return [0, self.Motors[i].power, self.Motors[i].position, self.Motors[i].speed]
+
+    def get_motor_encoder(self, port):
+        i, _ = self._convert_port(port)
+        return self.Motors[i].position
+
+    def offset_motor_encoder(self, port, position):
+        i, _ = self._convert_port(port)
+        self.Motors[i].set_position(position)
+
+    def reset_motor_encoder(self, port):
+        i, _ = self._convert_port(port)
+        self.Motors[i].set_position(0)
+
+    def reset_all(self):
+        pass</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="utils.brick.Brick" href="brick.html#utils.brick.Brick">Brick</a></li>
+<li><a title="utils.dummy.Brick" href="#utils.dummy.Brick">Brick</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="utils.dummy.BrickPi3.BPSPI_MESSAGE_TYPE"><code class="name">var <span class="ident">BPSPI_MESSAGE_TYPE</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.dummy.BrickPi3.I2CInBytes"><code class="name">var <span class="ident">I2CInBytes</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.dummy.BrickPi3.I2C_LENGTH_LIMIT"><code class="name">var <span class="ident">I2C_LENGTH_LIMIT</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.dummy.BrickPi3.MOTOR_FLOAT"><code class="name">var <span class="ident">MOTOR_FLOAT</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.dummy.BrickPi3.MOTOR_STATUS_FLAG"><code class="name">var <span class="ident">MOTOR_STATUS_FLAG</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.dummy.BrickPi3.PORT_1"><code class="name">var <span class="ident">PORT_1</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.dummy.BrickPi3.PORT_2"><code class="name">var <span class="ident">PORT_2</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.dummy.BrickPi3.PORT_3"><code class="name">var <span class="ident">PORT_3</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.dummy.BrickPi3.PORT_4"><code class="name">var <span class="ident">PORT_4</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.dummy.BrickPi3.PORT_A"><code class="name">var <span class="ident">PORT_A</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.dummy.BrickPi3.PORT_B"><code class="name">var <span class="ident">PORT_B</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.dummy.BrickPi3.PORT_C"><code class="name">var <span class="ident">PORT_C</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.dummy.BrickPi3.PORT_D"><code class="name">var <span class="ident">PORT_D</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.dummy.BrickPi3.SENSOR_CUSTOM"><code class="name">var <span class="ident">SENSOR_CUSTOM</span></code></dt>
+<dd>
+<div class="desc"><p>Flags for use with SENSOR_TYPE.CUSTOM</p>
+<p>PIN1_9V
+Enable 9V out on pin 1 (for LEGO NXT Ultrasonic sensor).</p>
+<p>PIN5_OUT
+Set pin 5 state to output. Pin 5 will be set to input if this flag is not set.</p>
+<p>PIN5_STATE
+If PIN5_OUT is set, this will set the state to output high, otherwise the state will
+be output low. If PIN5_OUT is not set, this flag has no effect.</p>
+<p>PIN6_OUT
+Set pin 6 state to output. Pin 6 will be set to input if this flag is not set.</p>
+<p>PIN6_STATE
+If PIN6_OUT is set, this will set the state to output high, otherwise the state will
+be output low. If PIN6_OUT is not set, this flag has no effect.</p>
+<p>PIN1_ADC
+Enable the analog/digital converter on pin 1 (e.g. for NXT analog sensors).</p>
+<p>PIN6_ADC
+Enable the analog/digital converter on pin 6.</p></div>
+</dd>
+<dt id="utils.dummy.BrickPi3.SENSOR_I2C_SETTINGS"><code class="name">var <span class="ident">SENSOR_I2C_SETTINGS</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.dummy.BrickPi3.SENSOR_STATE"><code class="name">var <span class="ident">SENSOR_STATE</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.dummy.BrickPi3.SENSOR_TYPE"><code class="name">var <span class="ident">SENSOR_TYPE</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.dummy.BrickPi3.SensorType"><code class="name">var <span class="ident">SensorType</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="utils.dummy.BrickPi3.get_board"><code class="name flex">
+<span>def <span class="ident">get_board</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_board(self):
+    pass</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.get_id"><code class="name flex">
+<span>def <span class="ident">get_id</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_id(self):
+    pass</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.get_manufacturer"><code class="name flex">
+<span>def <span class="ident">get_manufacturer</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_manufacturer(self):
+    pass</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.get_motor_encoder"><code class="name flex">
+<span>def <span class="ident">get_motor_encoder</span></span>(<span>self, port)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_motor_encoder(self, port):
+    i, _ = self._convert_port(port)
+    return self.Motors[i].position</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.get_motor_status"><code class="name flex">
+<span>def <span class="ident">get_motor_status</span></span>(<span>self, port)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_motor_status(self, port):
+    i, _ = self._convert_port(port)
+    return [0, self.Motors[i].power, self.Motors[i].position, self.Motors[i].speed]</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.get_sensor"><code class="name flex">
+<span>def <span class="ident">get_sensor</span></span>(<span>self, port)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_sensor(self, port):
+    i, _ = self._convert_port(port)
+    sensorType = self.SensorType[i]
+
+    return self._internal_data[sensorType]</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.get_version_firmware"><code class="name flex">
+<span>def <span class="ident">get_version_firmware</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_version_firmware(self):
+    pass</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.get_version_hardware"><code class="name flex">
+<span>def <span class="ident">get_version_hardware</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_version_hardware(self):
+    pass</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.get_voltage_3v3"><code class="name flex">
+<span>def <span class="ident">get_voltage_3v3</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_voltage_3v3(self):
+    pass</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.get_voltage_5v"><code class="name flex">
+<span>def <span class="ident">get_voltage_5v</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_voltage_5v(self):
+    pass</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.get_voltage_9v"><code class="name flex">
+<span>def <span class="ident">get_voltage_9v</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_voltage_9v(self):
+    pass</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.get_voltage_battery"><code class="name flex">
+<span>def <span class="ident">get_voltage_battery</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_voltage_battery(self):
+    pass</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.offset_motor_encoder"><code class="name flex">
+<span>def <span class="ident">offset_motor_encoder</span></span>(<span>self, port, position)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def offset_motor_encoder(self, port, position):
+    i, _ = self._convert_port(port)
+    self.Motors[i].set_position(position)</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.reset_all"><code class="name flex">
+<span>def <span class="ident">reset_all</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def reset_all(self):
+    pass</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.reset_motor_encoder"><code class="name flex">
+<span>def <span class="ident">reset_motor_encoder</span></span>(<span>self, port)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def reset_motor_encoder(self, port):
+    i, _ = self._convert_port(port)
+    self.Motors[i].set_position(0)</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.set_led"><code class="name flex">
+<span>def <span class="ident">set_led</span></span>(<span>self, value)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_led(self, value):
+    pass</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.set_motor_dps"><code class="name flex">
+<span>def <span class="ident">set_motor_dps</span></span>(<span>self, port, dps)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_motor_dps(self, port, dps):
+    i, _ = self._convert_port(port)
+    self.Motors[i].set_speed(dps)</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.set_motor_limits"><code class="name flex">
+<span>def <span class="ident">set_motor_limits</span></span>(<span>self, port, power=0, dps=0)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_motor_limits(self, port, power=0, dps=0):
+    i, _ = self._convert_port(port)
+    self.Motors[i].set_limits(power, dps)</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.set_motor_position"><code class="name flex">
+<span>def <span class="ident">set_motor_position</span></span>(<span>self, port, position)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_motor_position(self, port, position):
+    i, _ = self._convert_port(port)
+    self.Motors[i].go_position(position)</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.set_motor_position_kd"><code class="name flex">
+<span>def <span class="ident">set_motor_position_kd</span></span>(<span>self, port, kd=70)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_motor_position_kd(self, port, kd=70):
+    pass</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.set_motor_position_kp"><code class="name flex">
+<span>def <span class="ident">set_motor_position_kp</span></span>(<span>self, port, kp=25)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_motor_position_kp(self, port, kp=25):
+    pass</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.set_motor_position_relative"><code class="name flex">
+<span>def <span class="ident">set_motor_position_relative</span></span>(<span>self, port, degrees)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_motor_position_relative(self, port, degrees):
+    pos = self.get_motor_encoder()
+    self.set_motor_position(pos + degrees)</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.set_motor_power"><code class="name flex">
+<span>def <span class="ident">set_motor_power</span></span>(<span>self, port, power)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_motor_power(self, port, power):
+    i, _ = self._convert_port(port)
+    self.Motors[i].set_power(power)</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.set_sensor"><code class="name flex">
+<span>def <span class="ident">set_sensor</span></span>(<span>self, port, value)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>A special method only available to dummy.BrickPi3.
+Used to change the internal value of the fake sensors.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_sensor(self, port, value):
+    &#34;&#34;&#34;A special method only available to dummy.BrickPi3.
+    Used to change the internal value of the fake sensors.&#34;&#34;&#34;
+    i, _ = self._convert_port(port)
+    sensorType = self.SensorType[i]
+    self._internal_data[sensorType] = value</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.set_sensor_type"><code class="name flex">
+<span>def <span class="ident">set_sensor_type</span></span>(<span>self, port, type, params=0)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_sensor_type(self, port, type, params=0):
+    i, _ = self._convert_port(port)
+    self.SensorType[i] = type</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.spi_read_16"><code class="name flex">
+<span>def <span class="ident">spi_read_16</span></span>(<span>self, MessageType)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def spi_read_16(self, MessageType):
+    pass</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.spi_read_32"><code class="name flex">
+<span>def <span class="ident">spi_read_32</span></span>(<span>self, MessageType)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def spi_read_32(self, MessageType):
+    pass</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.spi_transfer_array"><code class="name flex">
+<span>def <span class="ident">spi_transfer_array</span></span>(<span>self, data_out)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Used by Brick.get_sensor_status</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def spi_transfer_array(self, data_out):
+    &#34;&#34;&#34;Used by Brick.get_sensor_status&#34;&#34;&#34;
+    &#34;&#34;&#34;
+    [self.SPI_Address, message_type, 0, 0, 0, 0, 0, 0, 0, 0]
+    =&gt; [0,0,0,0xA5,self.SensorType[i],status]
+
+    [self.SPI_Address, message_type, 0, 0, 0, 0]
+    =&gt; [0,0,0,0xA5,self.SensorType[i],status]
+
+    [self.SPI_Address, message_type, 0, 0, 0, 0, 0]
+    =&gt; [0,0,0,0xA5,self.SensorType[i],status]
+
+    [self.SPI_Address, message_type, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    =&gt; [0,0,0,0xA5,self.SensorType[i],status]
+    &#34;&#34;&#34;
+    SENSOR_STATUS = 0  # Valid Data
+    BAD_REPLY = [0, 0, 0, 0, 0, 0]
+
+    data = list(data_out)
+    if len(data) &lt; 2:
+        return BAD_REPLY
+
+    i = self.SPI_Messages.get(data[1], -1)
+    GOOD_REPLY = [0, 0, 0, 0xA5, self.SensorType[i], SENSOR_STATUS]
+
+    return GOOD_REPLY</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.spi_write_16"><code class="name flex">
+<span>def <span class="ident">spi_write_16</span></span>(<span>self, MessageType, Value)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def spi_write_16(self, MessageType, Value):
+    pass</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.spi_write_24"><code class="name flex">
+<span>def <span class="ident">spi_write_24</span></span>(<span>self, MessageType, Value)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def spi_write_24(self, MessageType, Value):
+    pass</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.spi_write_32"><code class="name flex">
+<span>def <span class="ident">spi_write_32</span></span>(<span>self, MessageType, Value)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def spi_write_32(self, MessageType, Value):
+    pass</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.spi_write_8"><code class="name flex">
+<span>def <span class="ident">spi_write_8</span></span>(<span>self, MessageType, Value)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def spi_write_8(self, MessageType, Value):
+    pass</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.BrickPi3.transact_i2c"><code class="name flex">
+<span>def <span class="ident">transact_i2c</span></span>(<span>self, port, Address, OutArray, InBytes)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def transact_i2c(self, port, Address, OutArray, InBytes):
+    pass</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="utils.dummy.Enumeration"><code class="flex name class">
+<span>class <span class="ident">Enumeration</span></span>
+<span>(</span><span>names)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Enumeration(object):
+    def __init__(self, names):  # or *names, with no .split()
+        number = 0
+        for line, name in enumerate(names.split(&#39;\n&#39;)):
+            if name.find(&#34;,&#34;) &gt;= 0:
+                # strip out the spaces
+                while(name.find(&#34; &#34;) != -1):
+                    name = name[:name.find(&#34; &#34;)] + name[(name.find(&#34; &#34;) + 1):]
+
+                # strip out the commas
+                while(name.find(&#34;,&#34;) != -1):
+                    name = name[:name.find(&#34;,&#34;)] + name[(name.find(&#34;,&#34;) + 1):]
+
+                # if the value was specified
+                if(name.find(&#34;=&#34;) != -1):
+                    number = int(float(name[(name.find(&#34;=&#34;) + 1):]))
+                    name = name[:name.find(&#34;=&#34;)]
+
+                # optionally print to confirm that it&#39;s working correctly
+                # print &#34;%40s has a value of %d&#34; % (name, number)
+
+                setattr(self, name, number)
+                number = number + 1</code></pre>
+</details>
+</dd>
+<dt id="utils.dummy.FirmwareVersionError"><code class="flex name class">
+<span>class <span class="ident">FirmwareVersionError</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Exception raised if the BrickPi3 firmware needs to be updated</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FirmwareVersionError(Exception):
+    &#34;&#34;&#34;Exception raised if the BrickPi3 firmware needs to be updated&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="utils.dummy.SensorError"><code class="flex name class">
+<span>class <span class="ident">SensorError</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Exception raised if a sensor is not yet configured when trying to read it with get_sensor</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SensorError(Exception):
+    &#34;&#34;&#34;Exception raised if a sensor is not yet configured when trying to read it with get_sensor&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="utils" href="index.html">utils</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="utils.dummy.Brick" href="#utils.dummy.Brick">Brick</a></code></h4>
+<ul class="">
+<li><code><a title="utils.dummy.Brick.get_sensor_status" href="#utils.dummy.Brick.get_sensor_status">get_sensor_status</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="utils.dummy.BrickPi3" href="#utils.dummy.BrickPi3">BrickPi3</a></code></h4>
+<ul class="">
+<li><code><a title="utils.dummy.BrickPi3.BPSPI_MESSAGE_TYPE" href="#utils.dummy.BrickPi3.BPSPI_MESSAGE_TYPE">BPSPI_MESSAGE_TYPE</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.I2CInBytes" href="#utils.dummy.BrickPi3.I2CInBytes">I2CInBytes</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.I2C_LENGTH_LIMIT" href="#utils.dummy.BrickPi3.I2C_LENGTH_LIMIT">I2C_LENGTH_LIMIT</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.MOTOR_FLOAT" href="#utils.dummy.BrickPi3.MOTOR_FLOAT">MOTOR_FLOAT</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.MOTOR_STATUS_FLAG" href="#utils.dummy.BrickPi3.MOTOR_STATUS_FLAG">MOTOR_STATUS_FLAG</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.PORT_1" href="#utils.dummy.BrickPi3.PORT_1">PORT_1</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.PORT_2" href="#utils.dummy.BrickPi3.PORT_2">PORT_2</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.PORT_3" href="#utils.dummy.BrickPi3.PORT_3">PORT_3</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.PORT_4" href="#utils.dummy.BrickPi3.PORT_4">PORT_4</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.PORT_A" href="#utils.dummy.BrickPi3.PORT_A">PORT_A</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.PORT_B" href="#utils.dummy.BrickPi3.PORT_B">PORT_B</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.PORT_C" href="#utils.dummy.BrickPi3.PORT_C">PORT_C</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.PORT_D" href="#utils.dummy.BrickPi3.PORT_D">PORT_D</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.SENSOR_CUSTOM" href="#utils.dummy.BrickPi3.SENSOR_CUSTOM">SENSOR_CUSTOM</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.SENSOR_I2C_SETTINGS" href="#utils.dummy.BrickPi3.SENSOR_I2C_SETTINGS">SENSOR_I2C_SETTINGS</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.SENSOR_STATE" href="#utils.dummy.BrickPi3.SENSOR_STATE">SENSOR_STATE</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.SENSOR_TYPE" href="#utils.dummy.BrickPi3.SENSOR_TYPE">SENSOR_TYPE</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.SensorType" href="#utils.dummy.BrickPi3.SensorType">SensorType</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.get_board" href="#utils.dummy.BrickPi3.get_board">get_board</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.get_id" href="#utils.dummy.BrickPi3.get_id">get_id</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.get_manufacturer" href="#utils.dummy.BrickPi3.get_manufacturer">get_manufacturer</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.get_motor_encoder" href="#utils.dummy.BrickPi3.get_motor_encoder">get_motor_encoder</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.get_motor_status" href="#utils.dummy.BrickPi3.get_motor_status">get_motor_status</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.get_sensor" href="#utils.dummy.BrickPi3.get_sensor">get_sensor</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.get_version_firmware" href="#utils.dummy.BrickPi3.get_version_firmware">get_version_firmware</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.get_version_hardware" href="#utils.dummy.BrickPi3.get_version_hardware">get_version_hardware</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.get_voltage_3v3" href="#utils.dummy.BrickPi3.get_voltage_3v3">get_voltage_3v3</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.get_voltage_5v" href="#utils.dummy.BrickPi3.get_voltage_5v">get_voltage_5v</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.get_voltage_9v" href="#utils.dummy.BrickPi3.get_voltage_9v">get_voltage_9v</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.get_voltage_battery" href="#utils.dummy.BrickPi3.get_voltage_battery">get_voltage_battery</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.offset_motor_encoder" href="#utils.dummy.BrickPi3.offset_motor_encoder">offset_motor_encoder</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.reset_all" href="#utils.dummy.BrickPi3.reset_all">reset_all</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.reset_motor_encoder" href="#utils.dummy.BrickPi3.reset_motor_encoder">reset_motor_encoder</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.set_led" href="#utils.dummy.BrickPi3.set_led">set_led</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.set_motor_dps" href="#utils.dummy.BrickPi3.set_motor_dps">set_motor_dps</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.set_motor_limits" href="#utils.dummy.BrickPi3.set_motor_limits">set_motor_limits</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.set_motor_position" href="#utils.dummy.BrickPi3.set_motor_position">set_motor_position</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.set_motor_position_kd" href="#utils.dummy.BrickPi3.set_motor_position_kd">set_motor_position_kd</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.set_motor_position_kp" href="#utils.dummy.BrickPi3.set_motor_position_kp">set_motor_position_kp</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.set_motor_position_relative" href="#utils.dummy.BrickPi3.set_motor_position_relative">set_motor_position_relative</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.set_motor_power" href="#utils.dummy.BrickPi3.set_motor_power">set_motor_power</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.set_sensor" href="#utils.dummy.BrickPi3.set_sensor">set_sensor</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.set_sensor_type" href="#utils.dummy.BrickPi3.set_sensor_type">set_sensor_type</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.spi_read_16" href="#utils.dummy.BrickPi3.spi_read_16">spi_read_16</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.spi_read_32" href="#utils.dummy.BrickPi3.spi_read_32">spi_read_32</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.spi_transfer_array" href="#utils.dummy.BrickPi3.spi_transfer_array">spi_transfer_array</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.spi_write_16" href="#utils.dummy.BrickPi3.spi_write_16">spi_write_16</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.spi_write_24" href="#utils.dummy.BrickPi3.spi_write_24">spi_write_24</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.spi_write_32" href="#utils.dummy.BrickPi3.spi_write_32">spi_write_32</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.spi_write_8" href="#utils.dummy.BrickPi3.spi_write_8">spi_write_8</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.transact_i2c" href="#utils.dummy.BrickPi3.transact_i2c">transact_i2c</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="utils.dummy.Enumeration" href="#utils.dummy.Enumeration">Enumeration</a></code></h4>
+</li>
+<li>
+<h4><code><a title="utils.dummy.FirmwareVersionError" href="#utils.dummy.FirmwareVersionError">FirmwareVersionError</a></code></h4>
+</li>
+<li>
+<h4><code><a title="utils.dummy.SensorError" href="#utils.dummy.SensorError">SensorError</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

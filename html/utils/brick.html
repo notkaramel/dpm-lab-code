@@ -1,0 +1,3529 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>utils.brick API documentation</title>
+<meta name="description" content="Module that handles all interaction with the BrickPi hardware, eg,
+sensors and motors …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>utils.brick</code></h1>
+</header>
+<section id="section-intro">
+<p>Module that handles all interaction with the BrickPi hardware, eg,
+sensors and motors.</p>
+<p>Authors: Ryan Au, Younes Boubekeur</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Module that handles all interaction with the BrickPi hardware, eg,
+sensors and motors.
+
+Authors: Ryan Au, Younes Boubekeur
+&#34;&#34;&#34;
+
+from __future__ import annotations
+
+from typing import Literal, Type
+import math
+import atexit
+import os
+import signal
+import time
+import sys
+
+class IOError(OSError):
+    pass
+
+# Save process ID of this program so we can force stop it later if needed
+os.system(f&#34;echo {os.getpid()} &gt; ~/brickpi3_pid&#34;)
+BP = None
+try:
+    from brickpi3 import Enumeration, FirmwareVersionError, SensorError, BrickPi3
+    import spidev
+    BP = BrickPi3()  # The BrickPi3 instance
+except (ModuleNotFoundError, OSError, TypeError) as err:
+    print(&#39;A BrickPi module is missing, or BrickPi is missing, intializing dummy BP&#39;, file=sys.stderr)
+    print(f&#39;Warning: {err.__class__.__name__}({err})&#39;, file=sys.stderr)
+    from .dummy import Enumeration, FirmwareVersionError, SensorError, BrickPi3
+    BP = BrickPi3()  # The BrickPi3 instance
+
+_OLD_BP = BP
+
+def restore_default_brick(bp=None):
+    global BP
+    if bp is None:
+        BP = _OLD_BP
+    else:
+        BP = bp
+
+
+WAIT_READY_INTERVAL = 0.01
+INF = float(&#34;inf&#34;)
+
+PORTS: dict[str, int] = {
+    &#39;1&#39;: BrickPi3.PORT_1,
+    &#39;2&#39;: BrickPi3.PORT_2,
+    &#39;3&#39;: BrickPi3.PORT_3,
+    &#39;4&#39;: BrickPi3.PORT_4,
+    &#39;A&#39;: BrickPi3.PORT_A,
+    &#39;B&#39;: BrickPi3.PORT_B,
+    &#39;C&#39;: BrickPi3.PORT_C,
+    &#39;D&#39;: BrickPi3.PORT_D,
+}
+
+
+def exception_handler(exception=Exception):
+    def exception_handler_factory(func):
+        def wrapper(*args, **kwargs):
+            try:
+                func(*args, **kwargs)
+            except exception as err:
+                print(&#34;ERROR:&#34;, err)
+        return wrapper
+    return exception_handler_factory
+
+
+class RevEnumeration:
+    &#34;&#34;&#34;
+    Take in a type object (class), finds every full-Uppercase attribute
+    (constants) and creates a Reverse Enumeration, where the constant value
+    is the key, and the constant&#39;s name is the value.
+    &#34;&#34;&#34;
+
+    def __init__(self, enum):  # or *names, with no .split()
+        &#34;enum can be any type, but preferably a brickpi3.Enumeration object.&#34;
+        self.keys = []
+        for attr, val in enum.__dict__.items():
+            if attr.isupper():
+                self[val] = attr
+        self.keys.sort()
+
+    def __getitem__(self, key):
+        &#34;Allow performing get actions such as SENSOR_CODES[0].&#34;
+        return self.__dict__[str(key)]  # SENSOR_CODES -&gt; self.enum?
+
+    def __setitem__(self, key, attr):
+        setattr(self, str(key), attr)
+        self.keys.append(str(key))
+
+    def __repr__(self):
+        return &#34;, &#34;.join([f&#34;{key}={self[key]}&#34; for key in self.keys])
+
+
+SENSOR_STATE = Enumeration(&#34;&#34;&#34;
+        VALID_DATA,
+        NOT_CONFIGURED,
+        CONFIGURING,
+        NO_DATA,
+        I2C_ERROR,
+        INCORRECT_SENSOR_PORT,
+    &#34;&#34;&#34;)
+SENSOR_CODES = RevEnumeration(SENSOR_STATE)
+
+
+class ColorMapping:
+    &#34;&#34;&#34;
+    Class that maps a color to a numeric code used by the color sensor.
+    &#34;&#34;&#34;
+
+    def __init__(self, name: str, code: int):
+        self.name = name
+        self.code = code
+
+
+class ColorMappings:
+    &#34;&#34;&#34;
+    Color mappings based on the colors that can be detected by the color sensor.
+    &#34;&#34;&#34;
+    UNKNOWN = ColorMapping(&#34;Unknown&#34;, 0)
+    BLACK = ColorMapping(&#34;Black&#34;, 1)
+    BLUE = ColorMapping(&#34;Blue&#34;, 2)
+    GREEN = ColorMapping(&#34;Green&#34;, 3)
+    YELLOW = ColorMapping(&#34;Yellow&#34;, 4)
+    RED = ColorMapping(&#34;Red&#34;, 5)
+    WHITE = ColorMapping(&#34;White&#34;, 6)
+    ORANGE = ColorMapping(&#34;Orange&#34;, 7)
+
+    _all_mappings = [UNKNOWN, BLACK, BLUE, GREEN, YELLOW, RED, WHITE, ORANGE]
+
+
+class Color:
+    &#34;&#34;&#34;
+    Namespace for color names, to reference them easily.
+    &#34;&#34;&#34;
+    UNKNOWN = &#34;Unknown&#34;
+    BLACK = &#34;Black&#34;
+    BLUE = &#34;Blue&#34;
+    GREEN = &#34;Green&#34;
+    YELLOW = &#34;Yellow&#34;
+    RED = &#34;Red&#34;
+    WHITE = &#34;White&#34;
+    ORANGE = &#34;Orange&#34;
+
+
+_color_names_by_code = {c.code: c.name for c in ColorMappings._all_mappings}
+
+
+class Brick(BrickPi3):
+    &#34;&#34;&#34;
+    Wrapper class for the BrickPi3 class. Comes with additional methods such get_sensor_status.
+    &#34;&#34;&#34;
+
+    def __init__(self, bp=None):
+        if bp is None:
+            self.bp = BP
+        else:
+            self.bp = bp
+        child = self.__dict__
+        parent = self.bp.__dict__
+        for key in parent.keys():
+            setattr(self, str(key), child.get(key, parent.get(key)))
+
+    def get_sensor_status(self, port: Literal[1, 2, 4, 8]):
+        &#34;&#34;&#34;
+        Read a sensor status.
+
+        Keyword arguments:
+        port - The sensor port (one at a time). PORT_1, PORT_2, PORT_3, or PORT_4.
+
+        Return a code from 0 to 4 with the following meanings:
+
+        0: VALID_DATA
+        1: NOT_CONFIGURED
+        2: CONFIGURING
+        3: NO_DATA
+        4: I2C_ERROR
+        5: INCORRECT_SENSOR_PORT
+        &#34;&#34;&#34;
+        if port == self.PORT_1:
+            message_type = self.BPSPI_MESSAGE_TYPE.GET_SENSOR_1
+            port_index = 0
+        elif port == self.PORT_2:
+            message_type = self.BPSPI_MESSAGE_TYPE.GET_SENSOR_2
+            port_index = 1
+        elif port == self.PORT_3:
+            message_type = self.BPSPI_MESSAGE_TYPE.GET_SENSOR_3
+            port_index = 2
+        elif port == self.PORT_4:
+            message_type = self.BPSPI_MESSAGE_TYPE.GET_SENSOR_4
+            port_index = 3
+        else:
+            raise IOError(
+                &#34;get_sensor error. Must be one sensor port at a time. PORT_1, PORT_2, PORT_3, or PORT_4.&#34;)
+
+        if self.SensorType[port_index] == self.SENSOR_TYPE.CUSTOM:
+            outArray = [self.SPI_Address, message_type, 0, 0, 0, 0, 0, 0, 0, 0]
+            reply = self.spi_transfer_array(outArray)
+            if reply[3] == 0xA5:
+                if reply[4] == self.SensorType[port_index]:
+                    return reply[5]
+                else:
+                    return SENSOR_STATE.INCORRECT_SENSOR_PORT
+            else:
+                raise IOError(&#34;get_sensor error: No SPI response&#34;)
+
+        elif self.SensorType[port_index] == self.SENSOR_TYPE.I2C:
+            outArray = [self.SPI_Address, message_type, 0, 0, 0, 0]
+            for b in range(self.I2CInBytes[port_index]):
+                outArray.append(0)
+            reply = self.spi_transfer_array(outArray)
+            if reply[3] == 0xA5:
+                if reply[4] == self.SensorType[port_index]:
+                    return reply[5]
+                else:
+                    return SENSOR_STATE.INCORRECT_SENSOR_PORT
+            else:
+                raise IOError(&#34;get_sensor error: No SPI response&#34;)
+
+        elif (self.SensorType[port_index] == self.SENSOR_TYPE.TOUCH
+              or self.SensorType[port_index] == self.SENSOR_TYPE.NXT_TOUCH
+              or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_TOUCH
+              or self.SensorType[port_index] == self.SENSOR_TYPE.NXT_ULTRASONIC
+              or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_COLOR_REFLECTED
+              or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_COLOR_AMBIENT
+              or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_COLOR_COLOR
+              or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_ULTRASONIC_LISTEN
+              or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_INFRARED_PROXIMITY):
+            outArray = [self.SPI_Address, message_type, 0, 0, 0, 0, 0]
+            reply = self.spi_transfer_array(outArray)
+            if (reply[3] == 0xA5):
+                if ((reply[4] == self.SensorType[port_index] or (self.SensorType[port_index] == self.SENSOR_TYPE.TOUCH
+                                                                 and (reply[4] == self.SENSOR_TYPE.NXT_TOUCH or reply[4] == self.SENSOR_TYPE.EV3_TOUCH)))):
+                    return reply[5]
+                else:
+                    return SENSOR_STATE.INCORRECT_SENSOR_PORT
+            else:
+                raise IOError(&#34;get_sensor error: No SPI response&#34;)
+
+        elif self.SensorType[port_index] == self.SENSOR_TYPE.NXT_COLOR_FULL:
+            outArray = [self.SPI_Address, message_type,
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            reply = self.spi_transfer_array(outArray)
+            if reply[3] == 0xA5:
+                if reply[4] == self.SensorType[port_index]:
+                    return reply[5]
+                else:
+                    return SENSOR_STATE.INCORRECT_SENSOR_PORT
+            else:
+                raise IOError(&#34;get_sensor error: No SPI response&#34;)
+
+        elif (self.SensorType[port_index] == self.SENSOR_TYPE.NXT_LIGHT_ON
+              or self.SensorType[port_index] == self.SENSOR_TYPE.NXT_LIGHT_OFF
+              or self.SensorType[port_index] == self.SENSOR_TYPE.NXT_COLOR_RED
+              or self.SensorType[port_index] == self.SENSOR_TYPE.NXT_COLOR_GREEN
+              or self.SensorType[port_index] == self.SENSOR_TYPE.NXT_COLOR_BLUE
+              or self.SensorType[port_index] == self.SENSOR_TYPE.NXT_COLOR_OFF
+              or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_GYRO_ABS
+              or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_GYRO_DPS
+              or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_ULTRASONIC_CM
+              or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_ULTRASONIC_INCHES):
+            outArray = [self.SPI_Address, message_type, 0, 0, 0, 0, 0, 0]
+            reply = self.spi_transfer_array(outArray)
+            if reply[3] == 0xA5:
+                if reply[4] == self.SensorType[port_index]:
+                    return reply[5]
+                else:
+                    return SENSOR_STATE.INCORRECT_SENSOR_PORT
+            else:
+                raise IOError(&#34;get_sensor error: No SPI response&#34;)
+
+        elif (self.SensorType[port_index] == self.SENSOR_TYPE.EV3_COLOR_RAW_REFLECTED
+              or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_GYRO_ABS_DPS):
+            outArray = [self.SPI_Address, message_type, 0, 0, 0, 0, 0, 0, 0, 0]
+            reply = self.spi_transfer_array(outArray)
+            if reply[3] == 0xA5:
+                if reply[4] == self.SensorType[port_index]:
+                    return reply[5]
+                else:
+                    return SENSOR_STATE.INCORRECT_SENSOR_PORT
+            else:
+                raise IOError(&#34;get_sensor error: No SPI response&#34;)
+
+        elif self.SensorType[port_index] == self.SENSOR_TYPE.EV3_COLOR_COLOR_COMPONENTS:
+            outArray = [self.SPI_Address, message_type,
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            reply = self.spi_transfer_array(outArray)
+            if reply[3] == 0xA5:
+                if reply[4] == self.SensorType[port_index]:
+                    return reply[5]
+                else:
+                    return SENSOR_STATE.INCORRECT_SENSOR_PORT
+            else:
+                raise IOError(&#34;get_sensor error: No SPI response&#34;)
+
+        elif self.SensorType[port_index] == self.SENSOR_TYPE.EV3_INFRARED_SEEK:
+            outArray = [self.SPI_Address, message_type,
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            reply = self.spi_transfer_array(outArray)
+            if reply[3] == 0xA5:
+                if reply[4] == self.SensorType[port_index]:
+                    return reply[5]
+                else:
+                    return SENSOR_STATE.INCORRECT_SENSOR_PORT
+            else:
+                raise IOError(&#34;get_sensor error: No SPI response&#34;)
+
+        elif self.SensorType[port_index] == self.SENSOR_TYPE.EV3_INFRARED_REMOTE:
+            outArray = [self.SPI_Address, message_type, 0, 0, 0, 0, 0, 0, 0, 0]
+            reply = self.spi_transfer_array(outArray)
+            if reply[3] == 0xA5:
+                if reply[4] == self.SensorType[port_index]:
+                    return reply[5]
+                else:
+                    return SENSOR_STATE.INCORRECT_SENSOR_PORT
+            else:
+                raise IOError(&#34;get_sensor error: No SPI response&#34;)
+
+        raise IOError(
+            &#34;get_sensor error: Sensor not configured or not supported.&#34;)
+
+
+class Sensor:
+    &#34;&#34;&#34;
+    Template Sensor class. Must implement set_mode(mode) to function.
+    &#34;&#34;&#34;
+    class Status:
+        VALID_DATA = &#34;VALID_DATA&#34;
+        NOT_CONFIGURED = &#34;NOT_CONFIGURED&#34;
+        CONFIGURING = &#34;CONFIGURING&#34;
+        NO_DATA = &#34;NO_DATA&#34;
+        I2C_ERROR = &#34;I2C_ERROR&#34;
+        INCORRECT_SENSOR_PORT = &#34;INCORRECT_SENSOR_PORT&#34;
+
+    ALL_SENSORS = {key: None for key in &#39;1 2 3 4&#39;.split(&#39; &#39;)}
+
+    def __init__(self, port: Literal[1, 2, 3, 4], bp=None):
+        &#34;Initialize sensor with a given port (1, 2, 3, or 4).&#34;
+        self.brick = Brick(bp=bp)
+        self.port = PORTS[str(port).upper()]
+        Sensor.ALL_SENSORS[str(port)] = self
+
+    def get_status(self):
+        &#34;&#34;&#34;
+        Get the sensor status of this sensor.
+
+        Return one of the following status messages:
+        VALID_DATA
+        NOT_CONFIGURED
+        CONFIGURING
+        NO_DATA
+        I2C_ERROR
+        &#34;&#34;&#34;
+        return SENSOR_CODES[self.brick.get_sensor_status(self.port)]
+
+    def set_port(self, port: Literal[1, 2, 3, 4]):
+        &#34;Change sensor port number. Does not unassign previous port.&#34;
+        try:
+            self.port = PORTS[str(port).upper()]
+            self.set_mode(self.mode)
+        except SensorError as error:
+            return error
+
+    def get_value(self):
+        &#34;Get the raw sensor value. May return a float, int, list or None if error.&#34;
+        try:
+            return self.brick.get_sensor(self.port)
+        except SensorError:
+            return None
+
+    def get_raw_value(self):
+        &#34;Get the raw sensor value. May return a float, int, list or None if error.&#34;
+        return self.get_value()
+
+    def wait_ready(self):
+        &#34;Wait (pause program) until the sensor is initialized.&#34;
+        while self.get_status() != Sensor.Status.VALID_DATA:
+            time.sleep(WAIT_READY_INTERVAL)
+
+
+def wait_ready_sensors(debug=False):
+    for port, sensor in Sensor.ALL_SENSORS.items():
+        if sensor is not None:
+            if debug:
+                print(f&#34;Initializing Port {port}:&#34;, type(sensor).__name__)
+            sensor.wait_ready()
+    if debug:
+        print(&#34;All Sensors Initialized&#34;)
+
+
+class TouchSensor(Sensor):
+    &#34;&#34;&#34;
+    Basic touch sensor class. There is only one mode.
+    Gives values 0 to 1, with 1 meaning the button is being pressed.
+    &#34;&#34;&#34;
+
+    def __init__(self, port: Literal[1, 2, 3, 4], mode: str = &#34;touch&#34;, bp=None):
+        &#34;&#34;&#34;
+        Initialize touch sensor with a given port number.
+        mode does not need to be set and actually does nothing here.
+        &#34;&#34;&#34;
+        super(TouchSensor, self).__init__(port, bp)
+        self.set_mode(mode.lower())
+
+    def set_mode(self, mode: str = &#34;touch&#34;):
+        &#34;&#34;&#34;
+        Touch sensor only has one mode, and does not require an input.
+        This method is useless unless you wish to re-initialize the sensor.
+        &#34;&#34;&#34;
+        try:
+            self.brick.set_sensor_type(self.port, BrickPi3.SENSOR_TYPE.TOUCH)
+            self.mode = mode.lower()
+            return True
+        except SensorError as error:
+            return error
+
+    def is_pressed(self) -&gt; bool:
+        &#34;Return True if pressed, False otherwise.&#34;
+        return self.get_value() == 1
+
+
+class EV3UltrasonicSensor(Sensor):
+    &#34;&#34;&#34;
+    EV3 Ultrasonic Sensor. Default mode returns distance in centimeters (cm).
+
+    Values given by modes:
+    cm - centimeter measure (0 to 255)
+    in - inches measure
+    listen - 0 or 1, 1 means another ultrasonic sensor is detected
+    &#34;&#34;&#34;
+    class Mode:
+        &#34;Mode for the EV3 Ultrasonic Sensor.&#34;
+        CM = &#34;cm&#34;
+        IN = &#34;in&#34;
+        LISTEN = &#34;listen&#34;
+
+    def __init__(self, port: Literal[1, 2, 3, 4], mode=&#34;cm&#34;, bp=None):
+        super(EV3UltrasonicSensor, self).__init__(port, bp)
+        self.set_mode(mode)
+
+    def set_mode(self, mode: str):
+        &#34;&#34;&#34;
+        Set ultrasonic sensor mode. Return True if mode change successful.
+        cm - centimeter measure (0 to 255)
+        in - inches measure
+        listen - 0 or 1, 1 means another ultrasonic sensor is detected
+        &#34;&#34;&#34;
+        try:
+            if mode.lower() == self.Mode.CM:
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_CM)
+            elif mode.lower() == self.Mode.IN:
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_INCHES)
+            elif mode.lower() == self.Mode.LISTEN:
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_LISTEN)
+            else:
+                return False
+            self.mode = mode.lower()
+            return True
+        except SensorError as error:
+            return error
+
+    def get_cm(self):
+        if self.mode != self.Mode.CM:
+            self.set_mode(self.Mode.CM)
+            self.wait_ready()
+        return self.get_value()
+
+    def get_inches(self):
+        if self.mode != self.Mode.IN:
+            self.set_mode(self.Mode.IN)
+            self.wait_ready()
+        return self.get_value()
+
+    def detects_other_us_sensor(self):
+        if self.mode != self.Mode.LISTEN:
+            self.set_mode(self.Mode.LISTEN)
+            self.wait_ready()
+        return self.get_value() == 1
+
+
+class EV3ColorSensor(Sensor):
+    &#34;&#34;&#34;
+    EV3 Color Sensor. Default mode is &#34;component&#34;.
+
+    Values given by modes:
+    component - give list of values [Red, Green, Blue, Unknown?]
+    ambient - light off, detect any light
+    red - red light on, detect red value only
+    rawred - give list of values [Red, Unknown?]
+    id - provide a single integer value based on the sensor&#39;s guess of detected color
+    &#34;&#34;&#34;
+    class Mode:
+        &#34;Mode for the EV3 Color Sensor.&#34;
+        COMPONENT = &#34;component&#34;
+        AMBIENT = &#34;ambient&#34;
+        RED = &#34;red&#34;
+        RAW_RED = &#34;rawred&#34;
+        ID = &#34;id&#34;
+
+    def __init__(self, port, mode=&#34;component&#34;, bp=None):
+        super(EV3ColorSensor, self).__init__(port, bp)
+        self.set_mode(mode)
+
+    def set_mode(self, mode: str):
+        &#34;&#34;&#34;
+        Sets color sensor mode. Return True if mode change successful.
+
+        component - give list of values [Red, Green, Blue, Unknown?]
+        ambient - light off, detect any light
+        red - red light on, detect red value only
+        rawred - give list of values [Red, Unknown?]
+        id - provide a single integer value based on the sensor&#39;s guess of detected color
+        &#34;&#34;&#34;
+        try:
+
+            if mode.lower() == self.Mode.COMPONENT:
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_COLOR_COMPONENTS)
+            elif mode.lower() == self.Mode.AMBIENT:
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_AMBIENT)
+            elif mode.lower() == self.Mode.RED:
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_REFLECTED)
+            elif mode.lower() == self.Mode.RAW_RED:
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_RAW_REFLECTED)
+            elif mode.lower() == self.Mode.ID:
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_COLOR)
+            else:
+                return False
+            self.mode = mode.lower()
+            return True
+        except SensorError as error:
+            return error
+
+    def get_ambient(self) -&gt; float:
+        &#34;Returns the ambient light detected by the sensor. Light will not turn on.&#34;
+        if self.mode != self.Mode.AMBIENT:
+            self.set_mode(self.Mode.AMBIENT)
+            self.wait_ready()
+        return self.get_value()
+
+    def get_rgb(self) -&gt; list[float]:
+        &#34;Return the RGB values from the sensor. This will switch the sensor to component mode.&#34;
+        if self.mode != self.Mode.COMPONENT:
+            self.set_mode(self.Mode.COMPONENT)
+            self.wait_ready()
+        val = self.get_value()
+        return val[:-1] if val is not None else [None, None, None]
+
+    def get_red(self) -&gt; float:
+        &#34;Returns the red light detected by the sensor. Only red light turns on.&#34;
+        if self.mode != self.Mode.RED:
+            self.set_mode(self.Mode.RED)
+            self.wait_ready()
+        return self.get_value()
+
+    def get_color_name(self) -&gt; str:
+        &#34;Return the closest detected color by name. This will switch the sensor to id mode.&#34;
+        if self.mode != self.Mode.ID:
+            self.set_mode(self.Mode.ID)
+            self.wait_ready()
+        return _color_names_by_code.get(self.get_value(), Color.UNKNOWN)
+
+
+class EV3GyroSensor(Sensor):
+    &#34;&#34;&#34;
+    EV3 Gyro sensor. Default mode is &#34;both&#34;.
+
+    Values given by modes:
+    abs - Absolute degrees rotated since start
+    dps - Degrees per second of rotation
+    both - list of [abs, dps] values
+    &#34;&#34;&#34;
+    class Mode:
+        &#34;Mode for the EV3 Gyro Sensor.&#34;
+        ABS = &#34;abs&#34;
+        DPS = &#34;dps&#34;
+        BOTH = &#34;both&#34;
+
+    def __init__(self, port: Literal[1, 2, 3, 4], mode=&#34;both&#34;, bp=None):
+        super(EV3GyroSensor, self).__init__(port, bp)
+        self.set_mode(mode)
+
+    def set_mode(self, mode: str):
+        &#34;&#34;&#34;
+        Change gyro sensor mode.
+
+        abs - Absolute degrees rotated since start
+        dps - Degrees per second of rotation
+        both - list of [abs, dps] values
+        &#34;&#34;&#34;
+        try:
+            if mode.lower() == self.Mode.ABS:
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_GYRO_ABS)
+            elif mode.lower() == self.Mode.DPS:
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_GYRO_DPS)
+            elif mode.lower() == self.Mode.BOTH:
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_GYRO_ABS_DPS)
+            else:
+                return False
+            self.mode = mode.lower()
+            return True
+        except SensorError as error:
+            return error
+
+    def reset_measure(self):
+        return self.set_mode(self.mode.lower())
+
+    def get_abs_measure(self):
+        if self.mode != self.Mode.ABS:
+            self.set_mode(self.Mode.ABS)
+            self.wait_ready()
+        return self.get_value()
+
+    def get_dps_measure(self):
+        if self.mode != self.Mode.DPS:
+            self.set_mode(self.Mode.DPS)
+            self.wait_ready()
+        return self.get_value()
+
+    def get_both_measure(self):
+        if self.mode != self.Mode.BOTH:
+            self.set_mode(self.Mode.BOTH)
+            self.wait_ready()
+        return self.get_value()
+
+
+class Motor:
+    &#34;Motor class for any motor.&#34;
+    INF = INF
+    MAX_SPEED = 1560  # positive or negative degree per second speed
+    MAX_POWER = 100  # positive or negative percent power
+
+    def __init__(self, port: Literal[&#34;A&#34;, &#34;B&#34;, &#34;C&#34;, &#34;D&#34;] | list[str], bp=None):
+        &#34;&#34;&#34;
+        Initialize this Motor object with the ports &#34;A&#34;, &#34;B&#34;, &#34;C&#34;, or &#34;D&#34;.
+        You may also provide a list of these ports such as [&#34;A&#34;, &#34;C&#34;] to run
+        both motors at the exact same time (exact combined behavior unknown).
+        &#34;&#34;&#34;
+        self.brick = Brick(bp)
+        self.set_port(port)
+
+    def set_port(self, port):
+        &#34;&#34;&#34;
+        Port can be &#34;A&#34;, &#34;B&#34;, &#34;C&#34;, or &#34;D&#34;.
+        You may also provide a list of these ports such as [&#34;A&#34;, &#34;C&#34;] to run
+        both motors at the exact same time (exact combined behavior unknown).
+        &#34;&#34;&#34;
+        if isinstance(port, list):
+            self.port = sum([PORTS[i] for i in port])
+        elif isinstance(port, int) or isinstance(port, str):
+            self.port = PORTS[str(port).upper()]
+
+    def set_power(self, power):
+        &#34;&#34;&#34;
+        Set the motor power in percent.
+
+        Keyword arguments:
+        power - The power from -100 to 100, or -128 for float
+        &#34;&#34;&#34;
+        self.brick.set_motor_power(self.port, power)
+
+    def float_motor(self):
+        &#34;Float the motor, which means let it rotate freely while measuring rotations.&#34;
+        self.brick.set_motor_power(self.port, -128)
+
+    def set_position(self, position):
+        &#34;Set the motor target position in degrees.&#34;
+        self.brick.set_motor_position(self.port, position)
+
+    def set_position_relative(self, degrees):
+        &#34;Set the relative motor target position in degrees, current position plus the specified degrees.&#34;
+        self.brick.set_motor_position_relative(self.port, degrees)
+
+    def set_position_kp(self, kp=25):
+        &#34;&#34;&#34;
+        Set the motor target position KP constant.
+
+        If you set kp higher, the motor will be more responsive to errors in position, at the cost of perhaps overshooting and oscillating.
+        kd slows down the motor as it approaches the target, and helps to prevent overshoot.
+        In general, if you increase kp, you should also increase kd to keep the motor from overshooting and oscillating.
+
+        Keyword arguments:
+        port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
+        kp - The KP constant (default 25)
+        &#34;&#34;&#34;
+        self.brick.set_motor_position_kp(self.port, kp)
+
+    def set_position_kd(self, kd=70):
+        &#34;&#34;&#34;
+        Set the motor target position KD constant.
+
+        If you set kp higher, the motor will be more responsive to errors in position, at the cost of perhaps overshooting and oscillating.
+        kd slows down the motor as it approaches the target, and helps to prevent overshoot.
+        In general, if you increase kp, you should also increase kd to keep the motor from overshooting and oscillating.
+
+        Keyword arguments:
+        port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
+        kd - The KD constant (default 70)
+        &#34;&#34;&#34;
+        self.brick.set_motor_position_kd(self.port, kd)
+
+    def set_dps(self, dps):
+        &#34;&#34;&#34;
+        Set the motor target speed in degrees per second. 
+        The motor will move at this speed consistently, once this function is run.
+
+        Keyword arguments:
+        port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
+        dps - The target speed in degrees per second
+        &#34;&#34;&#34;
+        self.brick.set_motor_dps(self.port, dps)
+        self.set_limits(dps=dps)
+
+    def set_limits(self, power=0, dps=0):
+        &#34;&#34;&#34;
+        Set the motor speed limit.
+
+        Keyword arguments:
+        port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
+        power - The power limit in percent (0 to 100), with 0 being no limit (100)
+        dps - The speed limit in degrees per second, with 0 being no limit
+        &#34;&#34;&#34;
+        self.brick.set_motor_limits(self.port, power, dps)
+
+    def get_status(self):
+        &#34;&#34;&#34;
+        Read a motor status.
+
+        Keyword arguments:
+        port - The motor port (one at a time). PORT_A, PORT_B, PORT_C, or PORT_D.
+
+        Returns a list:
+            flags - 8-bits of bit-flags that indicate motor status:
+                bit 0 - LOW_VOLTAGE_FLOAT - The motors are automatically disabled because the battery voltage is too low
+                bit 1 - OVERLOADED - The motors aren&#39;t close to the target (applies to position control and dps speed control).
+            power - the raw PWM power in percent (-100 to 100)
+            encoder - The encoder position
+            dps - The current speed in Degrees Per Second
+        &#34;&#34;&#34;
+        try:
+            return self.brick.get_motor_status(self.port)
+        except IOError:
+            return [None, None, None, None]
+
+    def get_encoder(self):
+        &#34;&#34;&#34;
+        Read a motor encoder in degrees.
+
+        Keyword arguments:
+        port - The motor port (one at a time). PORT_A, PORT_B, PORT_C, or PORT_D.
+
+        Returns the encoder position in degrees
+        &#34;&#34;&#34;
+        return self.brick.get_motor_encoder(self.port)
+
+    def get_position(self):
+        &#34;&#34;&#34;
+        Read a motor encoder in degrees.
+
+        Keyword arguments:
+        port - The motor port (one at a time). PORT_A, PORT_B, PORT_C, or PORT_D.
+
+        Returns the encoder position in degrees
+        &#34;&#34;&#34;
+        return self.get_encoder()
+
+    def get_power(self):
+        &#34;&#34;&#34;
+        Read motor status and returns power percent (-100 to 100)
+
+        Returns:
+            None if error encountered
+            Numeric Value -100 to 100 of raw power percent
+        &#34;&#34;&#34;
+        return self.get_status()[1]
+
+    def get_speed(self):
+        &#34;&#34;&#34;
+        Read motor status and returns speed in degrees per second
+
+        Returns:
+            None if error encountered
+            Numeric Value, negative or positive, in degrees per second
+        &#34;&#34;&#34;
+        return self.get_status()[3]
+
+    def is_moving(self):
+        try:
+            return (not math.isclose(self.get_power(), 0)) and (not math.isclose(self.get_speed(), 0))
+        except TypeError:
+            return None
+
+    def get_dps(self):
+        return self.get_speed()
+
+    def offset_encoder(self, position):
+        &#34;&#34;&#34;
+        Offset a motor encoder.
+
+        Keyword arguments:
+        port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
+        offset - The encoder offset
+
+        You can zero the encoder by offsetting it by the current position
+        &#34;&#34;&#34;
+        self.brick.offset_motor_encoder(self.port, position)
+
+    def reset_encoder(self):
+        &#34;&#34;&#34;
+        Reset motor encoder(s) to 0.
+
+        Keyword arguments:
+        port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
+        &#34;&#34;&#34;
+        self.brick.reset_motor_encoder(self.port)
+
+    def reset_position(self):
+        &#34;&#34;&#34;
+        Reset motor encoder(s) to 0.
+
+        Keyword arguments:
+        port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
+        &#34;&#34;&#34;
+        return self.reset_encoder()
+
+    @staticmethod
+    def create_motors(motor_ports: list[Literal[&#34;A&#34;, &#34;B&#34;, &#34;C&#34;, &#34;D&#34;]] | str):
+        motor_ports = map(str.upper, list(motor_ports))
+        result = []
+        for port in motor_ports:
+            if port in [&#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;]:
+                result.append(Motor(port))
+        return tuple(result)
+
+    def wait_is_moving(self, sleep_interval: float = None):
+        if sleep_interval is None:
+            sleep_interval = WAIT_READY_INTERVAL
+        while not self.is_moving():
+            time.sleep(sleep_interval)
+
+    def wait_is_stopped(self, sleep_interval: float = None):
+        if sleep_interval is None:
+            sleep_interval = WAIT_READY_INTERVAL
+        while self.is_moving():
+            time.sleep(sleep_interval)
+
+
+def create_motors(motor_ports: list[Literal[&#34;A&#34;, &#34;B&#34;, &#34;C&#34;, &#34;D&#34;]] | str):
+    return Motor.create_motors(motor_ports)
+
+
+def configure_ports(*,
+                    PORT_1: Type[Sensor] = None,
+                    PORT_2: Type[Sensor] = None,
+                    PORT_3: Type[Sensor] = None,
+                    PORT_4: Type[Sensor] = None,
+                    PORT_A: Type[Motor] = None,
+                    PORT_B: Type[Motor] = None,
+                    PORT_C: Type[Motor] = None,
+                    PORT_D: Type[Motor] = None,
+                    wait: bool = True,
+                    print_status: bool = True) -&gt; Sensor | Motor | list[Sensor | Motor]:
+    &#34;&#34;&#34;
+    Configure the ports to use the specified sensor or motor and return objects for each item,
+    ordered by sensor ports followed by motor ports.
+
+    When wait is True (the default), the function will wait for the sensors to be ready before returning.
+    When print_status is True (the default), the function will print two messages, the first to let the user
+    know to wait until the ports are configured, and the second to indicate the port configuration is complete.
+
+    Example:
+
+    TOUCH_SENSOR, COLOR_SENSOR, MOTOR = configure_ports(PORT_1=TouchSensor, PORT_3=EV3ColorSensor, PORT_A=Motor)
+    &#34;&#34;&#34;
+    sensor_ports = [PORT_1, PORT_2, PORT_3, PORT_4]
+    motor_ports = [PORT_A, PORT_B, PORT_C, PORT_D]
+    is_single_device = False
+    if (sensor_ports + motor_ports).count(None) == 7:  # if only one device configured
+        is_single_device = True
+    if print_status:
+        print(
+            f&#34;Configuring port{&#39;&#39; if is_single_device else &#39;s&#39;}, please wait...&#34;)
+    sensors: list[Sensor] = []
+    motors: list[Motor] = []
+    for n, sensor_type in enumerate(sensor_ports, 1):
+        if sensor_type:
+            sensor = sensor_type(n)
+            if wait:
+                if isinstance(sensor, (EV3UltrasonicSensor, EV3ColorSensor)):
+                    sensor.wait_ready()
+            if is_single_device:
+                return sensor
+            sensors.append(sensor)
+    for letter, motor_type in zip(&#34;ABCD&#34;, motor_ports):
+        if motor_type:
+            if is_single_device:
+                return motor_type(letter)
+            motors.append(motor_type(letter))
+    if print_status:
+        print(&#34;Port configuration complete!&#34;)
+    return sensors + motors
+
+
+def reset_brick(*args):
+    &#34;Reset BrickPi devices when program exits (&#39;at exit&#39;).&#34;
+    BP.reset_all()
+
+
+# Reset brick when the program exits
+try:
+    atexit.register(reset_brick)
+except ValueError as err:
+    print(err, &#34;Must import brick in main thread&#34;, file=sys.stderr)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="utils.brick.configure_ports"><code class="name flex">
+<span>def <span class="ident">configure_ports</span></span>(<span>*, PORT_1: Type[<a title="utils.brick.Sensor" href="#utils.brick.Sensor">Sensor</a>] = None, PORT_2: Type[<a title="utils.brick.Sensor" href="#utils.brick.Sensor">Sensor</a>] = None, PORT_3: Type[<a title="utils.brick.Sensor" href="#utils.brick.Sensor">Sensor</a>] = None, PORT_4: Type[<a title="utils.brick.Sensor" href="#utils.brick.Sensor">Sensor</a>] = None, PORT_A: Type[<a title="utils.brick.Motor" href="#utils.brick.Motor">Motor</a>] = None, PORT_B: Type[<a title="utils.brick.Motor" href="#utils.brick.Motor">Motor</a>] = None, PORT_C: Type[<a title="utils.brick.Motor" href="#utils.brick.Motor">Motor</a>] = None, PORT_D: Type[<a title="utils.brick.Motor" href="#utils.brick.Motor">Motor</a>] = None, wait: bool = True, print_status: bool = True) ‑> <a title="utils.brick.Sensor" href="#utils.brick.Sensor">Sensor</a> | <a title="utils.brick.Motor" href="#utils.brick.Motor">Motor</a> | list[<a title="utils.brick.Sensor" href="#utils.brick.Sensor">Sensor</a> | <a title="utils.brick.Motor" href="#utils.brick.Motor">Motor</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Configure the ports to use the specified sensor or motor and return objects for each item,
+ordered by sensor ports followed by motor ports.</p>
+<p>When wait is True (the default), the function will wait for the sensors to be ready before returning.
+When print_status is True (the default), the function will print two messages, the first to let the user
+know to wait until the ports are configured, and the second to indicate the port configuration is complete.</p>
+<p>Example:</p>
+<p>TOUCH_SENSOR, COLOR_SENSOR, MOTOR = configure_ports(PORT_1=TouchSensor, PORT_3=EV3ColorSensor, PORT_A=Motor)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def configure_ports(*,
+                    PORT_1: Type[Sensor] = None,
+                    PORT_2: Type[Sensor] = None,
+                    PORT_3: Type[Sensor] = None,
+                    PORT_4: Type[Sensor] = None,
+                    PORT_A: Type[Motor] = None,
+                    PORT_B: Type[Motor] = None,
+                    PORT_C: Type[Motor] = None,
+                    PORT_D: Type[Motor] = None,
+                    wait: bool = True,
+                    print_status: bool = True) -&gt; Sensor | Motor | list[Sensor | Motor]:
+    &#34;&#34;&#34;
+    Configure the ports to use the specified sensor or motor and return objects for each item,
+    ordered by sensor ports followed by motor ports.
+
+    When wait is True (the default), the function will wait for the sensors to be ready before returning.
+    When print_status is True (the default), the function will print two messages, the first to let the user
+    know to wait until the ports are configured, and the second to indicate the port configuration is complete.
+
+    Example:
+
+    TOUCH_SENSOR, COLOR_SENSOR, MOTOR = configure_ports(PORT_1=TouchSensor, PORT_3=EV3ColorSensor, PORT_A=Motor)
+    &#34;&#34;&#34;
+    sensor_ports = [PORT_1, PORT_2, PORT_3, PORT_4]
+    motor_ports = [PORT_A, PORT_B, PORT_C, PORT_D]
+    is_single_device = False
+    if (sensor_ports + motor_ports).count(None) == 7:  # if only one device configured
+        is_single_device = True
+    if print_status:
+        print(
+            f&#34;Configuring port{&#39;&#39; if is_single_device else &#39;s&#39;}, please wait...&#34;)
+    sensors: list[Sensor] = []
+    motors: list[Motor] = []
+    for n, sensor_type in enumerate(sensor_ports, 1):
+        if sensor_type:
+            sensor = sensor_type(n)
+            if wait:
+                if isinstance(sensor, (EV3UltrasonicSensor, EV3ColorSensor)):
+                    sensor.wait_ready()
+            if is_single_device:
+                return sensor
+            sensors.append(sensor)
+    for letter, motor_type in zip(&#34;ABCD&#34;, motor_ports):
+        if motor_type:
+            if is_single_device:
+                return motor_type(letter)
+            motors.append(motor_type(letter))
+    if print_status:
+        print(&#34;Port configuration complete!&#34;)
+    return sensors + motors</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.create_motors"><code class="name flex">
+<span>def <span class="ident">create_motors</span></span>(<span>motor_ports: "list[Literal['A', 'B', 'C', 'D']] | str")</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_motors(motor_ports: list[Literal[&#34;A&#34;, &#34;B&#34;, &#34;C&#34;, &#34;D&#34;]] | str):
+    return Motor.create_motors(motor_ports)</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.exception_handler"><code class="name flex">
+<span>def <span class="ident">exception_handler</span></span>(<span>exception=builtins.Exception)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def exception_handler(exception=Exception):
+    def exception_handler_factory(func):
+        def wrapper(*args, **kwargs):
+            try:
+                func(*args, **kwargs)
+            except exception as err:
+                print(&#34;ERROR:&#34;, err)
+        return wrapper
+    return exception_handler_factory</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.reset_brick"><code class="name flex">
+<span>def <span class="ident">reset_brick</span></span>(<span>*args)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Reset BrickPi devices when program exits ('at exit').</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def reset_brick(*args):
+    &#34;Reset BrickPi devices when program exits (&#39;at exit&#39;).&#34;
+    BP.reset_all()</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.restore_default_brick"><code class="name flex">
+<span>def <span class="ident">restore_default_brick</span></span>(<span>bp=None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def restore_default_brick(bp=None):
+    global BP
+    if bp is None:
+        BP = _OLD_BP
+    else:
+        BP = bp</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.wait_ready_sensors"><code class="name flex">
+<span>def <span class="ident">wait_ready_sensors</span></span>(<span>debug=False)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def wait_ready_sensors(debug=False):
+    for port, sensor in Sensor.ALL_SENSORS.items():
+        if sensor is not None:
+            if debug:
+                print(f&#34;Initializing Port {port}:&#34;, type(sensor).__name__)
+            sensor.wait_ready()
+    if debug:
+        print(&#34;All Sensors Initialized&#34;)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="utils.brick.Brick"><code class="flex name class">
+<span>class <span class="ident">Brick</span></span>
+<span>(</span><span>bp=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Wrapper class for the BrickPi3 class. Comes with additional methods such get_sensor_status.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Brick(BrickPi3):
+    &#34;&#34;&#34;
+    Wrapper class for the BrickPi3 class. Comes with additional methods such get_sensor_status.
+    &#34;&#34;&#34;
+
+    def __init__(self, bp=None):
+        if bp is None:
+            self.bp = BP
+        else:
+            self.bp = bp
+        child = self.__dict__
+        parent = self.bp.__dict__
+        for key in parent.keys():
+            setattr(self, str(key), child.get(key, parent.get(key)))
+
+    def get_sensor_status(self, port: Literal[1, 2, 4, 8]):
+        &#34;&#34;&#34;
+        Read a sensor status.
+
+        Keyword arguments:
+        port - The sensor port (one at a time). PORT_1, PORT_2, PORT_3, or PORT_4.
+
+        Return a code from 0 to 4 with the following meanings:
+
+        0: VALID_DATA
+        1: NOT_CONFIGURED
+        2: CONFIGURING
+        3: NO_DATA
+        4: I2C_ERROR
+        5: INCORRECT_SENSOR_PORT
+        &#34;&#34;&#34;
+        if port == self.PORT_1:
+            message_type = self.BPSPI_MESSAGE_TYPE.GET_SENSOR_1
+            port_index = 0
+        elif port == self.PORT_2:
+            message_type = self.BPSPI_MESSAGE_TYPE.GET_SENSOR_2
+            port_index = 1
+        elif port == self.PORT_3:
+            message_type = self.BPSPI_MESSAGE_TYPE.GET_SENSOR_3
+            port_index = 2
+        elif port == self.PORT_4:
+            message_type = self.BPSPI_MESSAGE_TYPE.GET_SENSOR_4
+            port_index = 3
+        else:
+            raise IOError(
+                &#34;get_sensor error. Must be one sensor port at a time. PORT_1, PORT_2, PORT_3, or PORT_4.&#34;)
+
+        if self.SensorType[port_index] == self.SENSOR_TYPE.CUSTOM:
+            outArray = [self.SPI_Address, message_type, 0, 0, 0, 0, 0, 0, 0, 0]
+            reply = self.spi_transfer_array(outArray)
+            if reply[3] == 0xA5:
+                if reply[4] == self.SensorType[port_index]:
+                    return reply[5]
+                else:
+                    return SENSOR_STATE.INCORRECT_SENSOR_PORT
+            else:
+                raise IOError(&#34;get_sensor error: No SPI response&#34;)
+
+        elif self.SensorType[port_index] == self.SENSOR_TYPE.I2C:
+            outArray = [self.SPI_Address, message_type, 0, 0, 0, 0]
+            for b in range(self.I2CInBytes[port_index]):
+                outArray.append(0)
+            reply = self.spi_transfer_array(outArray)
+            if reply[3] == 0xA5:
+                if reply[4] == self.SensorType[port_index]:
+                    return reply[5]
+                else:
+                    return SENSOR_STATE.INCORRECT_SENSOR_PORT
+            else:
+                raise IOError(&#34;get_sensor error: No SPI response&#34;)
+
+        elif (self.SensorType[port_index] == self.SENSOR_TYPE.TOUCH
+              or self.SensorType[port_index] == self.SENSOR_TYPE.NXT_TOUCH
+              or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_TOUCH
+              or self.SensorType[port_index] == self.SENSOR_TYPE.NXT_ULTRASONIC
+              or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_COLOR_REFLECTED
+              or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_COLOR_AMBIENT
+              or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_COLOR_COLOR
+              or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_ULTRASONIC_LISTEN
+              or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_INFRARED_PROXIMITY):
+            outArray = [self.SPI_Address, message_type, 0, 0, 0, 0, 0]
+            reply = self.spi_transfer_array(outArray)
+            if (reply[3] == 0xA5):
+                if ((reply[4] == self.SensorType[port_index] or (self.SensorType[port_index] == self.SENSOR_TYPE.TOUCH
+                                                                 and (reply[4] == self.SENSOR_TYPE.NXT_TOUCH or reply[4] == self.SENSOR_TYPE.EV3_TOUCH)))):
+                    return reply[5]
+                else:
+                    return SENSOR_STATE.INCORRECT_SENSOR_PORT
+            else:
+                raise IOError(&#34;get_sensor error: No SPI response&#34;)
+
+        elif self.SensorType[port_index] == self.SENSOR_TYPE.NXT_COLOR_FULL:
+            outArray = [self.SPI_Address, message_type,
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            reply = self.spi_transfer_array(outArray)
+            if reply[3] == 0xA5:
+                if reply[4] == self.SensorType[port_index]:
+                    return reply[5]
+                else:
+                    return SENSOR_STATE.INCORRECT_SENSOR_PORT
+            else:
+                raise IOError(&#34;get_sensor error: No SPI response&#34;)
+
+        elif (self.SensorType[port_index] == self.SENSOR_TYPE.NXT_LIGHT_ON
+              or self.SensorType[port_index] == self.SENSOR_TYPE.NXT_LIGHT_OFF
+              or self.SensorType[port_index] == self.SENSOR_TYPE.NXT_COLOR_RED
+              or self.SensorType[port_index] == self.SENSOR_TYPE.NXT_COLOR_GREEN
+              or self.SensorType[port_index] == self.SENSOR_TYPE.NXT_COLOR_BLUE
+              or self.SensorType[port_index] == self.SENSOR_TYPE.NXT_COLOR_OFF
+              or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_GYRO_ABS
+              or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_GYRO_DPS
+              or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_ULTRASONIC_CM
+              or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_ULTRASONIC_INCHES):
+            outArray = [self.SPI_Address, message_type, 0, 0, 0, 0, 0, 0]
+            reply = self.spi_transfer_array(outArray)
+            if reply[3] == 0xA5:
+                if reply[4] == self.SensorType[port_index]:
+                    return reply[5]
+                else:
+                    return SENSOR_STATE.INCORRECT_SENSOR_PORT
+            else:
+                raise IOError(&#34;get_sensor error: No SPI response&#34;)
+
+        elif (self.SensorType[port_index] == self.SENSOR_TYPE.EV3_COLOR_RAW_REFLECTED
+              or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_GYRO_ABS_DPS):
+            outArray = [self.SPI_Address, message_type, 0, 0, 0, 0, 0, 0, 0, 0]
+            reply = self.spi_transfer_array(outArray)
+            if reply[3] == 0xA5:
+                if reply[4] == self.SensorType[port_index]:
+                    return reply[5]
+                else:
+                    return SENSOR_STATE.INCORRECT_SENSOR_PORT
+            else:
+                raise IOError(&#34;get_sensor error: No SPI response&#34;)
+
+        elif self.SensorType[port_index] == self.SENSOR_TYPE.EV3_COLOR_COLOR_COMPONENTS:
+            outArray = [self.SPI_Address, message_type,
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            reply = self.spi_transfer_array(outArray)
+            if reply[3] == 0xA5:
+                if reply[4] == self.SensorType[port_index]:
+                    return reply[5]
+                else:
+                    return SENSOR_STATE.INCORRECT_SENSOR_PORT
+            else:
+                raise IOError(&#34;get_sensor error: No SPI response&#34;)
+
+        elif self.SensorType[port_index] == self.SENSOR_TYPE.EV3_INFRARED_SEEK:
+            outArray = [self.SPI_Address, message_type,
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            reply = self.spi_transfer_array(outArray)
+            if reply[3] == 0xA5:
+                if reply[4] == self.SensorType[port_index]:
+                    return reply[5]
+                else:
+                    return SENSOR_STATE.INCORRECT_SENSOR_PORT
+            else:
+                raise IOError(&#34;get_sensor error: No SPI response&#34;)
+
+        elif self.SensorType[port_index] == self.SENSOR_TYPE.EV3_INFRARED_REMOTE:
+            outArray = [self.SPI_Address, message_type, 0, 0, 0, 0, 0, 0, 0, 0]
+            reply = self.spi_transfer_array(outArray)
+            if reply[3] == 0xA5:
+                if reply[4] == self.SensorType[port_index]:
+                    return reply[5]
+                else:
+                    return SENSOR_STATE.INCORRECT_SENSOR_PORT
+            else:
+                raise IOError(&#34;get_sensor error: No SPI response&#34;)
+
+        raise IOError(
+            &#34;get_sensor error: Sensor not configured or not supported.&#34;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="utils.dummy.BrickPi3" href="dummy.html#utils.dummy.BrickPi3">BrickPi3</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="utils.brick.Brick.get_sensor_status"><code class="name flex">
+<span>def <span class="ident">get_sensor_status</span></span>(<span>self, port: Literal[1, 2, 4, 8])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Read a sensor status.</p>
+<p>Keyword arguments:
+port - The sensor port (one at a time). PORT_1, PORT_2, PORT_3, or PORT_4.</p>
+<p>Return a code from 0 to 4 with the following meanings:</p>
+<p>0: VALID_DATA
+1: NOT_CONFIGURED
+2: CONFIGURING
+3: NO_DATA
+4: I2C_ERROR
+5: INCORRECT_SENSOR_PORT</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_sensor_status(self, port: Literal[1, 2, 4, 8]):
+    &#34;&#34;&#34;
+    Read a sensor status.
+
+    Keyword arguments:
+    port - The sensor port (one at a time). PORT_1, PORT_2, PORT_3, or PORT_4.
+
+    Return a code from 0 to 4 with the following meanings:
+
+    0: VALID_DATA
+    1: NOT_CONFIGURED
+    2: CONFIGURING
+    3: NO_DATA
+    4: I2C_ERROR
+    5: INCORRECT_SENSOR_PORT
+    &#34;&#34;&#34;
+    if port == self.PORT_1:
+        message_type = self.BPSPI_MESSAGE_TYPE.GET_SENSOR_1
+        port_index = 0
+    elif port == self.PORT_2:
+        message_type = self.BPSPI_MESSAGE_TYPE.GET_SENSOR_2
+        port_index = 1
+    elif port == self.PORT_3:
+        message_type = self.BPSPI_MESSAGE_TYPE.GET_SENSOR_3
+        port_index = 2
+    elif port == self.PORT_4:
+        message_type = self.BPSPI_MESSAGE_TYPE.GET_SENSOR_4
+        port_index = 3
+    else:
+        raise IOError(
+            &#34;get_sensor error. Must be one sensor port at a time. PORT_1, PORT_2, PORT_3, or PORT_4.&#34;)
+
+    if self.SensorType[port_index] == self.SENSOR_TYPE.CUSTOM:
+        outArray = [self.SPI_Address, message_type, 0, 0, 0, 0, 0, 0, 0, 0]
+        reply = self.spi_transfer_array(outArray)
+        if reply[3] == 0xA5:
+            if reply[4] == self.SensorType[port_index]:
+                return reply[5]
+            else:
+                return SENSOR_STATE.INCORRECT_SENSOR_PORT
+        else:
+            raise IOError(&#34;get_sensor error: No SPI response&#34;)
+
+    elif self.SensorType[port_index] == self.SENSOR_TYPE.I2C:
+        outArray = [self.SPI_Address, message_type, 0, 0, 0, 0]
+        for b in range(self.I2CInBytes[port_index]):
+            outArray.append(0)
+        reply = self.spi_transfer_array(outArray)
+        if reply[3] == 0xA5:
+            if reply[4] == self.SensorType[port_index]:
+                return reply[5]
+            else:
+                return SENSOR_STATE.INCORRECT_SENSOR_PORT
+        else:
+            raise IOError(&#34;get_sensor error: No SPI response&#34;)
+
+    elif (self.SensorType[port_index] == self.SENSOR_TYPE.TOUCH
+          or self.SensorType[port_index] == self.SENSOR_TYPE.NXT_TOUCH
+          or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_TOUCH
+          or self.SensorType[port_index] == self.SENSOR_TYPE.NXT_ULTRASONIC
+          or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_COLOR_REFLECTED
+          or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_COLOR_AMBIENT
+          or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_COLOR_COLOR
+          or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_ULTRASONIC_LISTEN
+          or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_INFRARED_PROXIMITY):
+        outArray = [self.SPI_Address, message_type, 0, 0, 0, 0, 0]
+        reply = self.spi_transfer_array(outArray)
+        if (reply[3] == 0xA5):
+            if ((reply[4] == self.SensorType[port_index] or (self.SensorType[port_index] == self.SENSOR_TYPE.TOUCH
+                                                             and (reply[4] == self.SENSOR_TYPE.NXT_TOUCH or reply[4] == self.SENSOR_TYPE.EV3_TOUCH)))):
+                return reply[5]
+            else:
+                return SENSOR_STATE.INCORRECT_SENSOR_PORT
+        else:
+            raise IOError(&#34;get_sensor error: No SPI response&#34;)
+
+    elif self.SensorType[port_index] == self.SENSOR_TYPE.NXT_COLOR_FULL:
+        outArray = [self.SPI_Address, message_type,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        reply = self.spi_transfer_array(outArray)
+        if reply[3] == 0xA5:
+            if reply[4] == self.SensorType[port_index]:
+                return reply[5]
+            else:
+                return SENSOR_STATE.INCORRECT_SENSOR_PORT
+        else:
+            raise IOError(&#34;get_sensor error: No SPI response&#34;)
+
+    elif (self.SensorType[port_index] == self.SENSOR_TYPE.NXT_LIGHT_ON
+          or self.SensorType[port_index] == self.SENSOR_TYPE.NXT_LIGHT_OFF
+          or self.SensorType[port_index] == self.SENSOR_TYPE.NXT_COLOR_RED
+          or self.SensorType[port_index] == self.SENSOR_TYPE.NXT_COLOR_GREEN
+          or self.SensorType[port_index] == self.SENSOR_TYPE.NXT_COLOR_BLUE
+          or self.SensorType[port_index] == self.SENSOR_TYPE.NXT_COLOR_OFF
+          or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_GYRO_ABS
+          or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_GYRO_DPS
+          or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_ULTRASONIC_CM
+          or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_ULTRASONIC_INCHES):
+        outArray = [self.SPI_Address, message_type, 0, 0, 0, 0, 0, 0]
+        reply = self.spi_transfer_array(outArray)
+        if reply[3] == 0xA5:
+            if reply[4] == self.SensorType[port_index]:
+                return reply[5]
+            else:
+                return SENSOR_STATE.INCORRECT_SENSOR_PORT
+        else:
+            raise IOError(&#34;get_sensor error: No SPI response&#34;)
+
+    elif (self.SensorType[port_index] == self.SENSOR_TYPE.EV3_COLOR_RAW_REFLECTED
+          or self.SensorType[port_index] == self.SENSOR_TYPE.EV3_GYRO_ABS_DPS):
+        outArray = [self.SPI_Address, message_type, 0, 0, 0, 0, 0, 0, 0, 0]
+        reply = self.spi_transfer_array(outArray)
+        if reply[3] == 0xA5:
+            if reply[4] == self.SensorType[port_index]:
+                return reply[5]
+            else:
+                return SENSOR_STATE.INCORRECT_SENSOR_PORT
+        else:
+            raise IOError(&#34;get_sensor error: No SPI response&#34;)
+
+    elif self.SensorType[port_index] == self.SENSOR_TYPE.EV3_COLOR_COLOR_COMPONENTS:
+        outArray = [self.SPI_Address, message_type,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        reply = self.spi_transfer_array(outArray)
+        if reply[3] == 0xA5:
+            if reply[4] == self.SensorType[port_index]:
+                return reply[5]
+            else:
+                return SENSOR_STATE.INCORRECT_SENSOR_PORT
+        else:
+            raise IOError(&#34;get_sensor error: No SPI response&#34;)
+
+    elif self.SensorType[port_index] == self.SENSOR_TYPE.EV3_INFRARED_SEEK:
+        outArray = [self.SPI_Address, message_type,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        reply = self.spi_transfer_array(outArray)
+        if reply[3] == 0xA5:
+            if reply[4] == self.SensorType[port_index]:
+                return reply[5]
+            else:
+                return SENSOR_STATE.INCORRECT_SENSOR_PORT
+        else:
+            raise IOError(&#34;get_sensor error: No SPI response&#34;)
+
+    elif self.SensorType[port_index] == self.SENSOR_TYPE.EV3_INFRARED_REMOTE:
+        outArray = [self.SPI_Address, message_type, 0, 0, 0, 0, 0, 0, 0, 0]
+        reply = self.spi_transfer_array(outArray)
+        if reply[3] == 0xA5:
+            if reply[4] == self.SensorType[port_index]:
+                return reply[5]
+            else:
+                return SENSOR_STATE.INCORRECT_SENSOR_PORT
+        else:
+            raise IOError(&#34;get_sensor error: No SPI response&#34;)
+
+    raise IOError(
+        &#34;get_sensor error: Sensor not configured or not supported.&#34;)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="utils.dummy.BrickPi3" href="dummy.html#utils.dummy.BrickPi3">BrickPi3</a></b></code>:
+<ul class="hlist">
+<li><code><a title="utils.dummy.BrickPi3.SENSOR_CUSTOM" href="dummy.html#utils.dummy.BrickPi3.SENSOR_CUSTOM">SENSOR_CUSTOM</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.set_sensor" href="dummy.html#utils.dummy.BrickPi3.set_sensor">set_sensor</a></code></li>
+<li><code><a title="utils.dummy.BrickPi3.spi_transfer_array" href="dummy.html#utils.dummy.BrickPi3.spi_transfer_array">spi_transfer_array</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="utils.brick.Color"><code class="flex name class">
+<span>class <span class="ident">Color</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Namespace for color names, to reference them easily.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Color:
+    &#34;&#34;&#34;
+    Namespace for color names, to reference them easily.
+    &#34;&#34;&#34;
+    UNKNOWN = &#34;Unknown&#34;
+    BLACK = &#34;Black&#34;
+    BLUE = &#34;Blue&#34;
+    GREEN = &#34;Green&#34;
+    YELLOW = &#34;Yellow&#34;
+    RED = &#34;Red&#34;
+    WHITE = &#34;White&#34;
+    ORANGE = &#34;Orange&#34;</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="utils.brick.Color.BLACK"><code class="name">var <span class="ident">BLACK</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.brick.Color.BLUE"><code class="name">var <span class="ident">BLUE</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.brick.Color.GREEN"><code class="name">var <span class="ident">GREEN</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.brick.Color.ORANGE"><code class="name">var <span class="ident">ORANGE</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.brick.Color.RED"><code class="name">var <span class="ident">RED</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.brick.Color.UNKNOWN"><code class="name">var <span class="ident">UNKNOWN</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.brick.Color.WHITE"><code class="name">var <span class="ident">WHITE</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.brick.Color.YELLOW"><code class="name">var <span class="ident">YELLOW</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="utils.brick.ColorMapping"><code class="flex name class">
+<span>class <span class="ident">ColorMapping</span></span>
+<span>(</span><span>name: str, code: int)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class that maps a color to a numeric code used by the color sensor.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ColorMapping:
+    &#34;&#34;&#34;
+    Class that maps a color to a numeric code used by the color sensor.
+    &#34;&#34;&#34;
+
+    def __init__(self, name: str, code: int):
+        self.name = name
+        self.code = code</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.ColorMappings"><code class="flex name class">
+<span>class <span class="ident">ColorMappings</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Color mappings based on the colors that can be detected by the color sensor.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ColorMappings:
+    &#34;&#34;&#34;
+    Color mappings based on the colors that can be detected by the color sensor.
+    &#34;&#34;&#34;
+    UNKNOWN = ColorMapping(&#34;Unknown&#34;, 0)
+    BLACK = ColorMapping(&#34;Black&#34;, 1)
+    BLUE = ColorMapping(&#34;Blue&#34;, 2)
+    GREEN = ColorMapping(&#34;Green&#34;, 3)
+    YELLOW = ColorMapping(&#34;Yellow&#34;, 4)
+    RED = ColorMapping(&#34;Red&#34;, 5)
+    WHITE = ColorMapping(&#34;White&#34;, 6)
+    ORANGE = ColorMapping(&#34;Orange&#34;, 7)
+
+    _all_mappings = [UNKNOWN, BLACK, BLUE, GREEN, YELLOW, RED, WHITE, ORANGE]</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="utils.brick.ColorMappings.BLACK"><code class="name">var <span class="ident">BLACK</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.brick.ColorMappings.BLUE"><code class="name">var <span class="ident">BLUE</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.brick.ColorMappings.GREEN"><code class="name">var <span class="ident">GREEN</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.brick.ColorMappings.ORANGE"><code class="name">var <span class="ident">ORANGE</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.brick.ColorMappings.RED"><code class="name">var <span class="ident">RED</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.brick.ColorMappings.UNKNOWN"><code class="name">var <span class="ident">UNKNOWN</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.brick.ColorMappings.WHITE"><code class="name">var <span class="ident">WHITE</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.brick.ColorMappings.YELLOW"><code class="name">var <span class="ident">YELLOW</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="utils.brick.EV3ColorSensor"><code class="flex name class">
+<span>class <span class="ident">EV3ColorSensor</span></span>
+<span>(</span><span>port, mode='component', bp=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>EV3 Color Sensor. Default mode is "component".</p>
+<p>Values given by modes:
+component - give list of values [Red, Green, Blue, Unknown?]
+ambient - light off, detect any light
+red - red light on, detect red value only
+rawred - give list of values [Red, Unknown?]
+id - provide a single integer value based on the sensor's guess of detected color</p>
+<p>Initialize sensor with a given port (1, 2, 3, or 4).</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EV3ColorSensor(Sensor):
+    &#34;&#34;&#34;
+    EV3 Color Sensor. Default mode is &#34;component&#34;.
+
+    Values given by modes:
+    component - give list of values [Red, Green, Blue, Unknown?]
+    ambient - light off, detect any light
+    red - red light on, detect red value only
+    rawred - give list of values [Red, Unknown?]
+    id - provide a single integer value based on the sensor&#39;s guess of detected color
+    &#34;&#34;&#34;
+    class Mode:
+        &#34;Mode for the EV3 Color Sensor.&#34;
+        COMPONENT = &#34;component&#34;
+        AMBIENT = &#34;ambient&#34;
+        RED = &#34;red&#34;
+        RAW_RED = &#34;rawred&#34;
+        ID = &#34;id&#34;
+
+    def __init__(self, port, mode=&#34;component&#34;, bp=None):
+        super(EV3ColorSensor, self).__init__(port, bp)
+        self.set_mode(mode)
+
+    def set_mode(self, mode: str):
+        &#34;&#34;&#34;
+        Sets color sensor mode. Return True if mode change successful.
+
+        component - give list of values [Red, Green, Blue, Unknown?]
+        ambient - light off, detect any light
+        red - red light on, detect red value only
+        rawred - give list of values [Red, Unknown?]
+        id - provide a single integer value based on the sensor&#39;s guess of detected color
+        &#34;&#34;&#34;
+        try:
+
+            if mode.lower() == self.Mode.COMPONENT:
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_COLOR_COMPONENTS)
+            elif mode.lower() == self.Mode.AMBIENT:
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_AMBIENT)
+            elif mode.lower() == self.Mode.RED:
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_REFLECTED)
+            elif mode.lower() == self.Mode.RAW_RED:
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_RAW_REFLECTED)
+            elif mode.lower() == self.Mode.ID:
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_COLOR)
+            else:
+                return False
+            self.mode = mode.lower()
+            return True
+        except SensorError as error:
+            return error
+
+    def get_ambient(self) -&gt; float:
+        &#34;Returns the ambient light detected by the sensor. Light will not turn on.&#34;
+        if self.mode != self.Mode.AMBIENT:
+            self.set_mode(self.Mode.AMBIENT)
+            self.wait_ready()
+        return self.get_value()
+
+    def get_rgb(self) -&gt; list[float]:
+        &#34;Return the RGB values from the sensor. This will switch the sensor to component mode.&#34;
+        if self.mode != self.Mode.COMPONENT:
+            self.set_mode(self.Mode.COMPONENT)
+            self.wait_ready()
+        val = self.get_value()
+        return val[:-1] if val is not None else [None, None, None]
+
+    def get_red(self) -&gt; float:
+        &#34;Returns the red light detected by the sensor. Only red light turns on.&#34;
+        if self.mode != self.Mode.RED:
+            self.set_mode(self.Mode.RED)
+            self.wait_ready()
+        return self.get_value()
+
+    def get_color_name(self) -&gt; str:
+        &#34;Return the closest detected color by name. This will switch the sensor to id mode.&#34;
+        if self.mode != self.Mode.ID:
+            self.set_mode(self.Mode.ID)
+            self.wait_ready()
+        return _color_names_by_code.get(self.get_value(), Color.UNKNOWN)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="utils.brick.Sensor" href="#utils.brick.Sensor">Sensor</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="utils.remote.RemoteEV3ColorSensor" href="remote.html#utils.remote.RemoteEV3ColorSensor">RemoteEV3ColorSensor</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="utils.brick.EV3ColorSensor.Mode"><code class="name">var <span class="ident">Mode</span></code></dt>
+<dd>
+<div class="desc"><p>Mode for the EV3 Color Sensor.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="utils.brick.EV3ColorSensor.get_ambient"><code class="name flex">
+<span>def <span class="ident">get_ambient</span></span>(<span>self) ‑> float</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns the ambient light detected by the sensor. Light will not turn on.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_ambient(self) -&gt; float:
+    &#34;Returns the ambient light detected by the sensor. Light will not turn on.&#34;
+    if self.mode != self.Mode.AMBIENT:
+        self.set_mode(self.Mode.AMBIENT)
+        self.wait_ready()
+    return self.get_value()</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.EV3ColorSensor.get_color_name"><code class="name flex">
+<span>def <span class="ident">get_color_name</span></span>(<span>self) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return the closest detected color by name. This will switch the sensor to id mode.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_color_name(self) -&gt; str:
+    &#34;Return the closest detected color by name. This will switch the sensor to id mode.&#34;
+    if self.mode != self.Mode.ID:
+        self.set_mode(self.Mode.ID)
+        self.wait_ready()
+    return _color_names_by_code.get(self.get_value(), Color.UNKNOWN)</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.EV3ColorSensor.get_red"><code class="name flex">
+<span>def <span class="ident">get_red</span></span>(<span>self) ‑> float</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns the red light detected by the sensor. Only red light turns on.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_red(self) -&gt; float:
+    &#34;Returns the red light detected by the sensor. Only red light turns on.&#34;
+    if self.mode != self.Mode.RED:
+        self.set_mode(self.Mode.RED)
+        self.wait_ready()
+    return self.get_value()</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.EV3ColorSensor.get_rgb"><code class="name flex">
+<span>def <span class="ident">get_rgb</span></span>(<span>self) ‑> list[float]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return the RGB values from the sensor. This will switch the sensor to component mode.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_rgb(self) -&gt; list[float]:
+    &#34;Return the RGB values from the sensor. This will switch the sensor to component mode.&#34;
+    if self.mode != self.Mode.COMPONENT:
+        self.set_mode(self.Mode.COMPONENT)
+        self.wait_ready()
+    val = self.get_value()
+    return val[:-1] if val is not None else [None, None, None]</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.EV3ColorSensor.set_mode"><code class="name flex">
+<span>def <span class="ident">set_mode</span></span>(<span>self, mode: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Sets color sensor mode. Return True if mode change successful.</p>
+<p>component - give list of values [Red, Green, Blue, Unknown?]
+ambient - light off, detect any light
+red - red light on, detect red value only
+rawred - give list of values [Red, Unknown?]
+id - provide a single integer value based on the sensor's guess of detected color</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_mode(self, mode: str):
+    &#34;&#34;&#34;
+    Sets color sensor mode. Return True if mode change successful.
+
+    component - give list of values [Red, Green, Blue, Unknown?]
+    ambient - light off, detect any light
+    red - red light on, detect red value only
+    rawred - give list of values [Red, Unknown?]
+    id - provide a single integer value based on the sensor&#39;s guess of detected color
+    &#34;&#34;&#34;
+    try:
+
+        if mode.lower() == self.Mode.COMPONENT:
+            self.brick.set_sensor_type(
+                self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_COLOR_COMPONENTS)
+        elif mode.lower() == self.Mode.AMBIENT:
+            self.brick.set_sensor_type(
+                self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_AMBIENT)
+        elif mode.lower() == self.Mode.RED:
+            self.brick.set_sensor_type(
+                self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_REFLECTED)
+        elif mode.lower() == self.Mode.RAW_RED:
+            self.brick.set_sensor_type(
+                self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_RAW_REFLECTED)
+        elif mode.lower() == self.Mode.ID:
+            self.brick.set_sensor_type(
+                self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_COLOR)
+        else:
+            return False
+        self.mode = mode.lower()
+        return True
+    except SensorError as error:
+        return error</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="utils.brick.Sensor" href="#utils.brick.Sensor">Sensor</a></b></code>:
+<ul class="hlist">
+<li><code><a title="utils.brick.Sensor.get_raw_value" href="#utils.brick.Sensor.get_raw_value">get_raw_value</a></code></li>
+<li><code><a title="utils.brick.Sensor.get_status" href="#utils.brick.Sensor.get_status">get_status</a></code></li>
+<li><code><a title="utils.brick.Sensor.get_value" href="#utils.brick.Sensor.get_value">get_value</a></code></li>
+<li><code><a title="utils.brick.Sensor.set_port" href="#utils.brick.Sensor.set_port">set_port</a></code></li>
+<li><code><a title="utils.brick.Sensor.wait_ready" href="#utils.brick.Sensor.wait_ready">wait_ready</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="utils.brick.EV3GyroSensor"><code class="flex name class">
+<span>class <span class="ident">EV3GyroSensor</span></span>
+<span>(</span><span>port: Literal[1, 2, 3, 4], mode='both', bp=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>EV3 Gyro sensor. Default mode is "both".</p>
+<p>Values given by modes:
+abs - Absolute degrees rotated since start
+dps - Degrees per second of rotation
+both - list of [abs, dps] values</p>
+<p>Initialize sensor with a given port (1, 2, 3, or 4).</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EV3GyroSensor(Sensor):
+    &#34;&#34;&#34;
+    EV3 Gyro sensor. Default mode is &#34;both&#34;.
+
+    Values given by modes:
+    abs - Absolute degrees rotated since start
+    dps - Degrees per second of rotation
+    both - list of [abs, dps] values
+    &#34;&#34;&#34;
+    class Mode:
+        &#34;Mode for the EV3 Gyro Sensor.&#34;
+        ABS = &#34;abs&#34;
+        DPS = &#34;dps&#34;
+        BOTH = &#34;both&#34;
+
+    def __init__(self, port: Literal[1, 2, 3, 4], mode=&#34;both&#34;, bp=None):
+        super(EV3GyroSensor, self).__init__(port, bp)
+        self.set_mode(mode)
+
+    def set_mode(self, mode: str):
+        &#34;&#34;&#34;
+        Change gyro sensor mode.
+
+        abs - Absolute degrees rotated since start
+        dps - Degrees per second of rotation
+        both - list of [abs, dps] values
+        &#34;&#34;&#34;
+        try:
+            if mode.lower() == self.Mode.ABS:
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_GYRO_ABS)
+            elif mode.lower() == self.Mode.DPS:
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_GYRO_DPS)
+            elif mode.lower() == self.Mode.BOTH:
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_GYRO_ABS_DPS)
+            else:
+                return False
+            self.mode = mode.lower()
+            return True
+        except SensorError as error:
+            return error
+
+    def reset_measure(self):
+        return self.set_mode(self.mode.lower())
+
+    def get_abs_measure(self):
+        if self.mode != self.Mode.ABS:
+            self.set_mode(self.Mode.ABS)
+            self.wait_ready()
+        return self.get_value()
+
+    def get_dps_measure(self):
+        if self.mode != self.Mode.DPS:
+            self.set_mode(self.Mode.DPS)
+            self.wait_ready()
+        return self.get_value()
+
+    def get_both_measure(self):
+        if self.mode != self.Mode.BOTH:
+            self.set_mode(self.Mode.BOTH)
+            self.wait_ready()
+        return self.get_value()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="utils.brick.Sensor" href="#utils.brick.Sensor">Sensor</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="utils.remote.RemoteEV3GyroSensor" href="remote.html#utils.remote.RemoteEV3GyroSensor">RemoteEV3GyroSensor</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="utils.brick.EV3GyroSensor.Mode"><code class="name">var <span class="ident">Mode</span></code></dt>
+<dd>
+<div class="desc"><p>Mode for the EV3 Gyro Sensor.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="utils.brick.EV3GyroSensor.get_abs_measure"><code class="name flex">
+<span>def <span class="ident">get_abs_measure</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_abs_measure(self):
+    if self.mode != self.Mode.ABS:
+        self.set_mode(self.Mode.ABS)
+        self.wait_ready()
+    return self.get_value()</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.EV3GyroSensor.get_both_measure"><code class="name flex">
+<span>def <span class="ident">get_both_measure</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_both_measure(self):
+    if self.mode != self.Mode.BOTH:
+        self.set_mode(self.Mode.BOTH)
+        self.wait_ready()
+    return self.get_value()</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.EV3GyroSensor.get_dps_measure"><code class="name flex">
+<span>def <span class="ident">get_dps_measure</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_dps_measure(self):
+    if self.mode != self.Mode.DPS:
+        self.set_mode(self.Mode.DPS)
+        self.wait_ready()
+    return self.get_value()</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.EV3GyroSensor.reset_measure"><code class="name flex">
+<span>def <span class="ident">reset_measure</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def reset_measure(self):
+    return self.set_mode(self.mode.lower())</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.EV3GyroSensor.set_mode"><code class="name flex">
+<span>def <span class="ident">set_mode</span></span>(<span>self, mode: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Change gyro sensor mode.</p>
+<p>abs - Absolute degrees rotated since start
+dps - Degrees per second of rotation
+both - list of [abs, dps] values</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_mode(self, mode: str):
+    &#34;&#34;&#34;
+    Change gyro sensor mode.
+
+    abs - Absolute degrees rotated since start
+    dps - Degrees per second of rotation
+    both - list of [abs, dps] values
+    &#34;&#34;&#34;
+    try:
+        if mode.lower() == self.Mode.ABS:
+            self.brick.set_sensor_type(
+                self.port, BrickPi3.SENSOR_TYPE.EV3_GYRO_ABS)
+        elif mode.lower() == self.Mode.DPS:
+            self.brick.set_sensor_type(
+                self.port, BrickPi3.SENSOR_TYPE.EV3_GYRO_DPS)
+        elif mode.lower() == self.Mode.BOTH:
+            self.brick.set_sensor_type(
+                self.port, BrickPi3.SENSOR_TYPE.EV3_GYRO_ABS_DPS)
+        else:
+            return False
+        self.mode = mode.lower()
+        return True
+    except SensorError as error:
+        return error</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="utils.brick.Sensor" href="#utils.brick.Sensor">Sensor</a></b></code>:
+<ul class="hlist">
+<li><code><a title="utils.brick.Sensor.get_raw_value" href="#utils.brick.Sensor.get_raw_value">get_raw_value</a></code></li>
+<li><code><a title="utils.brick.Sensor.get_status" href="#utils.brick.Sensor.get_status">get_status</a></code></li>
+<li><code><a title="utils.brick.Sensor.get_value" href="#utils.brick.Sensor.get_value">get_value</a></code></li>
+<li><code><a title="utils.brick.Sensor.set_port" href="#utils.brick.Sensor.set_port">set_port</a></code></li>
+<li><code><a title="utils.brick.Sensor.wait_ready" href="#utils.brick.Sensor.wait_ready">wait_ready</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="utils.brick.EV3UltrasonicSensor"><code class="flex name class">
+<span>class <span class="ident">EV3UltrasonicSensor</span></span>
+<span>(</span><span>port: Literal[1, 2, 3, 4], mode='cm', bp=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>EV3 Ultrasonic Sensor. Default mode returns distance in centimeters (cm).</p>
+<p>Values given by modes:
+cm - centimeter measure (0 to 255)
+in - inches measure
+listen - 0 or 1, 1 means another ultrasonic sensor is detected</p>
+<p>Initialize sensor with a given port (1, 2, 3, or 4).</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EV3UltrasonicSensor(Sensor):
+    &#34;&#34;&#34;
+    EV3 Ultrasonic Sensor. Default mode returns distance in centimeters (cm).
+
+    Values given by modes:
+    cm - centimeter measure (0 to 255)
+    in - inches measure
+    listen - 0 or 1, 1 means another ultrasonic sensor is detected
+    &#34;&#34;&#34;
+    class Mode:
+        &#34;Mode for the EV3 Ultrasonic Sensor.&#34;
+        CM = &#34;cm&#34;
+        IN = &#34;in&#34;
+        LISTEN = &#34;listen&#34;
+
+    def __init__(self, port: Literal[1, 2, 3, 4], mode=&#34;cm&#34;, bp=None):
+        super(EV3UltrasonicSensor, self).__init__(port, bp)
+        self.set_mode(mode)
+
+    def set_mode(self, mode: str):
+        &#34;&#34;&#34;
+        Set ultrasonic sensor mode. Return True if mode change successful.
+        cm - centimeter measure (0 to 255)
+        in - inches measure
+        listen - 0 or 1, 1 means another ultrasonic sensor is detected
+        &#34;&#34;&#34;
+        try:
+            if mode.lower() == self.Mode.CM:
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_CM)
+            elif mode.lower() == self.Mode.IN:
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_INCHES)
+            elif mode.lower() == self.Mode.LISTEN:
+                self.brick.set_sensor_type(
+                    self.port, BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_LISTEN)
+            else:
+                return False
+            self.mode = mode.lower()
+            return True
+        except SensorError as error:
+            return error
+
+    def get_cm(self):
+        if self.mode != self.Mode.CM:
+            self.set_mode(self.Mode.CM)
+            self.wait_ready()
+        return self.get_value()
+
+    def get_inches(self):
+        if self.mode != self.Mode.IN:
+            self.set_mode(self.Mode.IN)
+            self.wait_ready()
+        return self.get_value()
+
+    def detects_other_us_sensor(self):
+        if self.mode != self.Mode.LISTEN:
+            self.set_mode(self.Mode.LISTEN)
+            self.wait_ready()
+        return self.get_value() == 1</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="utils.brick.Sensor" href="#utils.brick.Sensor">Sensor</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="utils.remote.RemoteEV3UltrasonicSensor" href="remote.html#utils.remote.RemoteEV3UltrasonicSensor">RemoteEV3UltrasonicSensor</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="utils.brick.EV3UltrasonicSensor.Mode"><code class="name">var <span class="ident">Mode</span></code></dt>
+<dd>
+<div class="desc"><p>Mode for the EV3 Ultrasonic Sensor.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="utils.brick.EV3UltrasonicSensor.detects_other_us_sensor"><code class="name flex">
+<span>def <span class="ident">detects_other_us_sensor</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def detects_other_us_sensor(self):
+    if self.mode != self.Mode.LISTEN:
+        self.set_mode(self.Mode.LISTEN)
+        self.wait_ready()
+    return self.get_value() == 1</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.EV3UltrasonicSensor.get_cm"><code class="name flex">
+<span>def <span class="ident">get_cm</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_cm(self):
+    if self.mode != self.Mode.CM:
+        self.set_mode(self.Mode.CM)
+        self.wait_ready()
+    return self.get_value()</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.EV3UltrasonicSensor.get_inches"><code class="name flex">
+<span>def <span class="ident">get_inches</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_inches(self):
+    if self.mode != self.Mode.IN:
+        self.set_mode(self.Mode.IN)
+        self.wait_ready()
+    return self.get_value()</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.EV3UltrasonicSensor.set_mode"><code class="name flex">
+<span>def <span class="ident">set_mode</span></span>(<span>self, mode: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set ultrasonic sensor mode. Return True if mode change successful.
+cm - centimeter measure (0 to 255)
+in - inches measure
+listen - 0 or 1, 1 means another ultrasonic sensor is detected</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_mode(self, mode: str):
+    &#34;&#34;&#34;
+    Set ultrasonic sensor mode. Return True if mode change successful.
+    cm - centimeter measure (0 to 255)
+    in - inches measure
+    listen - 0 or 1, 1 means another ultrasonic sensor is detected
+    &#34;&#34;&#34;
+    try:
+        if mode.lower() == self.Mode.CM:
+            self.brick.set_sensor_type(
+                self.port, BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_CM)
+        elif mode.lower() == self.Mode.IN:
+            self.brick.set_sensor_type(
+                self.port, BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_INCHES)
+        elif mode.lower() == self.Mode.LISTEN:
+            self.brick.set_sensor_type(
+                self.port, BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_LISTEN)
+        else:
+            return False
+        self.mode = mode.lower()
+        return True
+    except SensorError as error:
+        return error</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="utils.brick.Sensor" href="#utils.brick.Sensor">Sensor</a></b></code>:
+<ul class="hlist">
+<li><code><a title="utils.brick.Sensor.get_raw_value" href="#utils.brick.Sensor.get_raw_value">get_raw_value</a></code></li>
+<li><code><a title="utils.brick.Sensor.get_status" href="#utils.brick.Sensor.get_status">get_status</a></code></li>
+<li><code><a title="utils.brick.Sensor.get_value" href="#utils.brick.Sensor.get_value">get_value</a></code></li>
+<li><code><a title="utils.brick.Sensor.set_port" href="#utils.brick.Sensor.set_port">set_port</a></code></li>
+<li><code><a title="utils.brick.Sensor.wait_ready" href="#utils.brick.Sensor.wait_ready">wait_ready</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="utils.brick.IOError"><code class="flex name class">
+<span>class <span class="ident">IOError</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Base class for I/O related errors.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class IOError(OSError):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.OSError</li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="utils.brick.Motor"><code class="flex name class">
+<span>class <span class="ident">Motor</span></span>
+<span>(</span><span>port: "Literal['A', 'B', 'C', 'D'] | list[str]", bp=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Motor class for any motor.</p>
+<p>Initialize this Motor object with the ports "A", "B", "C", or "D".
+You may also provide a list of these ports such as ["A", "C"] to run
+both motors at the exact same time (exact combined behavior unknown).</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Motor:
+    &#34;Motor class for any motor.&#34;
+    INF = INF
+    MAX_SPEED = 1560  # positive or negative degree per second speed
+    MAX_POWER = 100  # positive or negative percent power
+
+    def __init__(self, port: Literal[&#34;A&#34;, &#34;B&#34;, &#34;C&#34;, &#34;D&#34;] | list[str], bp=None):
+        &#34;&#34;&#34;
+        Initialize this Motor object with the ports &#34;A&#34;, &#34;B&#34;, &#34;C&#34;, or &#34;D&#34;.
+        You may also provide a list of these ports such as [&#34;A&#34;, &#34;C&#34;] to run
+        both motors at the exact same time (exact combined behavior unknown).
+        &#34;&#34;&#34;
+        self.brick = Brick(bp)
+        self.set_port(port)
+
+    def set_port(self, port):
+        &#34;&#34;&#34;
+        Port can be &#34;A&#34;, &#34;B&#34;, &#34;C&#34;, or &#34;D&#34;.
+        You may also provide a list of these ports such as [&#34;A&#34;, &#34;C&#34;] to run
+        both motors at the exact same time (exact combined behavior unknown).
+        &#34;&#34;&#34;
+        if isinstance(port, list):
+            self.port = sum([PORTS[i] for i in port])
+        elif isinstance(port, int) or isinstance(port, str):
+            self.port = PORTS[str(port).upper()]
+
+    def set_power(self, power):
+        &#34;&#34;&#34;
+        Set the motor power in percent.
+
+        Keyword arguments:
+        power - The power from -100 to 100, or -128 for float
+        &#34;&#34;&#34;
+        self.brick.set_motor_power(self.port, power)
+
+    def float_motor(self):
+        &#34;Float the motor, which means let it rotate freely while measuring rotations.&#34;
+        self.brick.set_motor_power(self.port, -128)
+
+    def set_position(self, position):
+        &#34;Set the motor target position in degrees.&#34;
+        self.brick.set_motor_position(self.port, position)
+
+    def set_position_relative(self, degrees):
+        &#34;Set the relative motor target position in degrees, current position plus the specified degrees.&#34;
+        self.brick.set_motor_position_relative(self.port, degrees)
+
+    def set_position_kp(self, kp=25):
+        &#34;&#34;&#34;
+        Set the motor target position KP constant.
+
+        If you set kp higher, the motor will be more responsive to errors in position, at the cost of perhaps overshooting and oscillating.
+        kd slows down the motor as it approaches the target, and helps to prevent overshoot.
+        In general, if you increase kp, you should also increase kd to keep the motor from overshooting and oscillating.
+
+        Keyword arguments:
+        port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
+        kp - The KP constant (default 25)
+        &#34;&#34;&#34;
+        self.brick.set_motor_position_kp(self.port, kp)
+
+    def set_position_kd(self, kd=70):
+        &#34;&#34;&#34;
+        Set the motor target position KD constant.
+
+        If you set kp higher, the motor will be more responsive to errors in position, at the cost of perhaps overshooting and oscillating.
+        kd slows down the motor as it approaches the target, and helps to prevent overshoot.
+        In general, if you increase kp, you should also increase kd to keep the motor from overshooting and oscillating.
+
+        Keyword arguments:
+        port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
+        kd - The KD constant (default 70)
+        &#34;&#34;&#34;
+        self.brick.set_motor_position_kd(self.port, kd)
+
+    def set_dps(self, dps):
+        &#34;&#34;&#34;
+        Set the motor target speed in degrees per second. 
+        The motor will move at this speed consistently, once this function is run.
+
+        Keyword arguments:
+        port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
+        dps - The target speed in degrees per second
+        &#34;&#34;&#34;
+        self.brick.set_motor_dps(self.port, dps)
+        self.set_limits(dps=dps)
+
+    def set_limits(self, power=0, dps=0):
+        &#34;&#34;&#34;
+        Set the motor speed limit.
+
+        Keyword arguments:
+        port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
+        power - The power limit in percent (0 to 100), with 0 being no limit (100)
+        dps - The speed limit in degrees per second, with 0 being no limit
+        &#34;&#34;&#34;
+        self.brick.set_motor_limits(self.port, power, dps)
+
+    def get_status(self):
+        &#34;&#34;&#34;
+        Read a motor status.
+
+        Keyword arguments:
+        port - The motor port (one at a time). PORT_A, PORT_B, PORT_C, or PORT_D.
+
+        Returns a list:
+            flags - 8-bits of bit-flags that indicate motor status:
+                bit 0 - LOW_VOLTAGE_FLOAT - The motors are automatically disabled because the battery voltage is too low
+                bit 1 - OVERLOADED - The motors aren&#39;t close to the target (applies to position control and dps speed control).
+            power - the raw PWM power in percent (-100 to 100)
+            encoder - The encoder position
+            dps - The current speed in Degrees Per Second
+        &#34;&#34;&#34;
+        try:
+            return self.brick.get_motor_status(self.port)
+        except IOError:
+            return [None, None, None, None]
+
+    def get_encoder(self):
+        &#34;&#34;&#34;
+        Read a motor encoder in degrees.
+
+        Keyword arguments:
+        port - The motor port (one at a time). PORT_A, PORT_B, PORT_C, or PORT_D.
+
+        Returns the encoder position in degrees
+        &#34;&#34;&#34;
+        return self.brick.get_motor_encoder(self.port)
+
+    def get_position(self):
+        &#34;&#34;&#34;
+        Read a motor encoder in degrees.
+
+        Keyword arguments:
+        port - The motor port (one at a time). PORT_A, PORT_B, PORT_C, or PORT_D.
+
+        Returns the encoder position in degrees
+        &#34;&#34;&#34;
+        return self.get_encoder()
+
+    def get_power(self):
+        &#34;&#34;&#34;
+        Read motor status and returns power percent (-100 to 100)
+
+        Returns:
+            None if error encountered
+            Numeric Value -100 to 100 of raw power percent
+        &#34;&#34;&#34;
+        return self.get_status()[1]
+
+    def get_speed(self):
+        &#34;&#34;&#34;
+        Read motor status and returns speed in degrees per second
+
+        Returns:
+            None if error encountered
+            Numeric Value, negative or positive, in degrees per second
+        &#34;&#34;&#34;
+        return self.get_status()[3]
+
+    def is_moving(self):
+        try:
+            return (not math.isclose(self.get_power(), 0)) and (not math.isclose(self.get_speed(), 0))
+        except TypeError:
+            return None
+
+    def get_dps(self):
+        return self.get_speed()
+
+    def offset_encoder(self, position):
+        &#34;&#34;&#34;
+        Offset a motor encoder.
+
+        Keyword arguments:
+        port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
+        offset - The encoder offset
+
+        You can zero the encoder by offsetting it by the current position
+        &#34;&#34;&#34;
+        self.brick.offset_motor_encoder(self.port, position)
+
+    def reset_encoder(self):
+        &#34;&#34;&#34;
+        Reset motor encoder(s) to 0.
+
+        Keyword arguments:
+        port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
+        &#34;&#34;&#34;
+        self.brick.reset_motor_encoder(self.port)
+
+    def reset_position(self):
+        &#34;&#34;&#34;
+        Reset motor encoder(s) to 0.
+
+        Keyword arguments:
+        port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
+        &#34;&#34;&#34;
+        return self.reset_encoder()
+
+    @staticmethod
+    def create_motors(motor_ports: list[Literal[&#34;A&#34;, &#34;B&#34;, &#34;C&#34;, &#34;D&#34;]] | str):
+        motor_ports = map(str.upper, list(motor_ports))
+        result = []
+        for port in motor_ports:
+            if port in [&#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;]:
+                result.append(Motor(port))
+        return tuple(result)
+
+    def wait_is_moving(self, sleep_interval: float = None):
+        if sleep_interval is None:
+            sleep_interval = WAIT_READY_INTERVAL
+        while not self.is_moving():
+            time.sleep(sleep_interval)
+
+    def wait_is_stopped(self, sleep_interval: float = None):
+        if sleep_interval is None:
+            sleep_interval = WAIT_READY_INTERVAL
+        while self.is_moving():
+            time.sleep(sleep_interval)</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="utils.brick.Motor.INF"><code class="name">var <span class="ident">INF</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.brick.Motor.MAX_POWER"><code class="name">var <span class="ident">MAX_POWER</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.brick.Motor.MAX_SPEED"><code class="name">var <span class="ident">MAX_SPEED</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="utils.brick.Motor.create_motors"><code class="name flex">
+<span>def <span class="ident">create_motors</span></span>(<span>motor_ports: "list[Literal['A', 'B', 'C', 'D']] | str")</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def create_motors(motor_ports: list[Literal[&#34;A&#34;, &#34;B&#34;, &#34;C&#34;, &#34;D&#34;]] | str):
+    motor_ports = map(str.upper, list(motor_ports))
+    result = []
+    for port in motor_ports:
+        if port in [&#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;]:
+            result.append(Motor(port))
+    return tuple(result)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="utils.brick.Motor.float_motor"><code class="name flex">
+<span>def <span class="ident">float_motor</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Float the motor, which means let it rotate freely while measuring rotations.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def float_motor(self):
+    &#34;Float the motor, which means let it rotate freely while measuring rotations.&#34;
+    self.brick.set_motor_power(self.port, -128)</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.Motor.get_dps"><code class="name flex">
+<span>def <span class="ident">get_dps</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_dps(self):
+    return self.get_speed()</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.Motor.get_encoder"><code class="name flex">
+<span>def <span class="ident">get_encoder</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Read a motor encoder in degrees.</p>
+<p>Keyword arguments:
+port - The motor port (one at a time). PORT_A, PORT_B, PORT_C, or PORT_D.</p>
+<p>Returns the encoder position in degrees</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_encoder(self):
+    &#34;&#34;&#34;
+    Read a motor encoder in degrees.
+
+    Keyword arguments:
+    port - The motor port (one at a time). PORT_A, PORT_B, PORT_C, or PORT_D.
+
+    Returns the encoder position in degrees
+    &#34;&#34;&#34;
+    return self.brick.get_motor_encoder(self.port)</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.Motor.get_position"><code class="name flex">
+<span>def <span class="ident">get_position</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Read a motor encoder in degrees.</p>
+<p>Keyword arguments:
+port - The motor port (one at a time). PORT_A, PORT_B, PORT_C, or PORT_D.</p>
+<p>Returns the encoder position in degrees</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_position(self):
+    &#34;&#34;&#34;
+    Read a motor encoder in degrees.
+
+    Keyword arguments:
+    port - The motor port (one at a time). PORT_A, PORT_B, PORT_C, or PORT_D.
+
+    Returns the encoder position in degrees
+    &#34;&#34;&#34;
+    return self.get_encoder()</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.Motor.get_power"><code class="name flex">
+<span>def <span class="ident">get_power</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Read motor status and returns power percent (-100 to 100)</p>
+<h2 id="returns">Returns</h2>
+<p>None if error encountered
+Numeric Value -100 to 100 of raw power percent</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_power(self):
+    &#34;&#34;&#34;
+    Read motor status and returns power percent (-100 to 100)
+
+    Returns:
+        None if error encountered
+        Numeric Value -100 to 100 of raw power percent
+    &#34;&#34;&#34;
+    return self.get_status()[1]</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.Motor.get_speed"><code class="name flex">
+<span>def <span class="ident">get_speed</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Read motor status and returns speed in degrees per second</p>
+<h2 id="returns">Returns</h2>
+<p>None if error encountered
+Numeric Value, negative or positive, in degrees per second</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_speed(self):
+    &#34;&#34;&#34;
+    Read motor status and returns speed in degrees per second
+
+    Returns:
+        None if error encountered
+        Numeric Value, negative or positive, in degrees per second
+    &#34;&#34;&#34;
+    return self.get_status()[3]</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.Motor.get_status"><code class="name flex">
+<span>def <span class="ident">get_status</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Read a motor status.</p>
+<p>Keyword arguments:
+port - The motor port (one at a time). PORT_A, PORT_B, PORT_C, or PORT_D.</p>
+<p>Returns a list:
+flags - 8-bits of bit-flags that indicate motor status:
+bit 0 - LOW_VOLTAGE_FLOAT - The motors are automatically disabled because the battery voltage is too low
+bit 1 - OVERLOADED - The motors aren't close to the target (applies to position control and dps speed control).
+power - the raw PWM power in percent (-100 to 100)
+encoder - The encoder position
+dps - The current speed in Degrees Per Second</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_status(self):
+    &#34;&#34;&#34;
+    Read a motor status.
+
+    Keyword arguments:
+    port - The motor port (one at a time). PORT_A, PORT_B, PORT_C, or PORT_D.
+
+    Returns a list:
+        flags - 8-bits of bit-flags that indicate motor status:
+            bit 0 - LOW_VOLTAGE_FLOAT - The motors are automatically disabled because the battery voltage is too low
+            bit 1 - OVERLOADED - The motors aren&#39;t close to the target (applies to position control and dps speed control).
+        power - the raw PWM power in percent (-100 to 100)
+        encoder - The encoder position
+        dps - The current speed in Degrees Per Second
+    &#34;&#34;&#34;
+    try:
+        return self.brick.get_motor_status(self.port)
+    except IOError:
+        return [None, None, None, None]</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.Motor.is_moving"><code class="name flex">
+<span>def <span class="ident">is_moving</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_moving(self):
+    try:
+        return (not math.isclose(self.get_power(), 0)) and (not math.isclose(self.get_speed(), 0))
+    except TypeError:
+        return None</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.Motor.offset_encoder"><code class="name flex">
+<span>def <span class="ident">offset_encoder</span></span>(<span>self, position)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Offset a motor encoder.</p>
+<p>Keyword arguments:
+port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
+offset - The encoder offset</p>
+<p>You can zero the encoder by offsetting it by the current position</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def offset_encoder(self, position):
+    &#34;&#34;&#34;
+    Offset a motor encoder.
+
+    Keyword arguments:
+    port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
+    offset - The encoder offset
+
+    You can zero the encoder by offsetting it by the current position
+    &#34;&#34;&#34;
+    self.brick.offset_motor_encoder(self.port, position)</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.Motor.reset_encoder"><code class="name flex">
+<span>def <span class="ident">reset_encoder</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Reset motor encoder(s) to 0.</p>
+<p>Keyword arguments:
+port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def reset_encoder(self):
+    &#34;&#34;&#34;
+    Reset motor encoder(s) to 0.
+
+    Keyword arguments:
+    port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
+    &#34;&#34;&#34;
+    self.brick.reset_motor_encoder(self.port)</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.Motor.reset_position"><code class="name flex">
+<span>def <span class="ident">reset_position</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Reset motor encoder(s) to 0.</p>
+<p>Keyword arguments:
+port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def reset_position(self):
+    &#34;&#34;&#34;
+    Reset motor encoder(s) to 0.
+
+    Keyword arguments:
+    port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
+    &#34;&#34;&#34;
+    return self.reset_encoder()</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.Motor.set_dps"><code class="name flex">
+<span>def <span class="ident">set_dps</span></span>(<span>self, dps)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set the motor target speed in degrees per second.
+The motor will move at this speed consistently, once this function is run.</p>
+<p>Keyword arguments:
+port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
+dps - The target speed in degrees per second</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_dps(self, dps):
+    &#34;&#34;&#34;
+    Set the motor target speed in degrees per second. 
+    The motor will move at this speed consistently, once this function is run.
+
+    Keyword arguments:
+    port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
+    dps - The target speed in degrees per second
+    &#34;&#34;&#34;
+    self.brick.set_motor_dps(self.port, dps)
+    self.set_limits(dps=dps)</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.Motor.set_limits"><code class="name flex">
+<span>def <span class="ident">set_limits</span></span>(<span>self, power=0, dps=0)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set the motor speed limit.</p>
+<p>Keyword arguments:
+port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
+power - The power limit in percent (0 to 100), with 0 being no limit (100)
+dps - The speed limit in degrees per second, with 0 being no limit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_limits(self, power=0, dps=0):
+    &#34;&#34;&#34;
+    Set the motor speed limit.
+
+    Keyword arguments:
+    port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
+    power - The power limit in percent (0 to 100), with 0 being no limit (100)
+    dps - The speed limit in degrees per second, with 0 being no limit
+    &#34;&#34;&#34;
+    self.brick.set_motor_limits(self.port, power, dps)</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.Motor.set_port"><code class="name flex">
+<span>def <span class="ident">set_port</span></span>(<span>self, port)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Port can be "A", "B", "C", or "D".
+You may also provide a list of these ports such as ["A", "C"] to run
+both motors at the exact same time (exact combined behavior unknown).</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_port(self, port):
+    &#34;&#34;&#34;
+    Port can be &#34;A&#34;, &#34;B&#34;, &#34;C&#34;, or &#34;D&#34;.
+    You may also provide a list of these ports such as [&#34;A&#34;, &#34;C&#34;] to run
+    both motors at the exact same time (exact combined behavior unknown).
+    &#34;&#34;&#34;
+    if isinstance(port, list):
+        self.port = sum([PORTS[i] for i in port])
+    elif isinstance(port, int) or isinstance(port, str):
+        self.port = PORTS[str(port).upper()]</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.Motor.set_position"><code class="name flex">
+<span>def <span class="ident">set_position</span></span>(<span>self, position)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set the motor target position in degrees.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_position(self, position):
+    &#34;Set the motor target position in degrees.&#34;
+    self.brick.set_motor_position(self.port, position)</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.Motor.set_position_kd"><code class="name flex">
+<span>def <span class="ident">set_position_kd</span></span>(<span>self, kd=70)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set the motor target position KD constant.</p>
+<p>If you set kp higher, the motor will be more responsive to errors in position, at the cost of perhaps overshooting and oscillating.
+kd slows down the motor as it approaches the target, and helps to prevent overshoot.
+In general, if you increase kp, you should also increase kd to keep the motor from overshooting and oscillating.</p>
+<p>Keyword arguments:
+port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
+kd - The KD constant (default 70)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_position_kd(self, kd=70):
+    &#34;&#34;&#34;
+    Set the motor target position KD constant.
+
+    If you set kp higher, the motor will be more responsive to errors in position, at the cost of perhaps overshooting and oscillating.
+    kd slows down the motor as it approaches the target, and helps to prevent overshoot.
+    In general, if you increase kp, you should also increase kd to keep the motor from overshooting and oscillating.
+
+    Keyword arguments:
+    port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
+    kd - The KD constant (default 70)
+    &#34;&#34;&#34;
+    self.brick.set_motor_position_kd(self.port, kd)</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.Motor.set_position_kp"><code class="name flex">
+<span>def <span class="ident">set_position_kp</span></span>(<span>self, kp=25)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set the motor target position KP constant.</p>
+<p>If you set kp higher, the motor will be more responsive to errors in position, at the cost of perhaps overshooting and oscillating.
+kd slows down the motor as it approaches the target, and helps to prevent overshoot.
+In general, if you increase kp, you should also increase kd to keep the motor from overshooting and oscillating.</p>
+<p>Keyword arguments:
+port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
+kp - The KP constant (default 25)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_position_kp(self, kp=25):
+    &#34;&#34;&#34;
+    Set the motor target position KP constant.
+
+    If you set kp higher, the motor will be more responsive to errors in position, at the cost of perhaps overshooting and oscillating.
+    kd slows down the motor as it approaches the target, and helps to prevent overshoot.
+    In general, if you increase kp, you should also increase kd to keep the motor from overshooting and oscillating.
+
+    Keyword arguments:
+    port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
+    kp - The KP constant (default 25)
+    &#34;&#34;&#34;
+    self.brick.set_motor_position_kp(self.port, kp)</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.Motor.set_position_relative"><code class="name flex">
+<span>def <span class="ident">set_position_relative</span></span>(<span>self, degrees)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set the relative motor target position in degrees, current position plus the specified degrees.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_position_relative(self, degrees):
+    &#34;Set the relative motor target position in degrees, current position plus the specified degrees.&#34;
+    self.brick.set_motor_position_relative(self.port, degrees)</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.Motor.set_power"><code class="name flex">
+<span>def <span class="ident">set_power</span></span>(<span>self, power)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set the motor power in percent.</p>
+<p>Keyword arguments:
+power - The power from -100 to 100, or -128 for float</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_power(self, power):
+    &#34;&#34;&#34;
+    Set the motor power in percent.
+
+    Keyword arguments:
+    power - The power from -100 to 100, or -128 for float
+    &#34;&#34;&#34;
+    self.brick.set_motor_power(self.port, power)</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.Motor.wait_is_moving"><code class="name flex">
+<span>def <span class="ident">wait_is_moving</span></span>(<span>self, sleep_interval: float = None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def wait_is_moving(self, sleep_interval: float = None):
+    if sleep_interval is None:
+        sleep_interval = WAIT_READY_INTERVAL
+    while not self.is_moving():
+        time.sleep(sleep_interval)</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.Motor.wait_is_stopped"><code class="name flex">
+<span>def <span class="ident">wait_is_stopped</span></span>(<span>self, sleep_interval: float = None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def wait_is_stopped(self, sleep_interval: float = None):
+    if sleep_interval is None:
+        sleep_interval = WAIT_READY_INTERVAL
+    while self.is_moving():
+        time.sleep(sleep_interval)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="utils.brick.RevEnumeration"><code class="flex name class">
+<span>class <span class="ident">RevEnumeration</span></span>
+<span>(</span><span>enum)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Take in a type object (class), finds every full-Uppercase attribute
+(constants) and creates a Reverse Enumeration, where the constant value
+is the key, and the constant's name is the value.</p>
+<p>enum can be any type, but preferably a brickpi3.Enumeration object.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RevEnumeration:
+    &#34;&#34;&#34;
+    Take in a type object (class), finds every full-Uppercase attribute
+    (constants) and creates a Reverse Enumeration, where the constant value
+    is the key, and the constant&#39;s name is the value.
+    &#34;&#34;&#34;
+
+    def __init__(self, enum):  # or *names, with no .split()
+        &#34;enum can be any type, but preferably a brickpi3.Enumeration object.&#34;
+        self.keys = []
+        for attr, val in enum.__dict__.items():
+            if attr.isupper():
+                self[val] = attr
+        self.keys.sort()
+
+    def __getitem__(self, key):
+        &#34;Allow performing get actions such as SENSOR_CODES[0].&#34;
+        return self.__dict__[str(key)]  # SENSOR_CODES -&gt; self.enum?
+
+    def __setitem__(self, key, attr):
+        setattr(self, str(key), attr)
+        self.keys.append(str(key))
+
+    def __repr__(self):
+        return &#34;, &#34;.join([f&#34;{key}={self[key]}&#34; for key in self.keys])</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.Sensor"><code class="flex name class">
+<span>class <span class="ident">Sensor</span></span>
+<span>(</span><span>port: Literal[1, 2, 3, 4], bp=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Template Sensor class. Must implement set_mode(mode) to function.</p>
+<p>Initialize sensor with a given port (1, 2, 3, or 4).</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Sensor:
+    &#34;&#34;&#34;
+    Template Sensor class. Must implement set_mode(mode) to function.
+    &#34;&#34;&#34;
+    class Status:
+        VALID_DATA = &#34;VALID_DATA&#34;
+        NOT_CONFIGURED = &#34;NOT_CONFIGURED&#34;
+        CONFIGURING = &#34;CONFIGURING&#34;
+        NO_DATA = &#34;NO_DATA&#34;
+        I2C_ERROR = &#34;I2C_ERROR&#34;
+        INCORRECT_SENSOR_PORT = &#34;INCORRECT_SENSOR_PORT&#34;
+
+    ALL_SENSORS = {key: None for key in &#39;1 2 3 4&#39;.split(&#39; &#39;)}
+
+    def __init__(self, port: Literal[1, 2, 3, 4], bp=None):
+        &#34;Initialize sensor with a given port (1, 2, 3, or 4).&#34;
+        self.brick = Brick(bp=bp)
+        self.port = PORTS[str(port).upper()]
+        Sensor.ALL_SENSORS[str(port)] = self
+
+    def get_status(self):
+        &#34;&#34;&#34;
+        Get the sensor status of this sensor.
+
+        Return one of the following status messages:
+        VALID_DATA
+        NOT_CONFIGURED
+        CONFIGURING
+        NO_DATA
+        I2C_ERROR
+        &#34;&#34;&#34;
+        return SENSOR_CODES[self.brick.get_sensor_status(self.port)]
+
+    def set_port(self, port: Literal[1, 2, 3, 4]):
+        &#34;Change sensor port number. Does not unassign previous port.&#34;
+        try:
+            self.port = PORTS[str(port).upper()]
+            self.set_mode(self.mode)
+        except SensorError as error:
+            return error
+
+    def get_value(self):
+        &#34;Get the raw sensor value. May return a float, int, list or None if error.&#34;
+        try:
+            return self.brick.get_sensor(self.port)
+        except SensorError:
+            return None
+
+    def get_raw_value(self):
+        &#34;Get the raw sensor value. May return a float, int, list or None if error.&#34;
+        return self.get_value()
+
+    def wait_ready(self):
+        &#34;Wait (pause program) until the sensor is initialized.&#34;
+        while self.get_status() != Sensor.Status.VALID_DATA:
+            time.sleep(WAIT_READY_INTERVAL)</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="utils.brick.EV3ColorSensor" href="#utils.brick.EV3ColorSensor">EV3ColorSensor</a></li>
+<li><a title="utils.brick.EV3GyroSensor" href="#utils.brick.EV3GyroSensor">EV3GyroSensor</a></li>
+<li><a title="utils.brick.EV3UltrasonicSensor" href="#utils.brick.EV3UltrasonicSensor">EV3UltrasonicSensor</a></li>
+<li><a title="utils.brick.TouchSensor" href="#utils.brick.TouchSensor">TouchSensor</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="utils.brick.Sensor.ALL_SENSORS"><code class="name">var <span class="ident">ALL_SENSORS</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.brick.Sensor.Status"><code class="name">var <span class="ident">Status</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="utils.brick.Sensor.get_raw_value"><code class="name flex">
+<span>def <span class="ident">get_raw_value</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get the raw sensor value. May return a float, int, list or None if error.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_raw_value(self):
+    &#34;Get the raw sensor value. May return a float, int, list or None if error.&#34;
+    return self.get_value()</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.Sensor.get_status"><code class="name flex">
+<span>def <span class="ident">get_status</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get the sensor status of this sensor.</p>
+<p>Return one of the following status messages:
+VALID_DATA
+NOT_CONFIGURED
+CONFIGURING
+NO_DATA
+I2C_ERROR</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_status(self):
+    &#34;&#34;&#34;
+    Get the sensor status of this sensor.
+
+    Return one of the following status messages:
+    VALID_DATA
+    NOT_CONFIGURED
+    CONFIGURING
+    NO_DATA
+    I2C_ERROR
+    &#34;&#34;&#34;
+    return SENSOR_CODES[self.brick.get_sensor_status(self.port)]</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.Sensor.get_value"><code class="name flex">
+<span>def <span class="ident">get_value</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get the raw sensor value. May return a float, int, list or None if error.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_value(self):
+    &#34;Get the raw sensor value. May return a float, int, list or None if error.&#34;
+    try:
+        return self.brick.get_sensor(self.port)
+    except SensorError:
+        return None</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.Sensor.set_port"><code class="name flex">
+<span>def <span class="ident">set_port</span></span>(<span>self, port: Literal[1, 2, 3, 4])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Change sensor port number. Does not unassign previous port.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_port(self, port: Literal[1, 2, 3, 4]):
+    &#34;Change sensor port number. Does not unassign previous port.&#34;
+    try:
+        self.port = PORTS[str(port).upper()]
+        self.set_mode(self.mode)
+    except SensorError as error:
+        return error</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.Sensor.wait_ready"><code class="name flex">
+<span>def <span class="ident">wait_ready</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Wait (pause program) until the sensor is initialized.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def wait_ready(self):
+    &#34;Wait (pause program) until the sensor is initialized.&#34;
+    while self.get_status() != Sensor.Status.VALID_DATA:
+        time.sleep(WAIT_READY_INTERVAL)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="utils.brick.TouchSensor"><code class="flex name class">
+<span>class <span class="ident">TouchSensor</span></span>
+<span>(</span><span>port: Literal[1, 2, 3, 4], mode: str = 'touch', bp=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Basic touch sensor class. There is only one mode.
+Gives values 0 to 1, with 1 meaning the button is being pressed.</p>
+<p>Initialize touch sensor with a given port number.
+mode does not need to be set and actually does nothing here.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class TouchSensor(Sensor):
+    &#34;&#34;&#34;
+    Basic touch sensor class. There is only one mode.
+    Gives values 0 to 1, with 1 meaning the button is being pressed.
+    &#34;&#34;&#34;
+
+    def __init__(self, port: Literal[1, 2, 3, 4], mode: str = &#34;touch&#34;, bp=None):
+        &#34;&#34;&#34;
+        Initialize touch sensor with a given port number.
+        mode does not need to be set and actually does nothing here.
+        &#34;&#34;&#34;
+        super(TouchSensor, self).__init__(port, bp)
+        self.set_mode(mode.lower())
+
+    def set_mode(self, mode: str = &#34;touch&#34;):
+        &#34;&#34;&#34;
+        Touch sensor only has one mode, and does not require an input.
+        This method is useless unless you wish to re-initialize the sensor.
+        &#34;&#34;&#34;
+        try:
+            self.brick.set_sensor_type(self.port, BrickPi3.SENSOR_TYPE.TOUCH)
+            self.mode = mode.lower()
+            return True
+        except SensorError as error:
+            return error
+
+    def is_pressed(self) -&gt; bool:
+        &#34;Return True if pressed, False otherwise.&#34;
+        return self.get_value() == 1</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="utils.brick.Sensor" href="#utils.brick.Sensor">Sensor</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="utils.remote.RemoteTouchSensor" href="remote.html#utils.remote.RemoteTouchSensor">RemoteTouchSensor</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="utils.brick.TouchSensor.is_pressed"><code class="name flex">
+<span>def <span class="ident">is_pressed</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return True if pressed, False otherwise.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_pressed(self) -&gt; bool:
+    &#34;Return True if pressed, False otherwise.&#34;
+    return self.get_value() == 1</code></pre>
+</details>
+</dd>
+<dt id="utils.brick.TouchSensor.set_mode"><code class="name flex">
+<span>def <span class="ident">set_mode</span></span>(<span>self, mode: str = 'touch')</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Touch sensor only has one mode, and does not require an input.
+This method is useless unless you wish to re-initialize the sensor.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_mode(self, mode: str = &#34;touch&#34;):
+    &#34;&#34;&#34;
+    Touch sensor only has one mode, and does not require an input.
+    This method is useless unless you wish to re-initialize the sensor.
+    &#34;&#34;&#34;
+    try:
+        self.brick.set_sensor_type(self.port, BrickPi3.SENSOR_TYPE.TOUCH)
+        self.mode = mode.lower()
+        return True
+    except SensorError as error:
+        return error</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="utils.brick.Sensor" href="#utils.brick.Sensor">Sensor</a></b></code>:
+<ul class="hlist">
+<li><code><a title="utils.brick.Sensor.get_raw_value" href="#utils.brick.Sensor.get_raw_value">get_raw_value</a></code></li>
+<li><code><a title="utils.brick.Sensor.get_status" href="#utils.brick.Sensor.get_status">get_status</a></code></li>
+<li><code><a title="utils.brick.Sensor.get_value" href="#utils.brick.Sensor.get_value">get_value</a></code></li>
+<li><code><a title="utils.brick.Sensor.set_port" href="#utils.brick.Sensor.set_port">set_port</a></code></li>
+<li><code><a title="utils.brick.Sensor.wait_ready" href="#utils.brick.Sensor.wait_ready">wait_ready</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="utils" href="index.html">utils</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="utils.brick.configure_ports" href="#utils.brick.configure_ports">configure_ports</a></code></li>
+<li><code><a title="utils.brick.create_motors" href="#utils.brick.create_motors">create_motors</a></code></li>
+<li><code><a title="utils.brick.exception_handler" href="#utils.brick.exception_handler">exception_handler</a></code></li>
+<li><code><a title="utils.brick.reset_brick" href="#utils.brick.reset_brick">reset_brick</a></code></li>
+<li><code><a title="utils.brick.restore_default_brick" href="#utils.brick.restore_default_brick">restore_default_brick</a></code></li>
+<li><code><a title="utils.brick.wait_ready_sensors" href="#utils.brick.wait_ready_sensors">wait_ready_sensors</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="utils.brick.Brick" href="#utils.brick.Brick">Brick</a></code></h4>
+<ul class="">
+<li><code><a title="utils.brick.Brick.get_sensor_status" href="#utils.brick.Brick.get_sensor_status">get_sensor_status</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="utils.brick.Color" href="#utils.brick.Color">Color</a></code></h4>
+<ul class="two-column">
+<li><code><a title="utils.brick.Color.BLACK" href="#utils.brick.Color.BLACK">BLACK</a></code></li>
+<li><code><a title="utils.brick.Color.BLUE" href="#utils.brick.Color.BLUE">BLUE</a></code></li>
+<li><code><a title="utils.brick.Color.GREEN" href="#utils.brick.Color.GREEN">GREEN</a></code></li>
+<li><code><a title="utils.brick.Color.ORANGE" href="#utils.brick.Color.ORANGE">ORANGE</a></code></li>
+<li><code><a title="utils.brick.Color.RED" href="#utils.brick.Color.RED">RED</a></code></li>
+<li><code><a title="utils.brick.Color.UNKNOWN" href="#utils.brick.Color.UNKNOWN">UNKNOWN</a></code></li>
+<li><code><a title="utils.brick.Color.WHITE" href="#utils.brick.Color.WHITE">WHITE</a></code></li>
+<li><code><a title="utils.brick.Color.YELLOW" href="#utils.brick.Color.YELLOW">YELLOW</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="utils.brick.ColorMapping" href="#utils.brick.ColorMapping">ColorMapping</a></code></h4>
+</li>
+<li>
+<h4><code><a title="utils.brick.ColorMappings" href="#utils.brick.ColorMappings">ColorMappings</a></code></h4>
+<ul class="two-column">
+<li><code><a title="utils.brick.ColorMappings.BLACK" href="#utils.brick.ColorMappings.BLACK">BLACK</a></code></li>
+<li><code><a title="utils.brick.ColorMappings.BLUE" href="#utils.brick.ColorMappings.BLUE">BLUE</a></code></li>
+<li><code><a title="utils.brick.ColorMappings.GREEN" href="#utils.brick.ColorMappings.GREEN">GREEN</a></code></li>
+<li><code><a title="utils.brick.ColorMappings.ORANGE" href="#utils.brick.ColorMappings.ORANGE">ORANGE</a></code></li>
+<li><code><a title="utils.brick.ColorMappings.RED" href="#utils.brick.ColorMappings.RED">RED</a></code></li>
+<li><code><a title="utils.brick.ColorMappings.UNKNOWN" href="#utils.brick.ColorMappings.UNKNOWN">UNKNOWN</a></code></li>
+<li><code><a title="utils.brick.ColorMappings.WHITE" href="#utils.brick.ColorMappings.WHITE">WHITE</a></code></li>
+<li><code><a title="utils.brick.ColorMappings.YELLOW" href="#utils.brick.ColorMappings.YELLOW">YELLOW</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="utils.brick.EV3ColorSensor" href="#utils.brick.EV3ColorSensor">EV3ColorSensor</a></code></h4>
+<ul class="two-column">
+<li><code><a title="utils.brick.EV3ColorSensor.Mode" href="#utils.brick.EV3ColorSensor.Mode">Mode</a></code></li>
+<li><code><a title="utils.brick.EV3ColorSensor.get_ambient" href="#utils.brick.EV3ColorSensor.get_ambient">get_ambient</a></code></li>
+<li><code><a title="utils.brick.EV3ColorSensor.get_color_name" href="#utils.brick.EV3ColorSensor.get_color_name">get_color_name</a></code></li>
+<li><code><a title="utils.brick.EV3ColorSensor.get_red" href="#utils.brick.EV3ColorSensor.get_red">get_red</a></code></li>
+<li><code><a title="utils.brick.EV3ColorSensor.get_rgb" href="#utils.brick.EV3ColorSensor.get_rgb">get_rgb</a></code></li>
+<li><code><a title="utils.brick.EV3ColorSensor.set_mode" href="#utils.brick.EV3ColorSensor.set_mode">set_mode</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="utils.brick.EV3GyroSensor" href="#utils.brick.EV3GyroSensor">EV3GyroSensor</a></code></h4>
+<ul class="two-column">
+<li><code><a title="utils.brick.EV3GyroSensor.Mode" href="#utils.brick.EV3GyroSensor.Mode">Mode</a></code></li>
+<li><code><a title="utils.brick.EV3GyroSensor.get_abs_measure" href="#utils.brick.EV3GyroSensor.get_abs_measure">get_abs_measure</a></code></li>
+<li><code><a title="utils.brick.EV3GyroSensor.get_both_measure" href="#utils.brick.EV3GyroSensor.get_both_measure">get_both_measure</a></code></li>
+<li><code><a title="utils.brick.EV3GyroSensor.get_dps_measure" href="#utils.brick.EV3GyroSensor.get_dps_measure">get_dps_measure</a></code></li>
+<li><code><a title="utils.brick.EV3GyroSensor.reset_measure" href="#utils.brick.EV3GyroSensor.reset_measure">reset_measure</a></code></li>
+<li><code><a title="utils.brick.EV3GyroSensor.set_mode" href="#utils.brick.EV3GyroSensor.set_mode">set_mode</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="utils.brick.EV3UltrasonicSensor" href="#utils.brick.EV3UltrasonicSensor">EV3UltrasonicSensor</a></code></h4>
+<ul class="">
+<li><code><a title="utils.brick.EV3UltrasonicSensor.Mode" href="#utils.brick.EV3UltrasonicSensor.Mode">Mode</a></code></li>
+<li><code><a title="utils.brick.EV3UltrasonicSensor.detects_other_us_sensor" href="#utils.brick.EV3UltrasonicSensor.detects_other_us_sensor">detects_other_us_sensor</a></code></li>
+<li><code><a title="utils.brick.EV3UltrasonicSensor.get_cm" href="#utils.brick.EV3UltrasonicSensor.get_cm">get_cm</a></code></li>
+<li><code><a title="utils.brick.EV3UltrasonicSensor.get_inches" href="#utils.brick.EV3UltrasonicSensor.get_inches">get_inches</a></code></li>
+<li><code><a title="utils.brick.EV3UltrasonicSensor.set_mode" href="#utils.brick.EV3UltrasonicSensor.set_mode">set_mode</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="utils.brick.IOError" href="#utils.brick.IOError">IOError</a></code></h4>
+</li>
+<li>
+<h4><code><a title="utils.brick.Motor" href="#utils.brick.Motor">Motor</a></code></h4>
+<ul class="">
+<li><code><a title="utils.brick.Motor.INF" href="#utils.brick.Motor.INF">INF</a></code></li>
+<li><code><a title="utils.brick.Motor.MAX_POWER" href="#utils.brick.Motor.MAX_POWER">MAX_POWER</a></code></li>
+<li><code><a title="utils.brick.Motor.MAX_SPEED" href="#utils.brick.Motor.MAX_SPEED">MAX_SPEED</a></code></li>
+<li><code><a title="utils.brick.Motor.create_motors" href="#utils.brick.Motor.create_motors">create_motors</a></code></li>
+<li><code><a title="utils.brick.Motor.float_motor" href="#utils.brick.Motor.float_motor">float_motor</a></code></li>
+<li><code><a title="utils.brick.Motor.get_dps" href="#utils.brick.Motor.get_dps">get_dps</a></code></li>
+<li><code><a title="utils.brick.Motor.get_encoder" href="#utils.brick.Motor.get_encoder">get_encoder</a></code></li>
+<li><code><a title="utils.brick.Motor.get_position" href="#utils.brick.Motor.get_position">get_position</a></code></li>
+<li><code><a title="utils.brick.Motor.get_power" href="#utils.brick.Motor.get_power">get_power</a></code></li>
+<li><code><a title="utils.brick.Motor.get_speed" href="#utils.brick.Motor.get_speed">get_speed</a></code></li>
+<li><code><a title="utils.brick.Motor.get_status" href="#utils.brick.Motor.get_status">get_status</a></code></li>
+<li><code><a title="utils.brick.Motor.is_moving" href="#utils.brick.Motor.is_moving">is_moving</a></code></li>
+<li><code><a title="utils.brick.Motor.offset_encoder" href="#utils.brick.Motor.offset_encoder">offset_encoder</a></code></li>
+<li><code><a title="utils.brick.Motor.reset_encoder" href="#utils.brick.Motor.reset_encoder">reset_encoder</a></code></li>
+<li><code><a title="utils.brick.Motor.reset_position" href="#utils.brick.Motor.reset_position">reset_position</a></code></li>
+<li><code><a title="utils.brick.Motor.set_dps" href="#utils.brick.Motor.set_dps">set_dps</a></code></li>
+<li><code><a title="utils.brick.Motor.set_limits" href="#utils.brick.Motor.set_limits">set_limits</a></code></li>
+<li><code><a title="utils.brick.Motor.set_port" href="#utils.brick.Motor.set_port">set_port</a></code></li>
+<li><code><a title="utils.brick.Motor.set_position" href="#utils.brick.Motor.set_position">set_position</a></code></li>
+<li><code><a title="utils.brick.Motor.set_position_kd" href="#utils.brick.Motor.set_position_kd">set_position_kd</a></code></li>
+<li><code><a title="utils.brick.Motor.set_position_kp" href="#utils.brick.Motor.set_position_kp">set_position_kp</a></code></li>
+<li><code><a title="utils.brick.Motor.set_position_relative" href="#utils.brick.Motor.set_position_relative">set_position_relative</a></code></li>
+<li><code><a title="utils.brick.Motor.set_power" href="#utils.brick.Motor.set_power">set_power</a></code></li>
+<li><code><a title="utils.brick.Motor.wait_is_moving" href="#utils.brick.Motor.wait_is_moving">wait_is_moving</a></code></li>
+<li><code><a title="utils.brick.Motor.wait_is_stopped" href="#utils.brick.Motor.wait_is_stopped">wait_is_stopped</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="utils.brick.RevEnumeration" href="#utils.brick.RevEnumeration">RevEnumeration</a></code></h4>
+</li>
+<li>
+<h4><code><a title="utils.brick.Sensor" href="#utils.brick.Sensor">Sensor</a></code></h4>
+<ul class="two-column">
+<li><code><a title="utils.brick.Sensor.ALL_SENSORS" href="#utils.brick.Sensor.ALL_SENSORS">ALL_SENSORS</a></code></li>
+<li><code><a title="utils.brick.Sensor.Status" href="#utils.brick.Sensor.Status">Status</a></code></li>
+<li><code><a title="utils.brick.Sensor.get_raw_value" href="#utils.brick.Sensor.get_raw_value">get_raw_value</a></code></li>
+<li><code><a title="utils.brick.Sensor.get_status" href="#utils.brick.Sensor.get_status">get_status</a></code></li>
+<li><code><a title="utils.brick.Sensor.get_value" href="#utils.brick.Sensor.get_value">get_value</a></code></li>
+<li><code><a title="utils.brick.Sensor.set_port" href="#utils.brick.Sensor.set_port">set_port</a></code></li>
+<li><code><a title="utils.brick.Sensor.wait_ready" href="#utils.brick.Sensor.wait_ready">wait_ready</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="utils.brick.TouchSensor" href="#utils.brick.TouchSensor">TouchSensor</a></code></h4>
+<ul class="">
+<li><code><a title="utils.brick.TouchSensor.is_pressed" href="#utils.brick.TouchSensor.is_pressed">is_pressed</a></code></li>
+<li><code><a title="utils.brick.TouchSensor.set_mode" href="#utils.brick.TouchSensor.set_mode">set_mode</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

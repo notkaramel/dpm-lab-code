@@ -1,0 +1,2459 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>utils.rmi API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>utils.rmi</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">try:
+    from math import inf
+except:
+    inf = float(&#39;inf&#39;)
+from queue import Queue
+import socket
+import _socket
+import sys
+import threading
+import time
+from collections import deque
+from typing import Dict, List
+import uuid
+
+import json
+import marshal
+import pickle
+
+
+TIMEOUT = socket.getdefaulttimeout()
+DEFAULT_PORT = 2110
+THREAD_SLEEP = 0.001
+BUSY_WAITING = 0.001
+DEFAULT_PASSWORD = &#39;password&#39;
+SERVER_START_RETRIES = 5
+DEBUG_DEFAULT = False
+
+
+def isrelatedclass(typ, cls):
+    &#34;&#34;&#34;Determines if typ is a subclass, superclass, or equivalent to cls
+    cls can be an iterable of classes/types.
+    &#34;&#34;&#34;
+    if type(cls) == type:
+        cls = [cls]
+
+    for t in cls:
+        if typ == cls or issubclass(typ, cls) or issubclass(cls, typ):
+            return True
+    return False
+
+
+class IdentifyingException(Exception):
+    &#34;&#34;&#34;An exception with an overriden string representation, giving its class name along with error message.&#34;&#34;&#34;
+
+    def __repr__(self):
+        return f&#39;{self.__class__.__name__}: {super(IdentifyingException, self).__repr__()}&#39;
+
+
+class UnsupportedCommand(IdentifyingException):
+    &#34;&#34;&#34;Error given for when a command was sent to a RemoteServer that cannot process it.&#34;&#34;&#34;
+    pass
+
+
+class brickle:
+    &#34;&#34;&#34;A replacement for pickle, in the context of this RemoteClient/Server library. 
+    Only allows the parsing of objects that subclass PasswordProtected.
+    Attributes of these objects can only be primitive values. 
+    The parse can be changed to utilize the slower pickle library to cover all value types.&#34;&#34;&#34;
+    _parser = marshal
+
+    class UnpicklingError(IdentifyingException):
+        pass
+
+    def dumps(obj):
+        &#34;&#34;&#34;Only accepts objects that are of the type PasswordProtected, and converts them to a bytes-like format&#34;&#34;&#34;
+        try:
+            res = {}
+            if isinstance(obj, PasswordProtected):
+                res = brickle._dumps(obj)
+            else:
+                pass
+            return brickle._parser.dumps(res)
+        except Exception as err:
+            raise brickle.UnpicklingError(err)
+
+    def _dumps(obj):
+        res = vars(obj).copy()
+        res[&#39;__class__&#39;] = obj.__class__.__name__
+        return res
+
+    def loads(data):
+        &#34;&#34;&#34;Only accepts data of the bytes-like format used by this class. 
+        Outputs objects that are of the Command or Message type.
+
+        Returns None for any other type.
+        &#34;&#34;&#34;
+        try:
+            data = brickle._parser.loads(data)
+            if data[&#39;__class__&#39;] == &#39;Command&#39;:
+                c = Command(data[&#39;func_name&#39;])
+                return brickle._loads(c, data)
+            elif data[&#39;__class__&#39;] == &#39;Message&#39;:
+                m = Message(data[&#39;text&#39;])
+                return brickle._loads(m, data)
+            else:
+                return None
+        except Exception as err:
+            raise brickle.UnpicklingError(err)
+
+    def _loads(obj, data):
+        # Specific to this implementation
+        del data[&#39;__class__&#39;]
+        obj.__dict__.update(data)
+        return obj
+
+
+class PasswordProtected:
+    def __init__(self, password=None):
+        if password is None:
+            password = DEFAULT_PASSWORD
+        self.password = password
+
+    def verify_password(self, test):
+        &#34;&#34;&#34;Verifies that the test input matches the stored internal password&#34;&#34;&#34;
+        return test == self.password
+
+
+class MessageReplyException(IdentifyingException):
+    pass
+
+
+class Message(PasswordProtected):
+    &#34;&#34;&#34;Objects of this class are used as a wrapper around text messages sent over a TCP socket.
+
+    Utilized mainly by the Connection, RemoteClient, and RemoteServer classes in this module.
+    &#34;&#34;&#34;
+
+    def __init__(self, text):
+        super(Message, self).__init__()
+        self.text = str(text)
+        self.sender = None
+
+    def reply(self, text):
+        &#34;&#34;&#34;Sends a reply to the original sender of this message. Accepts a string text message.
+
+        This action is not always available, and would raise a MessageReplyException if it isn&#39;t available.
+
+        The underlying sender is intended to be Connection objects, but can apply to anything
+        that has a send method that can handle a Message obj.
+        &#34;&#34;&#34;
+        if self.sender is not None and hasattr(self.sender, &#39;send&#39;) and callable(getattr(self.sender, &#39;send&#39;)):
+            self.sender.send(Message(text))
+        else:
+            raise MessageReplyException(&#34;No sender available&#34;)
+
+    def __repr__(self):
+        return self.text
+
+
+class Command(PasswordProtected):
+    &#34;&#34;&#34;An object that represents a function call along with its arguments.
+    It is intended for usage in communicating the data of remote function calls over sockets.
+
+    Utilized mainly by the Connection, RemoteClient, and RemoteServer classes in this module.
+    &#34;&#34;&#34;
+
+    def __init__(self, func_name, *args, **kwargs):
+        &#34;&#34;&#34;Accepts the function name and arguments of the function call.&#34;&#34;&#34;
+        super(Command, self).__init__()
+        self.func_name = func_name
+        self.args = args
+        self.kwargs = kwargs
+        self.id = str(uuid.uuid1())
+        self.result = None
+        self._result_given = False
+        self._result_exception = False
+
+    def __repr__(self):
+        return f&#34;{self.id}: {self.func_name}({self.args},{self.kwargs})&#34;
+
+
+class Debuggable:
+    &#34;&#34;&#34;An extra class utilized for displaying debug messages&#34;&#34;&#34;
+    DEBUG_ALL = {}
+    DEBUG_COUNTER = 0
+
+    def __init__(self, debug=None):
+        self.debug = DEBUG_DEFAULT if debug is None else debug
+        if self.debug:
+            i = id(self)
+            if i not in self.__class__.DEBUG_ALL:
+                self.__class__.DEBUG_ALL[i] = f&#39;{self.__class__.__name__}{self.__class__.DEBUG_COUNTER}&#39;
+                self.__class__.DEBUG_COUNTER += 1
+
+    def _debug(self, text):
+        if self.debug:
+            i = self.__class__.DEBUG_ALL[id(self)]
+            print(f&#39;&gt;&gt;&gt; ({i}) {text}\t&#39;, file=sys.stderr)
+
+
+class ConnectionListenerError(IdentifyingException):
+    &#34;&#34;&#34;An error displayed when an error occurs on the Connection listener execution&#34;&#34;&#34;
+    pass
+
+
+class ConnectionFatalError(IdentifyingException):
+    &#34;&#34;&#34;An error displayed when a bad error occurs related to the operation of the Remote server&#34;&#34;&#34;
+    pass
+
+
+class Connection:
+    &#34;&#34;&#34;Objects that wrap TCP sockets and create a thread to listen for received data.
+    It also allows for listeners to be added, that process the data when it is received.
+    &#34;&#34;&#34;
+
+    def __init__(self, sock, password=&#34;password&#34;, debug=None):
+        self.sock: socket.socket = sock
+        self.listeners = {}
+        self.run_event = threading.Event()
+        self.lock_listener = threading.Lock()
+        self.lock_send = threading.Lock()
+        self._isclosed = False
+
+        self.password = password
+        self.run_event.set()
+        t = threading.Thread(target=Connection._func,
+                             args=(self,), daemon=True)
+        t.start()
+
+    def _func(self):
+        # self._debug(&#39;starting connection thread&#39;)
+        while self.run_event.is_set():
+            try:
+                # self._debug(&#39;start receiving&#39;)
+                try:
+                    d = self.sock.recv(4096)
+                except:
+                    # The read failed because the connection probably died.
+                    self.close()
+                    break
+                # self._debug(&#39;received. loading...&#39;)
+                if len(d) &lt;= 0:
+                    self.run_event.clear()
+                    self.close()
+                    break
+                o = brickle.loads(d)
+                # self._debug(&#39;received. loaded...&#39;)
+
+                self.lock_listener.acquire()
+
+                if isinstance(o, PasswordProtected) and o.verify_password(self.password):
+                    for key, val in self.listeners.items():
+                        listener, args = val
+                        try:
+                            # self._debug(f&#39;running listener &#34;{key}&#34;&#39;)
+                            listener(*args, o, self)
+                            # self._debug(f&#39;completed listener &#34;{key}&#34;&#39;)
+                        except Exception as err:
+                            c = ConnectionListenerError(
+                                f&#34;Error: Listener {key} - {err} {val}&#34;)
+                            print(c, file=sys.stderr)
+                self.lock_listener.release()
+            except OSError as err:
+                if self.isclosed():
+                    return
+                print(&#39;Warning:&#39;, err, file=sys.stderr)
+            except brickle.UnpicklingError as err:
+                print(&#39;Data Unpickling Error:&#39;, err, file=sys.stderr)
+            except Exception as err:
+                c = ConnectionFatalError(f&#39;Bad Error: {err}&#39;)
+                print(c, file=sys.stderr)
+        # self._debug(f&#39;connection thread ended&#39;)
+
+    def send(self, obj):
+        &#34;&#34;&#34;Send an object over the Connection. Only accepts objects of the type PasswordProtected.&#34;&#34;&#34;
+        if isinstance(obj, PasswordProtected):
+            self.lock_send.acquire()
+            obj.password = self.password
+            # self._debug(f&#39;dumping data ({str(obj)})&#39;)
+            d = brickle.dumps(obj)
+            # self._debug(f&#39;sending data dump ({str(obj)})&#39;)
+            self.sock.send(d)
+            # self._debug(f&#39;data sent ({str(obj)})&#39;)
+            self.lock_send.release()
+
+    def register_listener(self, name, listener, args=None):
+        &#34;&#34;&#34;Expects a listener of function type:
+        def func(*args, obj, connection)
+
+        where obj is the unpickled object, at the time
+        args are the arguments of the args tuple
+        and connection refers to this Connection object
+        &#34;&#34;&#34;
+        if args is None:
+            args = tuple()
+
+        self.lock_listener.acquire()
+        self.listeners[name] = (listener, args)
+        self.lock_listener.release()
+
+    def __del__(self):
+        self.close()
+
+    def close(self):
+        &#34;&#34;&#34;Ends this connection&#39;s thread and closes the socket.&#34;&#34;&#34;
+        try:
+            self.run_event.clear()
+            self.sock.shutdown(socket.SHUT_RDWR)
+            self.sock.close()
+        except:
+            pass
+
+        self._isclosed = True
+
+    def isclosed(self):
+        &#34;&#34;&#34;Checks if the socket is closed.&#34;&#34;&#34;
+        return self._isclosed
+
+
+class MethodCallerException(IdentifyingException):
+    &#34;&#34;&#34;An error that occurs in the calling of methods on the host server.&#34;&#34;&#34;
+    pass
+
+
+class _MethodCaller:
+    &#34;&#34;&#34;A class that wraps an object for remote method control.
+
+    This MethodCaller object will accept Command objects, and execute the 
+    Command&#39;s function call on the underlying wrapped object.
+    &#34;&#34;&#34;
+
+    def __init__(self, obj, custom=None, var_name=&#39;&#39;):
+        &#34;&#34;&#34;Create the wrapper around the object to be exposed for remote method control.
+        By default, excludes any methods starting with two underscores &#39;__&#39;
+
+        obj - the object to wrap
+        custom - Either None (default), or a list of string names of functions that would
+            also be included in the functions being exposed for remote method control.
+        var_name - Acts as a key, that can represent the Remote Object. Helps avoid name conflicts.
+        &#34;&#34;&#34;
+        if custom is None:
+            custom = []
+
+        self.cls = obj.__class__
+        self.obj = obj
+        self.var_name = var_name
+
+        self.methods = {f&#39;{self.var_name}.{func_name}&#39;: getattr(self.cls, func_name) for func_name in dir(
+            self.cls) if func_name in custom or (callable(getattr(self.cls, func_name)) and not func_name.startswith(&#34;__&#34;))}
+
+    def supports_command(self, command: Command):
+        &#34;&#34;&#34;Returns True if the function call of the Command is supported by this caller.&#34;&#34;&#34;
+        return command.func_name in self.methods
+
+    def execute(self, command: Command):
+        &#34;&#34;&#34;Executes the Command on the underlying wrapped object. 
+
+        If the command is not supported, the result is not set.
+        If an exception occurs during execution, the Command&#39;s 
+            result is set to the string representation of the Exception.
+        &#34;&#34;&#34;
+        if command.func_name in self.methods:
+            try:
+                command.result = self.methods[command.func_name](self.obj,
+                                                                 *command.args, **command.kwargs)
+                command._result_given = True
+            except Exception as err:
+                command.result = str(MethodCallerException(err))
+                command._result_exception = True
+        return command
+
+
+class MessageReceiver(object):
+    &#34;&#34;&#34;Subclass this class to add a thread-safe message buffer structure.
+    Only provides methods for retrieving messages.
+
+    Similar to a mixin, that addes the messages and lock_messages attributes, 
+    and related functions for retrieving.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        self.messages = deque()
+        self.lock_messages = threading.Lock()
+
+    def wait_messages(self, timeout=None, wait_interval=None):
+        &#34;&#34;&#34;Busy waits for messages to arrive in the buffer.
+
+        timeout - the number of seconds to wait for in total
+        wait_interval - the sleep interval for a single iteration
+
+        returns True whenever the function returns.
+        &#34;&#34;&#34;
+        if timeout is None:
+            timeout = inf
+        if wait_interval is None:
+            wait_interval = BUSY_WAITING
+
+        timeout = int(timeout / wait_interval)
+
+        while timeout &gt; 0 and not self.has_messages():
+            timeout -= 1
+            time.sleep(wait_interval)
+        return True
+
+    def has_messages(self):
+        &#34;&#34;&#34;Checks if the buffer contains any messages.&#34;&#34;&#34;
+        return self.num_messages() &gt; 0
+
+    def num_messages(self):
+        &#34;&#34;&#34;Returns the number of messages in the buffer.&#34;&#34;&#34;
+        self.lock_messages.acquire()
+        r = len(self.messages)
+        self.lock_messages.release()
+        return r
+
+    def get_messages(self, count=0):
+        &#34;&#34;&#34;Gets the specified number of messages from the message buffer.
+
+        Set to 0 (default value) to retrieve all the messages from the buffer.
+        Thread-safe.
+        &#34;&#34;&#34;
+        # Receiving messages in the listener thread for this RemoteBrickClient socket
+        self.lock_messages.acquire()
+
+        result = []
+        if count &lt;= 0:
+            result = list(self.messages)
+            self.messages.clear()
+        elif count &gt; 0:
+            count = min(len(self.messages), count)
+            for i in range(count):
+                result.append(self.messages.popleft())
+
+        self.lock_messages.release()
+        return result
+
+    def get_message(self, wait=False):
+        &#34;&#34;&#34;Retrieves one message from the buffer.&#34;&#34;&#34;
+        if wait:
+            self.wait_messages()
+        m = self._get_message()
+        return m
+
+    def _get_message(self):
+        &#34;&#34;&#34;Gets one message from the message buffer, or None if none present.
+        Thread-safe.
+        &#34;&#34;&#34;
+        self.lock_messages.acquire()
+        try:
+            m = self.messages.popleft()
+        except:
+            m = None
+        self.lock_messages.release()
+        return m
+
+
+class _RemoteCaller:
+    &#34;&#34;&#34;A class that wraps a representative object to be the remote method controller.
+
+    Usual method calls on this RemoteCaller object will send a Command object 
+    through the associated RemoteClient object, instead of executing the usual method call.
+    It will then wait for a response from the RemoteClient object, and return the result of that instead.
+    &#34;&#34;&#34;
+    TESTING = False
+
+    def create_caller(obj, remote_client, custom=None, var_name=&#39;&#39;):
+        &#34;&#34;&#34;Alters the given object (obj) such it represents a Remote Object.
+
+        Its functions will be modified to instead send Command objects through the RemoteClient (remote_client).
+
+        obj - the object to be altered to represent the Remote Object. Should be of the same type as the Remote Object.
+            This action relies on this obj having at least the same methods as the Remote Object.
+        remote_client - the RemoteClient object that commands will be sent through
+        custom - Either None (default), or a list of string names of functions that would
+            also be included in the functions being exposed for remote method control.
+        var_name - Acts as a key, that can represent the Remote Object. Helps avoid name conflicts.
+        &#34;&#34;&#34;
+        caller = _RemoteCaller(remote_client, var_name)
+
+        if custom is None:
+            custom = []
+
+        for name in dir(obj):
+            attr = getattr(obj, name)
+            if name in custom or (callable(attr) and not name.startswith(&#39;__&#39;)):
+                setattr(obj, name, caller._generate(name))
+
+        obj.__remote__ = caller
+        return obj
+
+    def __init__(self, remote_client, var_name):
+        self.remote_client = remote_client
+        self.var_name = var_name
+
+    def _generate(self, func_name):
+        &#34;&#34;&#34;Creates special methods that replace the existing methods in the remote object.&#34;&#34;&#34;
+        func_name = f&#39;{self.var_name}.{func_name}&#39;
+
+        def func(*args, wait_for_data=60, **kwargs):
+            res = self.remote_client._send_command(
+                func_name, *args, wait_for_data=wait_for_data, **kwargs)
+            if _RemoteCaller.TESTING:
+                return res
+            else:
+                if hasattr(res, &#39;result&#39;):
+                    return res.result
+                else:
+                    return res
+        return func
+
+
+class RemoteException(Exception):
+    &#34;&#34;&#34;Exception for when an exception occurs on a RemoteServer and it is sent back to the RemoteClient&#34;&#34;&#34;
+    pass
+
+
+class RemoteClient(MessageReceiver):
+    &#34;&#34;&#34;The client for remote method invocation.
+
+    Objects of this class can send and receive textual messages 
+    to the host, and create remote objects using the RemoteClient.create_caller method.
+    create_caller takes in an object (ideally of the same type as the remote object) and 
+    changes all of its methods such that they send function calls to the host and wait 
+    for responses from the host for return values.
+    &#34;&#34;&#34;
+
+    TESTING = False
+
+    def __init__(self, address, password, port=None, sock=None):
+        &#34;&#34;&#34;Creates the client for remote method invocation.
+
+        address - a string of either IP Address or Hostname of the Remote host
+        password - the password used by the remote host
+        port - None sets port to DEFAULT_PORT. Otherwise expects an integer value for port
+            to connect to.
+        sock - None creates a new socket based on the address and port. Otherwise, expects
+            an opened socket that is ready for sending and receiving data.
+        &#34;&#34;&#34;
+        super(RemoteClient, self).__init__()
+
+        self.address = socket.gethostbyname(address)
+        self.password = DEFAULT_PASSWORD if password is None else password
+        self.port = DEFAULT_PORT if port is None else port
+
+        self.buffer = {}
+        self.lock_buffer = threading.Lock()
+
+        self.status = None
+
+        if sock is None:
+            self.sock = socket.create_connection((self.address, self.port))
+        else:
+            self.sock = sock
+
+        self.conn = Connection(self.sock, self.password)
+
+        self.conn.register_listener(&#39;main&#39;, RemoteClient._listener, (self,))
+
+    def create_caller(self, obj, custom=None, var_name=&#39;&#39;):
+        &#34;&#34;&#34;Alters the given object (obj) such that it represents a Remote Object.
+
+        Its functions will be modified to instead send Command objects through the RemoteClient (remote_client).
+
+        obj - the object to be altered to represent the Remote Object. Should be of the same type as the Remote Object.
+            This action relies on this obj having at least the same methods as the Remote Object.
+        custom - Either None (default), or a list of string names of functions that would
+            also be included in the functions being exposed for remote method control.
+        var_name - Acts as a key, that can represent the Remote Object. Helps avoid name conflicts.
+        &#34;&#34;&#34;
+        return _RemoteCaller.create_caller(obj, self, custom=custom, var_name=var_name)
+
+    def send_message(self, text):
+        &#34;&#34;&#34;Sends a string text message to the host&#34;&#34;&#34;
+        self.conn.send(Message(text))
+
+    def __del__(self):
+        self.close()
+
+    def close(self):
+        &#34;&#34;&#34;Closes this connection to the host.&#34;&#34;&#34;
+        try:
+            self.conn.close()
+        except:
+            pass
+
+    def _listener(self, obj, conn):
+        if isinstance(obj, Message):
+            self.lock_messages.acquire()
+            obj.sender = conn
+            self.messages.append(obj)
+            self.lock_messages.release()
+        elif isinstance(obj, Command):
+            self.lock_buffer.acquire()
+            self.buffer[obj.id] = obj
+            self.lock_buffer.release()
+        else:
+            pass
+
+    def _send_command(self, func, *args, wait_for_data=True, **kwargs):
+        &#34;&#34;&#34;Send a command object to the other brick.
+        Thread-safe.
+        &#34;&#34;&#34;
+        c = Command(func, * args, **kwargs)
+        self.conn.send(c)
+        if wait_for_data:
+            res = self._get_result(c.id, wait_for_data)
+            if res._result_exception and not RemoteClient.TESTING:
+                raise RemoteException(str(res.result))
+        else:
+            res = c.id
+
+        return res
+
+    def _get_result(self, cid, wait_for_data=True) -&gt; Command:
+        &#34;&#34;&#34;Get the result of the following command id.
+        Thread-safe.
+        &#34;&#34;&#34;
+        waiting = not not wait_for_data
+        if not isinstance(wait_for_data, (int, float)):
+            wait_for_data = inf
+
+        start = time.perf_counter()
+        end = time.perf_counter()
+        while waiting and wait_for_data &gt; (end-start):
+            self.lock_buffer.acquire()
+            if cid in self.buffer:
+                self.lock_buffer.release()
+                break
+            self.lock_buffer.release()
+
+            time.sleep(BUSY_WAITING)
+            end = time.perf_counter()
+
+        self.lock_buffer.acquire()
+        o = self.buffer.get(cid, None)
+        if o is not None:
+            del self.buffer[cid]
+        self.lock_buffer.release()
+        return o
+
+
+class RemoteServer(MessageReceiver):
+    &#34;&#34;&#34;The client for remote method invocation.
+
+    Objects of this class can broadcast and receive textual messages 
+    to and from clients. Can accept objects to expose them 
+    for remote control by clients through the register_object method. 
+
+    Messages received from clients, will have the sender attribute set, 
+    such that through these Message objects one can reply to the client.
+    &#34;&#34;&#34;
+
+    def __init__(self, password, port=None):
+        &#34;&#34;&#34;Simply accepts the password to authenticate received objects.
+
+        Optionally accepts a different port number. Expects type integer.
+        Defualts to DEFAULT_PORT when port=None.
+        &#34;&#34;&#34;
+        super(RemoteServer, self).__init__()
+        self.password = (DEFAULT_PASSWORD if password is None else password)
+        self.port = (DEFAULT_PORT if port is None else port)
+
+        self._callers: List[_MethodCaller] = []
+        self._caller_methods: Dict[str, _MethodCaller] = {}
+
+        self._isclosed = False
+        self.connections: List[RemoteClient] = []
+        self.commands = []
+        self.lock_commands = threading.Lock()
+        self.lock_connections = threading.Lock()
+        self.run_event = threading.Event()
+        self.run_event.set()
+
+        self.sock = None
+        self.t1 = threading.Thread(target=self._thread_server, daemon=True)
+        self.t1.start()
+
+    def _thread_server(self):
+        # True or False flag for server restartability on Linux.
+        # Must be False on systems that don&#39;t support it e.g. Windows
+        reuse_port = (hasattr(_socket, &#34;SO_REUSEPORT&#34;))
+
+        while self.run_event.is_set():
+            with socket.create_server((&#39;0.0.0.0&#39;, self.port), reuse_port=reuse_port) as server:
+                self.sock = server
+                while self.run_event.is_set():
+                    try:
+                        conn, addr = self.sock.accept()  # blocking, don&#39;t need time sleep
+                    except OSError:
+                        self.run_event.clear()
+                        break
+
+                    self.lock_connections.acquire()
+                    self.connections = list(
+                        filter(lambda s: not s.isclosed(), self.connections))
+
+                    connection = Connection(conn, self.password)
+                    connection.register_listener(
+                        &#39;main&#39;, self._thread_listener)
+                    self.connections.append(connection)
+                    self.lock_connections.release()
+                self.close_connections()
+            self.close()
+
+    def _thread_listener(self, obj, conn):
+        if isinstance(obj, Command):
+            self.lock_commands.acquire()
+            self._execute(conn, obj)
+            self.lock_commands.release()
+        if isinstance(obj, Message):
+            self.lock_messages.acquire()
+            obj.sender = conn
+            self.messages.append(obj)
+            self.lock_messages.release()
+
+    def register_object(self, obj, custom=None, var_name=&#39;&#39;):
+        &#34;&#34;&#34;Accepts an object to be controlled by this remote method invocation host.
+
+        Does not modify the object given.
+
+        obj - the object to control
+        custom - Either None (default), or a list of string names of functions that would
+            also be included in the functions being exposed for remote method control.
+        var_name - Acts as a key, that can represent the Remote Object. Helps avoid name conflicts.
+        &#34;&#34;&#34;
+        caller = _MethodCaller(obj, custom=custom, var_name=var_name)
+        for method in caller.methods:
+            self._caller_methods[method] = caller
+        self._callers.append(caller)
+
+    def _caller_retrieve_command(self, command: Command) -&gt; _MethodCaller:
+        return self._caller_methods.get(command.func_name, None)
+
+    def _caller_supports_command(self, command: Command):
+        return command is not None and command.func_name in self._caller_methods.keys()
+
+    def _caller_execute(self, command: Command):
+        return self._caller_methods[command.func_name].execute(command)
+
+    def _execute(self, conn: Connection, command: Command):
+        &#34;&#34;&#34;Executes a command and sends the result back to the remote brick (rem)&#34;&#34;&#34;
+        command._result_given = True
+
+        try:
+            if (caller := self._caller_retrieve_command(command)) is not None:
+                caller.execute(command)
+                conn.send(command)
+                return
+            elif command.func_name == &#39;__initialize&#39;:
+                return
+            elif command.func_name == &#39;__verify&#39;:
+                command.result = (
+                    f&#34;I am sending back the command for {command.id}&#34;)
+                conn.send(command)
+                return
+            else:
+                command.result = str(UnsupportedCommand(
+                    f&#34;Command &#39;{command.func_name}&#39; is not supported.&#34;))
+        except Exception as err:
+            command.result = str(f&#39;{err.__class__.__name__}: {err}&#39;)
+
+        command._result_exception = True
+        conn.send(command)
+
+    def __del__(self):
+        self.close()
+
+    def broadcast_message(self, text):
+        &#34;&#34;&#34;Send a singular message to all connected clients.&#34;&#34;&#34;
+        m = Message(text)
+        self.lock_connections.acquire()
+        for conn in self.connections:
+            try:
+                conn.send_message(m)
+            except:
+                pass
+        self.lock_connections.release()
+
+    def close_connections(self):
+        &#34;&#34;&#34;Close all client connections.&#34;&#34;&#34;
+        self.lock_connections.acquire()
+        c = self.connections
+        self.connections = []
+        self.lock_connections.release()
+
+        for conn in c:
+            try:
+                conn.close()
+                del conn
+            except:
+                pass
+        c.clear()
+
+    def close(self):
+        &#34;&#34;&#34;Close this server and all client connections.&#34;&#34;&#34;
+        self._isclosed = True
+        self.run_event.clear()
+        self.close_connections()
+        try:
+            self.sock.shutdown(socket.SHUT_RDWR)
+            self.sock.close()
+        except:
+            pass
+
+    def isclosed(self):
+        &#34;&#34;&#34;Returns True if this server has been closed by .close()&#34;&#34;&#34;
+        return self._isclosed</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="utils.rmi.isrelatedclass"><code class="name flex">
+<span>def <span class="ident">isrelatedclass</span></span>(<span>typ, cls)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Determines if typ is a subclass, superclass, or equivalent to cls
+cls can be an iterable of classes/types.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def isrelatedclass(typ, cls):
+    &#34;&#34;&#34;Determines if typ is a subclass, superclass, or equivalent to cls
+    cls can be an iterable of classes/types.
+    &#34;&#34;&#34;
+    if type(cls) == type:
+        cls = [cls]
+
+    for t in cls:
+        if typ == cls or issubclass(typ, cls) or issubclass(cls, typ):
+            return True
+    return False</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="utils.rmi.Command"><code class="flex name class">
+<span>class <span class="ident">Command</span></span>
+<span>(</span><span>func_name, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>An object that represents a function call along with its arguments.
+It is intended for usage in communicating the data of remote function calls over sockets.</p>
+<p>Utilized mainly by the Connection, RemoteClient, and RemoteServer classes in this module.</p>
+<p>Accepts the function name and arguments of the function call.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Command(PasswordProtected):
+    &#34;&#34;&#34;An object that represents a function call along with its arguments.
+    It is intended for usage in communicating the data of remote function calls over sockets.
+
+    Utilized mainly by the Connection, RemoteClient, and RemoteServer classes in this module.
+    &#34;&#34;&#34;
+
+    def __init__(self, func_name, *args, **kwargs):
+        &#34;&#34;&#34;Accepts the function name and arguments of the function call.&#34;&#34;&#34;
+        super(Command, self).__init__()
+        self.func_name = func_name
+        self.args = args
+        self.kwargs = kwargs
+        self.id = str(uuid.uuid1())
+        self.result = None
+        self._result_given = False
+        self._result_exception = False
+
+    def __repr__(self):
+        return f&#34;{self.id}: {self.func_name}({self.args},{self.kwargs})&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="utils.rmi.PasswordProtected" href="#utils.rmi.PasswordProtected">PasswordProtected</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="utils.rmi.PasswordProtected" href="#utils.rmi.PasswordProtected">PasswordProtected</a></b></code>:
+<ul class="hlist">
+<li><code><a title="utils.rmi.PasswordProtected.verify_password" href="#utils.rmi.PasswordProtected.verify_password">verify_password</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="utils.rmi.Connection"><code class="flex name class">
+<span>class <span class="ident">Connection</span></span>
+<span>(</span><span>sock, password='password', debug=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Objects that wrap TCP sockets and create a thread to listen for received data.
+It also allows for listeners to be added, that process the data when it is received.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Connection:
+    &#34;&#34;&#34;Objects that wrap TCP sockets and create a thread to listen for received data.
+    It also allows for listeners to be added, that process the data when it is received.
+    &#34;&#34;&#34;
+
+    def __init__(self, sock, password=&#34;password&#34;, debug=None):
+        self.sock: socket.socket = sock
+        self.listeners = {}
+        self.run_event = threading.Event()
+        self.lock_listener = threading.Lock()
+        self.lock_send = threading.Lock()
+        self._isclosed = False
+
+        self.password = password
+        self.run_event.set()
+        t = threading.Thread(target=Connection._func,
+                             args=(self,), daemon=True)
+        t.start()
+
+    def _func(self):
+        # self._debug(&#39;starting connection thread&#39;)
+        while self.run_event.is_set():
+            try:
+                # self._debug(&#39;start receiving&#39;)
+                try:
+                    d = self.sock.recv(4096)
+                except:
+                    # The read failed because the connection probably died.
+                    self.close()
+                    break
+                # self._debug(&#39;received. loading...&#39;)
+                if len(d) &lt;= 0:
+                    self.run_event.clear()
+                    self.close()
+                    break
+                o = brickle.loads(d)
+                # self._debug(&#39;received. loaded...&#39;)
+
+                self.lock_listener.acquire()
+
+                if isinstance(o, PasswordProtected) and o.verify_password(self.password):
+                    for key, val in self.listeners.items():
+                        listener, args = val
+                        try:
+                            # self._debug(f&#39;running listener &#34;{key}&#34;&#39;)
+                            listener(*args, o, self)
+                            # self._debug(f&#39;completed listener &#34;{key}&#34;&#39;)
+                        except Exception as err:
+                            c = ConnectionListenerError(
+                                f&#34;Error: Listener {key} - {err} {val}&#34;)
+                            print(c, file=sys.stderr)
+                self.lock_listener.release()
+            except OSError as err:
+                if self.isclosed():
+                    return
+                print(&#39;Warning:&#39;, err, file=sys.stderr)
+            except brickle.UnpicklingError as err:
+                print(&#39;Data Unpickling Error:&#39;, err, file=sys.stderr)
+            except Exception as err:
+                c = ConnectionFatalError(f&#39;Bad Error: {err}&#39;)
+                print(c, file=sys.stderr)
+        # self._debug(f&#39;connection thread ended&#39;)
+
+    def send(self, obj):
+        &#34;&#34;&#34;Send an object over the Connection. Only accepts objects of the type PasswordProtected.&#34;&#34;&#34;
+        if isinstance(obj, PasswordProtected):
+            self.lock_send.acquire()
+            obj.password = self.password
+            # self._debug(f&#39;dumping data ({str(obj)})&#39;)
+            d = brickle.dumps(obj)
+            # self._debug(f&#39;sending data dump ({str(obj)})&#39;)
+            self.sock.send(d)
+            # self._debug(f&#39;data sent ({str(obj)})&#39;)
+            self.lock_send.release()
+
+    def register_listener(self, name, listener, args=None):
+        &#34;&#34;&#34;Expects a listener of function type:
+        def func(*args, obj, connection)
+
+        where obj is the unpickled object, at the time
+        args are the arguments of the args tuple
+        and connection refers to this Connection object
+        &#34;&#34;&#34;
+        if args is None:
+            args = tuple()
+
+        self.lock_listener.acquire()
+        self.listeners[name] = (listener, args)
+        self.lock_listener.release()
+
+    def __del__(self):
+        self.close()
+
+    def close(self):
+        &#34;&#34;&#34;Ends this connection&#39;s thread and closes the socket.&#34;&#34;&#34;
+        try:
+            self.run_event.clear()
+            self.sock.shutdown(socket.SHUT_RDWR)
+            self.sock.close()
+        except:
+            pass
+
+        self._isclosed = True
+
+    def isclosed(self):
+        &#34;&#34;&#34;Checks if the socket is closed.&#34;&#34;&#34;
+        return self._isclosed</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="utils.rmi.Connection.close"><code class="name flex">
+<span>def <span class="ident">close</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Ends this connection's thread and closes the socket.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def close(self):
+    &#34;&#34;&#34;Ends this connection&#39;s thread and closes the socket.&#34;&#34;&#34;
+    try:
+        self.run_event.clear()
+        self.sock.shutdown(socket.SHUT_RDWR)
+        self.sock.close()
+    except:
+        pass
+
+    self._isclosed = True</code></pre>
+</details>
+</dd>
+<dt id="utils.rmi.Connection.isclosed"><code class="name flex">
+<span>def <span class="ident">isclosed</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Checks if the socket is closed.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def isclosed(self):
+    &#34;&#34;&#34;Checks if the socket is closed.&#34;&#34;&#34;
+    return self._isclosed</code></pre>
+</details>
+</dd>
+<dt id="utils.rmi.Connection.register_listener"><code class="name flex">
+<span>def <span class="ident">register_listener</span></span>(<span>self, name, listener, args=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Expects a listener of function type:
+def func(*args, obj, connection)</p>
+<p>where obj is the unpickled object, at the time
+args are the arguments of the args tuple
+and connection refers to this Connection object</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def register_listener(self, name, listener, args=None):
+    &#34;&#34;&#34;Expects a listener of function type:
+    def func(*args, obj, connection)
+
+    where obj is the unpickled object, at the time
+    args are the arguments of the args tuple
+    and connection refers to this Connection object
+    &#34;&#34;&#34;
+    if args is None:
+        args = tuple()
+
+    self.lock_listener.acquire()
+    self.listeners[name] = (listener, args)
+    self.lock_listener.release()</code></pre>
+</details>
+</dd>
+<dt id="utils.rmi.Connection.send"><code class="name flex">
+<span>def <span class="ident">send</span></span>(<span>self, obj)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Send an object over the Connection. Only accepts objects of the type PasswordProtected.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def send(self, obj):
+    &#34;&#34;&#34;Send an object over the Connection. Only accepts objects of the type PasswordProtected.&#34;&#34;&#34;
+    if isinstance(obj, PasswordProtected):
+        self.lock_send.acquire()
+        obj.password = self.password
+        # self._debug(f&#39;dumping data ({str(obj)})&#39;)
+        d = brickle.dumps(obj)
+        # self._debug(f&#39;sending data dump ({str(obj)})&#39;)
+        self.sock.send(d)
+        # self._debug(f&#39;data sent ({str(obj)})&#39;)
+        self.lock_send.release()</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="utils.rmi.ConnectionFatalError"><code class="flex name class">
+<span>class <span class="ident">ConnectionFatalError</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>An error displayed when a bad error occurs related to the operation of the Remote server</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ConnectionFatalError(IdentifyingException):
+    &#34;&#34;&#34;An error displayed when a bad error occurs related to the operation of the Remote server&#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="utils.rmi.IdentifyingException" href="#utils.rmi.IdentifyingException">IdentifyingException</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="utils.rmi.ConnectionListenerError"><code class="flex name class">
+<span>class <span class="ident">ConnectionListenerError</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>An error displayed when an error occurs on the Connection listener execution</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ConnectionListenerError(IdentifyingException):
+    &#34;&#34;&#34;An error displayed when an error occurs on the Connection listener execution&#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="utils.rmi.IdentifyingException" href="#utils.rmi.IdentifyingException">IdentifyingException</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="utils.rmi.Debuggable"><code class="flex name class">
+<span>class <span class="ident">Debuggable</span></span>
+<span>(</span><span>debug=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>An extra class utilized for displaying debug messages</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Debuggable:
+    &#34;&#34;&#34;An extra class utilized for displaying debug messages&#34;&#34;&#34;
+    DEBUG_ALL = {}
+    DEBUG_COUNTER = 0
+
+    def __init__(self, debug=None):
+        self.debug = DEBUG_DEFAULT if debug is None else debug
+        if self.debug:
+            i = id(self)
+            if i not in self.__class__.DEBUG_ALL:
+                self.__class__.DEBUG_ALL[i] = f&#39;{self.__class__.__name__}{self.__class__.DEBUG_COUNTER}&#39;
+                self.__class__.DEBUG_COUNTER += 1
+
+    def _debug(self, text):
+        if self.debug:
+            i = self.__class__.DEBUG_ALL[id(self)]
+            print(f&#39;&gt;&gt;&gt; ({i}) {text}\t&#39;, file=sys.stderr)</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="utils.rmi.Debuggable.DEBUG_ALL"><code class="name">var <span class="ident">DEBUG_ALL</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="utils.rmi.Debuggable.DEBUG_COUNTER"><code class="name">var <span class="ident">DEBUG_COUNTER</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="utils.rmi.IdentifyingException"><code class="flex name class">
+<span>class <span class="ident">IdentifyingException</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>An exception with an overriden string representation, giving its class name along with error message.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class IdentifyingException(Exception):
+    &#34;&#34;&#34;An exception with an overriden string representation, giving its class name along with error message.&#34;&#34;&#34;
+
+    def __repr__(self):
+        return f&#39;{self.__class__.__name__}: {super(IdentifyingException, self).__repr__()}&#39;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="utils.rmi.ConnectionFatalError" href="#utils.rmi.ConnectionFatalError">ConnectionFatalError</a></li>
+<li><a title="utils.rmi.ConnectionListenerError" href="#utils.rmi.ConnectionListenerError">ConnectionListenerError</a></li>
+<li><a title="utils.rmi.MessageReplyException" href="#utils.rmi.MessageReplyException">MessageReplyException</a></li>
+<li><a title="utils.rmi.MethodCallerException" href="#utils.rmi.MethodCallerException">MethodCallerException</a></li>
+<li><a title="utils.rmi.UnsupportedCommand" href="#utils.rmi.UnsupportedCommand">UnsupportedCommand</a></li>
+<li><a title="utils.rmi.brickle.UnpicklingError" href="#utils.rmi.brickle.UnpicklingError">brickle.UnpicklingError</a></li>
+</ul>
+</dd>
+<dt id="utils.rmi.Message"><code class="flex name class">
+<span>class <span class="ident">Message</span></span>
+<span>(</span><span>text)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Objects of this class are used as a wrapper around text messages sent over a TCP socket.</p>
+<p>Utilized mainly by the Connection, RemoteClient, and RemoteServer classes in this module.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Message(PasswordProtected):
+    &#34;&#34;&#34;Objects of this class are used as a wrapper around text messages sent over a TCP socket.
+
+    Utilized mainly by the Connection, RemoteClient, and RemoteServer classes in this module.
+    &#34;&#34;&#34;
+
+    def __init__(self, text):
+        super(Message, self).__init__()
+        self.text = str(text)
+        self.sender = None
+
+    def reply(self, text):
+        &#34;&#34;&#34;Sends a reply to the original sender of this message. Accepts a string text message.
+
+        This action is not always available, and would raise a MessageReplyException if it isn&#39;t available.
+
+        The underlying sender is intended to be Connection objects, but can apply to anything
+        that has a send method that can handle a Message obj.
+        &#34;&#34;&#34;
+        if self.sender is not None and hasattr(self.sender, &#39;send&#39;) and callable(getattr(self.sender, &#39;send&#39;)):
+            self.sender.send(Message(text))
+        else:
+            raise MessageReplyException(&#34;No sender available&#34;)
+
+    def __repr__(self):
+        return self.text</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="utils.rmi.PasswordProtected" href="#utils.rmi.PasswordProtected">PasswordProtected</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="utils.rmi.Message.reply"><code class="name flex">
+<span>def <span class="ident">reply</span></span>(<span>self, text)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Sends a reply to the original sender of this message. Accepts a string text message.</p>
+<p>This action is not always available, and would raise a MessageReplyException if it isn't available.</p>
+<p>The underlying sender is intended to be Connection objects, but can apply to anything
+that has a send method that can handle a Message obj.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def reply(self, text):
+    &#34;&#34;&#34;Sends a reply to the original sender of this message. Accepts a string text message.
+
+    This action is not always available, and would raise a MessageReplyException if it isn&#39;t available.
+
+    The underlying sender is intended to be Connection objects, but can apply to anything
+    that has a send method that can handle a Message obj.
+    &#34;&#34;&#34;
+    if self.sender is not None and hasattr(self.sender, &#39;send&#39;) and callable(getattr(self.sender, &#39;send&#39;)):
+        self.sender.send(Message(text))
+    else:
+        raise MessageReplyException(&#34;No sender available&#34;)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="utils.rmi.PasswordProtected" href="#utils.rmi.PasswordProtected">PasswordProtected</a></b></code>:
+<ul class="hlist">
+<li><code><a title="utils.rmi.PasswordProtected.verify_password" href="#utils.rmi.PasswordProtected.verify_password">verify_password</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="utils.rmi.MessageReceiver"><code class="flex name class">
+<span>class <span class="ident">MessageReceiver</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Subclass this class to add a thread-safe message buffer structure.
+Only provides methods for retrieving messages.</p>
+<p>Similar to a mixin, that addes the messages and lock_messages attributes,
+and related functions for retrieving.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MessageReceiver(object):
+    &#34;&#34;&#34;Subclass this class to add a thread-safe message buffer structure.
+    Only provides methods for retrieving messages.
+
+    Similar to a mixin, that addes the messages and lock_messages attributes, 
+    and related functions for retrieving.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        self.messages = deque()
+        self.lock_messages = threading.Lock()
+
+    def wait_messages(self, timeout=None, wait_interval=None):
+        &#34;&#34;&#34;Busy waits for messages to arrive in the buffer.
+
+        timeout - the number of seconds to wait for in total
+        wait_interval - the sleep interval for a single iteration
+
+        returns True whenever the function returns.
+        &#34;&#34;&#34;
+        if timeout is None:
+            timeout = inf
+        if wait_interval is None:
+            wait_interval = BUSY_WAITING
+
+        timeout = int(timeout / wait_interval)
+
+        while timeout &gt; 0 and not self.has_messages():
+            timeout -= 1
+            time.sleep(wait_interval)
+        return True
+
+    def has_messages(self):
+        &#34;&#34;&#34;Checks if the buffer contains any messages.&#34;&#34;&#34;
+        return self.num_messages() &gt; 0
+
+    def num_messages(self):
+        &#34;&#34;&#34;Returns the number of messages in the buffer.&#34;&#34;&#34;
+        self.lock_messages.acquire()
+        r = len(self.messages)
+        self.lock_messages.release()
+        return r
+
+    def get_messages(self, count=0):
+        &#34;&#34;&#34;Gets the specified number of messages from the message buffer.
+
+        Set to 0 (default value) to retrieve all the messages from the buffer.
+        Thread-safe.
+        &#34;&#34;&#34;
+        # Receiving messages in the listener thread for this RemoteBrickClient socket
+        self.lock_messages.acquire()
+
+        result = []
+        if count &lt;= 0:
+            result = list(self.messages)
+            self.messages.clear()
+        elif count &gt; 0:
+            count = min(len(self.messages), count)
+            for i in range(count):
+                result.append(self.messages.popleft())
+
+        self.lock_messages.release()
+        return result
+
+    def get_message(self, wait=False):
+        &#34;&#34;&#34;Retrieves one message from the buffer.&#34;&#34;&#34;
+        if wait:
+            self.wait_messages()
+        m = self._get_message()
+        return m
+
+    def _get_message(self):
+        &#34;&#34;&#34;Gets one message from the message buffer, or None if none present.
+        Thread-safe.
+        &#34;&#34;&#34;
+        self.lock_messages.acquire()
+        try:
+            m = self.messages.popleft()
+        except:
+            m = None
+        self.lock_messages.release()
+        return m</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="utils.rmi.RemoteClient" href="#utils.rmi.RemoteClient">RemoteClient</a></li>
+<li><a title="utils.rmi.RemoteServer" href="#utils.rmi.RemoteServer">RemoteServer</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="utils.rmi.MessageReceiver.get_message"><code class="name flex">
+<span>def <span class="ident">get_message</span></span>(<span>self, wait=False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Retrieves one message from the buffer.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_message(self, wait=False):
+    &#34;&#34;&#34;Retrieves one message from the buffer.&#34;&#34;&#34;
+    if wait:
+        self.wait_messages()
+    m = self._get_message()
+    return m</code></pre>
+</details>
+</dd>
+<dt id="utils.rmi.MessageReceiver.get_messages"><code class="name flex">
+<span>def <span class="ident">get_messages</span></span>(<span>self, count=0)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Gets the specified number of messages from the message buffer.</p>
+<p>Set to 0 (default value) to retrieve all the messages from the buffer.
+Thread-safe.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_messages(self, count=0):
+    &#34;&#34;&#34;Gets the specified number of messages from the message buffer.
+
+    Set to 0 (default value) to retrieve all the messages from the buffer.
+    Thread-safe.
+    &#34;&#34;&#34;
+    # Receiving messages in the listener thread for this RemoteBrickClient socket
+    self.lock_messages.acquire()
+
+    result = []
+    if count &lt;= 0:
+        result = list(self.messages)
+        self.messages.clear()
+    elif count &gt; 0:
+        count = min(len(self.messages), count)
+        for i in range(count):
+            result.append(self.messages.popleft())
+
+    self.lock_messages.release()
+    return result</code></pre>
+</details>
+</dd>
+<dt id="utils.rmi.MessageReceiver.has_messages"><code class="name flex">
+<span>def <span class="ident">has_messages</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Checks if the buffer contains any messages.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def has_messages(self):
+    &#34;&#34;&#34;Checks if the buffer contains any messages.&#34;&#34;&#34;
+    return self.num_messages() &gt; 0</code></pre>
+</details>
+</dd>
+<dt id="utils.rmi.MessageReceiver.num_messages"><code class="name flex">
+<span>def <span class="ident">num_messages</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns the number of messages in the buffer.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def num_messages(self):
+    &#34;&#34;&#34;Returns the number of messages in the buffer.&#34;&#34;&#34;
+    self.lock_messages.acquire()
+    r = len(self.messages)
+    self.lock_messages.release()
+    return r</code></pre>
+</details>
+</dd>
+<dt id="utils.rmi.MessageReceiver.wait_messages"><code class="name flex">
+<span>def <span class="ident">wait_messages</span></span>(<span>self, timeout=None, wait_interval=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Busy waits for messages to arrive in the buffer.</p>
+<p>timeout - the number of seconds to wait for in total
+wait_interval - the sleep interval for a single iteration</p>
+<p>returns True whenever the function returns.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def wait_messages(self, timeout=None, wait_interval=None):
+    &#34;&#34;&#34;Busy waits for messages to arrive in the buffer.
+
+    timeout - the number of seconds to wait for in total
+    wait_interval - the sleep interval for a single iteration
+
+    returns True whenever the function returns.
+    &#34;&#34;&#34;
+    if timeout is None:
+        timeout = inf
+    if wait_interval is None:
+        wait_interval = BUSY_WAITING
+
+    timeout = int(timeout / wait_interval)
+
+    while timeout &gt; 0 and not self.has_messages():
+        timeout -= 1
+        time.sleep(wait_interval)
+    return True</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="utils.rmi.MessageReplyException"><code class="flex name class">
+<span>class <span class="ident">MessageReplyException</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>An exception with an overriden string representation, giving its class name along with error message.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MessageReplyException(IdentifyingException):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="utils.rmi.IdentifyingException" href="#utils.rmi.IdentifyingException">IdentifyingException</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="utils.rmi.MethodCallerException"><code class="flex name class">
+<span>class <span class="ident">MethodCallerException</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>An error that occurs in the calling of methods on the host server.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MethodCallerException(IdentifyingException):
+    &#34;&#34;&#34;An error that occurs in the calling of methods on the host server.&#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="utils.rmi.IdentifyingException" href="#utils.rmi.IdentifyingException">IdentifyingException</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="utils.rmi.PasswordProtected"><code class="flex name class">
+<span>class <span class="ident">PasswordProtected</span></span>
+<span>(</span><span>password=None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class PasswordProtected:
+    def __init__(self, password=None):
+        if password is None:
+            password = DEFAULT_PASSWORD
+        self.password = password
+
+    def verify_password(self, test):
+        &#34;&#34;&#34;Verifies that the test input matches the stored internal password&#34;&#34;&#34;
+        return test == self.password</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="utils.rmi.Command" href="#utils.rmi.Command">Command</a></li>
+<li><a title="utils.rmi.Message" href="#utils.rmi.Message">Message</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="utils.rmi.PasswordProtected.verify_password"><code class="name flex">
+<span>def <span class="ident">verify_password</span></span>(<span>self, test)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Verifies that the test input matches the stored internal password</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def verify_password(self, test):
+    &#34;&#34;&#34;Verifies that the test input matches the stored internal password&#34;&#34;&#34;
+    return test == self.password</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="utils.rmi.RemoteClient"><code class="flex name class">
+<span>class <span class="ident">RemoteClient</span></span>
+<span>(</span><span>address, password, port=None, sock=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>The client for remote method invocation.</p>
+<p>Objects of this class can send and receive textual messages
+to the host, and create remote objects using the RemoteClient.create_caller method.
+create_caller takes in an object (ideally of the same type as the remote object) and
+changes all of its methods such that they send function calls to the host and wait
+for responses from the host for return values.</p>
+<p>Creates the client for remote method invocation.</p>
+<p>address - a string of either IP Address or Hostname of the Remote host
+password - the password used by the remote host
+port - None sets port to DEFAULT_PORT. Otherwise expects an integer value for port
+to connect to.
+sock - None creates a new socket based on the address and port. Otherwise, expects
+an opened socket that is ready for sending and receiving data.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RemoteClient(MessageReceiver):
+    &#34;&#34;&#34;The client for remote method invocation.
+
+    Objects of this class can send and receive textual messages 
+    to the host, and create remote objects using the RemoteClient.create_caller method.
+    create_caller takes in an object (ideally of the same type as the remote object) and 
+    changes all of its methods such that they send function calls to the host and wait 
+    for responses from the host for return values.
+    &#34;&#34;&#34;
+
+    TESTING = False
+
+    def __init__(self, address, password, port=None, sock=None):
+        &#34;&#34;&#34;Creates the client for remote method invocation.
+
+        address - a string of either IP Address or Hostname of the Remote host
+        password - the password used by the remote host
+        port - None sets port to DEFAULT_PORT. Otherwise expects an integer value for port
+            to connect to.
+        sock - None creates a new socket based on the address and port. Otherwise, expects
+            an opened socket that is ready for sending and receiving data.
+        &#34;&#34;&#34;
+        super(RemoteClient, self).__init__()
+
+        self.address = socket.gethostbyname(address)
+        self.password = DEFAULT_PASSWORD if password is None else password
+        self.port = DEFAULT_PORT if port is None else port
+
+        self.buffer = {}
+        self.lock_buffer = threading.Lock()
+
+        self.status = None
+
+        if sock is None:
+            self.sock = socket.create_connection((self.address, self.port))
+        else:
+            self.sock = sock
+
+        self.conn = Connection(self.sock, self.password)
+
+        self.conn.register_listener(&#39;main&#39;, RemoteClient._listener, (self,))
+
+    def create_caller(self, obj, custom=None, var_name=&#39;&#39;):
+        &#34;&#34;&#34;Alters the given object (obj) such that it represents a Remote Object.
+
+        Its functions will be modified to instead send Command objects through the RemoteClient (remote_client).
+
+        obj - the object to be altered to represent the Remote Object. Should be of the same type as the Remote Object.
+            This action relies on this obj having at least the same methods as the Remote Object.
+        custom - Either None (default), or a list of string names of functions that would
+            also be included in the functions being exposed for remote method control.
+        var_name - Acts as a key, that can represent the Remote Object. Helps avoid name conflicts.
+        &#34;&#34;&#34;
+        return _RemoteCaller.create_caller(obj, self, custom=custom, var_name=var_name)
+
+    def send_message(self, text):
+        &#34;&#34;&#34;Sends a string text message to the host&#34;&#34;&#34;
+        self.conn.send(Message(text))
+
+    def __del__(self):
+        self.close()
+
+    def close(self):
+        &#34;&#34;&#34;Closes this connection to the host.&#34;&#34;&#34;
+        try:
+            self.conn.close()
+        except:
+            pass
+
+    def _listener(self, obj, conn):
+        if isinstance(obj, Message):
+            self.lock_messages.acquire()
+            obj.sender = conn
+            self.messages.append(obj)
+            self.lock_messages.release()
+        elif isinstance(obj, Command):
+            self.lock_buffer.acquire()
+            self.buffer[obj.id] = obj
+            self.lock_buffer.release()
+        else:
+            pass
+
+    def _send_command(self, func, *args, wait_for_data=True, **kwargs):
+        &#34;&#34;&#34;Send a command object to the other brick.
+        Thread-safe.
+        &#34;&#34;&#34;
+        c = Command(func, * args, **kwargs)
+        self.conn.send(c)
+        if wait_for_data:
+            res = self._get_result(c.id, wait_for_data)
+            if res._result_exception and not RemoteClient.TESTING:
+                raise RemoteException(str(res.result))
+        else:
+            res = c.id
+
+        return res
+
+    def _get_result(self, cid, wait_for_data=True) -&gt; Command:
+        &#34;&#34;&#34;Get the result of the following command id.
+        Thread-safe.
+        &#34;&#34;&#34;
+        waiting = not not wait_for_data
+        if not isinstance(wait_for_data, (int, float)):
+            wait_for_data = inf
+
+        start = time.perf_counter()
+        end = time.perf_counter()
+        while waiting and wait_for_data &gt; (end-start):
+            self.lock_buffer.acquire()
+            if cid in self.buffer:
+                self.lock_buffer.release()
+                break
+            self.lock_buffer.release()
+
+            time.sleep(BUSY_WAITING)
+            end = time.perf_counter()
+
+        self.lock_buffer.acquire()
+        o = self.buffer.get(cid, None)
+        if o is not None:
+            del self.buffer[cid]
+        self.lock_buffer.release()
+        return o</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="utils.rmi.MessageReceiver" href="#utils.rmi.MessageReceiver">MessageReceiver</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="utils.remote.RemoteBrickClient" href="remote.html#utils.remote.RemoteBrickClient">RemoteBrickClient</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="utils.rmi.RemoteClient.TESTING"><code class="name">var <span class="ident">TESTING</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="utils.rmi.RemoteClient.close"><code class="name flex">
+<span>def <span class="ident">close</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Closes this connection to the host.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def close(self):
+    &#34;&#34;&#34;Closes this connection to the host.&#34;&#34;&#34;
+    try:
+        self.conn.close()
+    except:
+        pass</code></pre>
+</details>
+</dd>
+<dt id="utils.rmi.RemoteClient.create_caller"><code class="name flex">
+<span>def <span class="ident">create_caller</span></span>(<span>self, obj, custom=None, var_name='')</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Alters the given object (obj) such that it represents a Remote Object.</p>
+<p>Its functions will be modified to instead send Command objects through the RemoteClient (remote_client).</p>
+<p>obj - the object to be altered to represent the Remote Object. Should be of the same type as the Remote Object.
+This action relies on this obj having at least the same methods as the Remote Object.
+custom - Either None (default), or a list of string names of functions that would
+also be included in the functions being exposed for remote method control.
+var_name - Acts as a key, that can represent the Remote Object. Helps avoid name conflicts.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_caller(self, obj, custom=None, var_name=&#39;&#39;):
+    &#34;&#34;&#34;Alters the given object (obj) such that it represents a Remote Object.
+
+    Its functions will be modified to instead send Command objects through the RemoteClient (remote_client).
+
+    obj - the object to be altered to represent the Remote Object. Should be of the same type as the Remote Object.
+        This action relies on this obj having at least the same methods as the Remote Object.
+    custom - Either None (default), or a list of string names of functions that would
+        also be included in the functions being exposed for remote method control.
+    var_name - Acts as a key, that can represent the Remote Object. Helps avoid name conflicts.
+    &#34;&#34;&#34;
+    return _RemoteCaller.create_caller(obj, self, custom=custom, var_name=var_name)</code></pre>
+</details>
+</dd>
+<dt id="utils.rmi.RemoteClient.send_message"><code class="name flex">
+<span>def <span class="ident">send_message</span></span>(<span>self, text)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Sends a string text message to the host</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def send_message(self, text):
+    &#34;&#34;&#34;Sends a string text message to the host&#34;&#34;&#34;
+    self.conn.send(Message(text))</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="utils.rmi.MessageReceiver" href="#utils.rmi.MessageReceiver">MessageReceiver</a></b></code>:
+<ul class="hlist">
+<li><code><a title="utils.rmi.MessageReceiver.get_message" href="#utils.rmi.MessageReceiver.get_message">get_message</a></code></li>
+<li><code><a title="utils.rmi.MessageReceiver.get_messages" href="#utils.rmi.MessageReceiver.get_messages">get_messages</a></code></li>
+<li><code><a title="utils.rmi.MessageReceiver.has_messages" href="#utils.rmi.MessageReceiver.has_messages">has_messages</a></code></li>
+<li><code><a title="utils.rmi.MessageReceiver.num_messages" href="#utils.rmi.MessageReceiver.num_messages">num_messages</a></code></li>
+<li><code><a title="utils.rmi.MessageReceiver.wait_messages" href="#utils.rmi.MessageReceiver.wait_messages">wait_messages</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="utils.rmi.RemoteException"><code class="flex name class">
+<span>class <span class="ident">RemoteException</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Exception for when an exception occurs on a RemoteServer and it is sent back to the RemoteClient</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RemoteException(Exception):
+    &#34;&#34;&#34;Exception for when an exception occurs on a RemoteServer and it is sent back to the RemoteClient&#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="utils.rmi.RemoteServer"><code class="flex name class">
+<span>class <span class="ident">RemoteServer</span></span>
+<span>(</span><span>password, port=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>The client for remote method invocation.</p>
+<p>Objects of this class can broadcast and receive textual messages
+to and from clients. Can accept objects to expose them
+for remote control by clients through the register_object method. </p>
+<p>Messages received from clients, will have the sender attribute set,
+such that through these Message objects one can reply to the client.</p>
+<p>Simply accepts the password to authenticate received objects.</p>
+<p>Optionally accepts a different port number. Expects type integer.
+Defualts to DEFAULT_PORT when port=None.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RemoteServer(MessageReceiver):
+    &#34;&#34;&#34;The client for remote method invocation.
+
+    Objects of this class can broadcast and receive textual messages 
+    to and from clients. Can accept objects to expose them 
+    for remote control by clients through the register_object method. 
+
+    Messages received from clients, will have the sender attribute set, 
+    such that through these Message objects one can reply to the client.
+    &#34;&#34;&#34;
+
+    def __init__(self, password, port=None):
+        &#34;&#34;&#34;Simply accepts the password to authenticate received objects.
+
+        Optionally accepts a different port number. Expects type integer.
+        Defualts to DEFAULT_PORT when port=None.
+        &#34;&#34;&#34;
+        super(RemoteServer, self).__init__()
+        self.password = (DEFAULT_PASSWORD if password is None else password)
+        self.port = (DEFAULT_PORT if port is None else port)
+
+        self._callers: List[_MethodCaller] = []
+        self._caller_methods: Dict[str, _MethodCaller] = {}
+
+        self._isclosed = False
+        self.connections: List[RemoteClient] = []
+        self.commands = []
+        self.lock_commands = threading.Lock()
+        self.lock_connections = threading.Lock()
+        self.run_event = threading.Event()
+        self.run_event.set()
+
+        self.sock = None
+        self.t1 = threading.Thread(target=self._thread_server, daemon=True)
+        self.t1.start()
+
+    def _thread_server(self):
+        # True or False flag for server restartability on Linux.
+        # Must be False on systems that don&#39;t support it e.g. Windows
+        reuse_port = (hasattr(_socket, &#34;SO_REUSEPORT&#34;))
+
+        while self.run_event.is_set():
+            with socket.create_server((&#39;0.0.0.0&#39;, self.port), reuse_port=reuse_port) as server:
+                self.sock = server
+                while self.run_event.is_set():
+                    try:
+                        conn, addr = self.sock.accept()  # blocking, don&#39;t need time sleep
+                    except OSError:
+                        self.run_event.clear()
+                        break
+
+                    self.lock_connections.acquire()
+                    self.connections = list(
+                        filter(lambda s: not s.isclosed(), self.connections))
+
+                    connection = Connection(conn, self.password)
+                    connection.register_listener(
+                        &#39;main&#39;, self._thread_listener)
+                    self.connections.append(connection)
+                    self.lock_connections.release()
+                self.close_connections()
+            self.close()
+
+    def _thread_listener(self, obj, conn):
+        if isinstance(obj, Command):
+            self.lock_commands.acquire()
+            self._execute(conn, obj)
+            self.lock_commands.release()
+        if isinstance(obj, Message):
+            self.lock_messages.acquire()
+            obj.sender = conn
+            self.messages.append(obj)
+            self.lock_messages.release()
+
+    def register_object(self, obj, custom=None, var_name=&#39;&#39;):
+        &#34;&#34;&#34;Accepts an object to be controlled by this remote method invocation host.
+
+        Does not modify the object given.
+
+        obj - the object to control
+        custom - Either None (default), or a list of string names of functions that would
+            also be included in the functions being exposed for remote method control.
+        var_name - Acts as a key, that can represent the Remote Object. Helps avoid name conflicts.
+        &#34;&#34;&#34;
+        caller = _MethodCaller(obj, custom=custom, var_name=var_name)
+        for method in caller.methods:
+            self._caller_methods[method] = caller
+        self._callers.append(caller)
+
+    def _caller_retrieve_command(self, command: Command) -&gt; _MethodCaller:
+        return self._caller_methods.get(command.func_name, None)
+
+    def _caller_supports_command(self, command: Command):
+        return command is not None and command.func_name in self._caller_methods.keys()
+
+    def _caller_execute(self, command: Command):
+        return self._caller_methods[command.func_name].execute(command)
+
+    def _execute(self, conn: Connection, command: Command):
+        &#34;&#34;&#34;Executes a command and sends the result back to the remote brick (rem)&#34;&#34;&#34;
+        command._result_given = True
+
+        try:
+            if (caller := self._caller_retrieve_command(command)) is not None:
+                caller.execute(command)
+                conn.send(command)
+                return
+            elif command.func_name == &#39;__initialize&#39;:
+                return
+            elif command.func_name == &#39;__verify&#39;:
+                command.result = (
+                    f&#34;I am sending back the command for {command.id}&#34;)
+                conn.send(command)
+                return
+            else:
+                command.result = str(UnsupportedCommand(
+                    f&#34;Command &#39;{command.func_name}&#39; is not supported.&#34;))
+        except Exception as err:
+            command.result = str(f&#39;{err.__class__.__name__}: {err}&#39;)
+
+        command._result_exception = True
+        conn.send(command)
+
+    def __del__(self):
+        self.close()
+
+    def broadcast_message(self, text):
+        &#34;&#34;&#34;Send a singular message to all connected clients.&#34;&#34;&#34;
+        m = Message(text)
+        self.lock_connections.acquire()
+        for conn in self.connections:
+            try:
+                conn.send_message(m)
+            except:
+                pass
+        self.lock_connections.release()
+
+    def close_connections(self):
+        &#34;&#34;&#34;Close all client connections.&#34;&#34;&#34;
+        self.lock_connections.acquire()
+        c = self.connections
+        self.connections = []
+        self.lock_connections.release()
+
+        for conn in c:
+            try:
+                conn.close()
+                del conn
+            except:
+                pass
+        c.clear()
+
+    def close(self):
+        &#34;&#34;&#34;Close this server and all client connections.&#34;&#34;&#34;
+        self._isclosed = True
+        self.run_event.clear()
+        self.close_connections()
+        try:
+            self.sock.shutdown(socket.SHUT_RDWR)
+            self.sock.close()
+        except:
+            pass
+
+    def isclosed(self):
+        &#34;&#34;&#34;Returns True if this server has been closed by .close()&#34;&#34;&#34;
+        return self._isclosed</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="utils.rmi.MessageReceiver" href="#utils.rmi.MessageReceiver">MessageReceiver</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="utils.remote.RemoteBrickServer" href="remote.html#utils.remote.RemoteBrickServer">RemoteBrickServer</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="utils.rmi.RemoteServer.broadcast_message"><code class="name flex">
+<span>def <span class="ident">broadcast_message</span></span>(<span>self, text)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Send a singular message to all connected clients.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def broadcast_message(self, text):
+    &#34;&#34;&#34;Send a singular message to all connected clients.&#34;&#34;&#34;
+    m = Message(text)
+    self.lock_connections.acquire()
+    for conn in self.connections:
+        try:
+            conn.send_message(m)
+        except:
+            pass
+    self.lock_connections.release()</code></pre>
+</details>
+</dd>
+<dt id="utils.rmi.RemoteServer.close"><code class="name flex">
+<span>def <span class="ident">close</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Close this server and all client connections.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def close(self):
+    &#34;&#34;&#34;Close this server and all client connections.&#34;&#34;&#34;
+    self._isclosed = True
+    self.run_event.clear()
+    self.close_connections()
+    try:
+        self.sock.shutdown(socket.SHUT_RDWR)
+        self.sock.close()
+    except:
+        pass</code></pre>
+</details>
+</dd>
+<dt id="utils.rmi.RemoteServer.close_connections"><code class="name flex">
+<span>def <span class="ident">close_connections</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Close all client connections.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def close_connections(self):
+    &#34;&#34;&#34;Close all client connections.&#34;&#34;&#34;
+    self.lock_connections.acquire()
+    c = self.connections
+    self.connections = []
+    self.lock_connections.release()
+
+    for conn in c:
+        try:
+            conn.close()
+            del conn
+        except:
+            pass
+    c.clear()</code></pre>
+</details>
+</dd>
+<dt id="utils.rmi.RemoteServer.isclosed"><code class="name flex">
+<span>def <span class="ident">isclosed</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns True if this server has been closed by .close()</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def isclosed(self):
+    &#34;&#34;&#34;Returns True if this server has been closed by .close()&#34;&#34;&#34;
+    return self._isclosed</code></pre>
+</details>
+</dd>
+<dt id="utils.rmi.RemoteServer.register_object"><code class="name flex">
+<span>def <span class="ident">register_object</span></span>(<span>self, obj, custom=None, var_name='')</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Accepts an object to be controlled by this remote method invocation host.</p>
+<p>Does not modify the object given.</p>
+<p>obj - the object to control
+custom - Either None (default), or a list of string names of functions that would
+also be included in the functions being exposed for remote method control.
+var_name - Acts as a key, that can represent the Remote Object. Helps avoid name conflicts.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def register_object(self, obj, custom=None, var_name=&#39;&#39;):
+    &#34;&#34;&#34;Accepts an object to be controlled by this remote method invocation host.
+
+    Does not modify the object given.
+
+    obj - the object to control
+    custom - Either None (default), or a list of string names of functions that would
+        also be included in the functions being exposed for remote method control.
+    var_name - Acts as a key, that can represent the Remote Object. Helps avoid name conflicts.
+    &#34;&#34;&#34;
+    caller = _MethodCaller(obj, custom=custom, var_name=var_name)
+    for method in caller.methods:
+        self._caller_methods[method] = caller
+    self._callers.append(caller)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="utils.rmi.MessageReceiver" href="#utils.rmi.MessageReceiver">MessageReceiver</a></b></code>:
+<ul class="hlist">
+<li><code><a title="utils.rmi.MessageReceiver.get_message" href="#utils.rmi.MessageReceiver.get_message">get_message</a></code></li>
+<li><code><a title="utils.rmi.MessageReceiver.get_messages" href="#utils.rmi.MessageReceiver.get_messages">get_messages</a></code></li>
+<li><code><a title="utils.rmi.MessageReceiver.has_messages" href="#utils.rmi.MessageReceiver.has_messages">has_messages</a></code></li>
+<li><code><a title="utils.rmi.MessageReceiver.num_messages" href="#utils.rmi.MessageReceiver.num_messages">num_messages</a></code></li>
+<li><code><a title="utils.rmi.MessageReceiver.wait_messages" href="#utils.rmi.MessageReceiver.wait_messages">wait_messages</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="utils.rmi.UnsupportedCommand"><code class="flex name class">
+<span>class <span class="ident">UnsupportedCommand</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Error given for when a command was sent to a RemoteServer that cannot process it.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class UnsupportedCommand(IdentifyingException):
+    &#34;&#34;&#34;Error given for when a command was sent to a RemoteServer that cannot process it.&#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="utils.rmi.IdentifyingException" href="#utils.rmi.IdentifyingException">IdentifyingException</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="utils.rmi.brickle"><code class="flex name class">
+<span>class <span class="ident">brickle</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>A replacement for pickle, in the context of this RemoteClient/Server library.
+Only allows the parsing of objects that subclass PasswordProtected.
+Attributes of these objects can only be primitive values.
+The parse can be changed to utilize the slower pickle library to cover all value types.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class brickle:
+    &#34;&#34;&#34;A replacement for pickle, in the context of this RemoteClient/Server library. 
+    Only allows the parsing of objects that subclass PasswordProtected.
+    Attributes of these objects can only be primitive values. 
+    The parse can be changed to utilize the slower pickle library to cover all value types.&#34;&#34;&#34;
+    _parser = marshal
+
+    class UnpicklingError(IdentifyingException):
+        pass
+
+    def dumps(obj):
+        &#34;&#34;&#34;Only accepts objects that are of the type PasswordProtected, and converts them to a bytes-like format&#34;&#34;&#34;
+        try:
+            res = {}
+            if isinstance(obj, PasswordProtected):
+                res = brickle._dumps(obj)
+            else:
+                pass
+            return brickle._parser.dumps(res)
+        except Exception as err:
+            raise brickle.UnpicklingError(err)
+
+    def _dumps(obj):
+        res = vars(obj).copy()
+        res[&#39;__class__&#39;] = obj.__class__.__name__
+        return res
+
+    def loads(data):
+        &#34;&#34;&#34;Only accepts data of the bytes-like format used by this class. 
+        Outputs objects that are of the Command or Message type.
+
+        Returns None for any other type.
+        &#34;&#34;&#34;
+        try:
+            data = brickle._parser.loads(data)
+            if data[&#39;__class__&#39;] == &#39;Command&#39;:
+                c = Command(data[&#39;func_name&#39;])
+                return brickle._loads(c, data)
+            elif data[&#39;__class__&#39;] == &#39;Message&#39;:
+                m = Message(data[&#39;text&#39;])
+                return brickle._loads(m, data)
+            else:
+                return None
+        except Exception as err:
+            raise brickle.UnpicklingError(err)
+
+    def _loads(obj, data):
+        # Specific to this implementation
+        del data[&#39;__class__&#39;]
+        obj.__dict__.update(data)
+        return obj</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="utils.rmi.brickle.UnpicklingError"><code class="name">var <span class="ident">UnpicklingError</span></code></dt>
+<dd>
+<div class="desc"><p>An exception with an overriden string representation, giving its class name along with error message.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="utils.rmi.brickle.dumps"><code class="name flex">
+<span>def <span class="ident">dumps</span></span>(<span>obj)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Only accepts objects that are of the type PasswordProtected, and converts them to a bytes-like format</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dumps(obj):
+    &#34;&#34;&#34;Only accepts objects that are of the type PasswordProtected, and converts them to a bytes-like format&#34;&#34;&#34;
+    try:
+        res = {}
+        if isinstance(obj, PasswordProtected):
+            res = brickle._dumps(obj)
+        else:
+            pass
+        return brickle._parser.dumps(res)
+    except Exception as err:
+        raise brickle.UnpicklingError(err)</code></pre>
+</details>
+</dd>
+<dt id="utils.rmi.brickle.loads"><code class="name flex">
+<span>def <span class="ident">loads</span></span>(<span>data)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Only accepts data of the bytes-like format used by this class.
+Outputs objects that are of the Command or Message type.</p>
+<p>Returns None for any other type.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def loads(data):
+    &#34;&#34;&#34;Only accepts data of the bytes-like format used by this class. 
+    Outputs objects that are of the Command or Message type.
+
+    Returns None for any other type.
+    &#34;&#34;&#34;
+    try:
+        data = brickle._parser.loads(data)
+        if data[&#39;__class__&#39;] == &#39;Command&#39;:
+            c = Command(data[&#39;func_name&#39;])
+            return brickle._loads(c, data)
+        elif data[&#39;__class__&#39;] == &#39;Message&#39;:
+            m = Message(data[&#39;text&#39;])
+            return brickle._loads(m, data)
+        else:
+            return None
+    except Exception as err:
+        raise brickle.UnpicklingError(err)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="utils" href="index.html">utils</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="utils.rmi.isrelatedclass" href="#utils.rmi.isrelatedclass">isrelatedclass</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="utils.rmi.Command" href="#utils.rmi.Command">Command</a></code></h4>
+</li>
+<li>
+<h4><code><a title="utils.rmi.Connection" href="#utils.rmi.Connection">Connection</a></code></h4>
+<ul class="">
+<li><code><a title="utils.rmi.Connection.close" href="#utils.rmi.Connection.close">close</a></code></li>
+<li><code><a title="utils.rmi.Connection.isclosed" href="#utils.rmi.Connection.isclosed">isclosed</a></code></li>
+<li><code><a title="utils.rmi.Connection.register_listener" href="#utils.rmi.Connection.register_listener">register_listener</a></code></li>
+<li><code><a title="utils.rmi.Connection.send" href="#utils.rmi.Connection.send">send</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="utils.rmi.ConnectionFatalError" href="#utils.rmi.ConnectionFatalError">ConnectionFatalError</a></code></h4>
+</li>
+<li>
+<h4><code><a title="utils.rmi.ConnectionListenerError" href="#utils.rmi.ConnectionListenerError">ConnectionListenerError</a></code></h4>
+</li>
+<li>
+<h4><code><a title="utils.rmi.Debuggable" href="#utils.rmi.Debuggable">Debuggable</a></code></h4>
+<ul class="">
+<li><code><a title="utils.rmi.Debuggable.DEBUG_ALL" href="#utils.rmi.Debuggable.DEBUG_ALL">DEBUG_ALL</a></code></li>
+<li><code><a title="utils.rmi.Debuggable.DEBUG_COUNTER" href="#utils.rmi.Debuggable.DEBUG_COUNTER">DEBUG_COUNTER</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="utils.rmi.IdentifyingException" href="#utils.rmi.IdentifyingException">IdentifyingException</a></code></h4>
+</li>
+<li>
+<h4><code><a title="utils.rmi.Message" href="#utils.rmi.Message">Message</a></code></h4>
+<ul class="">
+<li><code><a title="utils.rmi.Message.reply" href="#utils.rmi.Message.reply">reply</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="utils.rmi.MessageReceiver" href="#utils.rmi.MessageReceiver">MessageReceiver</a></code></h4>
+<ul class="">
+<li><code><a title="utils.rmi.MessageReceiver.get_message" href="#utils.rmi.MessageReceiver.get_message">get_message</a></code></li>
+<li><code><a title="utils.rmi.MessageReceiver.get_messages" href="#utils.rmi.MessageReceiver.get_messages">get_messages</a></code></li>
+<li><code><a title="utils.rmi.MessageReceiver.has_messages" href="#utils.rmi.MessageReceiver.has_messages">has_messages</a></code></li>
+<li><code><a title="utils.rmi.MessageReceiver.num_messages" href="#utils.rmi.MessageReceiver.num_messages">num_messages</a></code></li>
+<li><code><a title="utils.rmi.MessageReceiver.wait_messages" href="#utils.rmi.MessageReceiver.wait_messages">wait_messages</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="utils.rmi.MessageReplyException" href="#utils.rmi.MessageReplyException">MessageReplyException</a></code></h4>
+</li>
+<li>
+<h4><code><a title="utils.rmi.MethodCallerException" href="#utils.rmi.MethodCallerException">MethodCallerException</a></code></h4>
+</li>
+<li>
+<h4><code><a title="utils.rmi.PasswordProtected" href="#utils.rmi.PasswordProtected">PasswordProtected</a></code></h4>
+<ul class="">
+<li><code><a title="utils.rmi.PasswordProtected.verify_password" href="#utils.rmi.PasswordProtected.verify_password">verify_password</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="utils.rmi.RemoteClient" href="#utils.rmi.RemoteClient">RemoteClient</a></code></h4>
+<ul class="">
+<li><code><a title="utils.rmi.RemoteClient.TESTING" href="#utils.rmi.RemoteClient.TESTING">TESTING</a></code></li>
+<li><code><a title="utils.rmi.RemoteClient.close" href="#utils.rmi.RemoteClient.close">close</a></code></li>
+<li><code><a title="utils.rmi.RemoteClient.create_caller" href="#utils.rmi.RemoteClient.create_caller">create_caller</a></code></li>
+<li><code><a title="utils.rmi.RemoteClient.send_message" href="#utils.rmi.RemoteClient.send_message">send_message</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="utils.rmi.RemoteException" href="#utils.rmi.RemoteException">RemoteException</a></code></h4>
+</li>
+<li>
+<h4><code><a title="utils.rmi.RemoteServer" href="#utils.rmi.RemoteServer">RemoteServer</a></code></h4>
+<ul class="">
+<li><code><a title="utils.rmi.RemoteServer.broadcast_message" href="#utils.rmi.RemoteServer.broadcast_message">broadcast_message</a></code></li>
+<li><code><a title="utils.rmi.RemoteServer.close" href="#utils.rmi.RemoteServer.close">close</a></code></li>
+<li><code><a title="utils.rmi.RemoteServer.close_connections" href="#utils.rmi.RemoteServer.close_connections">close_connections</a></code></li>
+<li><code><a title="utils.rmi.RemoteServer.isclosed" href="#utils.rmi.RemoteServer.isclosed">isclosed</a></code></li>
+<li><code><a title="utils.rmi.RemoteServer.register_object" href="#utils.rmi.RemoteServer.register_object">register_object</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="utils.rmi.UnsupportedCommand" href="#utils.rmi.UnsupportedCommand">UnsupportedCommand</a></code></h4>
+</li>
+<li>
+<h4><code><a title="utils.rmi.brickle" href="#utils.rmi.brickle">brickle</a></code></h4>
+<ul class="">
+<li><code><a title="utils.rmi.brickle.UnpicklingError" href="#utils.rmi.brickle.UnpicklingError">UnpicklingError</a></code></li>
+<li><code><a title="utils.rmi.brickle.dumps" href="#utils.rmi.brickle.dumps">dumps</a></code></li>
+<li><code><a title="utils.rmi.brickle.loads" href="#utils.rmi.brickle.loads">loads</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

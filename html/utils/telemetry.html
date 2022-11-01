@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>utils.telemetry API documentation</title>
+<meta name="description" content="Module for providing access to a single, simple, GUI that can easily display data.
+It also allows the creation of buttons and sliders for adjusting …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>utils.telemetry</code></h1>
+</header>
+<section id="section-intro">
+<p>Module for providing access to a single, simple, GUI that can easily display data.
+It also allows the creation of buttons and sliders for adjusting starting parameters.</p>
+<p>Author: Ryan Au</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Module for providing access to a single, simple, GUI that can easily display data.
+It also allows the creation of buttons and sliders for adjusting starting parameters.
+
+Author: Ryan Au
+&#34;&#34;&#34;
+
+from collections import deque
+from queue import Empty, Queue
+from tkinter import Scale, ttk, StringVar, TclError, Button as TkButton
+
+import tkinter as tk
+from tkinter.constants import HORIZONTAL
+import threading
+from uuid import UUID, SafeUUID
+import time
+
+
+WINDOW: tk.Tk = None
+LABELS = {}
+_EXIT_FLAG = True
+
+class Command:
+    WAIT_DONE = 0.001
+    def __init__(self, func, args):
+        self.func = func
+        self.args = args
+        self.result_given = False
+        self.error_given = False
+        self.result = None
+        # self.cid = UUID(is_safe=SafeUUID.safe)
+    def execute(self):
+        &#34;&#34;&#34;To be executed in the main thread&#34;&#34;&#34;
+        try:
+            self.result = self.func(*(self.args))
+            self.result_given = True
+        except BaseException as e:
+            self.result = e
+            self.error_given = True
+    def wait_done(self):
+        &#34;&#34;&#34;To be executed in the worker process&#34;&#34;&#34;
+        while not self.result_given and not self.error_given:
+            time.sleep(Command.WAIT_DONE)
+        if self.result_given:
+            return self.result
+        if self.error_given:
+            raise self.result
+
+class CommandQueue:
+    def __init__(self):
+        self.queue = Queue()
+    def put_func(self, func, args):
+        c = Command(func, args)
+        self.queue.put(c)
+        return c
+    def execute_all(self):
+        size = self.queue.qsize()
+        try:
+            while size &gt; 0:
+                command:Command = self.queue.get(block=False)
+                command.execute()
+                size -= 1
+        except Empty:
+            pass
+
+_COMMANDQUEUE = CommandQueue()
+
+def remote(func, *args):
+    c = _COMMANDQUEUE.put_func(func, args)
+    return c.wait_done()
+
+def remote_capable(func):
+    def inner(*args):
+        if threading.current_thread().name == &#39;MainThread&#39;:
+            func(*args)
+        else:
+            remote(func, *args)
+    return inner
+
+def _on_closing():
+    &#34;&#34;&#34;Private method: cleans up internal values on window destruction&#34;&#34;&#34;
+    global WINDOW, _EXIT_FLAG, LABELS
+    _EXIT_FLAG = True
+    WINDOW.destroy()
+    WINDOW = None
+    LABELS = {}
+
+
+def start():
+    &#34;&#34;&#34;Open the telemetry window&#34;&#34;&#34;
+    global WINDOW, _EXIT_FLAG
+    _EXIT_FLAG = False
+    if WINDOW is None:
+        WINDOW = tk.Tk()
+    WINDOW.protocol(&#34;WM_DELETE_WINDOW&#34;, _on_closing)
+    update()
+
+
+def isopen():
+    &#34;&#34;&#34;Determines if the telemtry window has been opened or closed&#34;&#34;&#34;
+    return not _EXIT_FLAG
+
+
+def resize(width=100, height=100):
+    &#34;&#34;&#34;Resize telemtry to a set width and height in pixels&#34;&#34;&#34;
+    if WINDOW is None:
+        return
+    WINDOW.geometry(&#34;{}x{}&#34;.format(width, height))
+
+
+def stop():
+    &#34;&#34;&#34;Closes telemtry window&#34;&#34;&#34;
+    global WINDOW
+    if WINDOW is not None:
+        WINDOW.quit()
+        WINDOW = None
+
+
+class _Updater:
+    UPDATE_DELAY = 0.01
+    def __init__(self, func, obj, *args):
+        self.thread = threading.Thread(target=self._listener, args=[obj]+list(args), daemon=True)
+        self.func = func
+        self.event = threading.Event()
+        self.event.set()
+    def start(self):
+        self.thread.start()
+    def stop(self):
+        self.event.clear()
+    def _listener(self, *args):
+        while self.event.is_set():
+            try:
+                (self.func)(*args)
+                time.sleep(_Updater.UPDATE_DELAY)
+            except BaseException as e:
+                print(e)
+                break
+
+class _Updatable:
+    def set_updater(self, func, obj, *args):
+        if hasattr(self, &#39;_updater&#39;) and self._updater is not None:
+            if not isinstance(self._updater, _Updater):
+                return
+            self._updater.stop()
+        self._updater = _Updater(func, obj, *args)
+        self._updater.start()
+    def stop_updater(self):
+        if hasattr(self, &#39;_updater&#39;) and self._updater is not None and isinstance(self._updater, _Updater):
+            self._updater.stop()
+
+class _Slider(_Updatable):
+    def __init__(self, lower, upper, value, func=None):
+        self.s = Scale(WINDOW, from_=lower, to=upper, orient=HORIZONTAL)
+        self.s.set(value)
+        self.s.pack()
+
+        if func is not None:
+            self.set_updater(func, self)
+
+    def get_value(self):
+        return self.s.get()
+    
+    def __del__(self):
+        self.stop_updater()
+
+
+def create_slider(lower, upper=None, value=None, func=None):
+    &#34;&#34;&#34;Adds a slider to the telemetry window AND returns the slider object added
+    
+    create_slider(50) creates: 0&lt;---25---&gt;50
+    create_slider(25, 50) creates: 25&lt;---37---&gt;50
+    create_slider(-100, 100, 50) creates: -100&lt;---50---&gt;100
+    &#34;&#34;&#34;
+    if upper is None:
+        upper = lower
+        lower = 0
+
+    if value is None:
+        value = lower
+
+    if WINDOW is None or not isopen():
+        return
+    
+    return _Slider(lower, upper, value, func)
+
+
+class _Button(_Updatable):
+    def __init__(self, name, func=None):
+        self.b = TkButton(WINDOW, text=name)
+        self.b.bind(&#34;&lt;ButtonPress&gt;&#34;, self._on_press)
+        self.b.bind(&#34;&lt;ButtonRelease&gt;&#34;, self._on_release)
+        self._is_pressed = False
+        self.b.pack()
+
+        if func is not None:
+            self.set_updater(func, self)
+
+    def _on_press(self, *args):
+        self._is_pressed = True
+
+    def _on_release(self, *args):
+        self._is_pressed = False
+
+    def is_pressed(self):
+        return self._is_pressed
+
+    def __del__(self):
+        self.stop_updater()
+
+def create_button(name, func=None):
+    &#34;&#34;&#34;Adds a button to the telemetry window AND returns the button object added&#34;&#34;&#34;
+    if WINDOW is None or not isopen():
+        return
+
+    return _Button(name, func)
+
+@remote_capable
+def label(key, data, showkey=False):
+    &#34;&#34;&#34;Adds/Sets data by a key to the telemetry window&#34;&#34;&#34;
+    add(key, data, showkey)
+
+
+def add(key, data, showkey=False):
+    &#34;&#34;&#34;Adds/Sets data by a key to the telemetry window&#34;&#34;&#34;
+    if WINDOW is None or not isopen():
+        return
+    key = str(key)
+    data = str(data)
+    if showkey:
+        data = &#34;{} : {}&#34;.format(key, data)
+    if key in LABELS:
+        LABELS[key][1].set(data)
+    else:
+        var = StringVar()
+        var.set(data)
+        LABELS[key] = (tk.Label(WINDOW, textvariable=var), var)
+        LABELS[key][0].pack()
+
+
+def update(retries=1):
+    &#34;&#34;&#34;Updates display with latest telemetry values&#34;&#34;&#34;
+    global WINDOW
+    if WINDOW is not None:
+        try:
+            ### Execute CommandQueue Operations ###
+            _COMMANDQUEUE.execute_all()
+            ### Execute CommandQueue Operations ###
+            for i in range(retries):
+                WINDOW.update()
+        except TclError as e:
+            err = str(e)
+            if err == &#39;can\&#39;t invoke &#34;update&#34; command: application has been destroyed&#39;:
+                WINDOW = None
+
+
+def clear():
+    &#34;&#34;&#34;Destroy and remove all LABELS of telemetry&#34;&#34;&#34;
+    global LABELS
+    for i, widget in LABELS.items():
+        try:
+            widget[0].destroy()
+        except TclError:
+            pass
+    LABELS = {}
+
+
+def mainloop():
+    &#34;&#34;&#34;Starts a while loop that calls update for you! 
+    Usage of telemetry.update not needed when using this&#34;&#34;&#34;
+    if WINDOW is not None and isopen():
+        try:
+            WINDOW.mainloop()
+        except KeyboardInterrupt:
+            return
+
+
+if __name__ == &#39;__main__&#39;:
+    import time
+    start()
+    resize(500, 200)
+    i = 0
+    add(&#34;word&#34;, &#34;heyo this is the start&#34;)
+    update()
+    while True:
+        time.sleep(1)
+
+        ### Test clearing window despite still updating ###
+        if i == 10:
+            clear()
+            if not isopen():
+                start()
+
+        # Adding data
+        add(&#34;color&#34;, &#34;red&#34;, True)
+        i = i + 2 if i &lt; 40 else 0
+
+        print(i, isopen())
+        add(&#34;counter&#34;, &#34;*&#34;*i)
+
+        # Must update window to see changes
+        update()</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="utils.telemetry.add"><code class="name flex">
+<span>def <span class="ident">add</span></span>(<span>key, data, showkey=False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Adds/Sets data by a key to the telemetry window</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add(key, data, showkey=False):
+    &#34;&#34;&#34;Adds/Sets data by a key to the telemetry window&#34;&#34;&#34;
+    if WINDOW is None or not isopen():
+        return
+    key = str(key)
+    data = str(data)
+    if showkey:
+        data = &#34;{} : {}&#34;.format(key, data)
+    if key in LABELS:
+        LABELS[key][1].set(data)
+    else:
+        var = StringVar()
+        var.set(data)
+        LABELS[key] = (tk.Label(WINDOW, textvariable=var), var)
+        LABELS[key][0].pack()</code></pre>
+</details>
+</dd>
+<dt id="utils.telemetry.clear"><code class="name flex">
+<span>def <span class="ident">clear</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Destroy and remove all LABELS of telemetry</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def clear():
+    &#34;&#34;&#34;Destroy and remove all LABELS of telemetry&#34;&#34;&#34;
+    global LABELS
+    for i, widget in LABELS.items():
+        try:
+            widget[0].destroy()
+        except TclError:
+            pass
+    LABELS = {}</code></pre>
+</details>
+</dd>
+<dt id="utils.telemetry.create_button"><code class="name flex">
+<span>def <span class="ident">create_button</span></span>(<span>name, func=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Adds a button to the telemetry window AND returns the button object added</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_button(name, func=None):
+    &#34;&#34;&#34;Adds a button to the telemetry window AND returns the button object added&#34;&#34;&#34;
+    if WINDOW is None or not isopen():
+        return
+
+    return _Button(name, func)</code></pre>
+</details>
+</dd>
+<dt id="utils.telemetry.create_slider"><code class="name flex">
+<span>def <span class="ident">create_slider</span></span>(<span>lower, upper=None, value=None, func=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Adds a slider to the telemetry window AND returns the slider object added</p>
+<p>create_slider(50) creates: 0&lt;&mdash;25&mdash;&gt;50
+create_slider(25, 50) creates: 25&lt;&mdash;37&mdash;&gt;50
+create_slider(-100, 100, 50) creates: -100&lt;&mdash;50&mdash;&gt;100</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_slider(lower, upper=None, value=None, func=None):
+    &#34;&#34;&#34;Adds a slider to the telemetry window AND returns the slider object added
+    
+    create_slider(50) creates: 0&lt;---25---&gt;50
+    create_slider(25, 50) creates: 25&lt;---37---&gt;50
+    create_slider(-100, 100, 50) creates: -100&lt;---50---&gt;100
+    &#34;&#34;&#34;
+    if upper is None:
+        upper = lower
+        lower = 0
+
+    if value is None:
+        value = lower
+
+    if WINDOW is None or not isopen():
+        return
+    
+    return _Slider(lower, upper, value, func)</code></pre>
+</details>
+</dd>
+<dt id="utils.telemetry.isopen"><code class="name flex">
+<span>def <span class="ident">isopen</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Determines if the telemtry window has been opened or closed</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def isopen():
+    &#34;&#34;&#34;Determines if the telemtry window has been opened or closed&#34;&#34;&#34;
+    return not _EXIT_FLAG</code></pre>
+</details>
+</dd>
+<dt id="utils.telemetry.label"><code class="name flex">
+<span>def <span class="ident">label</span></span>(<span>*args)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def inner(*args):
+    if threading.current_thread().name == &#39;MainThread&#39;:
+        func(*args)
+    else:
+        remote(func, *args)</code></pre>
+</details>
+</dd>
+<dt id="utils.telemetry.mainloop"><code class="name flex">
+<span>def <span class="ident">mainloop</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Starts a while loop that calls update for you!
+Usage of telemetry.update not needed when using this</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def mainloop():
+    &#34;&#34;&#34;Starts a while loop that calls update for you! 
+    Usage of telemetry.update not needed when using this&#34;&#34;&#34;
+    if WINDOW is not None and isopen():
+        try:
+            WINDOW.mainloop()
+        except KeyboardInterrupt:
+            return</code></pre>
+</details>
+</dd>
+<dt id="utils.telemetry.remote"><code class="name flex">
+<span>def <span class="ident">remote</span></span>(<span>func, *args)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def remote(func, *args):
+    c = _COMMANDQUEUE.put_func(func, args)
+    return c.wait_done()</code></pre>
+</details>
+</dd>
+<dt id="utils.telemetry.remote_capable"><code class="name flex">
+<span>def <span class="ident">remote_capable</span></span>(<span>func)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def remote_capable(func):
+    def inner(*args):
+        if threading.current_thread().name == &#39;MainThread&#39;:
+            func(*args)
+        else:
+            remote(func, *args)
+    return inner</code></pre>
+</details>
+</dd>
+<dt id="utils.telemetry.resize"><code class="name flex">
+<span>def <span class="ident">resize</span></span>(<span>width=100, height=100)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Resize telemtry to a set width and height in pixels</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def resize(width=100, height=100):
+    &#34;&#34;&#34;Resize telemtry to a set width and height in pixels&#34;&#34;&#34;
+    if WINDOW is None:
+        return
+    WINDOW.geometry(&#34;{}x{}&#34;.format(width, height))</code></pre>
+</details>
+</dd>
+<dt id="utils.telemetry.start"><code class="name flex">
+<span>def <span class="ident">start</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Open the telemetry window</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def start():
+    &#34;&#34;&#34;Open the telemetry window&#34;&#34;&#34;
+    global WINDOW, _EXIT_FLAG
+    _EXIT_FLAG = False
+    if WINDOW is None:
+        WINDOW = tk.Tk()
+    WINDOW.protocol(&#34;WM_DELETE_WINDOW&#34;, _on_closing)
+    update()</code></pre>
+</details>
+</dd>
+<dt id="utils.telemetry.stop"><code class="name flex">
+<span>def <span class="ident">stop</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Closes telemtry window</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def stop():
+    &#34;&#34;&#34;Closes telemtry window&#34;&#34;&#34;
+    global WINDOW
+    if WINDOW is not None:
+        WINDOW.quit()
+        WINDOW = None</code></pre>
+</details>
+</dd>
+<dt id="utils.telemetry.update"><code class="name flex">
+<span>def <span class="ident">update</span></span>(<span>retries=1)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Updates display with latest telemetry values</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update(retries=1):
+    &#34;&#34;&#34;Updates display with latest telemetry values&#34;&#34;&#34;
+    global WINDOW
+    if WINDOW is not None:
+        try:
+            ### Execute CommandQueue Operations ###
+            _COMMANDQUEUE.execute_all()
+            ### Execute CommandQueue Operations ###
+            for i in range(retries):
+                WINDOW.update()
+        except TclError as e:
+            err = str(e)
+            if err == &#39;can\&#39;t invoke &#34;update&#34; command: application has been destroyed&#39;:
+                WINDOW = None</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="utils.telemetry.Command"><code class="flex name class">
+<span>class <span class="ident">Command</span></span>
+<span>(</span><span>func, args)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Command:
+    WAIT_DONE = 0.001
+    def __init__(self, func, args):
+        self.func = func
+        self.args = args
+        self.result_given = False
+        self.error_given = False
+        self.result = None
+        # self.cid = UUID(is_safe=SafeUUID.safe)
+    def execute(self):
+        &#34;&#34;&#34;To be executed in the main thread&#34;&#34;&#34;
+        try:
+            self.result = self.func(*(self.args))
+            self.result_given = True
+        except BaseException as e:
+            self.result = e
+            self.error_given = True
+    def wait_done(self):
+        &#34;&#34;&#34;To be executed in the worker process&#34;&#34;&#34;
+        while not self.result_given and not self.error_given:
+            time.sleep(Command.WAIT_DONE)
+        if self.result_given:
+            return self.result
+        if self.error_given:
+            raise self.result</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="utils.telemetry.Command.WAIT_DONE"><code class="name">var <span class="ident">WAIT_DONE</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="utils.telemetry.Command.execute"><code class="name flex">
+<span>def <span class="ident">execute</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>To be executed in the main thread</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def execute(self):
+    &#34;&#34;&#34;To be executed in the main thread&#34;&#34;&#34;
+    try:
+        self.result = self.func(*(self.args))
+        self.result_given = True
+    except BaseException as e:
+        self.result = e
+        self.error_given = True</code></pre>
+</details>
+</dd>
+<dt id="utils.telemetry.Command.wait_done"><code class="name flex">
+<span>def <span class="ident">wait_done</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>To be executed in the worker process</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def wait_done(self):
+    &#34;&#34;&#34;To be executed in the worker process&#34;&#34;&#34;
+    while not self.result_given and not self.error_given:
+        time.sleep(Command.WAIT_DONE)
+    if self.result_given:
+        return self.result
+    if self.error_given:
+        raise self.result</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="utils.telemetry.CommandQueue"><code class="flex name class">
+<span>class <span class="ident">CommandQueue</span></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CommandQueue:
+    def __init__(self):
+        self.queue = Queue()
+    def put_func(self, func, args):
+        c = Command(func, args)
+        self.queue.put(c)
+        return c
+    def execute_all(self):
+        size = self.queue.qsize()
+        try:
+            while size &gt; 0:
+                command:Command = self.queue.get(block=False)
+                command.execute()
+                size -= 1
+        except Empty:
+            pass</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="utils.telemetry.CommandQueue.execute_all"><code class="name flex">
+<span>def <span class="ident">execute_all</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def execute_all(self):
+    size = self.queue.qsize()
+    try:
+        while size &gt; 0:
+            command:Command = self.queue.get(block=False)
+            command.execute()
+            size -= 1
+    except Empty:
+        pass</code></pre>
+</details>
+</dd>
+<dt id="utils.telemetry.CommandQueue.put_func"><code class="name flex">
+<span>def <span class="ident">put_func</span></span>(<span>self, func, args)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def put_func(self, func, args):
+    c = Command(func, args)
+    self.queue.put(c)
+    return c</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="utils" href="index.html">utils</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="two-column">
+<li><code><a title="utils.telemetry.add" href="#utils.telemetry.add">add</a></code></li>
+<li><code><a title="utils.telemetry.clear" href="#utils.telemetry.clear">clear</a></code></li>
+<li><code><a title="utils.telemetry.create_button" href="#utils.telemetry.create_button">create_button</a></code></li>
+<li><code><a title="utils.telemetry.create_slider" href="#utils.telemetry.create_slider">create_slider</a></code></li>
+<li><code><a title="utils.telemetry.isopen" href="#utils.telemetry.isopen">isopen</a></code></li>
+<li><code><a title="utils.telemetry.label" href="#utils.telemetry.label">label</a></code></li>
+<li><code><a title="utils.telemetry.mainloop" href="#utils.telemetry.mainloop">mainloop</a></code></li>
+<li><code><a title="utils.telemetry.remote" href="#utils.telemetry.remote">remote</a></code></li>
+<li><code><a title="utils.telemetry.remote_capable" href="#utils.telemetry.remote_capable">remote_capable</a></code></li>
+<li><code><a title="utils.telemetry.resize" href="#utils.telemetry.resize">resize</a></code></li>
+<li><code><a title="utils.telemetry.start" href="#utils.telemetry.start">start</a></code></li>
+<li><code><a title="utils.telemetry.stop" href="#utils.telemetry.stop">stop</a></code></li>
+<li><code><a title="utils.telemetry.update" href="#utils.telemetry.update">update</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="utils.telemetry.Command" href="#utils.telemetry.Command">Command</a></code></h4>
+<ul class="">
+<li><code><a title="utils.telemetry.Command.WAIT_DONE" href="#utils.telemetry.Command.WAIT_DONE">WAIT_DONE</a></code></li>
+<li><code><a title="utils.telemetry.Command.execute" href="#utils.telemetry.Command.execute">execute</a></code></li>
+<li><code><a title="utils.telemetry.Command.wait_done" href="#utils.telemetry.Command.wait_done">wait_done</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="utils.telemetry.CommandQueue" href="#utils.telemetry.CommandQueue">CommandQueue</a></code></h4>
+<ul class="">
+<li><code><a title="utils.telemetry.CommandQueue.execute_all" href="#utils.telemetry.CommandQueue.execute_all">execute_all</a></code></li>
+<li><code><a title="utils.telemetry.CommandQueue.put_func" href="#utils.telemetry.CommandQueue.put_func">put_func</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>
