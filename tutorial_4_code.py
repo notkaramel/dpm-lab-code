@@ -9,7 +9,7 @@ POSITIONS = [-70, -160, -255, -360, -450, -545]
 RESET_DISTANCE = 600
 
 
-COLORS = { # means, stdevs, threshold on stdev distance
+COLORS = {  # means, stdevs, threshold on stdev distance
     'red': ((0.9720, 0.1305, 0.1947), (0.003706, 0.01108, 0.01371), 7.5),
     'blue': ((0.1782, 0.3947, 0.9006), (0.02419, 0.02570, 0.01359), 7.5),
     'green': ((0.1633, 0.8940, 0.4161), (0.02180, 0.009301, 0.02003), 10),
@@ -36,7 +36,7 @@ def normalize(r, g, b):
 
 def color_dist(rgb):
     """Returns a color string of the closest color using standard deviation-scaled distance.
-    
+
     The given rgb value, treated as a vector, is converted to stdev_distance by the formula:
         stdev_components = abs(rgb-mean)/stdev
         stdev_distance = sqrt(stdev_components**2)
@@ -62,7 +62,7 @@ def color_dist(rgb):
     for color, (mean, std, threshold) in COLORS.items():
         r, g, b = [abs(c-m)/s for c, m, s in zip(rgb, mean, std)]
         d = vector_length(r, g, b)
-        
+
         distances.append(d)
         color_order.append(color)
 
@@ -90,26 +90,26 @@ def window_start():
 
 def block_position_relative(motor: brick.Motor, degrees, dps=90, threshold=0.5):
     motor.set_limits(dps=dps)
-    end = motor.get_position() + degrees
+    diff = abs(degrees)
+    time_diff = diff / dps
+
     motor.set_position_relative(degrees)
-    time.sleep(0.1)
 
     # Keep waiting until we are at the position and stopped
-    while abs(end - motor.get_position()) > threshold or motor.get_speed() > 0.5:
-        time.sleep(0.1)
+    time.sleep(time_diff)
     motor.set_power(0)
     time.sleep(0.5)
 
 
 def block_position(motor: brick.Motor, degrees, dps=90, threshold=0.5):
     motor.set_limits(dps=dps)
+    diff = abs(motor.get_position() - degrees)
+    time_diff = diff / dps
 
     motor.set_position(degrees)
-    time.sleep(0.1)
 
     # Keep waiting until we are at the position and stopped
-    while abs(motor.get_position() - degrees) > threshold or motor.get_speed() > 0.5:
-        time.sleep(0.1)
+    time.sleep(time_diff)
     motor.set_power(0)
     time.sleep(0.5)
 
@@ -196,7 +196,8 @@ if __name__ == '__main__':
                     current_thread = sort_cubes(
                         SORTING_LIST, selector, color_sensor)
                 if not current_thread.is_alive() and len(SORTING_LIST) == MAX_CUBES:
-                    telemetry.label("STATUS", f"Sort Finished: {SORTING_LIST}", True)
+                    telemetry.label(
+                        "STATUS", f"Sort Finished: {SORTING_LIST}", True)
                     MODE = "Retrieving"
                     current_thread = None
                 elif len(SORTING_LIST) > MAX_CUBES:
@@ -216,10 +217,12 @@ if __name__ == '__main__':
                             SORTING_LIST[REQUESTED_COLOR] = None
                             telemetry.label("STATUS", f"Chosen {color}", True)
                         elif color not in SORTING_LIST:
-                            telemetry.label("STATUS", f"{color} is not available on the robot", True)
+                            telemetry.label(
+                                "STATUS", f"{color} is not available on the robot", True)
                             pass  # WARNING: color not available in robot
                         elif REQUESTED_COLOR is not None:
-                            telemetry.label("STATUS", f"Cube #{REQUESTED_COLOR}: {REQUESTED_COLOR_NAME} is currently being retrieved", True)
+                            telemetry.label(
+                                "STATUS", f"Cube #{REQUESTED_COLOR}: {REQUESTED_COLOR_NAME} is currently being retrieved", True)
                             pass  # WARNING: color currently being retrieved
                         # A slight pause, to press button only once
                         time.sleep(0.5)
@@ -227,12 +230,14 @@ if __name__ == '__main__':
                 # Uses REQUESTED_COLOR
                 if REQUESTED_COLOR is not None and current_thread is None:
                     # Start retrieval
-                    telemetry.label("STATUS", f"Retrieving Cube #{REQUESTED_COLOR}: {REQUESTED_COLOR_NAME}", True)
+                    telemetry.label(
+                        "STATUS", f"Retrieving Cube #{REQUESTED_COLOR}: {REQUESTED_COLOR_NAME}", True)
                     current_thread = retrieve_cube(
                         REQUESTED_COLOR, selector, pusher)
                 if REQUESTED_COLOR is not None and not current_thread.is_alive():
                     # Retrieval has completed
-                    telemetry.label("STATUS", f"Finished retrieving {REQUESTED_COLOR_NAME} | {SORTING_LIST}", True)
+                    telemetry.label(
+                        "STATUS", f"Finished retrieving {REQUESTED_COLOR_NAME} | {SORTING_LIST}", True)
                     REQUESTED_COLOR = None
                     current_thread = None
             telemetry.label("Stored Colors", f"{SORTING_LIST}", True)
