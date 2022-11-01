@@ -161,7 +161,7 @@ if __name__ == '__main__':
         selector.set_limits(dps=90)
         pusher.set_limits(dps=90)
         # Reset to starting position
-        block_position_relative(selector, RESET_DISTANCE)
+        block_position_relative(selector, RESET_DISTANCE, 20)
         selector.reset_encoder()  # Set this position to be the 0th position
 
         MODE = None
@@ -170,7 +170,7 @@ if __name__ == '__main__':
         REQUESTED_COLOR = None  # index in the SORTING_LIST
         REQUESTED_COLOR_NAME = None
         current_thread = None  # The current action being executed
-        brick.wait_ready_sensors(True)
+        # brick.wait_ready_sensors(True)
         telemetry.label("STATUS", "Sorter is Ready", True)
         while True:
             if not telemetry.isopen():
