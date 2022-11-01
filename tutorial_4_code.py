@@ -161,7 +161,7 @@ if __name__ == '__main__':
         selector.set_limits(dps=90)
         pusher.set_limits(dps=90)
         # Reset to starting position
-        block_position_relative(selector, RESET_DISTANCE, 20)
+        block_position_relative(selector, RESET_DISTANCE, threshold=20)
         selector.reset_encoder()  # Set this position to be the 0th position
 
         MODE = None
