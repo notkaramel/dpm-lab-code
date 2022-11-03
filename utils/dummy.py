@@ -378,8 +378,12 @@ class BrickPi3():
         }
 
     def __del__(self):
-        for mot in self.Motors:
-            mot.shutdown()
+        if hasattr(self, "Motors"):
+            try:
+                for mot in self.Motors:
+                    mot.shutdown()
+            except TypeError:
+                pass
 
     def spi_transfer_array(self, data_out):
         """Used by Brick.get_sensor_status"""
