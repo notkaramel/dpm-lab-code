@@ -675,7 +675,18 @@ class Motor:
 
     def set_power(self, power):
         """
-        Set the motor power in percent.
+        Commands the motor to rotate continuously. Will rotate at the given power percentage.
+        (Constant-Type Motor Control)
+
+        Percentage has no directly associated speed in (deg/sec). However, the maximum 
+        speed of the motor is "potentially" 1250 deg/sec. The actual speed of the motor
+        may fluctuate based on the strength of the power source (battery) attached to 
+        the robot.
+
+        SIDE EFFECTS:
+        STOPS ALL (Position-Type Motor Control) methods.
+        IT RESETS any limits defined by 'Motor.set_limits(power, dps)'
+        SOLIDLY STOPS the motor if given 'Motor.set_power(0)'
 
         Keyword arguments:
         power - The power from -100 to 100, or -128 for float
@@ -683,15 +694,71 @@ class Motor:
         self.brick.set_motor_power(self.port, power)
 
     def float_motor(self):
-        "Float the motor, which means let it rotate freely while measuring rotations."
+        """(Float the motor), which unlocks the motor, and allows outside forces to rotate it.
+
+        NORMALLY, when powered, the motor will maintain its current position, 
+        and prevent outside forces from rotating it.
+
+        This function (float_motor) commands the motor to allow outside forces to rotate it.
+        The motor will still record speed and position, such that the corresponding functions
+        still work: (get_speed) and (get_position).
+
+        SIDE EFFECTS:
+        It DOES NOT RESET any limits defined by (Motor.set_limits)
+        The Motor will stop any current movements, then unlock
+        """
         self.brick.set_motor_power(self.port, -128)
 
     def set_position(self, position):
-        "Set the motor target position in degrees."
+        """
+        Command the motor rotate a given number of degrees away from its origin 0.
+        (Position-Type Motor Control)
+
+        The origin is defined as either (the current position when the robot turns on)
+        OR
+        (the current position, when 'Motor.reset_encoder()' is called)
+
+        BEHAVIOR:
+        1. Reset Encoder
+        2. Set Position to 60
+        3. Motor rotates 60 degrees
+        4. Set Position to 60
+        5. Motor maintains its current position
+        6. Reset Encoder
+        7. Motor rotates 60 more degrees 
+            (because current position becomes 0. Motor tries to maintain last set position)
+
+        SIDE EFFECTS:
+        If you use Motor.set_position IMMEDIATELY AFTER Motor.set_power or Motor.set_dps,
+            it will rotate at FULL POWER. This may crash the robot.
+        """
         self.brick.set_motor_position(self.port, position)
 
     def set_position_relative(self, degrees):
-        "Set the relative motor target position in degrees, current position plus the specified degrees."
+        """
+        Command the motor rotate a given number of degrees away from its current position.
+        It does rotations relative to its current position (not based on the absolute origin).
+        (Position-Type Motor Control)
+
+        The origin is defined as either (the current position when the robot turns on)
+        OR
+        (the current position, when 'Motor.reset_encoder()' is called)
+
+        BEHAVIOR:
+        1. Reset Encoder
+        2. Set Relative Position to 60
+        3. Motor rotates 60 degrees
+        4. Set Relative Position to 60
+        5. Motor rotates another 60 degrees
+        6. Reset Encoder
+        7. Motor rotates 120 degrees
+            because current position becomes 0. 
+            Motor tries to maintain last set position of 120 degrees (60 + 60).
+
+        SIDE EFFECTS:
+        If you use Motor.set_position IMMEDIATELY AFTER Motor.set_power or Motor.set_dps,
+            it will rotate at FULL POWER. This may crash the robot.
+        """
         self.brick.set_motor_position_relative(self.port, degrees)
 
     def set_position_kp(self, kp=25):
@@ -703,7 +770,6 @@ class Motor:
         In general, if you increase kp, you should also increase kd to keep the motor from overshooting and oscillating.
 
         Keyword arguments:
-        port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
         kp - The KP constant (default 25)
         """
         self.brick.set_motor_position_kp(self.port, kp)
@@ -717,18 +783,25 @@ class Motor:
         In general, if you increase kp, you should also increase kd to keep the motor from overshooting and oscillating.
 
         Keyword arguments:
-        port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
         kd - The KD constant (default 70)
         """
         self.brick.set_motor_position_kd(self.port, kd)
 
     def set_dps(self, dps):
         """
-        Set the motor target speed in degrees per second. 
-        The motor will move at this speed consistently, once this function is run.
+        Commands the motor to rotate continuously. Will rotate at the given speed (deg/sec).
+        (Constant-Type Motor Control)
+
+        The maximum speed of the motor is "potentially" 1250 deg/sec.
+        The actual speed of the motor may fluctuate based on the strength
+        of the power source (battery) attached to the robot.
+
+        SIDE EFFECTS:
+        STOPS ALL (Position-Type Motor Control) methods.
+        IT RESETS any limits defined by 'Motor.set_limits(power, dps)'
+        SOLIDLY STOPS the motor if given 'Motor.set_dps(0)'
 
         Keyword arguments:
-        port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
         dps - The target speed in degrees per second
         """
         self.brick.set_motor_dps(self.port, dps)
@@ -736,10 +809,17 @@ class Motor:
 
     def set_limits(self, power=0, dps=0):
         """
-        Set the motor speed limit.
+        Set the motor speed limit. The speed is limited to whichever value is 
+        slowest, power or dps.
+        (Position-Type Motor Control)
+
+        It provides a maximum speed limit for both the Motor.set_position and 
+        Motor.set_position_relative
+        Since the maximum potential speed of a motor is 1250 dps, then a power of 50%
+        could potentially give a speed of 625 dps.
+
 
         Keyword arguments:
-        port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
         power - The power limit in percent (0 to 100), with 0 being no limit (100)
         dps - The speed limit in degrees per second, with 0 being no limit
         """
@@ -767,22 +847,22 @@ class Motor:
 
     def get_encoder(self):
         """
-        Read a motor encoder in degrees.
+        Read a motor encoder in degrees. The current position of the motor.
+        The encoder will read degrees cumulatively. Every full rotation counts as 360.
+        The range for encoder values it can maintain is -2147483648 to 2147483647
 
         Keyword arguments:
-        port - The motor port (one at a time). PORT_A, PORT_B, PORT_C, or PORT_D.
-
         Returns the encoder position in degrees
         """
         return self.brick.get_motor_encoder(self.port)
 
     def get_position(self):
         """
-        Read a motor encoder in degrees.
+        Read a motor encoder in degrees. The current position of the motor.
+        The encoder will read degrees cumulatively. Every full rotation counts as 360.
+        The range for encoder values it can maintain is -2147483648 to 2147483647
 
         Keyword arguments:
-        port - The motor port (one at a time). PORT_A, PORT_B, PORT_C, or PORT_D.
-
         Returns the encoder position in degrees
         """
         return self.get_encoder()
@@ -819,9 +899,14 @@ class Motor:
     def offset_encoder(self, position):
         """
         Offset a motor encoder.
+        The range for encoder values it can maintain is -2147483648 to 2147483647
+        It will overflow from 2147483647 to -2147483648
+
+        BEHAVIOR:
+        If the current position is 350, and we run Motor.offset_encoder(350),
+        then the current position becomes 0.
 
         Keyword arguments:
-        port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
         offset - The encoder offset
 
         You can zero the encoder by offsetting it by the current position
@@ -833,16 +918,12 @@ class Motor:
         Reset motor encoder(s) to 0.
 
         Keyword arguments:
-        port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
         """
         self.brick.reset_motor_encoder(self.port)
 
     def reset_position(self):
         """
         Reset motor encoder(s) to 0.
-
-        Keyword arguments:
-        port - The motor port(s). PORT_A, PORT_B, PORT_C, and/or PORT_D.
         """
         return self.reset_encoder()
 

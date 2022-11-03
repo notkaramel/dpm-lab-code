@@ -633,22 +633,33 @@ Data descriptors inherited from <a href="builtins.html#BaseException">builtins.B
 You&nbsp;may&nbsp;also&nbsp;provide&nbsp;a&nbsp;list&nbsp;of&nbsp;these&nbsp;ports&nbsp;such&nbsp;as&nbsp;["A",&nbsp;"C"]&nbsp;to&nbsp;run<br>
 both&nbsp;motors&nbsp;at&nbsp;the&nbsp;exact&nbsp;same&nbsp;time&nbsp;(exact&nbsp;combined&nbsp;behavior&nbsp;unknown).</tt></dd></dl>
 
-<dl><dt><a name="Motor-float_motor"><strong>float_motor</strong></a>(self)</dt><dd><tt>Float&nbsp;the&nbsp;motor,&nbsp;which&nbsp;means&nbsp;let&nbsp;it&nbsp;rotate&nbsp;freely&nbsp;while&nbsp;measuring&nbsp;rotations.</tt></dd></dl>
+<dl><dt><a name="Motor-float_motor"><strong>float_motor</strong></a>(self)</dt><dd><tt>(Float&nbsp;the&nbsp;motor),&nbsp;which&nbsp;unlocks&nbsp;the&nbsp;motor,&nbsp;and&nbsp;allows&nbsp;outside&nbsp;forces&nbsp;to&nbsp;rotate&nbsp;it.<br>
+&nbsp;<br>
+NORMALLY,&nbsp;when&nbsp;powered,&nbsp;the&nbsp;motor&nbsp;will&nbsp;maintain&nbsp;its&nbsp;current&nbsp;position,&nbsp;<br>
+and&nbsp;prevent&nbsp;outside&nbsp;forces&nbsp;from&nbsp;rotating&nbsp;it.<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;(float_motor)&nbsp;commands&nbsp;the&nbsp;motor&nbsp;to&nbsp;allow&nbsp;outside&nbsp;forces&nbsp;to&nbsp;rotate&nbsp;it.<br>
+The&nbsp;motor&nbsp;will&nbsp;still&nbsp;record&nbsp;speed&nbsp;and&nbsp;position,&nbsp;such&nbsp;that&nbsp;the&nbsp;corresponding&nbsp;functions<br>
+still&nbsp;work:&nbsp;(get_speed)&nbsp;and&nbsp;(get_position).<br>
+&nbsp;<br>
+SIDE&nbsp;EFFECTS:<br>
+It&nbsp;DOES&nbsp;NOT&nbsp;RESET&nbsp;any&nbsp;limits&nbsp;defined&nbsp;by&nbsp;(<a href="#Motor">Motor</a>.set_limits)<br>
+The&nbsp;<a href="#Motor">Motor</a>&nbsp;will&nbsp;stop&nbsp;any&nbsp;current&nbsp;movements,&nbsp;then&nbsp;unlock</tt></dd></dl>
 
 <dl><dt><a name="Motor-get_dps"><strong>get_dps</strong></a>(self)</dt></dl>
 
-<dl><dt><a name="Motor-get_encoder"><strong>get_encoder</strong></a>(self)</dt><dd><tt>Read&nbsp;a&nbsp;motor&nbsp;encoder&nbsp;in&nbsp;degrees.<br>
+<dl><dt><a name="Motor-get_encoder"><strong>get_encoder</strong></a>(self)</dt><dd><tt>Read&nbsp;a&nbsp;motor&nbsp;encoder&nbsp;in&nbsp;degrees.&nbsp;The&nbsp;current&nbsp;position&nbsp;of&nbsp;the&nbsp;motor.<br>
+The&nbsp;encoder&nbsp;will&nbsp;read&nbsp;degrees&nbsp;cumulatively.&nbsp;Every&nbsp;full&nbsp;rotation&nbsp;counts&nbsp;as&nbsp;360.<br>
+The&nbsp;range&nbsp;for&nbsp;encoder&nbsp;values&nbsp;it&nbsp;can&nbsp;maintain&nbsp;is&nbsp;-2147483648&nbsp;to&nbsp;2147483647<br>
 &nbsp;<br>
 Keyword&nbsp;arguments:<br>
-port&nbsp;-&nbsp;The&nbsp;motor&nbsp;port&nbsp;(one&nbsp;at&nbsp;a&nbsp;time).&nbsp;PORT_A,&nbsp;PORT_B,&nbsp;PORT_C,&nbsp;or&nbsp;PORT_D.<br>
-&nbsp;<br>
 Returns&nbsp;the&nbsp;encoder&nbsp;position&nbsp;in&nbsp;degrees</tt></dd></dl>
 
-<dl><dt><a name="Motor-get_position"><strong>get_position</strong></a>(self)</dt><dd><tt>Read&nbsp;a&nbsp;motor&nbsp;encoder&nbsp;in&nbsp;degrees.<br>
+<dl><dt><a name="Motor-get_position"><strong>get_position</strong></a>(self)</dt><dd><tt>Read&nbsp;a&nbsp;motor&nbsp;encoder&nbsp;in&nbsp;degrees.&nbsp;The&nbsp;current&nbsp;position&nbsp;of&nbsp;the&nbsp;motor.<br>
+The&nbsp;encoder&nbsp;will&nbsp;read&nbsp;degrees&nbsp;cumulatively.&nbsp;Every&nbsp;full&nbsp;rotation&nbsp;counts&nbsp;as&nbsp;360.<br>
+The&nbsp;range&nbsp;for&nbsp;encoder&nbsp;values&nbsp;it&nbsp;can&nbsp;maintain&nbsp;is&nbsp;-2147483648&nbsp;to&nbsp;2147483647<br>
 &nbsp;<br>
 Keyword&nbsp;arguments:<br>
-port&nbsp;-&nbsp;The&nbsp;motor&nbsp;port&nbsp;(one&nbsp;at&nbsp;a&nbsp;time).&nbsp;PORT_A,&nbsp;PORT_B,&nbsp;PORT_C,&nbsp;or&nbsp;PORT_D.<br>
-&nbsp;<br>
 Returns&nbsp;the&nbsp;encoder&nbsp;position&nbsp;in&nbsp;degrees</tt></dd></dl>
 
 <dl><dt><a name="Motor-get_power"><strong>get_power</strong></a>(self)</dt><dd><tt>Read&nbsp;motor&nbsp;status&nbsp;and&nbsp;returns&nbsp;power&nbsp;percent&nbsp;(-100&nbsp;to&nbsp;100)<br>
@@ -679,34 +690,50 @@ Returns&nbsp;a&nbsp;list:<br>
 <dl><dt><a name="Motor-is_moving"><strong>is_moving</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="Motor-offset_encoder"><strong>offset_encoder</strong></a>(self, position)</dt><dd><tt>Offset&nbsp;a&nbsp;motor&nbsp;encoder.<br>
+The&nbsp;range&nbsp;for&nbsp;encoder&nbsp;values&nbsp;it&nbsp;can&nbsp;maintain&nbsp;is&nbsp;-2147483648&nbsp;to&nbsp;2147483647<br>
+It&nbsp;will&nbsp;overflow&nbsp;from&nbsp;2147483647&nbsp;to&nbsp;-2147483648<br>
+&nbsp;<br>
+BEHAVIOR:<br>
+If&nbsp;the&nbsp;current&nbsp;position&nbsp;is&nbsp;350,&nbsp;and&nbsp;we&nbsp;run&nbsp;<a href="#Motor">Motor</a>.<a href="#Motor-offset_encoder">offset_encoder</a>(350),<br>
+then&nbsp;the&nbsp;current&nbsp;position&nbsp;becomes&nbsp;0.<br>
 &nbsp;<br>
 Keyword&nbsp;arguments:<br>
-port&nbsp;-&nbsp;The&nbsp;motor&nbsp;port(s).&nbsp;PORT_A,&nbsp;PORT_B,&nbsp;PORT_C,&nbsp;and/or&nbsp;PORT_D.<br>
 offset&nbsp;-&nbsp;The&nbsp;encoder&nbsp;offset<br>
 &nbsp;<br>
 You&nbsp;can&nbsp;zero&nbsp;the&nbsp;encoder&nbsp;by&nbsp;offsetting&nbsp;it&nbsp;by&nbsp;the&nbsp;current&nbsp;position</tt></dd></dl>
 
 <dl><dt><a name="Motor-reset_encoder"><strong>reset_encoder</strong></a>(self)</dt><dd><tt>Reset&nbsp;motor&nbsp;encoder(s)&nbsp;to&nbsp;0.<br>
 &nbsp;<br>
-Keyword&nbsp;arguments:<br>
-port&nbsp;-&nbsp;The&nbsp;motor&nbsp;port(s).&nbsp;PORT_A,&nbsp;PORT_B,&nbsp;PORT_C,&nbsp;and/or&nbsp;PORT_D.</tt></dd></dl>
+Keyword&nbsp;arguments:</tt></dd></dl>
 
-<dl><dt><a name="Motor-reset_position"><strong>reset_position</strong></a>(self)</dt><dd><tt>Reset&nbsp;motor&nbsp;encoder(s)&nbsp;to&nbsp;0.<br>
+<dl><dt><a name="Motor-reset_position"><strong>reset_position</strong></a>(self)</dt><dd><tt>Reset&nbsp;motor&nbsp;encoder(s)&nbsp;to&nbsp;0.</tt></dd></dl>
+
+<dl><dt><a name="Motor-set_dps"><strong>set_dps</strong></a>(self, dps)</dt><dd><tt>Commands&nbsp;the&nbsp;motor&nbsp;to&nbsp;rotate&nbsp;continuously.&nbsp;Will&nbsp;rotate&nbsp;at&nbsp;the&nbsp;given&nbsp;speed&nbsp;(deg/sec).<br>
+(Constant-Type&nbsp;<a href="#Motor">Motor</a>&nbsp;Control)<br>
+&nbsp;<br>
+The&nbsp;maximum&nbsp;speed&nbsp;of&nbsp;the&nbsp;motor&nbsp;is&nbsp;"potentially"&nbsp;1250&nbsp;deg/sec.<br>
+The&nbsp;actual&nbsp;speed&nbsp;of&nbsp;the&nbsp;motor&nbsp;may&nbsp;fluctuate&nbsp;based&nbsp;on&nbsp;the&nbsp;strength<br>
+of&nbsp;the&nbsp;power&nbsp;source&nbsp;(battery)&nbsp;attached&nbsp;to&nbsp;the&nbsp;robot.<br>
+&nbsp;<br>
+SIDE&nbsp;EFFECTS:<br>
+STOPS&nbsp;ALL&nbsp;(Position-Type&nbsp;<a href="#Motor">Motor</a>&nbsp;Control)&nbsp;methods.<br>
+IT&nbsp;RESETS&nbsp;any&nbsp;limits&nbsp;defined&nbsp;by&nbsp;'<a href="#Motor">Motor</a>.<a href="#Motor-set_limits">set_limits</a>(power,&nbsp;dps)'<br>
+SOLIDLY&nbsp;STOPS&nbsp;the&nbsp;motor&nbsp;if&nbsp;given&nbsp;'<a href="#Motor">Motor</a>.<a href="#Motor-set_dps">set_dps</a>(0)'<br>
 &nbsp;<br>
 Keyword&nbsp;arguments:<br>
-port&nbsp;-&nbsp;The&nbsp;motor&nbsp;port(s).&nbsp;PORT_A,&nbsp;PORT_B,&nbsp;PORT_C,&nbsp;and/or&nbsp;PORT_D.</tt></dd></dl>
-
-<dl><dt><a name="Motor-set_dps"><strong>set_dps</strong></a>(self, dps)</dt><dd><tt>Set&nbsp;the&nbsp;motor&nbsp;target&nbsp;speed&nbsp;in&nbsp;degrees&nbsp;per&nbsp;second.&nbsp;<br>
-The&nbsp;motor&nbsp;will&nbsp;move&nbsp;at&nbsp;this&nbsp;speed&nbsp;consistently,&nbsp;once&nbsp;this&nbsp;function&nbsp;is&nbsp;run.<br>
-&nbsp;<br>
-Keyword&nbsp;arguments:<br>
-port&nbsp;-&nbsp;The&nbsp;motor&nbsp;port(s).&nbsp;PORT_A,&nbsp;PORT_B,&nbsp;PORT_C,&nbsp;and/or&nbsp;PORT_D.<br>
 dps&nbsp;-&nbsp;The&nbsp;target&nbsp;speed&nbsp;in&nbsp;degrees&nbsp;per&nbsp;second</tt></dd></dl>
 
-<dl><dt><a name="Motor-set_limits"><strong>set_limits</strong></a>(self, power=0, dps=0)</dt><dd><tt>Set&nbsp;the&nbsp;motor&nbsp;speed&nbsp;limit.<br>
+<dl><dt><a name="Motor-set_limits"><strong>set_limits</strong></a>(self, power=0, dps=0)</dt><dd><tt>Set&nbsp;the&nbsp;motor&nbsp;speed&nbsp;limit.&nbsp;The&nbsp;speed&nbsp;is&nbsp;limited&nbsp;to&nbsp;whichever&nbsp;value&nbsp;is&nbsp;<br>
+slowest,&nbsp;power&nbsp;or&nbsp;dps.<br>
+(Position-Type&nbsp;<a href="#Motor">Motor</a>&nbsp;Control)<br>
+&nbsp;<br>
+It&nbsp;provides&nbsp;a&nbsp;maximum&nbsp;speed&nbsp;limit&nbsp;for&nbsp;both&nbsp;the&nbsp;<a href="#Motor">Motor</a>.set_position&nbsp;and&nbsp;<br>
+<a href="#Motor">Motor</a>.set_position_relative<br>
+Since&nbsp;the&nbsp;maximum&nbsp;potential&nbsp;speed&nbsp;of&nbsp;a&nbsp;motor&nbsp;is&nbsp;1250&nbsp;dps,&nbsp;then&nbsp;a&nbsp;power&nbsp;of&nbsp;50%<br>
+could&nbsp;potentially&nbsp;give&nbsp;a&nbsp;speed&nbsp;of&nbsp;625&nbsp;dps.<br>
+&nbsp;<br>
 &nbsp;<br>
 Keyword&nbsp;arguments:<br>
-port&nbsp;-&nbsp;The&nbsp;motor&nbsp;port(s).&nbsp;PORT_A,&nbsp;PORT_B,&nbsp;PORT_C,&nbsp;and/or&nbsp;PORT_D.<br>
 power&nbsp;-&nbsp;The&nbsp;power&nbsp;limit&nbsp;in&nbsp;percent&nbsp;(0&nbsp;to&nbsp;100),&nbsp;with&nbsp;0&nbsp;being&nbsp;no&nbsp;limit&nbsp;(100)<br>
 dps&nbsp;-&nbsp;The&nbsp;speed&nbsp;limit&nbsp;in&nbsp;degrees&nbsp;per&nbsp;second,&nbsp;with&nbsp;0&nbsp;being&nbsp;no&nbsp;limit</tt></dd></dl>
 
@@ -714,7 +741,26 @@ dps&nbsp;-&nbsp;The&nbsp;speed&nbsp;limit&nbsp;in&nbsp;degrees&nbsp;per&nbsp;sec
 You&nbsp;may&nbsp;also&nbsp;provide&nbsp;a&nbsp;list&nbsp;of&nbsp;these&nbsp;ports&nbsp;such&nbsp;as&nbsp;["A",&nbsp;"C"]&nbsp;to&nbsp;run<br>
 both&nbsp;motors&nbsp;at&nbsp;the&nbsp;exact&nbsp;same&nbsp;time&nbsp;(exact&nbsp;combined&nbsp;behavior&nbsp;unknown).</tt></dd></dl>
 
-<dl><dt><a name="Motor-set_position"><strong>set_position</strong></a>(self, position)</dt><dd><tt>Set&nbsp;the&nbsp;motor&nbsp;target&nbsp;position&nbsp;in&nbsp;degrees.</tt></dd></dl>
+<dl><dt><a name="Motor-set_position"><strong>set_position</strong></a>(self, position)</dt><dd><tt>Command&nbsp;the&nbsp;motor&nbsp;rotate&nbsp;a&nbsp;given&nbsp;number&nbsp;of&nbsp;degrees&nbsp;away&nbsp;from&nbsp;its&nbsp;origin&nbsp;0.<br>
+(Position-Type&nbsp;<a href="#Motor">Motor</a>&nbsp;Control)<br>
+&nbsp;<br>
+The&nbsp;origin&nbsp;is&nbsp;defined&nbsp;as&nbsp;either&nbsp;(the&nbsp;current&nbsp;position&nbsp;when&nbsp;the&nbsp;robot&nbsp;turns&nbsp;on)<br>
+OR<br>
+(the&nbsp;current&nbsp;position,&nbsp;when&nbsp;'<a href="#Motor">Motor</a>.<a href="#Motor-reset_encoder">reset_encoder</a>()'&nbsp;is&nbsp;called)<br>
+&nbsp;<br>
+BEHAVIOR:<br>
+1.&nbsp;Reset&nbsp;Encoder<br>
+2.&nbsp;Set&nbsp;Position&nbsp;to&nbsp;60<br>
+3.&nbsp;<a href="#Motor">Motor</a>&nbsp;rotates&nbsp;60&nbsp;degrees<br>
+4.&nbsp;Set&nbsp;Position&nbsp;to&nbsp;60<br>
+5.&nbsp;<a href="#Motor">Motor</a>&nbsp;maintains&nbsp;its&nbsp;current&nbsp;position<br>
+6.&nbsp;Reset&nbsp;Encoder<br>
+7.&nbsp;<a href="#Motor">Motor</a>&nbsp;rotates&nbsp;60&nbsp;more&nbsp;degrees&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(because&nbsp;current&nbsp;position&nbsp;becomes&nbsp;0.&nbsp;<a href="#Motor">Motor</a>&nbsp;tries&nbsp;to&nbsp;maintain&nbsp;last&nbsp;set&nbsp;position)<br>
+&nbsp;<br>
+SIDE&nbsp;EFFECTS:<br>
+If&nbsp;you&nbsp;use&nbsp;<a href="#Motor">Motor</a>.set_position&nbsp;IMMEDIATELY&nbsp;AFTER&nbsp;<a href="#Motor">Motor</a>.set_power&nbsp;or&nbsp;<a href="#Motor">Motor</a>.set_dps,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;it&nbsp;will&nbsp;rotate&nbsp;at&nbsp;FULL&nbsp;POWER.&nbsp;This&nbsp;may&nbsp;crash&nbsp;the&nbsp;robot.</tt></dd></dl>
 
 <dl><dt><a name="Motor-set_position_kd"><strong>set_position_kd</strong></a>(self, kd=70)</dt><dd><tt>Set&nbsp;the&nbsp;motor&nbsp;target&nbsp;position&nbsp;KD&nbsp;constant.<br>
 &nbsp;<br>
@@ -723,7 +769,6 @@ kd&nbsp;slows&nbsp;down&nbsp;the&nbsp;motor&nbsp;as&nbsp;it&nbsp;approaches&nbsp
 In&nbsp;general,&nbsp;if&nbsp;you&nbsp;increase&nbsp;kp,&nbsp;you&nbsp;should&nbsp;also&nbsp;increase&nbsp;kd&nbsp;to&nbsp;keep&nbsp;the&nbsp;motor&nbsp;from&nbsp;overshooting&nbsp;and&nbsp;oscillating.<br>
 &nbsp;<br>
 Keyword&nbsp;arguments:<br>
-port&nbsp;-&nbsp;The&nbsp;motor&nbsp;port(s).&nbsp;PORT_A,&nbsp;PORT_B,&nbsp;PORT_C,&nbsp;and/or&nbsp;PORT_D.<br>
 kd&nbsp;-&nbsp;The&nbsp;KD&nbsp;constant&nbsp;(default&nbsp;70)</tt></dd></dl>
 
 <dl><dt><a name="Motor-set_position_kp"><strong>set_position_kp</strong></a>(self, kp=25)</dt><dd><tt>Set&nbsp;the&nbsp;motor&nbsp;target&nbsp;position&nbsp;KP&nbsp;constant.<br>
@@ -733,12 +778,43 @@ kd&nbsp;slows&nbsp;down&nbsp;the&nbsp;motor&nbsp;as&nbsp;it&nbsp;approaches&nbsp
 In&nbsp;general,&nbsp;if&nbsp;you&nbsp;increase&nbsp;kp,&nbsp;you&nbsp;should&nbsp;also&nbsp;increase&nbsp;kd&nbsp;to&nbsp;keep&nbsp;the&nbsp;motor&nbsp;from&nbsp;overshooting&nbsp;and&nbsp;oscillating.<br>
 &nbsp;<br>
 Keyword&nbsp;arguments:<br>
-port&nbsp;-&nbsp;The&nbsp;motor&nbsp;port(s).&nbsp;PORT_A,&nbsp;PORT_B,&nbsp;PORT_C,&nbsp;and/or&nbsp;PORT_D.<br>
 kp&nbsp;-&nbsp;The&nbsp;KP&nbsp;constant&nbsp;(default&nbsp;25)</tt></dd></dl>
 
-<dl><dt><a name="Motor-set_position_relative"><strong>set_position_relative</strong></a>(self, degrees)</dt><dd><tt>Set&nbsp;the&nbsp;relative&nbsp;motor&nbsp;target&nbsp;position&nbsp;in&nbsp;degrees,&nbsp;current&nbsp;position&nbsp;plus&nbsp;the&nbsp;specified&nbsp;degrees.</tt></dd></dl>
+<dl><dt><a name="Motor-set_position_relative"><strong>set_position_relative</strong></a>(self, degrees)</dt><dd><tt>Command&nbsp;the&nbsp;motor&nbsp;rotate&nbsp;a&nbsp;given&nbsp;number&nbsp;of&nbsp;degrees&nbsp;away&nbsp;from&nbsp;its&nbsp;current&nbsp;position.<br>
+It&nbsp;does&nbsp;rotations&nbsp;relative&nbsp;to&nbsp;its&nbsp;current&nbsp;position&nbsp;(not&nbsp;based&nbsp;on&nbsp;the&nbsp;absolute&nbsp;origin).<br>
+(Position-Type&nbsp;<a href="#Motor">Motor</a>&nbsp;Control)<br>
+&nbsp;<br>
+The&nbsp;origin&nbsp;is&nbsp;defined&nbsp;as&nbsp;either&nbsp;(the&nbsp;current&nbsp;position&nbsp;when&nbsp;the&nbsp;robot&nbsp;turns&nbsp;on)<br>
+OR<br>
+(the&nbsp;current&nbsp;position,&nbsp;when&nbsp;'<a href="#Motor">Motor</a>.<a href="#Motor-reset_encoder">reset_encoder</a>()'&nbsp;is&nbsp;called)<br>
+&nbsp;<br>
+BEHAVIOR:<br>
+1.&nbsp;Reset&nbsp;Encoder<br>
+2.&nbsp;Set&nbsp;Relative&nbsp;Position&nbsp;to&nbsp;60<br>
+3.&nbsp;<a href="#Motor">Motor</a>&nbsp;rotates&nbsp;60&nbsp;degrees<br>
+4.&nbsp;Set&nbsp;Relative&nbsp;Position&nbsp;to&nbsp;60<br>
+5.&nbsp;<a href="#Motor">Motor</a>&nbsp;rotates&nbsp;another&nbsp;60&nbsp;degrees<br>
+6.&nbsp;Reset&nbsp;Encoder<br>
+7.&nbsp;<a href="#Motor">Motor</a>&nbsp;rotates&nbsp;120&nbsp;degrees<br>
+&nbsp;&nbsp;&nbsp;&nbsp;because&nbsp;current&nbsp;position&nbsp;becomes&nbsp;0.&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#Motor">Motor</a>&nbsp;tries&nbsp;to&nbsp;maintain&nbsp;last&nbsp;set&nbsp;position&nbsp;of&nbsp;120&nbsp;degrees&nbsp;(60&nbsp;+&nbsp;60).<br>
+&nbsp;<br>
+SIDE&nbsp;EFFECTS:<br>
+If&nbsp;you&nbsp;use&nbsp;<a href="#Motor">Motor</a>.set_position&nbsp;IMMEDIATELY&nbsp;AFTER&nbsp;<a href="#Motor">Motor</a>.set_power&nbsp;or&nbsp;<a href="#Motor">Motor</a>.set_dps,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;it&nbsp;will&nbsp;rotate&nbsp;at&nbsp;FULL&nbsp;POWER.&nbsp;This&nbsp;may&nbsp;crash&nbsp;the&nbsp;robot.</tt></dd></dl>
 
-<dl><dt><a name="Motor-set_power"><strong>set_power</strong></a>(self, power)</dt><dd><tt>Set&nbsp;the&nbsp;motor&nbsp;power&nbsp;in&nbsp;percent.<br>
+<dl><dt><a name="Motor-set_power"><strong>set_power</strong></a>(self, power)</dt><dd><tt>Commands&nbsp;the&nbsp;motor&nbsp;to&nbsp;rotate&nbsp;continuously.&nbsp;Will&nbsp;rotate&nbsp;at&nbsp;the&nbsp;given&nbsp;power&nbsp;percentage.<br>
+(Constant-Type&nbsp;<a href="#Motor">Motor</a>&nbsp;Control)<br>
+&nbsp;<br>
+Percentage&nbsp;has&nbsp;no&nbsp;directly&nbsp;associated&nbsp;speed&nbsp;in&nbsp;(deg/sec).&nbsp;However,&nbsp;the&nbsp;maximum&nbsp;<br>
+speed&nbsp;of&nbsp;the&nbsp;motor&nbsp;is&nbsp;"potentially"&nbsp;1250&nbsp;deg/sec.&nbsp;The&nbsp;actual&nbsp;speed&nbsp;of&nbsp;the&nbsp;motor<br>
+may&nbsp;fluctuate&nbsp;based&nbsp;on&nbsp;the&nbsp;strength&nbsp;of&nbsp;the&nbsp;power&nbsp;source&nbsp;(battery)&nbsp;attached&nbsp;to&nbsp;<br>
+the&nbsp;robot.<br>
+&nbsp;<br>
+SIDE&nbsp;EFFECTS:<br>
+STOPS&nbsp;ALL&nbsp;(Position-Type&nbsp;<a href="#Motor">Motor</a>&nbsp;Control)&nbsp;methods.<br>
+IT&nbsp;RESETS&nbsp;any&nbsp;limits&nbsp;defined&nbsp;by&nbsp;'<a href="#Motor">Motor</a>.<a href="#Motor-set_limits">set_limits</a>(power,&nbsp;dps)'<br>
+SOLIDLY&nbsp;STOPS&nbsp;the&nbsp;motor&nbsp;if&nbsp;given&nbsp;'<a href="#Motor">Motor</a>.<a href="#Motor-set_power">set_power</a>(0)'<br>
 &nbsp;<br>
 Keyword&nbsp;arguments:<br>
 power&nbsp;-&nbsp;The&nbsp;power&nbsp;from&nbsp;-100&nbsp;to&nbsp;100,&nbsp;or&nbsp;-128&nbsp;for&nbsp;float</tt></dd></dl>
@@ -909,7 +985,9 @@ Data and other attributes inherited from <a href="utils.brick.html#Sensor">Senso
 <font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
     
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><dl><dt><a name="-configure_ports"><strong>configure_ports</strong></a>(*, PORT_1: 'Type[Sensor]' = None, PORT_2: 'Type[Sensor]' = None, PORT_3: 'Type[Sensor]' = None, PORT_4: 'Type[Sensor]' = None, PORT_A: 'Type[Motor]' = None, PORT_B: 'Type[Motor]' = None, PORT_C: 'Type[Motor]' = None, PORT_D: 'Type[Motor]' = None, wait: 'bool' = True, print_status: 'bool' = True) -&gt; 'Sensor | Motor | list[Sensor | Motor]'</dt><dd><tt>Configure&nbsp;the&nbsp;ports&nbsp;to&nbsp;use&nbsp;the&nbsp;specified&nbsp;sensor&nbsp;or&nbsp;motor&nbsp;and&nbsp;return&nbsp;objects&nbsp;for&nbsp;each&nbsp;item,<br>
+<td width="100%"><dl><dt><a name="-busy_sleep"><strong>busy_sleep</strong></a>(seconds: 'float')</dt><dd><tt>A&nbsp;different&nbsp;form&nbsp;of&nbsp;time.sleep,&nbsp;which&nbsp;uses&nbsp;a&nbsp;while&nbsp;loop&nbsp;that&nbsp;<br>
+constantly&nbsp;checks&nbsp;the&nbsp;time,&nbsp;to&nbsp;see&nbsp;if&nbsp;the&nbsp;duration&nbsp;has&nbsp;elapsed.</tt></dd></dl>
+ <dl><dt><a name="-configure_ports"><strong>configure_ports</strong></a>(*, PORT_1: 'Type[Sensor]' = None, PORT_2: 'Type[Sensor]' = None, PORT_3: 'Type[Sensor]' = None, PORT_4: 'Type[Sensor]' = None, PORT_A: 'Type[Motor]' = None, PORT_B: 'Type[Motor]' = None, PORT_C: 'Type[Motor]' = None, PORT_D: 'Type[Motor]' = None, wait: 'bool' = True, print_status: 'bool' = True) -&gt; 'Sensor | Motor | list[Sensor | Motor]'</dt><dd><tt>Configure&nbsp;the&nbsp;ports&nbsp;to&nbsp;use&nbsp;the&nbsp;specified&nbsp;sensor&nbsp;or&nbsp;motor&nbsp;and&nbsp;return&nbsp;objects&nbsp;for&nbsp;each&nbsp;item,<br>
 ordered&nbsp;by&nbsp;sensor&nbsp;ports&nbsp;followed&nbsp;by&nbsp;motor&nbsp;ports.<br>
 &nbsp;<br>
 When&nbsp;wait&nbsp;is&nbsp;True&nbsp;(the&nbsp;default),&nbsp;the&nbsp;function&nbsp;will&nbsp;wait&nbsp;for&nbsp;the&nbsp;sensors&nbsp;to&nbsp;be&nbsp;ready&nbsp;before&nbsp;returning.<br>
