@@ -15,8 +15,18 @@ import signal
 import time
 import sys
 
+
+def busy_sleep(seconds: float):
+    """A different form of time.sleep, which uses a while loop that 
+    constantly checks the time, to see if the duration has elapsed."""
+    start = time.time()
+    while (time.time() - start) < seconds:
+        time.sleep(0.005)
+
+
 class IOError(OSError):
     pass
+
 
 # Save process ID of this program so we can force stop it later if needed
 os.system(f"echo {os.getpid()} > ~/brickpi3_pid")
@@ -32,6 +42,7 @@ except (ModuleNotFoundError, OSError, TypeError) as err:
     BP = BrickPi3()  # The BrickPi3 instance
 
 _OLD_BP = BP
+
 
 def restore_default_brick(bp=None):
     global BP
