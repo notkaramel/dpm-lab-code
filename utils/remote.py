@@ -69,5 +69,5 @@ class RemoteTouchSensor(brick.TouchSensor):
 
 
 class RemoteMotor(brick.Motor):
-    def __init__(self, client: RemoteBrickClient, port):
+    def __init__(self, client: RemoteBrickClient, port: Literal["A", "B", "C", "D"]):
         super(RemoteMotor, self).__init__(port, bp=client.get_brick())
