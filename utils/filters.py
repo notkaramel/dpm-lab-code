@@ -44,8 +44,20 @@ def _wrap_index(i, l):
     else:
         return i
 
+class AtomicActor:
+    def __init__(self):
+        self.__atomic_lock__ = threading.RLock()
 
-class CircularList:
+    def _atomic(func):
+        def inner(*args, **kwargs):
+            if len(args) == 0 or not isinstance(args[0], AtomicActor):
+                raise RuntimeError("atomic decorator must be applied to a subclass of itself")
+            self = args[0]
+            with self.__atomic_lock__:
+                return func(*args, **kwargs)
+        return inner
+
+class CircularList(AtomicActor):
     class Empty:
         def __eq__(self, __o: object) -> bool:
             return isinstance(__o, CircularList.Empty)
@@ -69,6 +81,7 @@ class CircularList:
         Traceback (most recent call last):
         ValueError: size must be positive non-zero value
         """
+        super(CircularList, self).__init__()
         if type(size) != int:
             raise ValueError("size must be of type int")
         if size <= 0:
@@ -82,6 +95,7 @@ class CircularList:
         """String representation of this CircularList"""
         return repr(self.to_list())
 
+    @AtomicActor._atomic
     def update(self, iterable):
         """Appends each element of the iterable to this list.
         The normal CircularList.append rules apply, and will overwrite
@@ -101,6 +115,7 @@ class CircularList:
         for i in iterable:
             self.append(i)
 
+    @AtomicActor._atomic
     def to_list(self):
         """
         Returns a List form of this CircularList.
@@ -125,6 +140,7 @@ class CircularList:
         if self.tail < self.head:
             return [self.data[i] for i in self._slice(self.head, self.tail)]
 
+    @AtomicActor._atomic
     def append(self, element):
         """
         Append an item to this list. Returns element if overriden,
@@ -173,6 +189,7 @@ class CircularList:
         self.data[self.tail] = element
         return last_item
 
+    @AtomicActor._atomic
     def pop(self):
         """Remove last added item and return it.
 
@@ -202,6 +219,7 @@ class CircularList:
         """Remove last added item and return it."""
         return self.pop()
 
+    @AtomicActor._atomic
     def pophead(self):
         """Remove first added item and return it."""
         if self.tail is None:
@@ -275,6 +293,7 @@ class CircularList:
         elif self.head > self.tail:
             return (i >= self.head and i < self.size) or (i >= 0 and i <= self.tail)
 
+    @AtomicActor._atomic
     def __len__(self):
         """Get the length of the added elements
 
@@ -301,6 +320,7 @@ class CircularList:
         elif self.head > self.tail:
             return self.size - self.head + (self.tail + 1)
 
+    @AtomicActor._atomic
     def __getitem__(self, i: slice | int):
         """Gets an item from the list. 
 
@@ -347,6 +367,7 @@ class CircularList:
 
             return [self.data[i] for i in self._slice(start, stop, step)]
 
+    @AtomicActor._atomic
     def __setitem__(self, i: int, value):
         """Sets an index's position in the circular list.
 
@@ -375,34 +396,41 @@ class CircularList:
                 "list element cannot be of the CircularList.Empty class")
         self.data[i] = value
 
+    @AtomicActor._atomic
     def __contains__(self, value):
         if isinstance(value, CircularList.Empty):
             raise ValueError(
                 "list element cannot be of the CircularList.Empty class")
         return value in self.data
 
+    @AtomicActor._atomic
     def __reversed__(self):
         c = CircularList(self.size)
         c.update(reversed(self.data))
         return c
 
+    @AtomicActor._atomic
     def clear(self):
         n = self.__len__()
         for i in range(n):
             self.pop()
 
+    @AtomicActor._atomic
     def copy(self):
         c = CircularList(self.size)
         c.update(c.to_list())
         return c
 
+    @AtomicActor._atomic
     def extend(self, iterable):
         self.update(iterable)
 
+    @AtomicActor._atomic
     def count(self, value):
         """"""
         return self.to_list().count(value)  # TODO: Optimize this
 
+    @AtomicActor._atomic
     def index(self, value):
         """"""
         return self.to_list().index(value)  # TODO: Optimize this
