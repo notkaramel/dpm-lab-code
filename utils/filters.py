@@ -6,6 +6,7 @@ Author: Ryan Au
 """
 
 import math
+import time
 from collections import UserList, deque
 from statistics import mean, median
 import threading
@@ -44,6 +45,7 @@ def _wrap_index(i, l):
     else:
         return i
 
+
 class AtomicActor:
     def __init__(self):
         self.__atomic_lock__ = threading.RLock()
@@ -51,11 +53,13 @@ class AtomicActor:
     def _atomic(func):
         def inner(*args, **kwargs):
             if len(args) == 0 or not isinstance(args[0], AtomicActor):
-                raise RuntimeError("atomic decorator must be applied to a subclass of itself")
+                raise RuntimeError(
+                    "atomic decorator must be applied to a subclass of itself")
             self = args[0]
             with self.__atomic_lock__:
                 return func(*args, **kwargs)
         return inner
+
 
 class CircularList(AtomicActor):
     class Empty:
@@ -448,136 +452,182 @@ class CircularList(AtomicActor):
         raise Exception("Unimplemented function")
 
 
-# class RangeLimitFilter(SimpleFunctionFilter):
-#     def __init__(self, source, lower, upper):
-#         super().__init__(source, lambda x: range_limit(x, lower, upper))
+class WindowedFilter(AtomicActor):
+    def __init__(self, window_size=10):
+        if type(window_size) != int or window_size <= 0:
+            raise RuntimeError(
+                "window_size is an invalid value. Must be a positive integer.")
+
+        self.window_size = window_size
+        self.queue = deque()
+        self.circ = CircularList(self.window_size)
+
+    def __appender__(self, in_value, out_value):
+        """The method to be overriden, when subclassing WindowedFilter.
+
+        in_value - the new value being appended
+        out_value - the old value that is removed from window
+        """
+        return in_value
+
+    def get_inner_list(self):
+        return self.circ.to_list()
+
+    def to_list(self):
+        return list(self.queue)
+
+    def get_value(self):
+        if self.queue:
+            return self.queue[-1]
+        else:
+            return None
+
+    def append(self, value, **kwargs):
+        out_value = self.circ.append(value)
+        if isinstance(out_value, CircularList.Empty):
+            out_value = None
+        in_value = self.__appender__(value, out_value, **kwargs)
+        self.queue.append(in_value)
+
+    def pop(self):
+        try:
+            out_value = self.circ.pop()
+        except:
+            out_value = None
+        if isinstance(out_value, CircularList.Empty):
+            out_value = None
+        _ = self.__appender__(None, out_value)
+        try:
+            return self.queue.pop()
+        except:
+            return None
+
+    def clear(self):
+        while self.pop() is not None:
+            pass
+        self.queue.clear()
+
+    def __repr__(self):
+        return str(list(self.queue))
 
 
-# class ModulusFilter(SimpleFunctionFilter):
-#     def __init__(self, source, mod):
-#         super().__init__(source, lambda x: x % mod)
+class MeanWindow(WindowedFilter):
+    def __init__(self, window_size=10):
+        super().__init__(window_size)
+        self.running_sum = 0
+        self.running_n = 0
+
+    def __appender__(self, in_value, out_value):
+        if out_value is not None:
+            self.running_sum -= out_value
+
+        if in_value is not None:
+            self.running_sum += in_value
+
+        self.running_n = min(self.window_size, self.running_n + 1)
+        return self.running_sum / self.running_n
 
 
-# class MaximumFilter(WidthFunctionFilter):
-#     def __init__(self, source, N):
-#         super().__init__(source, N, max)
+class SumWindow(WindowedFilter):
+    def __init__(self, window_size=10):
+        super().__init__(window_size)
+        self.running_sum = 0
+
+    def __appender__(self, in_value, out_value):
+        if out_value is not None:
+            self.running_sum -= out_value
+        if in_value is not None:
+            self.running_sum += in_value
+
+        return self.running_sum
 
 
-# class MinimumFilter(WidthFunctionFilter):
-#     def __init__(self, source, N):
-#         super().__init__(source, N, min)
+class MedianWindow(WindowedFilter):
+    def __init__(self, window_size=10):
+        super().__init__(window_size)
+        self.data = []
+
+    def __appender__(self, in_value, out_value):
+        if out_value is not None:
+            self.data.remove(out_value)
+        if in_value is not None:
+            self.data.append(in_value)
+        self.data.sort()
+        return median(self.data)
 
 
-# class MeanFilter(WidthFunctionFilter):
-#     def __init__(self, source, N):
-#         super().__init__(source, N, mean)
+class IntegrationTracker(WindowedFilter):
+    def __init__(self, default_dx=1):
+        super().__init__(window_size=1)
+        self.default_dx = default_dx
+
+    def __appender__(self, in_value, out_value, dx=None):
+        if dx is None:
+            dx = self.default_dx
+        old = self.get_value()
+        old = 0 if old is None else old
+
+        if out_value is None:
+            return old
+        elif in_value is None:
+            # Popping the value
+            return old
+        else:
+            return (out_value + in_value) / 2 * dx + old
 
 
-# class MedianFilter(WidthFunctionFilter):
-#     def __init__(self, source, N):
-#         super().__init__(source, N, median)
+class ValueListWrapper(UserList):
+    def __init__(self, iterable=None):
+        super().__init__(None)
+
+        if iterable is not None:
+            iter(iterable)
+            self.data = iterable
+
+    def get_value(self):
+        return self[-1]
 
 
-# class SumFilter(WidthFunctionFilter):
-#     def __init__(self, source, N):
-#         super().__init__(source, N, sum)
+class SimpleFunctionFilter:
+    def __init__(self, value_giver, func=None):
+        if not (hasattr(value_giver, 'get_value') and callable(getattr(value_giver, 'get_value'))):
+            raise RuntimeError(
+                "value_giver does not have a valid get_value function")
+        self.src = value_giver
+        if func is None:
+            self.func = lambda x: x
+        else:
+            self.func = func
+        if not callable(func):
+            raise RuntimeError(
+                "inner function func is not a callable function")
+
+    def get_value(self):
+        value = self.src.get_value()
+        if value is not None:
+            return self.func(value)
+        else:
+            return None
 
 
-# class IntegrationTracker(AppendingList):
-#     """IntegrationTracker is a special type of list which finds the trapezoidal integral of added values.
-
-#     For Example:
-#     tracker = IntegrationTracker() # instantiate tracker
-#     tracker.append(0,1) # append with values (y-value, delta-x)
-#     tracker.append(1)   # same as .append(1,1)
-#     tracker.append(2,1)
-#     tracker.append(3,1)
-
-#     print(tracker.get_original()) # gives list of added values (y,dx)
-#     print(tracker)     # gives integrated values: [0, 0.5, 2, 4.5]
-#     print(tracker[-1]) # gives 4.5, last added value
-#     tracker[2] = 3     # will not work, only append or extend can change tracker
-
-#     tracker += [0,1,2,3] # appends each element of list
-#     tracker.extend([0,1,2,3]) # appends each element of list
-
-#     tracker += [(0,2), (0,3)] # appends each pair from list as y and dx to tracker
-#     tracker.extend([(0,2), (0,3)]) # appends each pair from list as y and dx to tracker
-#     """
-
-#     def __init__(self):
-#         super().__init__()
-#         self._result = 0
-#         self._last = 0
-#         self._original = []
-
-#     def append(self, value, dx=1):
-#         if type(value) != float and type(value) != int:
-#             raise ValueError(
-#                 "Parameter 'value' must be an acceptable numerical value, float or int")
-#         if type(dx) != float and type(dx) != int:
-#             raise ValueError(
-#                 "Parameter 'dx' must be an acceptable numerical value, float or int")
-
-#         self._original.append((value, dx))
-#         if len(self) > 0:
-#             self._result += (self._last + value) * dx * 0.5
-#         self._last = value
-#         super().append(self._result)
-
-#     def extend(self, ls):
-#         self.__iadd__(ls)
-
-#     def __iadd__(self, ls):
-#         ls = list(ls)
-#         for o in ls:
-#             try:
-#                 i = iter(o)
-#                 if len(i) > 1:
-#                     self.append(i[0], i[1])
-#                 else:
-#                     self.append(i[0])
-#             except TypeError:
-#                 self.append(o)
-#         return self
-
-#     def reset(self, value=0):
-#         self._result = value
-#         self._last = 0
-
-#     def get_original(self):
-#         return tuple(self._original)
+class RangeLimitFilter(SimpleFunctionFilter):
+    def __init__(self, source, lower, upper):
+        super().__init__(source, lambda x: range_limit(x, lower, upper))
 
 
-# def integration(samples: list, delta_time=1):
-#     """Returns the trapezoidal integration of the samples, given a constant sample time interval.
+class ModulusFilter(SimpleFunctionFilter):
+    def __init__(self, source, mod):
+        super().__init__(source, lambda x: x % mod)
 
-#     Example:
-#     samples = [0,1,2,3,4] and delta_time=1
-#     result => [0, 0.5, 2, 4.5, 8]
-#     (Equivalent of f(x)=x integrated to g(x)=x^2/2)
 
-#     delta_time can be a float or a list of floats (the list must be length N-1 as samples N)
-#     """
-#     if type(delta_time) == list:
-#         if not all([type(d) == float or type(d) == int for d in delta_time]):
-#             return None
-#         if len(delta_time) != len(samples)-1:
-#             return None
-#     elif type(delta_time) == int or type(delta_time) == float:
-#         m = float(delta_time)
-#         delta_time = [m for m in range(len(samples)-1)]
-#     else:
-#         return None
+class MaximumFilter(SimpleFunctionFilter):
+    def __init__(self, source, maximum_value):
+        super().__init__(source, lambda x: max(x, maximum_value))
 
-#     N = len(samples)
-#     result = 0
-#     ls = [0]
-#     for i in range(N-1):
-#         j = i + 1
-#         result += (samples[i] + samples[j]) * delta_time[i] * 0.5
-#         ls.append(result)
-#     return ls
+
+class MinimumFilter(SimpleFunctionFilter):
+    def __init__(self, source, minimum_value):
+        super().__init__(source, lambda x: min(x, minimum_value))
 
 
 if __name__ == '__main__':
