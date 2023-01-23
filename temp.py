@@ -189,7 +189,7 @@ def main():
             if detection_start_time is None:
                 detection_start_time = time.time()
             delta = P_CONSTANT + I_CONSTANT * (time.time() - detection_start_time)
-            delta = max(delta, MAX_SPEED)
+            delta = min(delta, MAX_SPEED)
 
         if final_color == 'red_tape':
             # Right
