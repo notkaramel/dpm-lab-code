@@ -6,10 +6,10 @@ from collections import Counter
 import time
 import math
 
-BASE_SPEED = 120
-MAX_SPEED = 360
-P_CONSTANT = 70.0
-I_CONSTANT = 5.0
+BASE_SPEED = 90
+MAX_SPEED = 720
+P_CONSTANT = 20.0
+I_CONSTANT = 1.0
 
 COLOR_MARKERS = {
     'blue_tape': (0, 419, 13),
@@ -178,7 +178,7 @@ def main():
             break
 
         sample = color_sensor.get_rgb()
-        final_color, potentials = determine_color(color_sensor, window=10)
+        final_color, potentials = determine_color(color_sensor, window=5)
 
         if final_color == 'gray_table' or final_color == 'unknown':
             # Forward
