@@ -7,9 +7,9 @@ import time
 import math
 
 COLOR_MARKERS = {
-    'blue_tape': (0, 505, 7),
-    'gray_table': (504, 674, 7),
-    'red_tape': (673, 941, 7)
+    'blue_tape': (0, 505, 13),
+    'gray_table': (504, 674, 13),
+    'red_tape': (673, 941, 13)
 }
 
 COLOR_DATA = "colorSensor.csv"
