@@ -127,7 +127,7 @@ def window_start():
         global P_CONSTANT
         P_CONSTANT = slider.get_value()
         telemetry.label("P Constant", P_CONSTANT, True)
-    telemetry.create_slider(0, BASE_SPEED, P_CONSTANT, update_p_constant)
+    telemetry.create_slider(0, MAX_SPEED, P_CONSTANT, update_p_constant)
 
     # I Constant controls
     telemetry.label("I Constant", I_CONSTANT, True)
@@ -135,7 +135,7 @@ def window_start():
         global I_CONSTANT
         I_CONSTANT = slider.get_value()
         telemetry.label("I Constant", I_CONSTANT, True)
-    telemetry.create_slider(0, BASE_SPEED, I_CONSTANT, update_i_constant)
+    telemetry.create_slider(0, MAX_SPEED, I_CONSTANT, update_i_constant)
 
     telemetry.update()
 
