@@ -1,4 +1,4 @@
-# 1-504, 505-673, 674-940, 941-
+# 1-419, 420-665, 666-1223
 
 from statistics import mean, stdev
 from utils import brick, telemetry
@@ -8,13 +8,13 @@ import math
 
 BASE_SPEED = 120
 MAX_SPEED = 360
-P_CONSTANT = 20.0
-I_CONSTANT = 1.0
+P_CONSTANT = 70.0
+I_CONSTANT = 5.0
 
 COLOR_MARKERS = {
-    'blue_tape': (0, 505, 13),
-    'gray_table': (504, 674, 13),
-    'red_tape': (673, 941, 13)
+    'blue_tape': (0, 419, 13),
+    'gray_table': (419, 665, 13),
+    'red_tape': (665, 1224, 13)
 }
 
 COLOR_DATA = "colorSensor.csv"
