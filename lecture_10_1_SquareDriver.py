@@ -64,8 +64,8 @@ def init_motor(motor: Motor):
 def move_dist_fwd(distance, speed):  # meters, dps
     "Function to move forward by user-specified distance and speed"
     try:
-        LEFT_MOTOR.set_dps(speed)                                      # Set speeds of motors
-        RIGHT_MOTOR.set_dps(speed)
+        # LEFT_MOTOR.set_dps(speed)                                      # Set speeds of motors
+        # RIGHT_MOTOR.set_dps(speed)
         LEFT_MOTOR.set_limits(POWER_LIMIT, speed)
         RIGHT_MOTOR.set_limits(POWER_LIMIT, speed)
         LEFT_MOTOR.set_position_relative(int(distance * DIST_TO_DEG))  # Rotate wheels
@@ -80,8 +80,8 @@ def move_dist_fwd(distance, speed):  # meters, dps
 def rotate_bot(angle, speed):
     "Function to rotate in place by a user specified angle and speed"
     try:
-        LEFT_MOTOR.set_dps(speed)                                      # Set speeds of motors
-        RIGHT_MOTOR.set_dps(speed)
+        # LEFT_MOTOR.set_dps(speed)                                      # Set speeds of motors
+        # RIGHT_MOTOR.set_dps(speed)
         LEFT_MOTOR.set_limits(POWER_LIMIT, speed)
         RIGHT_MOTOR.set_limits(POWER_LIMIT, speed)
         LEFT_MOTOR.set_position_relative(int(angle * ORIENT_TO_DEG))   # Rotate L Wheel +ve

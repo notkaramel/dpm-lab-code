@@ -37,7 +37,7 @@ try:
             red, gre, blu, lum = C_SENSOR.get_value()
 
             # Write color values to the file
-            f.write('{:d},{:d},{:d},{:d}\n'.format(red, gre, blu, lum))
+            f.write('{:d},{:d},{:d}\n'.format(red, gre, blu))
 
             time.sleep(SENSOR_POLL_SLEEP)         # Use sensor polling interval here
         except SensorError as error:
