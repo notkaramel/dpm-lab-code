@@ -159,7 +159,7 @@ def _start_threaded_target(pre_update_func, sleep_interval, *args):
 
 def start_threaded(pre_update_func=None, sleep_interval=0.01):
     """Starts the telemetry window in a separate thread.
-    
+
     pre_update_func is a function with no arguments, which will be
     executed before every call to telemetry.update
     """
@@ -205,7 +205,8 @@ class _Updater:
     UPDATE_DELAY = 0.01
 
     def __init__(self, func, *args):
-        self.thread = threading.Thread(target=self._listener, args=args, daemon=True)
+        self.thread = threading.Thread(
+            target=self._listener, args=args, daemon=True)
         self.func = func
         self.event = threading.Event()
         self.event.set()
@@ -237,6 +238,7 @@ class _Updatable:
     stop_updater will stop the internal _updater if it isn't already
         stopped.
     """
+
     def set_updater(self, func, *args):
         """set_updater will create an internal _updater varaible, and
             assign an _Updater object to it. The expected input function
@@ -244,7 +246,7 @@ class _Updatable:
         """
         if hasattr(self, '_updater') and self._updater is not None:
             if not isinstance(self._updater, _Updater):
-                return # Something went wrong, so we won't touch _updater anymore
+                return  # Something went wrong, so we won't touch _updater anymore
             self._updater.stop()
         self._updater = _Updater(func, self, *args)
         self._updater.start()
@@ -261,6 +263,7 @@ class _Slider(_Updatable):
     """An internal _Slider object, that should not be instantiated
     using this class. Use telemetry.create_slider
     """
+
     def __init__(self, lower, upper, value, func=None):
         self.s = Scale(WINDOW, from_=lower, to=upper, orient=HORIZONTAL)
         self.s.set(value)
@@ -283,9 +286,6 @@ class _Slider(_Updatable):
 
     def __repr__(self):
         return f"Slider[{self.lower} <-> {self.upper}, {self.get_value()}]"
-
-    def __del__(self):
-        self.destroy()
 
 
 @remote_capable
@@ -313,6 +313,7 @@ class _Button(_Updatable):
     """An internal _Button object, that should not be instantiated
     using this class. Use telemetry.create_button
     """
+
     def __init__(self, name, func=None):
         self.b = TkButton(WINDOW, text=name)
         self.b.bind("<ButtonPress>", self._on_press)
@@ -342,9 +343,6 @@ class _Button(_Updatable):
     def __repr__(self):
         return f"Button[{self.name}, {self.is_pressed()}]"
 
-    def __del__(self):
-        self.destroy()
-
 
 @remote_capable
 def create_button(name, func=None):
@@ -357,7 +355,7 @@ def create_button(name, func=None):
 
 def label(key, data, showkey=False):
     """Adds a textual Label based on a key to the telemetry window.
-    
+
     If the key has not been used before, then it will create a new Label
     If the key has been used before, then it will change the old Label
 
@@ -370,7 +368,7 @@ def label(key, data, showkey=False):
 @remote_capable
 def add(key, data, showkey=False):
     """Adds a textual Label based on a key to the telemetry window.
-    
+
     If the key has not been used before, then it will create a new Label
     If the key has been used before, then it will change the old Label
 
@@ -394,7 +392,7 @@ def add(key, data, showkey=False):
 
 def update(retries=1):
     """Updates the display, allowing it to function and respond to input/output.
-    
+
     It also runs telemetry.remote commands
     """
     global WINDOW
@@ -418,6 +416,7 @@ def update(retries=1):
 def clear_labels():
     clear()
 
+
 @remote_capable
 def clear():
     """Destroy and remove all LABELS of the telemetry window"""
@@ -433,7 +432,7 @@ def clear():
 def mainloop(pre_update_func=None, sleep_interval=0.01):
     """Starts a while loop that calls update for you! 
     Usage of telemetry.update not needed when using this
-    
+
     pre_update_func is a function with no arguments, which will be
     executed before every call to telemetry.update
     """

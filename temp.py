@@ -6,6 +6,11 @@ from collections import Counter
 import time
 import math
 
+BASE_SPEED = 120
+MAX_SPEED = 360
+P_CONSTANT = 40.0
+I_CONSTANT = 5.0
+
 COLOR_MARKERS = {
     'blue_tape': (0, 505, 13),
     'gray_table': (504, 674, 13),
@@ -115,7 +120,38 @@ def window_start():
     telemetry.resize(500, 500)
 
     telemetry.label("STATUS", "Initializing", True)
+
+    # P Constant controls
+    telemetry.label("P Constant", P_CONSTANT, True)
+    def update_p_constant(slider:telemetry._Slider):
+        global P_CONSTANT
+        P_CONSTANT = slider.get_value()
+        telemetry.label("P Constant", P_CONSTANT, True)
+    telemetry.create_slider(0, BASE_SPEED, P_CONSTANT, update_p_constant)
+
+    # I Constant controls
+    telemetry.label("I Constant", I_CONSTANT, True)
+    def update_i_constant(slider:telemetry._Slider):
+        global I_CONSTANT
+        I_CONSTANT = slider.get_value()
+        telemetry.label("I Constant", I_CONSTANT, True)
+    telemetry.create_slider(0, BASE_SPEED, I_CONSTANT, update_i_constant)
+
     telemetry.update()
+
+
+def determine_color(color_sensor: brick.EV3ColorSensor, window=10):
+    counter = Counter()
+    while True:
+        sample_set = []
+        for i in range(window):
+            detected, _ = color_dist(color_sensor.get_rgb())
+            sample_set.append(detected)
+            time.sleep(0.01)
+        counter.update(sample_set)
+        if len(counter) == 1 or counter.most_common()[0][1] > counter.most_common()[1][1]:
+            return counter.most_common()[0][0], counter.most_common()
+
 
 
 def main():
@@ -134,42 +170,40 @@ def main():
     motor_left.reset_encoder()
     motor_right.reset_encoder()
 
+    detection_start_time = None
+    delta = 0
     while True:
         time.sleep(0.01)
         if touch_sensor.is_pressed():
             break
 
-        if sensor_left.is_pressed():
-            motor_left.set_dps(180)
-        else:
-            motor_left.set_dps(0)
-
-        if sensor_right.is_pressed():
-            motor_right.set_dps(180)
-        else:
-            motor_right.set_dps(0)
-
         sample = color_sensor.get_rgb()
+        final_color, potentials = determine_color(color_sensor, window=10)
 
-        telemetry.label("Current Color", str(color_dist(sample)), True)
-        telemetry.label("Detected Color", determine_color(
-            color_sensor, window=10))
+        if final_color == 'gray_table' or final_color == 'unknown':
+            # Forward
+            motor_left.set_dps(BASE_SPEED)
+            motor_right.set_dps(BASE_SPEED)
+            detection_start_time = None
+        else:
+            if detection_start_time is None:
+                detection_start_time = time.time()
+            delta = P_CONSTANT + I_CONSTANT * (time.time() - detection_start_time)
+            delta = max(delta, MAX_SPEED)
+
+        if final_color == 'red_tape':
+            # Right
+            motor_left.set_dps(BASE_SPEED + delta)
+            motor_right.set_dps(BASE_SPEED)
+        elif final_color == 'blue_tape':
+            # Left
+            motor_left.set_dps(BASE_SPEED)
+            motor_right.set_dps(BASE_SPEED + delta)
+
+        telemetry.label("Current Color", final_color, True)
+        telemetry.label("Detected Colors", potentials, True)
 
         telemetry.update()
-
-
-def determine_color(color_sensor: brick.EV3ColorSensor, window=10):
-    counter = Counter()
-    while True:
-        sample_set = []
-        for i in range(window):
-            detected, _ = color_dist(color_sensor.get_rgb())
-            sample_set.append(detected)
-            time.sleep(0.01)
-        counter.update(sample_set)
-        if len(counter) == 1 or counter.most_common()[0][1] > counter.most_common()[1][1]:
-            print(counter.most_common())
-            return counter.most_common()[0][0]
 
 
 if __name__ == '__main__':
