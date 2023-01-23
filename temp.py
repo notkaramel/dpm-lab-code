@@ -92,7 +92,7 @@ def collect_stats(filename, markers):
     with open(filename, 'r') as f:
         data = [list(map(int, line.strip().split(',')))
                 for line in f.readlines() if line.strip()]
-
+        data = [ list(normalize(*sample)) for sample in data ]
     result = {}
     for marker, (start, stop, threshold) in markers.items():
         part = data[start:stop]
@@ -102,7 +102,7 @@ def collect_stats(filename, markers):
             (stdev(r), stdev(g), stdev(b)),
             threshold
         )
-
+    print(result)
     return result
 
 
