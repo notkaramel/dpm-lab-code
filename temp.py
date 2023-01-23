@@ -8,8 +8,8 @@ import math
 
 BASE_SPEED = 120
 MAX_SPEED = 360
-P_CONSTANT = 40.0
-I_CONSTANT = 5.0
+P_CONSTANT = 20.0
+I_CONSTANT = 1.0
 
 COLOR_MARKERS = {
     'blue_tape': (0, 505, 13),
