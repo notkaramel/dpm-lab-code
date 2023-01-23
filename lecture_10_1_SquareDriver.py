@@ -100,25 +100,25 @@ def do_square(side_length):
     LEFT_MOTOR.set_power(0)                   # Motors off, square done
     RIGHT_MOTOR.set_power(0)
 
+if __name__=='__main__':
+    try:
+        print('Square Driving Demo') # Banner
+        init_motor(LEFT_MOTOR)       # Initialize L Motor
+        init_motor(RIGHT_MOTOR)      # Initialize R Motor
 
-try:
-    print('Square Driving Demo') # Banner
-    init_motor(LEFT_MOTOR)       # Initialize L Motor
-    init_motor(RIGHT_MOTOR)      # Initialize R Motor
+        # Prompt for drive loop
+        while True:
+            side_length = SQUARE_LENGTH # Assume default side length
+            resp = input('Override default side length {:0.2f}m? y/n (q for quit): '.format(side_length))
+            if resp.lower() == 'y':
+                AXLE_LENGTH = float(input('Enter square side length (m): '))
+            if resp.lower() == 'q':
+                BP.reset_all()
+                exit()
+            print('Starting sqaure driver with side length = {:0.2f}m'.format(
+                side_length))
+            
+            do_square(side_length) # Drive in a square shape, with designated side_length
 
-    # Prompt for drive loop
-    while True:
-        side_length = SQUARE_LENGTH # Assume default side length
-        resp = input('Override default side length {:0.2f}m? y/n (q for quit): '.format(side_length))
-        if resp.lower() == 'y':
-            AXLE_LENGTH = float(input('Enter square side length (m): '))
-        if resp.lower() == 'q':
-            BP.reset_all()
-            exit()
-        print('Starting sqaure driver with side length = {:0.2f}m'.format(
-            side_length))
-        
-        do_square(side_length) # Drive in a square shape, with designated side_length
-
-except KeyboardInterrupt: # Abort program using ^C (Ctrl+C)
-    BP.reset_all()
+    except KeyboardInterrupt: # Abort program using ^C (Ctrl+C)
+        BP.reset_all()
