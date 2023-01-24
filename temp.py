@@ -11,13 +11,14 @@ MAX_SPEED = 720
 P_CONSTANT = 200.0
 I_CONSTANT = 200.0
 
-COLOR_MARKERS = {
-    'blue_tape': (0, 419, 13),
-    'gray_table': (419, 665, 13),
-    'red_tape': (665, 1224, 13)
-}
+COLOR_MARKERS = (
+    ('blue_tape', 13),
+    ('gray_table', 13),
+    ('red_tape', 13),
+    ('gray_table', 13),
+)
 
-COLOR_DATA = "colorSensor.csv"
+COLOR_DATA = "temp_calibration.csv"
 
 COLORS = {  # means, stdevs, threshold on stdev distance
     'red': ((0.9720, 0.1305, 0.1947), (0.003706, 0.01108, 0.01371), 7.5),
@@ -87,6 +88,8 @@ def color_dist(rgb):
 
 def collect_stats(filename, markers):
     """
+    markers : list of (key, threshold)
+
     Returns format:
 
     {
@@ -97,12 +100,23 @@ def collect_stats(filename, markers):
     with open(filename, 'r') as f:
         data = [list(map(int, line.strip().split(',')))
                 for line in f.readlines() if line.strip()]
-        data = [ list(normalize(*sample)) for sample in data ]
+        data = [ list(normalize(*sample[0:3]))+[sample[3]] for sample in data ]
+    collected_data = {}
+    reverse_keys = {}
+    for i, (marker, threshold) in enumerate(markers):
+        reverse_keys[i] = (marker, threshold)
+    for dat in data:
+        r, g, b, i = dat
+        key, _ = reverse_keys[dat[3]]
+        ls = collected_data.get(key, [])
+        ls.append(dat[0:3])
+        collected_data[key] = ls
+
     result = {}
-    for marker, (start, stop, threshold) in markers.items():
-        part = data[start:stop]
-        r, g, b = zip(*part)
-        result[marker] = (
+    for key, rows in collected_data.items():
+        r, g, b = zip(*rows)
+        threshold = dict(markers)[key]
+        result[key] = (
             (mean(r), mean(g), mean(b)),
             (stdev(r), stdev(g), stdev(b)),
             threshold
