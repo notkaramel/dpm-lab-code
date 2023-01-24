@@ -41,7 +41,7 @@ try:
                 print(f"Pausing execution...")
                 index += 1
                 while switch_sensor.is_pressed():
-                    time.sleep(1)
+                    time.sleep(0.1)
                 print(f"Resuming execution...")
             
             # Retrieve the color values the Color sensor
