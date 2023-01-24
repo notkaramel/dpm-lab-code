@@ -268,7 +268,7 @@ def main():
 
         telemetry.label("Current Color", final_color, True)
         telemetry.label("Detected Colors", potentials, True)
-        if counter % 100:
+        if counter % 100 == 0:
             telemetry.label("Sample Colors", '\n'.join(list(map(str, color_distances.items()))), True)
 
         telemetry.update()
