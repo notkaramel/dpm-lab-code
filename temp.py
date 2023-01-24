@@ -162,6 +162,7 @@ def determine_color(color_sensor: brick.EV3ColorSensor, window=10):
         for i in range(window):
             detected, dist = color_dist(color_sensor.get_rgb())
             sample_dists[detected].append(dist)
+            sample_set.append(detected)
             time.sleep(0.01)
         counter.update(sample_set)
         if len(counter) == 1 or counter.most_common()[0][1] > counter.most_common()[1][1]:
@@ -192,12 +193,12 @@ def controller_PI_1(self, final_color):
 
     if final_color == 'red_tape':
         # Right
-        self.motor_left.set_dps(BASE_SPEED + self.delta)
-        self.motor_right.set_dps(BASE_SPEED)
+        self.motor_right.set_dps(BASE_SPEED + self.delta)
+        self.motor_left.set_dps(BASE_SPEED)
     elif final_color == 'blue_tape':
         # Left
-        self.motor_left.set_dps(BASE_SPEED)
-        self.motor_right.set_dps(BASE_SPEED + self.delta)
+        self.motor_right.set_dps(BASE_SPEED)
+        self.motor_left.set_dps(BASE_SPEED + self.delta)
 
 
 @ObjectFunction
