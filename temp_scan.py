@@ -39,6 +39,7 @@ try:
             if switch_sensor.is_pressed():
                 print(f"Switching to Next Index {index} -> {index+1}")
                 print(f"Pausing execution...")
+                index += 1
                 while switch_sensor.is_pressed():
                     time.sleep(1)
                 print(f"Resuming execution...")
