@@ -253,6 +253,8 @@ def main():
 
     controller_slowest.motor_left, controller_slowest.motor_right = motor_left, motor_right
     controller_slowest.BASE_SPEED = 200
+
+    counter = 0
     while True:
         time.sleep(0.01)
         if touch_sensor.is_pressed():
@@ -266,9 +268,11 @@ def main():
 
         telemetry.label("Current Color", final_color, True)
         telemetry.label("Detected Colors", potentials, True)
-        telemetry.label("Sample Colors", color_distances, True)
+        if counter % 100:
+            telemetry.label("Sample Colors", '\n'.join(list(map(str, color_distances.items()))), True)
 
         telemetry.update()
+        counter += 1
 
 
 if __name__ == '__main__':
