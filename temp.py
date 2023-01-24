@@ -266,6 +266,7 @@ def main():
 
         telemetry.label("Current Color", final_color, True)
         telemetry.label("Detected Colors", potentials, True)
+        telemetry.label("Sample Colors", color_distances, True)
 
         telemetry.update()
 
