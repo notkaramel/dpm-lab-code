@@ -168,6 +168,64 @@ def determine_color(color_sensor: brick.EV3ColorSensor, window=10):
             return counter.most_common()[0][0], counter.most_common(), sample_dists
 
 
+class ObjectFunction:
+    def __init__(self, func):
+        self._func = func
+
+    def __call__(self, *args, **kwargs):
+        return self._func(self, *args, **kwargs)
+
+
+@ObjectFunction
+def controller_PI_1(self, final_color):
+    if final_color == 'gray_table' or final_color == 'unknown':
+        # Forward
+        self.motor_left.set_dps(BASE_SPEED)
+        self.motor_right.set_dps(BASE_SPEED)
+        self.detection_start_time = None
+    else:
+        if self.detection_start_time is None:
+            self.detection_start_time = time.time()
+        self.delta = P_CONSTANT + I_CONSTANT * \
+            (time.time() - self.detection_start_time)
+        self.delta = min(self.delta, MAX_SPEED)
+
+    if final_color == 'red_tape':
+        # Right
+        self.motor_left.set_dps(BASE_SPEED + self.delta)
+        self.motor_right.set_dps(BASE_SPEED)
+    elif final_color == 'blue_tape':
+        # Left
+        self.motor_left.set_dps(BASE_SPEED)
+        self.motor_right.set_dps(BASE_SPEED + self.delta)
+
+
+@ObjectFunction
+def controller_bang_bang(self, final_color):
+    if final_color == 'gray_table':
+        self.motor_left.set_dps(self.BASE_SPEED)
+        self.motor_right.set_dps(self.BASE_SPEED)
+    if final_color == 'red_tape':
+        self.motor_left.set_dps(self.BASE_SPEED - self.DELTA)
+        self.motor_right.set_dps(self.BASE_SPEED)
+    if final_color == 'blue_tape':
+        self.motor_left.set_dps(self.BASE_SPEED)
+        self.motor_right.set_dps(-self.BASE_SPEED - self.DELTA)
+
+
+@ObjectFunction
+def controller_slowest(self, final_color):
+    if final_color == 'gray_table':
+        self.motor_left.set_dps(self.BASE_SPEED)
+        self.motor_right.set_dps(self.BASE_SPEED)
+    if final_color == 'red_tape':
+        self.motor_left.set_dps(-self.BASE_SPEED)
+        self.motor_right.set_dps(self.BASE_SPEED)
+    if final_color == 'blue_tape':
+        self.motor_left.set_dps(self.BASE_SPEED)
+        self.motor_right.set_dps(-self.BASE_SPEED)
+
+
 def main():
     motor_left = brick.Motor('A')
     motor_right = brick.Motor('D')
@@ -184,36 +242,26 @@ def main():
     motor_left.reset_encoder()
     motor_right.reset_encoder()
 
-    detection_start_time = None
-    delta = 0
+    controller_PI_1.detection_start_time = None
+    controller_PI_1.delta = 0
+    controller_PI_1.motor_left, controller_PI_1.motor_right = motor_left, motor_right
+
+    controller_bang_bang.motor_left, controller_bang_bang.motor_right = motor_left, motor_right
+    controller_bang_bang.BASE_SPEED = 200
+    controller_bang_bang.DELTA = 100
+
+    controller_slowest.motor_left, controller_slowest.motor_right = motor_left, motor_right
+    controller_slowest.BASE_SPEED = 200
     while True:
         time.sleep(0.01)
         if touch_sensor.is_pressed():
             break
 
         # sample = color_sensor.get_rgb()
-        final_color, potentials, color_distances = determine_color(color_sensor, window=5)
+        final_color, potentials, color_distances = determine_color(
+            color_sensor, window=5)
 
-        if final_color == 'gray_table' or final_color == 'unknown':
-            # Forward
-            motor_left.set_dps(BASE_SPEED)
-            motor_right.set_dps(BASE_SPEED)
-            detection_start_time = None
-        else:
-            if detection_start_time is None:
-                detection_start_time = time.time()
-            delta = P_CONSTANT + I_CONSTANT * \
-                (time.time() - detection_start_time)
-            delta = min(delta, MAX_SPEED)
-
-        if final_color == 'red_tape':
-            # Right
-            motor_left.set_dps(BASE_SPEED + delta)
-            motor_right.set_dps(BASE_SPEED)
-        elif final_color == 'blue_tape':
-            # Left
-            motor_left.set_dps(BASE_SPEED)
-            motor_right.set_dps(BASE_SPEED + delta)
+        controller_PI_1(final_color)
 
         telemetry.label("Current Color", final_color, True)
         telemetry.label("Detected Colors", potentials, True)
