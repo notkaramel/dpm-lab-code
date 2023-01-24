@@ -1,8 +1,8 @@
-# 1-419, 420-665, 666-1223
+
 
 from statistics import mean, stdev
 from utils import brick, telemetry
-from collections import Counter
+from collections import Counter, defaultdict
 import time
 import math
 
@@ -100,17 +100,15 @@ def collect_stats(filename, markers):
     with open(filename, 'r') as f:
         data = [list(map(int, line.strip().split(',')))
                 for line in f.readlines() if line.strip()]
-        data = [ list(normalize(*sample[0:3]))+[sample[3]] for sample in data ]
-    collected_data = {}
+        data = [list(normalize(*sample[0:3]))+[sample[3]] for sample in data]
+    collected_data = defaultdict(list)
     reverse_keys = {}
     for i, (marker, threshold) in enumerate(markers):
         reverse_keys[i] = (marker, threshold)
     for dat in data:
         r, g, b, i = dat
         key, _ = reverse_keys[dat[3]]
-        ls = collected_data.get(key, [])
-        ls.append(dat[0:3])
-        collected_data[key] = ls
+        collected_data[key].append(dat[0:3])
 
     result = {}
     for key, rows in collected_data.items():
@@ -137,7 +135,8 @@ def window_start():
 
     # P Constant controls
     telemetry.label("P Constant", P_CONSTANT, True)
-    def update_p_constant(slider:telemetry._Slider):
+
+    def update_p_constant(slider: telemetry._Slider):
         global P_CONSTANT
         P_CONSTANT = slider.get_value()
         telemetry.label("P Constant", P_CONSTANT, True)
@@ -145,7 +144,8 @@ def window_start():
 
     # I Constant controls
     telemetry.label("I Constant", I_CONSTANT, True)
-    def update_i_constant(slider:telemetry._Slider):
+
+    def update_i_constant(slider: telemetry._Slider):
         global I_CONSTANT
         I_CONSTANT = slider.get_value()
         telemetry.label("I Constant", I_CONSTANT, True)
@@ -158,14 +158,14 @@ def determine_color(color_sensor: brick.EV3ColorSensor, window=10):
     counter = Counter()
     while True:
         sample_set = []
+        sample_dists = defaultdict(list)
         for i in range(window):
-            detected, _ = color_dist(color_sensor.get_rgb())
-            sample_set.append(detected)
+            detected, dist = color_dist(color_sensor.get_rgb())
+            sample_dists[detected].append(dist)
             time.sleep(0.01)
         counter.update(sample_set)
         if len(counter) == 1 or counter.most_common()[0][1] > counter.most_common()[1][1]:
-            return counter.most_common()[0][0], counter.most_common()
-
+            return counter.most_common()[0][0], counter.most_common(), sample_dists
 
 
 def main():
@@ -191,8 +191,8 @@ def main():
         if touch_sensor.is_pressed():
             break
 
-        sample = color_sensor.get_rgb()
-        final_color, potentials = determine_color(color_sensor, window=5)
+        # sample = color_sensor.get_rgb()
+        final_color, potentials, color_distances = determine_color(color_sensor, window=5)
 
         if final_color == 'gray_table' or final_color == 'unknown':
             # Forward
@@ -202,7 +202,8 @@ def main():
         else:
             if detection_start_time is None:
                 detection_start_time = time.time()
-            delta = P_CONSTANT + I_CONSTANT * (time.time() - detection_start_time)
+            delta = P_CONSTANT + I_CONSTANT * \
+                (time.time() - detection_start_time)
             delta = min(delta, MAX_SPEED)
 
         if final_color == 'red_tape':
