@@ -3,6 +3,8 @@ import threading
 import time
 import enum
 import json
+import re
+
 
 
 class Inputs(enum.Enum):
@@ -125,6 +127,7 @@ D-pad Right     - Button 14
 Capture Button  - Button 15
 """
 
+THREADING_OUTPUT = [None]
 
 class GamepadManager:
     MANAGER = None
@@ -146,16 +149,25 @@ class GamepadManager:
         self.lock_assigners = threading.Lock()
         self.profiles = {}
 
-    def register(self, json_profile):
+    @classmethod
+    def register(cls, json_profile):
         data = json.loads(json_profile)
-        self.profiles[data['name']] = data['keys']
+        cls.get_instance().profiles[data['name']] = data['keys']
 
-    def init(self):
+    @classmethod
+    def init(cls):
+        self = cls.get_instance()
         pygame.init()
         self.thread = threading.Thread(target=self.process_events, daemon=True)
         self.thread.start()
 
-    def add_assigner(self, assigner):
+    @staticmethod
+    def update():
+        pygame.event.pump()
+
+    @classmethod
+    def add_assigner(cls, assigner):
+        self = cls.get_instance()
         self.lock_assigners.acquire()
         self.assigners.append(assigner)
         self.lock_assigners.release()
@@ -174,11 +186,11 @@ class GamepadManager:
                     del self.gamepads[event.instance_id]
 
                 for gamepad in self.gamepads.values():
-                    print(gamepad.all())
                     self.lock_assigners.acquire()
                     for assigner in self.assigners:
                         assigner._attempt(gamepad)
                     self.lock_assigners.release()
+                    THREADING_OUTPUT[0] = (gamepad.all())
 
                 time.sleep(self.SLEEP_INTERVAL)
 
@@ -272,6 +284,11 @@ GamepadManager.get_instance().register("""{
 
 class _Gamepad:
     """Underlying unassigned gamepads"""
+    RAW_INPUT_PATTERN = r'[A-Z][0-9]+(?:.[0-9]+)?'
+
+    @staticmethod
+    def update():
+        GamepadManager.update()
 
     def __init__(self, joystick):
         self.joystick = joystick
@@ -291,7 +308,7 @@ class _Gamepad:
 
     def all(self):
         text = ""
-        pygame.event.get()
+        pygame.event.pump()
         for i in range(self.joystick.get_numbuttons()):
             text += f"B{i}: {self.joystick.get_button(i)}\n"
         for i in range(self.joystick.get_numhats()):
@@ -304,37 +321,59 @@ class _Gamepad:
         return text.strip()
 
     def get(self, key):
-        pygame.event.get()
+        pygame.event.pump()
+
+        if re.fullmatch(_Gamepad.RAW_INPUT_PATTERN, key) is not None:
+            return self.get_value(key)
         if type(key) != Inputs:
             key = Inputs.value(key)
         command: str = self.profile[key]  # B, A, H, L
-        if 'B' in command:
-            return self.joystick.get_button(int(command[1:]))
-        if 'A' in command:
-            if '.' in command:
-                part = command[1:].split('.')
-                index = int(part[0])
-                direction = int(part[1])
-                return self.joystick.get_axis(index) * ((-1)**(direction % 2)) < 0
-            else:
-                return self.joystick.get_axis(int(command[1:]))
-        if 'H' in command:
-            if '.' in command:
-                part = command[1:].split('.')
-                index = int(part[0])
-                direction = int(part[1])
-                axis = direction // 2
-                return self.joystick.get_hat(index)[axis] * ((-1)**(direction % 2)) < 0
-            else:
-                return self.joystick.get_hat(int(command[1:]))
-        if 'L' in command:
-            return self.joystick.get_ball(int(command[1:]))
+        return self.get_value(command)
 
-        return None
+
+    def get_value(self, key):
+        """Retrieves the input value from the underlying joystick.
+        
+        B - Button
+        A - Axis
+        H - Hat
+        L - Ball
+
+        B0 gets Button 0
+        A1 gets Axis 1
+
+        A1.0 gets -Axis 1
+        A1.1 gets +Axis 1
+        """
+        if 'B' == key[0]:
+            return self.joystick.get_button(int(key[1:]))
+        if 'A' == key[0]:
+            if '.' in key:
+                part = key[1:].split('.')
+                index = int(part[0])
+                direction = -1 if int(part[1]) == 0 else +1
+                return max(self.joystick.get_axis(index) * direction, 0)
+            else:
+                return self.joystick.get_axis(int(key[1:]))
+        if 'H' == key[0]:
+            if '.' in key:
+                part = key[1:].split('.')
+                index = int(part[0])
+                direction = -1 if int(part[1]) == 0 else +1
+                axis = direction // 2
+                return max(self.joystick.get_hat(index)[axis] * direction, 0)
+            else:
+                return self.joystick.get_hat(int(key[1:]))
+        if 'L' == key[0]:
+            return self.joystick.get_ball(int(key[1:]))
 
 
 class Gamepad:
     """Define this as a gamepad that can be assigned by pressing a given key-combination"""
+
+    @staticmethod
+    def update():
+        GamepadManager.update()
 
     def __init__(self, button_combination, controller_type=None):
         """Create a gamepad that is assigned by the given button_combination
@@ -352,7 +391,6 @@ class Gamepad:
         if self.controller_type is not None and gamepad.type() != self.controller_type:
             return
         if all([gamepad.get(button) for button in self.button_combination]):
-            print("succeeding")
             self.gamepad = gamepad
 
     def unassign(self):
@@ -367,3 +405,5 @@ class Gamepad:
 if __name__ == '__main__':
     GamepadManager.get_instance().init()
     gm = GamepadManager.get_instance()
+    gamepad = Gamepad(['B0', 'B1'])
+    GamepadManager.update()
