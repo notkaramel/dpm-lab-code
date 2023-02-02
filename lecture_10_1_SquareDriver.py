@@ -40,17 +40,6 @@ def wait_for_motor(motor: Motor):
     while not math.isclose(motor.get_speed(), 0):    # Wait for motor to spin down (stop)
         time.sleep(MOTOR_POLL_DELAY)
 
-def sleep_for_motor(degrees, speed):
-    "Sleeps for the given amount of travel time"
-    time.sleep(degrees / speed)
-
-def poll_for_motor(degrees, speed):
-    "Sleeps for the given amount of travel time, by reading the time instead of directly sleeping"
-    duration = degrees / speed
-    start = time.time()
-    while time.time() - start < duration:
-        time.sleep(0.001)
-
 def init_motor(motor: Motor):
     "Function to initialize a motor"
     try:
@@ -64,8 +53,7 @@ def init_motor(motor: Motor):
 def move_dist_fwd(distance, speed):  # meters, dps
     "Function to move forward by user-specified distance and speed"
     try:
-        # LEFT_MOTOR.set_dps(speed)                                      # Set speeds of motors
-        # RIGHT_MOTOR.set_dps(speed)
+        # Set speed of motors
         LEFT_MOTOR.set_limits(POWER_LIMIT, speed)
         RIGHT_MOTOR.set_limits(POWER_LIMIT, speed)
         LEFT_MOTOR.set_position_relative(int(distance * DIST_TO_DEG))  # Rotate wheels
@@ -80,8 +68,7 @@ def move_dist_fwd(distance, speed):  # meters, dps
 def rotate_bot(angle, speed):
     "Function to rotate in place by a user specified angle and speed"
     try:
-        # LEFT_MOTOR.set_dps(speed)                                      # Set speeds of motors
-        # RIGHT_MOTOR.set_dps(speed)
+        # Set speeds of motors
         LEFT_MOTOR.set_limits(POWER_LIMIT, speed)
         RIGHT_MOTOR.set_limits(POWER_LIMIT, speed)
         LEFT_MOTOR.set_position_relative(int(angle * ORIENT_TO_DEG))   # Rotate L Wheel +ve
