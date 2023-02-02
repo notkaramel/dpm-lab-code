@@ -368,7 +368,9 @@ class _Gamepad:
             if '.' in key:
                 part = key[1:].split('.')
                 index = int(part[0])
-                direction = -1 if int(part[1]) == 0 else +1
+                if part[1] == '4' or part[1] == '5':
+                    return self.joystick.get_hat(index)[int(part[1]) - 4]
+                direction = -1 if int(part[1])%2 == 0 else +1
                 axis = direction // 2
                 return max(self.joystick.get_hat(index)[axis] * direction, 0)
             else:
