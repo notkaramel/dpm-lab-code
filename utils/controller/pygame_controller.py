@@ -131,7 +131,7 @@ THREADING_OUTPUT = [None]
 
 class GamepadManager:
     MANAGER = None
-    SLEEP_INTERVAL = 0.5
+    SLEEP_INTERVAL = 0.01
 
     @classmethod
     def get_instance(cls):
@@ -144,7 +144,7 @@ class GamepadManager:
             raise RuntimeError(
                 "Cannot create a second instance of GamepadManager")
 
-        self.gamepads = {}
+        self._gamepads = {}
         self.assigners = []
         self.lock_assigners = threading.Lock()
         self.profiles = {}
@@ -172,20 +172,29 @@ class GamepadManager:
         self.assigners.append(assigner)
         self.lock_assigners.release()
 
+    @property
+    def gamepads(self):
+        return self._gamepads
+
     def process_events(self):
         try:
             while True:
                 # Handle adding and removing gamepads
-                event = pygame.event.poll()
-                if event.type == pygame.JOYDEVICEADDED:
+                try:
+                    event = pygame.event.poll()
+                except:
+                    event = None
+                if event is None:
+                    pass
+                elif event.type == pygame.JOYDEVICEADDED:
                     index = event.device_index
                     joystick = pygame.joystick.Joystick(index)
                     g = _Gamepad(joystick)
-                    self.gamepads[joystick.get_instance_id()] = g
-                if event.type == pygame.JOYDEVICEREMOVED:
-                    del self.gamepads[event.instance_id]
+                    self._gamepads[joystick.get_instance_id()] = g
+                elif event.type == pygame.JOYDEVICEREMOVED:
+                    del self._gamepads[event.instance_id]
 
-                for gamepad in self.gamepads.values():
+                for gamepad in self._gamepads.values():
                     self.lock_assigners.acquire()
                     for assigner in self.assigners:
                         assigner._attempt(gamepad)
