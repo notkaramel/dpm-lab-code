@@ -445,6 +445,8 @@ def mainloop(pre_update_func=None, sleep_interval=0.01):
     if WINDOW is not None and isopen():
         _start_threaded_target(pre_update_func, sleep_interval)
 
+import atexit
+atexit.register(stop)
 
 if __name__ == '__main__':
     import time

@@ -6,7 +6,6 @@ import json
 import re
 
 
-
 class Inputs(enum.Enum):
     DPAD_UP = enum.auto()
     DPAD_DOWN = enum.auto()
@@ -127,7 +126,6 @@ D-pad Right     - Button 14
 Capture Button  - Button 15
 """
 
-THREADING_OUTPUT = [None]
 
 class GamepadManager:
     MANAGER = None
@@ -199,7 +197,6 @@ class GamepadManager:
                     for assigner in self.assigners:
                         assigner._attempt(gamepad)
                     self.lock_assigners.release()
-                    THREADING_OUTPUT[0] = (gamepad.all())
 
                 time.sleep(self.SLEEP_INTERVAL)
 
@@ -297,25 +294,49 @@ class _Gamepad:
 
     @staticmethod
     def update():
+        """Updates the current state of all gamepads to the current output"""
         GamepadManager.update()
 
     def __init__(self, joystick):
+        """This _Gamepad must be initialized using a valid Pygame joystick as input."""
         self.joystick = joystick
         self.profile = {}
-        profile = GamepadManager.get_instance().profiles.get(self.type(), None)
+        profile = GamepadManager.get_instance().profiles.get(self.gamepad_type(), None)
 
         if profile is not None:
             self.set_profile(profile)
 
     def set_profile(self, profile):
+        """Sets the profile of this gamepad given a dictionary of mappings between 
+        Inputs Enum keys and Pygame joystick input identifiers (i.e. B0, A1, H1.5, H1.3)
+        """
         for key, identifiers in profile.items():
             for identifier in identifiers:
                 self.profile[Inputs[identifier]] = key
 
-    def type(self):
+    def gamepad_type(self):
+        """Gets the joystick type of this gamepad."""
         return self.joystick.get_name()
 
-    def all(self):
+    def raw_values(self):
+        pygame.event.pump()
+        B = []
+        H = []
+        A = []
+        L = []
+        for i in range(self.joystick.get_numbuttons()):
+            B.append(self.joystick.get_button(i))
+        for i in range(self.joystick.get_numhats()):
+            H.append(self.joystick.get_hat(i))
+        for i in range(self.joystick.get_numaxes()):
+            A.append(self.joystick.get_axis(i))
+        for i in range(self.joystick.get_numballs()):
+            L.append(self.joystick.get_ball(i))
+
+        return {'B': B, 'H': H, 'A': A, 'L': L}
+
+    def __repr__(self):
+        """Prints all raw Pygame input values."""
         text = ""
         pygame.event.pump()
         for i in range(self.joystick.get_numbuttons()):
@@ -330,19 +351,31 @@ class _Gamepad:
         return text.strip()
 
     def get(self, key):
+        """A universal get function that you should use.
+        It accepts either Pygame input identifiers (see _Gamepad.get_raw)
+        or Inputs Enum keys/names/indexes.
+
+        Valid inputs include:
+
+        "B0" for Button 0 (Not sure which button this will be)
+        "A" for the A button on an XBOX controller or Nintendo Switch controller
+        3 for the 4th Inupts Enum key, DPAD_RIGHT
+        Inputs.LEFT_STICK_X to get the x axis (-1 to +1) of the left analog stick
+        """
         pygame.event.pump()
 
         if re.fullmatch(_Gamepad.RAW_INPUT_PATTERN, key) is not None:
-            return self.get_value(key)
+            return self.get_raw(key)
         if type(key) != Inputs:
             key = Inputs.value(key)
         command: str = self.profile[key]  # B, A, H, L
-        return self.get_value(command)
+        return self.get_raw(command)
 
+    def get_raw(self, key):
+        """Retrieves the input value from the underlying Pygame joystick.
+        It also uses a special syntax that lets us split Axes and Hats into
+        component values:
 
-    def get_value(self, key):
-        """Retrieves the input value from the underlying joystick.
-        
         B - Button
         A - Axis
         H - Hat
@@ -353,6 +386,13 @@ class _Gamepad:
 
         A1.0 gets -Axis 1
         A1.1 gets +Axis 1
+
+        H1.0 gets -Axis X
+        H1.1 gets +Axis X
+        H1.2 gets -Axis Y
+        H1.3 gets +Axis Y
+        H1.4 gets Axis X of the hat as normal Axis
+        H1.5 gets Axis Y of the hat as normal Axis
         """
         if 'B' == key[0]:
             return self.joystick.get_button(int(key[1:]))
@@ -370,7 +410,7 @@ class _Gamepad:
                 index = int(part[0])
                 if part[1] == '4' or part[1] == '5':
                     return self.joystick.get_hat(index)[int(part[1]) - 4]
-                direction = -1 if int(part[1])%2 == 0 else +1
+                direction = -1 if int(part[1]) % 2 == 0 else +1
                 axis = direction // 2
                 return max(self.joystick.get_hat(index)[axis] * direction, 0)
             else:
@@ -399,22 +439,70 @@ class Gamepad:
         GamepadManager.get_instance().add_assigner(self)
 
     def _attempt(self, gamepad: _Gamepad):
-        if self.controller_type is not None and gamepad.type() != self.controller_type:
+        if self.controller_type is not None and gamepad.gamepad_type() != self.controller_type:
             return
         if all([gamepad.get(button) for button in self.button_combination]):
             self.gamepad = gamepad
 
     def unassign(self):
+        """Disables this Assigned Gamepad by detaching the physical gamepad from this object.
+
+        Utilizing the assigning key combination again, will reassign that physical gamepad.
+        """
         self.gamepad = None
 
     def get(self, key):
+        """Get the value of a button, given a key.
+
+        --Accepts multiple types of keys--
+
+        Inputs Enum Keys
+            Inputs.LEFT_STICK_X will get the left analog stick x axis
+        Inputs Enum Key Names
+            "L_BUMPER" will get the left click button on most controllers
+        Inputs Enum Key Indexes
+            3 will get the fourth Enum Key, DPAD_RIGHT
+
+
+        --Special Joystick Identifiers--
+
+        "B0" gets Button 0
+        "H1" gets (x, y) of the second Hat
+        "A2" gets the 3rd axis of a controller. -1 to +1. -1 is usually left and up 
+            on analog axis sticks
+        "A0.0" turns -1 to 0 to 1 on an axis to 1 to 0 to 0. So, if 
+            Axis 0 is the Left Stick X axis, then A0.0 will be 1 if the stick is pushed left,
+            0 if in the center, and 0 if towards the right.
+        "A0.1" turns -1, 0, 1 on an axis into 0, 0, 1. So, if
+            Axis 0 is the Left Stick X axis, then A0.1 will be 0 if the stick is left or center,
+            and fully +1 when pushed to the right.
+        "H0.0" and "H0.1" apply the axis splitting to the X component of the Hat.
+        "H0.2" and "H0.3" apply the axis splitting to the Y component of the Hat.
+        "H0.4" gives the X axis of the Hat like a normal Axis
+        "H0.5" gives the Y axis of the Hat like a normal Axis
+
+        """
         if self.gamepad is None:
             return None
         return self.gamepad.get(key)
 
+    def __repr__(self):
+        return f"Gamepad[combo({self.button_combination}), assigned:{self.gamepad.joystick.get_instance_id() if self.gamepad is not None else 'none'}]"
+
+    def raw_values(self):
+        """Gets all inputs from the gamepad if it exists.
+        Does not give proper labels/names to each input.
+        """
+        return None if self.gamepad is None else self.gamepad.raw_values()
+
 
 if __name__ == '__main__':
+    import telemetry
     GamepadManager.get_instance().init()
     gm = GamepadManager.get_instance()
     gamepad = Gamepad(['B0', 'B1'])
     GamepadManager.update()
+
+    def update():
+        telemetry.label('output', gm.gamepads)
+    telemetry.start_threaded(update)
