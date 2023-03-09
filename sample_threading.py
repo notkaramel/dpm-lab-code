@@ -1,77 +1,67 @@
-from threading import Thread
-from time import time, sleep
-from utils.brick import EV3ColorSensor, EV3UltrasonicSensor, Sensor, Motor
+import threading
+import time
+from utils.brick import EV3ColorSensor, EV3UltrasonicSensor, Motor, wait_ready_sensors
 
 # Preapre Motor and Sensors
-COLOR_SENSOR = EV3ColorSensor(1) # Port S1
+COLOR_SENSOR = EV3ColorSensor(1)   # Port S1
 US_SENSOR = EV3UltrasonicSensor(2) # Port S2
-MOTOR = Motor("A") # Motor in Port MA
+MOTOR = Motor("A")                 # Motor in Port MA
 
 # Wait for Sensor Initialization
-print("waiting for sensors")
-COLOR_SENSOR.wait_ready()
-US_SENSOR.wait_ready()
-print("sensors ready")
+wait_ready_sensors(True)
 
-# Set a dictionary to store sensor data.
-# None means no data.
+# Create a dictionary to store sensor data.
 SHARED_DATA = {'us': None, 'color': None}
 
-# Runs in background, polling the ultrasonic sensor
-# storing the data in its own space in SHARED_DATA
-def read_ultrasonic(shared):
-    try:
-        while True:
-            shared['us'] = US_SENSOR.get_value()
-            sleep(0.2)
-    except Exception:
-        return
 
-# Runs in background, polling the COLOR sensor
-# storing the data in its own space in SHARED_DATA
-def read_color(shared):
-    try:
-        while True:
-            rgb = COLOR_SENSOR.get_value()
-            if rgb is not None and len(rgb) >= 3:
-                shared['color'] = rgb[0]
-            sleep(0.2)
-    except Exception:
-        return
+def read_ultrasonic():
+    """Runs in background, polling the ultrasonic sensor"""
+    global SHARED_DATA
+
+    while True:
+        SHARED_DATA['us'] = US_SENSOR.get_cm()
+        time.sleep(0.01)
+def read_color():
+    """Runs in background, polling the color sensor"""
+    global SHARED_DATA
+
+    while True:
+        SHARED_DATA['color'] = COLOR_SENSOR.get_rgb()
+        time.sleep(0.01)
 
 def main():
-    # Starting the threads for reading sensors
+    """Your main() function is the Main Thread.
+    t1 and t2 are Child Threads (daemon also).
+
+    When Main Thread finishes/exits, then Child Threads exit automatically also.
+    """
+    global SHARED_DATA
+    
     print("starting sensor readings")
-    t1 = Thread(target=read_ultrasonic, args=[SHARED_DATA])
-    t2 = Thread(target=read_color, args=[SHARED_DATA])
-    t1.start() # will update SHARED_DATA['us'] in the background
-    t2.start() # will update SHARED_DATA['color'] in the background
+    t1 = threading.Thread(target=read_ultrasonic, daemon=True)
+    t2 = threading.Thread(target=read_color,      daemon=True)
+    t1.start() # must start threads also
+    t2.start()
 
-    # Main loop is usually where primary decisions and actions are done.
-    # Threads are for "background tasks" that run while you perform
-    # "main loop" actions.
-    motor_power = 0 # power value 0.0 to 1.0
+    MOTOR.set_dps(0) # Stops motor movement
     while True:
+        dist = SHARED_DATA['us']     # Always pull out a value from the dictionary first
+        color = SHARED_DATA['color']
 
-        # always sets motor_power to either 0.5 or 0
-        if SHARED_DATA['us'] is not None and SHARED_DATA['us'] < 5:
-            motor_power = 50
-        else:
-            motor_power = 0
+        speed = 0
+        if dist is not None:
+            speed = dist + 90
+        
+        if color[0] > 100:
+            speed = -speed
 
-        # either leaves the motor_power to normal direction, or switches it to negative
-        if SHARED_DATA['color'] is not None and SHARED_DATA['color'] > 100:
-            motor_power = -motor_power
+        MOTOR.set_dps(speed)
 
-        # Motors keep the power that they were last given
-        # In this case, we always set power of motor to the newest
-        # motor_power value
-        MOTOR.set_power(motor_power)
-        print("Data:", motor_power, SHARED_DATA)
-        sleep(0.2)
+
+        time.sleep(0.1) # This time is different from the sensors' times
 
 if __name__ == '__main__':
     try:
         main()
-    except Exception:
-        pass # catch all exceptions, like Ctrl + C
+    except KeyboardInterrupt:
+        exit()

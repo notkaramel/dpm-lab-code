@@ -128,6 +128,9 @@ def _on_closing():
     _TK_THREAD = None
     LABELS = {}
 
+def wait_ready(timeout=10):
+    while not isopen():
+        time.sleep(0.1)
 
 def start():
     """Open the telemetry window.
@@ -174,6 +177,7 @@ def start_threaded(pre_update_func=None, sleep_interval=0.01):
         _USER_THREAD = threading.Thread(target=_start_threaded_target, args=(
             pre_update_func, sleep_interval), daemon=True)
         _USER_THREAD.start()
+        time.sleep(0.2)
         return True
     return False
 

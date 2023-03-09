@@ -1,3 +1,11 @@
+"""
+Module for accessing Gamepads attached to a computer or the robot.
+
+Relies on PyGame being installed
+
+Author: Ryan Au
+"""
+
 import pygame
 import threading
 import time

@@ -19,7 +19,12 @@ from utils.brick import Motor
 
 motor_left = Motor("A")
 
-motor_left.set_power(50)
+
+motor_left.set_dps(180) # Motor starts to rotate 180 deg/sec constantly without stopping
+print("motor_left.set_dps(180)")
+input("# Press any key to continue...")
+
+motor_left.set_power(50) # Set power to 50% of maximum voltage input, constant rotation starts
 print("motor_left.set_power(50)")
 input("# Press any key to continue...")
 
@@ -71,7 +76,6 @@ dps=360, rotation_dist=1080
 dps=540, rotation_dist=1440
 """
 for i, speed in enumerate([180, 360, 180*3]):
-    motor_left.set_dps(speed) # overrides previous limits. Use limits or set_dps
     motor_left.set_position_relative(360 * (i+2))
     motor_left.wait_is_moving()
     while motor_left.is_moving():

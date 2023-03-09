@@ -19,9 +19,8 @@ from threading import Thread
 import os
 import time
 
-telemetry.start()  # open and create telemetry window
+telemetry.start_threaded()  # open and create telemetry window
 telemetry.resize(200, 100)
-
 SLIDER = telemetry.create_slider(0, 100, 51)
 BUTTON = telemetry.create_button("Ok")
 
@@ -32,7 +31,7 @@ def main():
     """
     try:
         i = 1
-        while True:
+        while telemetry.isopen():
             telemetry.label('text', '.'*i)
             telemetry.label('slider', SLIDER.get_value(), showkey=True)
 
@@ -40,9 +39,7 @@ def main():
             time.sleep(1)
             i += 1
     except KeyboardInterrupt:
-        os._exit(0)
+        exit(0)
 
-t = Thread(target=main, daemon=True)
-t.start()
-
-telemetry.mainloop()
+if __name__ == '__main__':
+    main()
