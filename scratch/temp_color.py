@@ -1,27 +1,41 @@
 from statistics import mean, stdev
 from collections import Counter, defaultdict
 import math
+import random
 
 
 def square(x):
+    """Returns x to the power of 2"""
     return x*x
 
 
 def vector_length(vector):
+    """Takes a vector of any size and gives the length of the vector"""
     return math.sqrt(sum(map(square, vector)))
 
 
 def normalize(vector):
+    """Takes a vector of any size and turns it into a unit vector"""
     n = vector_length(vector)
     return [x/n for x in vector]
 
 
 def text_to_lists(text, row_length=3):
+    """Convert text to a 2D list
+
+    Inner lists are separated by newlines, and elements
+    of an inner list are separated by commas.
+    """
     return [tuple(map(int, line.strip().split(',')[:row_length]))
             for line in text.strip().split('\n')]
 
+
 def circ_dist(angle1, angle2):
-    '''
+    """Returns the closest between to angles on a circle.
+    Works in degrees, not radians.
+
+    Example: the closest distance between 5 and 355 deg is 10 deg, not 350
+
     >>> circ_dist(60, 300)
     120
     >>> circ_dist(300, 60)
@@ -32,10 +46,35 @@ def circ_dist(angle1, angle2):
     10
     >>> circ_dist(120, 240)
     120
-    '''
-    return min((angle1-angle2)%360, (angle2-angle1)%360)
+    """
+    return min((angle1-angle2) % 360, (angle2-angle1) % 360)
+
 
 class RGBData:
+    """A way to store an RGB data and easily convert it to different formats
+
+    Initialization:
+    RGBData(50, 100, 20) # In order of R, G, and B color channels
+    RGBData.from_sample([50, 100, 20])
+    RGBData.poll(color_sensor) # color_sensor needs a .get_rgb() function
+
+    RGBData.from_samples([[50, 100, 20], [50, 100, 30]]) # List of RGBData objects
+    RGBData.from_text('50,100,20\n30,40,10') # List of RGBData objects
+    RGBData.from_csv('some_file.csv') # Each row is a comma-separated list of 3 values ideally
+
+    Usage:
+    r, g, b = 3, 4, 5
+    dat = RGBData(r, g, b)
+
+    dat.brightness => vector_length of <r, g, b>
+    dat.normalized => unit vector version of <r, g, b>
+    dat.hsv        => HSV version
+    dat.r, dat.g, dat.b => access each original color channel
+    list(dat)      => gives [r, g, b]
+
+    print(dat)     => prints "RGB[r, g, b]"
+
+    """
 
     @staticmethod
     def poll(sensor):
@@ -126,7 +165,30 @@ class RGBData:
     def __repr__(self):
         return f'RGB[{round(self.r, 2)}, {round(self.g, 2)}, {round(self.b, 2)}]'
 
+
 class ColorProfile:
+    """A method of storing the profile of a color as the mean and 
+    standard deviation of its color channels.
+
+
+    # name, rgb means, rgb stdev, and the 'minimum threshold' used for some processing functions
+    profile = ColorProfile('red', [5, 6, 7], [0.1, 0.1, 0.1], 4)
+
+    # name, raw collected data, 'minimum threshold' again
+    profile = ColorProfile.from_data('red', [[1,2,3], [2,3,4]], 4)
+
+    # Loading data from a CSV
+    # filename, name, minimum threshold, 'num_terms' set to 3 for 3 rgb channels
+    # (there is little reason to change 'num_terms' as it is the num of columns from the csv)
+    profile = ColorProfile.from_csv('data.csv', 'red', 4, 3)
+
+
+    # Randomly generates fake data based on means and stdevs
+    # Can be useful if data does not exist, but means and stdevs do
+    profile.generate_data() # Default: 500 iterations
+    profile.generate_data(100)
+    """
+
     UNKNOWN = None
     _DATA_GEN_SIZE = 500
 
@@ -148,32 +210,32 @@ class ColorProfile:
 
     def __init__(self, name, color_mean=None, color_stdev=None, color_threshold=3):
         self.name = name
-        self.color_mean = None if color_mean is None else RGBData.from_sample(color_mean)
+        self.color_mean = None if color_mean is None else RGBData.from_sample(
+            color_mean)
         self.color_stdev = color_stdev
         self.color_threshold = color_threshold
 
         if color_mean is not None and color_stdev is not None:
-            self.gen_func = [ColorProfile.gaussian_func(
-                m, s) for m, s in zip(color_mean, color_stdev)]
+            self.gen_func = [ColorProfile.gaussian_func(m, s) for m, s in zip(color_mean, color_stdev)]
 
         self.data = None
 
-    def get_data(self):
-        if self.data is None and self.gen_func is not None:
-            # Generate the data based on the gaussian functions
-            for i in range(self._DATA_GEN_SIZE):
-                pass
-        return self.data
+    def generate_data(self, iterations=500):
+        return [
+            [random.gauss(m, s) for m, s in zip(self.color_mean.normalized, self.color_stdev)] for i in range(500)
+        ]
 
     @staticmethod
     def gaussian_func(mean_val, stdev_val):
+        """1D Gaussian Distribution Function
+        Area underneath the curve adds up to ~100
+        """
         a = mean_val
         s = stdev_val
 
         def func(x):
             term = - (x - a)**2 / (2 * s**2)
             pow = math.exp(term)
-            # return pow
             return 1 / math.sqrt(2 * math.pi * s**2) * pow
 
         return func
@@ -186,6 +248,11 @@ ColorProfile.UNKNOWN = ColorProfile("unknown")
 
 
 class ColorGroup:
+    """An object to group together ColorProfile objects and 
+    apply processing functions to them.
+    
+    """
+
     def __init__(self, profiles=None):
         if profiles is not None:
             self.profiles = [profile for profile in list(
@@ -213,7 +280,7 @@ class ColorGroup:
     def raw_dist(profile: ColorProfile, color_sample):
         color_sample = normalize(color_sample)
         return vector_length([abs(c-m) for c, m in zip(color_sample, profile.color_mean.normalized)])
-    
+
     @staticmethod
     def hsv_dist(profile: ColorProfile, color_sample):
         """Gives an altered version of HSV.
@@ -231,6 +298,28 @@ class ColorGroup:
 
 
 class ColorDetector:
+    """ColorDetector uses a group ColorProfiles and preset functions to identify new color samples.
+    
+    Requires specification of:
+    - a processor function to compare the new sample to each existing profile 
+        (outputs some value per profile)
+    - a detector function to choose one of the profiles 
+        (based on the comparison result)
+
+    Examples:
+    
+    # Euclidean distance between normalized RGB profile and RGB sample. Chooses color with shortest distance detected.
+    detect0 = ColorDetector(profiles, ColorGroup.raw_dist, ColorDetector.by_min_value)
+
+    # Every distance comparison is in units of standard deviations. Chooses color with shortest distance.
+    # Gives unknown if sample is too far away from any one profile (uses minimum_threshold on profiles)
+    detect1 = ColorDetector(profiles, ColorGroup.gaussian_dist, ColorDetector.by_min_with_threshold)
+
+    # Uses HSV to compute distances (H, S, V) where H is the degrees distance from the profile.
+    # Takes the shortest distance found.
+    detect2 = ColorDetector(profiles, ColorGroup.hsv_dist, ColorDetector.by_min_value)
+    """
+
     def __init__(self, profiles, processor_func, detector_func):
         self.color_group = ColorGroup(profiles)
         self.processor_func = processor_func
