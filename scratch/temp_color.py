@@ -20,14 +20,29 @@ def normalize(vector):
     return [x/n for x in vector]
 
 
-def text_to_lists(text, row_length=3):
+def text_to_lists(text, row_length=3, row_range=None):
     """Convert text to a 2D list
 
     Inner lists are separated by newlines, and elements
     of an inner list are separated by commas.
+
+    >>> ls = [(1,2,3), (3,4,5), (4,5,6)]
+    >>> conv = (lambda x : '\\n'.join([ ','.join(map(str, row)) for row in x ]))
+    >>> text_to_lists(conv(ls)) == ls
+    True
+    >>> text_to_lists(conv(ls[:2]), row_range=range(2)) == ls[:2]
+    True
+    >>> text_to_lists(conv(ls[1:3]), row_range=range(1,3)) == ls[1:3]
+    True
+    >>> text_to_lists(conv(ls[0:5:2]), row_range=range(0,5,2)) == ls[0:5:2]
+    True
     """
+    list_text = text.strip().split('\n')
+    if row_range is not None and isinstance(row_range, range):
+        list_text = list_text[row_range.start: row_range.stop: row_range.step]
+
     return [tuple(map(int, line.strip().split(',')[:row_length]))
-            for line in text.strip().split('\n')]
+            for line in list_text]
 
 
 def circ_dist(angle1, angle2):
@@ -92,13 +107,13 @@ class RGBData:
         return [RGBData.from_sample(sample) for sample in rgb_samples]
 
     @staticmethod
-    def from_text(text):
-        return RGBData.from_samples(text_to_lists(text))
+    def from_text(text, row_length=3, row_range=None):
+        return RGBData.from_samples(text_to_lists(text, row_length=row_length, row_range=row_range))
 
     @staticmethod
-    def from_csv(filename):
+    def from_csv(filename, num_terms=3, row_range=None):
         with open(filename, 'r') as f:
-            return RGBData.from_text(f.read())
+            return RGBData.from_text(f.read(), row_length=num_terms, row_range=row_range)
 
     def __init__(self, r, g, b):
         self._r = r
@@ -193,9 +208,10 @@ class ColorProfile:
     _DATA_GEN_SIZE = 500
 
     @staticmethod
-    def from_csv(filename, name, color_threshold=3, num_terms=3):
+    def from_csv(filename, name, color_threshold=3, num_terms=3, row_range=None):
         with open(filename, 'r') as f:
-            data = text_to_lists(f.read())
+            data = text_to_lists(
+                f.read(), row_length=num_terms, row_range=row_range)
             return ColorProfile.from_data(name, data, color_threshold)
 
     @staticmethod
@@ -216,19 +232,28 @@ class ColorProfile:
         self.color_threshold = color_threshold
 
         if color_mean is not None and color_stdev is not None:
-            self.gen_func = [ColorProfile.gaussian_func(m, s) for m, s in zip(color_mean, color_stdev)]
+            self.gen_func = [ColorProfile.gaussian_func(
+                m, s) for m, s in zip(color_mean, color_stdev)]
 
         self.data = None
 
     def generate_data(self, iterations=500):
+        """Randomly generates a 2D list of RGB values based on the current mean and stdev for each RGB colors.
+        
+        Imperfect, but potentially useful if random data is needed for some for of statistics/testing.
+        """
         return [
             [random.gauss(m, s) for m, s in zip(self.color_mean.normalized, self.color_stdev)] for i in range(500)
         ]
 
     @staticmethod
     def gaussian_func(mean_val, stdev_val):
-        """1D Gaussian Distribution Function
+        """Creates a 1D Gaussian Distribution Function
         Area underneath the curve adds up to ~100
+
+        func1 = ColorProfile.gaussian_func(0.4, 0.2) # mean and stdev
+
+        func1(0.4) # gives the highest probability of an x-value
         """
         a = mean_val
         s = stdev_val
@@ -250,7 +275,7 @@ ColorProfile.UNKNOWN = ColorProfile("unknown")
 class ColorGroup:
     """An object to group together ColorProfile objects and 
     apply processing functions to them.
-    
+
     """
 
     def __init__(self, profiles=None):
@@ -299,7 +324,7 @@ class ColorGroup:
 
 class ColorDetector:
     """ColorDetector uses a group ColorProfiles and preset functions to identify new color samples.
-    
+
     Requires specification of:
     - a processor function to compare the new sample to each existing profile 
         (outputs some value per profile)
@@ -307,7 +332,7 @@ class ColorDetector:
         (based on the comparison result)
 
     Examples:
-    
+
     # Euclidean distance between normalized RGB profile and RGB sample. Chooses color with shortest distance detected.
     detect0 = ColorDetector(profiles, ColorGroup.raw_dist, ColorDetector.by_min_value)
 
