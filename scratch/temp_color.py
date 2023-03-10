@@ -234,7 +234,7 @@ class ColorProfile:
         self.name = name
         self.color_mean = RGBData.UNKNOWN if color_mean is None else RGBData.from_sample(
             color_mean)
-        self.color_stdev = color_stdev
+        self.color_stdev = (1, 1, 1) if color_stdev is None else color_stdev
         self.color_threshold = color_threshold
 
         if color_mean is not None and color_stdev is not None:
