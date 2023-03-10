@@ -140,7 +140,10 @@ class RGBData:
     def normalized(self):
         if not hasattr(self, '_normal'):
             n = self.length
-            self._normal = (self.r/n, self.g/n, self.b/n)
+            if n == 0:
+                self._normal = (0, 0, 0)
+            else:
+                self._normal = (self.r/n, self.g/n, self.b/n)
         return self._normal
 
     @property
