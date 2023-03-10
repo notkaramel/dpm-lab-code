@@ -16,7 +16,7 @@ try:
             while marker.is_pressed(): time.sleep(0.1)
         if touch.is_pressed():
             dat = RGBData.poll(color)
-            print(f"{dat} <= {[round(c, 3) for c in dat.normalized]}")
+            print(f"{dat} <= {[round(c, 3) for c in dat.hsv]}")
             time.sleep(0.5)
         time.sleep(0.1)
 except KeyboardInterrupt:
