@@ -45,3 +45,20 @@ try:
         time.sleep(0.1)
 except KeyboardInterrupt:
     print([ (p.color_mean, p.color_stdev) for p in profiles_list])
+
+
+"""
+Red -    0.97 0.17 0.14 | 0.0046 0.0203 0.0357
+Orange - 0.96 0.26 0.13 | 0.0065 0.0199 0.0251
+Purple - 0.93 0.17 0.33 | 0.0131 0.0199 0.0383
+Blue -   0.30 0.47 0.83 | 0.0368 0.0293 0.0218
+Yellow - 0.73 0.67 0.11 | 0.0182 0.0209 0.0068
+Green -  0.29 0.92 0.26 | 0.0160 0.0116 0.0261
+
+Red -    
+Orange - 
+Purple - 
+Blue -   
+Yellow - 
+Green  - 
+"""

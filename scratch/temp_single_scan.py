@@ -12,7 +12,7 @@ try:
     while True:
         if touch.is_pressed():
             dat = RGBData.poll(color)
-            print(f"{dat} <= {dat._dat}")
+            print(f"{dat} <= {dat.hsv}")
             time.sleep(0.5)
         time.sleep(0.1)
 except KeyboardInterrupt:
