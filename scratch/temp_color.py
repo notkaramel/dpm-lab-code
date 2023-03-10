@@ -17,6 +17,8 @@ def vector_length(vector):
 def normalize(vector):
     """Takes a vector of any size and turns it into a unit vector"""
     n = vector_length(vector)
+    if n == 0:
+        return [0, 0, 0]
     return [x/n for x in vector]
 
 
@@ -300,7 +302,11 @@ class ColorGroup:
         func is the type function(ColorProfile, List[float]) -> Any
         color_sample is the type List[float]
         """
-        return {profile: func(profile, color_sample) for profile in self.profiles}
+        try:
+            return {profile: func(profile, color_sample) for profile in self.profiles}
+        except Exception as error:
+            print(error)
+            return None
 
     @staticmethod
     def gaussian_dist(profile: ColorProfile, color_sample):
@@ -358,7 +364,12 @@ class ColorDetector:
 
     def determine(self, sample):
         data = self.color_group.apply(self.processor_func, sample)
-        return self.detector_func(data)
+        if data is not None:
+            try:
+                return self.detector_func(data)
+            except Exception as error:
+                print(error)
+        return None
 
     @staticmethod
     def by_min_value(data_dict: dict):
