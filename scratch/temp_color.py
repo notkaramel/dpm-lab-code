@@ -91,6 +91,8 @@ class RGBData:
 
     """
 
+    UNKNOWN = None
+
     @staticmethod
     def poll(sensor):
         if hasattr(sensor, 'get_rgb'):
@@ -180,6 +182,7 @@ class RGBData:
     def __repr__(self):
         return f'RGB[{round(self.r, 2)}, {round(self.g, 2)}, {round(self.b, 2)}]'
 
+RGBData.UNKNOWN = RGBData(0, 0, 0)
 
 class ColorProfile:
     """A method of storing the profile of a color as the mean and 
@@ -226,7 +229,7 @@ class ColorProfile:
 
     def __init__(self, name, color_mean=None, color_stdev=None, color_threshold=3):
         self.name = name
-        self.color_mean = None if color_mean is None else RGBData.from_sample(
+        self.color_mean = RGBData.UNKNOWN if color_mean is None else RGBData.from_sample(
             color_mean)
         self.color_stdev = color_stdev
         self.color_threshold = color_threshold
