@@ -185,7 +185,7 @@ class RGBData:
     def __repr__(self):
         return f'RGB[{round(self.r, 2)}, {round(self.g, 2)}, {round(self.b, 2)}]'
 
-RGBData.UNKNOWN = RGBData(0, 0, 0)
+RGBData.UNKNOWN = RGBData(1, 1, 1)
 
 class ColorProfile:
     """A method of storing the profile of a color as the mean and 
