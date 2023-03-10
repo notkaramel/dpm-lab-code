@@ -44,4 +44,4 @@ try:
         print(detector.determine(dat))
         time.sleep(0.1)
 except KeyboardInterrupt:
-    pass
+    print([ (p.color_mean, p.color_stdev) for p in profiles_list])
