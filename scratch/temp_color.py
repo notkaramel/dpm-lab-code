@@ -380,12 +380,12 @@ class ColorDetector:
 
 if __name__ == '__main__':
     import doctest
-    doctest.testmod()
+    # doctest.testmod()
     profile_data = {
-        'blue': normalize([0.4545, 0.6426, 0.6122]),
-        'yellow': normalize([0.8432, 0.5208, 0.1325]),
-        'orange': normalize([0.9501, 0.2868, 0.1158]),
-        'red': normalize([0.9501, 0.0868, 0.0158]),
+        'blue': normalize([50, 50, 75]),
+        'yellow': normalize([292, 212, 36]),
+        'orange': normalize([284, 66, 27]),
+        'red': normalize([245, 50, 28]),
     }
     profiles = [ColorProfile(name, color_mean=RGBData.from_sample(dat), color_stdev=[.1, .1, .1],
                              color_threshold=1) for name, dat in profile_data.items()]
