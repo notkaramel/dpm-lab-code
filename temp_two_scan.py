@@ -24,13 +24,21 @@ try:
             print(f"Color 1: {dat} <= {[round(c, 3) for c in dat.normalized]}")
 
             samples1.append(dat)
-            profiles_list[0] = ColorProfile.from_data("Color 1", samples1)
+            try:
+                profiles_list[0] = ColorProfile.from_data("Color 1", samples1)
+            except:
+                pass
+
             time.sleep(0.5)
         if touch2.is_pressed():
             print(f"Color 2: {dat} <= {[round(c, 3) for c in dat.normalized]}")
 
             samples2.append(dat)
-            profiles_list[1] = ColorProfile.from_data("Color 2", samples2)
+            try:
+                profiles_list[1] = ColorProfile.from_data("Color 2", samples2)
+            except:
+                pass
+
             time.sleep(0.5)
 
         print(detector.determine(dat))
