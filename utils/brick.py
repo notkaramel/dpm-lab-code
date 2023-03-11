@@ -805,7 +805,6 @@ class Motor:
         dps - The target speed in degrees per second
         """
         self.brick.set_motor_dps(self.port, dps)
-        self.set_limits(dps=dps)
 
     def set_limits(self, power=0, dps=0):
         """

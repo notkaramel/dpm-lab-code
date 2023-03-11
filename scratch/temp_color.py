@@ -32,11 +32,11 @@ def text_to_lists(text, row_length=3, row_range=None):
     >>> conv = (lambda x : '\\n'.join([ ','.join(map(str, row)) for row in x ]))
     >>> text_to_lists(conv(ls)) == ls
     True
-    >>> text_to_lists(conv(ls[:2]), row_range=range(2)) == ls[:2]
+    >>> text_to_lists(conv(ls), row_range=range(2)) == ls[:2]
     True
-    >>> text_to_lists(conv(ls[1:3]), row_range=range(1,3)) == ls[1:3]
+    >>> text_to_lists(conv(ls), row_range=range(1,3)) == ls[1:3]
     True
-    >>> text_to_lists(conv(ls[0:5:2]), row_range=range(0,5,2)) == ls[0:5:2]
+    >>> text_to_lists(conv(ls), row_range=range(0,5,2)) == ls[0:5:2]
     True
     """
     list_text = text.strip().split('\n')
@@ -419,7 +419,7 @@ class ColorDetector:
 
 if __name__ == '__main__':
     import doctest
-    # doctest.testmod()
+    doctest.testmod()
     profile_data = {
         'blue': normalize([50, 50, 75]),
         'yellow': normalize([292, 212, 36]),
