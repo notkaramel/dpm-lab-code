@@ -66,6 +66,28 @@ def circ_dist(angle1, angle2):
     """
     return min((angle1-angle2) % 360, (angle2-angle1) % 360)
 
+def hsv_to_rgb(hsv):
+    H, S, V = hsv
+    M = 255 * V
+    m = M*(1-S)
+
+    z = (M-m) * (1 - abs((H/60)%2 - 1))
+
+    zm = z + m
+    if 0 <= H < 60:
+        return M, zm, m
+    elif 60 <= H and H < 120:
+        return zm, M, m
+    elif 120 <= H and H < 180:
+        return m, M, zm
+    elif 180 <= H and H < 240:
+        return m, zm, M
+    elif 240 <= H and H < 300:
+        return zm, m, M
+    elif 300 <= H and H < 360:
+        return M, m, zm
+
+
 
 class RGBData:
     """A way to store an RGB data and easily convert it to different formats
