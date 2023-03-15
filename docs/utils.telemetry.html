@@ -20,11 +20,12 @@ Author:&nbsp;Ryan&nbsp;Au</tt></p>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
     
 <tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="threading.html">threading</a><br>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="atexit.html">atexit</a><br>
+<a href="threading.html">threading</a><br>
 </td><td width="25%" valign=top><a href="time.html">time</a><br>
-</td><td width="25%" valign=top><a href="tkinter.html">tkinter</a><br>
+<a href="tkinter.html">tkinter</a><br>
 </td><td width="25%" valign=top><a href="tkinter.ttk.html">tkinter.ttk</a><br>
-</td></tr></table></td></tr></table><p>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ee77aa">
 <td colspan=3 valign=bottom>&nbsp;<br>
@@ -99,24 +100,41 @@ Data descriptors defined here:<br>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
     
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><dl><dt><a name="-add"><strong>add</strong></a>(key, data, showkey=False)</dt><dd><tt>Adds/Sets&nbsp;data&nbsp;by&nbsp;a&nbsp;key&nbsp;to&nbsp;the&nbsp;telemetry&nbsp;window</tt></dd></dl>
- <dl><dt><a name="-clear"><strong>clear</strong></a>()</dt><dd><tt>Destroy&nbsp;and&nbsp;remove&nbsp;all&nbsp;LABELS&nbsp;of&nbsp;telemetry</tt></dd></dl>
- <dl><dt><a name="-create_button"><strong>create_button</strong></a>(name, func=None)</dt><dd><tt>Adds&nbsp;a&nbsp;button&nbsp;to&nbsp;the&nbsp;telemetry&nbsp;window&nbsp;AND&nbsp;returns&nbsp;the&nbsp;button&nbsp;<a href="builtins.html#object">object</a>&nbsp;added</tt></dd></dl>
- <dl><dt><a name="-create_slider"><strong>create_slider</strong></a>(lower, upper=None, value=None, func=None)</dt><dd><tt>Adds&nbsp;a&nbsp;slider&nbsp;to&nbsp;the&nbsp;telemetry&nbsp;window&nbsp;AND&nbsp;returns&nbsp;the&nbsp;slider&nbsp;<a href="builtins.html#object">object</a>&nbsp;added<br>
-&nbsp;<br>
-<a href="#-create_slider">create_slider</a>(50)&nbsp;creates:&nbsp;0&lt;---25---&gt;50<br>
-<a href="#-create_slider">create_slider</a>(25,&nbsp;50)&nbsp;creates:&nbsp;25&lt;---37---&gt;50<br>
-<a href="#-create_slider">create_slider</a>(-100,&nbsp;100,&nbsp;50)&nbsp;creates:&nbsp;-100&lt;---50---&gt;100</tt></dd></dl>
+<td width="100%"><dl><dt><a name="-add"><strong>add</strong></a> = inner(*args)</dt></dl>
+ <dl><dt><a name="-clear"><strong>clear</strong></a> = inner(*args)</dt></dl>
+ <dl><dt><a name="-clear_labels"><strong>clear_labels</strong></a>()</dt></dl>
+ <dl><dt><a name="-create_button"><strong>create_button</strong></a> = inner(*args)</dt></dl>
+ <dl><dt><a name="-create_slider"><strong>create_slider</strong></a> = inner(*args)</dt></dl>
  <dl><dt><a name="-isopen"><strong>isopen</strong></a>()</dt><dd><tt>Determines&nbsp;if&nbsp;the&nbsp;telemtry&nbsp;window&nbsp;has&nbsp;been&nbsp;opened&nbsp;or&nbsp;closed</tt></dd></dl>
- <dl><dt><a name="-label"><strong>label</strong></a> = inner(*args)</dt></dl>
- <dl><dt><a name="-mainloop"><strong>mainloop</strong></a>()</dt><dd><tt>Starts&nbsp;a&nbsp;while&nbsp;loop&nbsp;that&nbsp;calls&nbsp;update&nbsp;for&nbsp;you!&nbsp;<br>
-Usage&nbsp;of&nbsp;telemetry.update&nbsp;not&nbsp;needed&nbsp;when&nbsp;using&nbsp;this</tt></dd></dl>
- <dl><dt><a name="-remote"><strong>remote</strong></a>(func, *args)</dt></dl>
- <dl><dt><a name="-remote_capable"><strong>remote_capable</strong></a>(func)</dt></dl>
- <dl><dt><a name="-resize"><strong>resize</strong></a>(width=100, height=100)</dt><dd><tt>Resize&nbsp;telemtry&nbsp;to&nbsp;a&nbsp;set&nbsp;width&nbsp;and&nbsp;height&nbsp;in&nbsp;pixels</tt></dd></dl>
- <dl><dt><a name="-start"><strong>start</strong></a>()</dt><dd><tt>Open&nbsp;the&nbsp;telemetry&nbsp;window</tt></dd></dl>
- <dl><dt><a name="-stop"><strong>stop</strong></a>()</dt><dd><tt>Closes&nbsp;telemtry&nbsp;window</tt></dd></dl>
- <dl><dt><a name="-update"><strong>update</strong></a>(retries=1)</dt><dd><tt>Updates&nbsp;display&nbsp;with&nbsp;latest&nbsp;telemetry&nbsp;values</tt></dd></dl>
+ <dl><dt><a name="-label"><strong>label</strong></a>(key, data, showkey=False)</dt><dd><tt>Adds&nbsp;a&nbsp;textual&nbsp;Label&nbsp;based&nbsp;on&nbsp;a&nbsp;key&nbsp;to&nbsp;the&nbsp;telemetry&nbsp;window.<br>
+&nbsp;<br>
+If&nbsp;the&nbsp;key&nbsp;has&nbsp;not&nbsp;been&nbsp;used&nbsp;before,&nbsp;then&nbsp;it&nbsp;will&nbsp;create&nbsp;a&nbsp;new&nbsp;Label<br>
+If&nbsp;the&nbsp;key&nbsp;has&nbsp;been&nbsp;used&nbsp;before,&nbsp;then&nbsp;it&nbsp;will&nbsp;change&nbsp;the&nbsp;old&nbsp;Label<br>
+&nbsp;<br>
+If&nbsp;showkey&nbsp;==&nbsp;True,&nbsp;then&nbsp;Label&nbsp;will&nbsp;have&nbsp;the&nbsp;format&nbsp;"key:&nbsp;data"<br>
+If&nbsp;showkey&nbsp;==&nbsp;False,&nbsp;then&nbsp;Label&nbsp;will&nbsp;have&nbsp;the&nbsp;format&nbsp;"data"&nbsp;only</tt></dd></dl>
+ <dl><dt><a name="-mainloop"><strong>mainloop</strong></a>(pre_update_func=None, sleep_interval=0.01)</dt><dd><tt>Starts&nbsp;a&nbsp;while&nbsp;loop&nbsp;that&nbsp;calls&nbsp;update&nbsp;for&nbsp;you!&nbsp;<br>
+Usage&nbsp;of&nbsp;telemetry.update&nbsp;not&nbsp;needed&nbsp;when&nbsp;using&nbsp;this<br>
+&nbsp;<br>
+pre_update_func&nbsp;is&nbsp;a&nbsp;function&nbsp;with&nbsp;no&nbsp;arguments,&nbsp;which&nbsp;will&nbsp;be<br>
+executed&nbsp;before&nbsp;every&nbsp;call&nbsp;to&nbsp;telemetry.update</tt></dd></dl>
+ <dl><dt><a name="-remote"><strong>remote</strong></a>(func, *args)</dt><dd><tt>When&nbsp;outside&nbsp;the&nbsp;telemetry&nbsp;thread&nbsp;(thread&nbsp;where&nbsp;telemetry.<a href="#-start">start</a>()&nbsp;executed)<br>
+This&nbsp;will&nbsp;queue&nbsp;the&nbsp;function&nbsp;func&nbsp;for&nbsp;execution&nbsp;during&nbsp;the&nbsp;telemetry.<a href="#-update">update</a>()&nbsp;call.</tt></dd></dl>
+ <dl><dt><a name="-remote_capable"><strong>remote_capable</strong></a>(func)</dt><dd><tt>A&nbsp;function&nbsp;decorator,&nbsp;used&nbsp;to&nbsp;allow&nbsp;functions&nbsp;to&nbsp;run&nbsp;in&nbsp;both<br>
+main&nbsp;telemetry&nbsp;thread&nbsp;and&nbsp;outside&nbsp;threads.</tt></dd></dl>
+ <dl><dt><a name="-resize"><strong>resize</strong></a> = inner(*args)</dt></dl>
+ <dl><dt><a name="-start"><strong>start</strong></a>()</dt><dd><tt>Open&nbsp;the&nbsp;telemetry&nbsp;window.<br>
+&nbsp;<br>
+Thread&nbsp;that&nbsp;runs&nbsp;this&nbsp;function,&nbsp;will&nbsp;be&nbsp;called&nbsp;the&nbsp;telemetry&nbsp;thread.</tt></dd></dl>
+ <dl><dt><a name="-start_threaded"><strong>start_threaded</strong></a>(pre_update_func=None, sleep_interval=0.01)</dt><dd><tt>Starts&nbsp;the&nbsp;telemetry&nbsp;window&nbsp;in&nbsp;a&nbsp;separate&nbsp;thread.<br>
+&nbsp;<br>
+pre_update_func&nbsp;is&nbsp;a&nbsp;function&nbsp;with&nbsp;no&nbsp;arguments,&nbsp;which&nbsp;will&nbsp;be<br>
+executed&nbsp;before&nbsp;every&nbsp;call&nbsp;to&nbsp;telemetry.update</tt></dd></dl>
+ <dl><dt><a name="-stop"><strong>stop</strong></a> = inner(*args)</dt></dl>
+ <dl><dt><a name="-update"><strong>update</strong></a>(retries=1)</dt><dd><tt>Updates&nbsp;the&nbsp;display,&nbsp;allowing&nbsp;it&nbsp;to&nbsp;function&nbsp;and&nbsp;respond&nbsp;to&nbsp;input/output.<br>
+&nbsp;<br>
+It&nbsp;also&nbsp;runs&nbsp;telemetry.remote&nbsp;commands</tt></dd></dl>
+ <dl><dt><a name="-wait_ready"><strong>wait_ready</strong></a>(timeout=10)</dt></dl>
 </td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">

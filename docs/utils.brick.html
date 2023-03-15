@@ -706,6 +706,8 @@ You&nbsp;can&nbsp;zero&nbsp;the&nbsp;encoder&nbsp;by&nbsp;offsetting&nbsp;it&nbs
 &nbsp;<br>
 Keyword&nbsp;arguments:</tt></dd></dl>
 
+<dl><dt><a name="Motor-reset_limits"><strong>reset_limits</strong></a>(self)</dt><dd><tt>For&nbsp;position-based&nbsp;control,&nbsp;use&nbsp;maximum&nbsp;power/speed&nbsp;on&nbsp;any&nbsp;rotational&nbsp;movement.</tt></dd></dl>
+
 <dl><dt><a name="Motor-reset_position"><strong>reset_position</strong></a>(self)</dt><dd><tt>Reset&nbsp;motor&nbsp;encoder(s)&nbsp;to&nbsp;0.</tt></dd></dl>
 
 <dl><dt><a name="Motor-set_dps"><strong>set_dps</strong></a>(self, dps)</dt><dd><tt>Commands&nbsp;the&nbsp;motor&nbsp;to&nbsp;rotate&nbsp;continuously.&nbsp;Will&nbsp;rotate&nbsp;at&nbsp;the&nbsp;given&nbsp;speed&nbsp;(deg/sec).<br>
@@ -882,7 +884,7 @@ Data descriptors defined here:<br>
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt><a href="#Sensor">Sensor</a>(port:&nbsp;'Literal[1,&nbsp;2,&nbsp;3,&nbsp;4]',&nbsp;bp=None)<br>
 &nbsp;<br>
-Template&nbsp;<a href="#Sensor">Sensor</a>&nbsp;class.&nbsp;Must&nbsp;implement&nbsp;set_mode(mode)&nbsp;to&nbsp;function.<br>&nbsp;</tt></td></tr>
+Template&nbsp;<a href="#Sensor">Sensor</a>&nbsp;class.&nbsp;Must&nbsp;implement&nbsp;<a href="#Sensor-set_mode">set_mode</a>(mode)&nbsp;to&nbsp;function.<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%">Methods defined here:<br>
 <dl><dt><a name="Sensor-__init__"><strong>__init__</strong></a>(self, port: 'Literal[1, 2, 3, 4]', bp=None)</dt><dd><tt>Initialize&nbsp;sensor&nbsp;with&nbsp;a&nbsp;given&nbsp;port&nbsp;(1,&nbsp;2,&nbsp;3,&nbsp;or&nbsp;4).</tt></dd></dl>
@@ -899,6 +901,8 @@ NO_DATA<br>
 I2C_ERROR</tt></dd></dl>
 
 <dl><dt><a name="Sensor-get_value"><strong>get_value</strong></a>(self)</dt><dd><tt>Get&nbsp;the&nbsp;raw&nbsp;sensor&nbsp;value.&nbsp;May&nbsp;return&nbsp;a&nbsp;float,&nbsp;int,&nbsp;list&nbsp;or&nbsp;None&nbsp;if&nbsp;error.</tt></dd></dl>
+
+<dl><dt><a name="Sensor-set_mode"><strong>set_mode</strong></a>(self, mode)</dt></dl>
 
 <dl><dt><a name="Sensor-set_port"><strong>set_port</strong></a>(self, port: 'Literal[1, 2, 3, 4]')</dt><dd><tt>Change&nbsp;sensor&nbsp;port&nbsp;number.&nbsp;Does&nbsp;not&nbsp;unassign&nbsp;previous&nbsp;port.</tt></dd></dl>
 
@@ -1001,7 +1005,7 @@ TOUCH_SENSOR,&nbsp;COLOR_SENSOR,&nbsp;MOTOR&nbsp;=&nbsp;<a href="#-configure_por
  <dl><dt><a name="-exception_handler"><strong>exception_handler</strong></a>(exception=&lt;class 'Exception'&gt;)</dt></dl>
  <dl><dt><a name="-reset_brick"><strong>reset_brick</strong></a>(*args)</dt><dd><tt>Reset&nbsp;BrickPi&nbsp;devices&nbsp;when&nbsp;program&nbsp;exits&nbsp;('at&nbsp;exit').</tt></dd></dl>
  <dl><dt><a name="-restore_default_brick"><strong>restore_default_brick</strong></a>(bp=None)</dt></dl>
- <dl><dt><a name="-wait_ready_sensors"><strong>wait_ready_sensors</strong></a>(debug=False)</dt></dl>
+ <dl><dt><a name="-wait_ready_sensors"><strong>wait_ready_sensors</strong></a>(debug=True)</dt></dl>
 </td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
