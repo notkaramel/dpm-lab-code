@@ -1,14 +1,8 @@
 """
---Telemetry Window with Threads--
-Telemetry can have issues/bugs when using telemtry.update() so instead,
-we use telemetry.mainloop() at the end. Mainloop uses its own while True 
-loop, meaning we need to use 'threads' do any other actions during the 
-program execution.
+--Telemetry Window (Easy Version)--
 
-1. Open telemetry window
-2. (optional) Resize if desired
-3. Start any primary/control threads, such as 'main()' [Use daemon=True]
-4. Run telemetry.mainloop()
+Telemetry displays live up-to-date information, like a 'print()' statement.
+Also allows input via sliders (integers) and buttons (true/false)
 
 Author: Ryan Au
 """

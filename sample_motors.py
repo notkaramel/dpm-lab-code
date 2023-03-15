@@ -1,11 +1,12 @@
-"""sample_motors
+"""
 
-This file serves as a list of example code using the motors. It is 
-meant to be run with a Motor attached to Port MA. It uses 'input' calls
-to let you stop execution for as long as you want, because any motor 
-method (except "wait_*" methods) will simply jump to the next line of code 
-after being executed. You usually use "busy-waiting" while loops to wait 
-for a motor to be done rotating according to certain conditions.
+--Motor Examples--
+
+Demonstrates usage of the motors.
+
+Every motor.set_*() function returns immediately, it does not "wait"
+to complete. You can use time.sleep(seconds) or input("msg") to wait
+until the motor finishes its movement.
 
 Author: Ryan Au
 January 24th, 2022

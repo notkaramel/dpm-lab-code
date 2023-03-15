@@ -1,15 +1,15 @@
-"""sample_sensors
+"""
 
-This file serves as a list of example code using the sensors. It is 
-meant to be run with the following attached sensors:
+--Sensor Examples--
+
+Demonstrates using the Sensors:
 
 Port 1 - TouchSensor
 Port 2 - EV3ColorSensor
 Port 3 - EV3UltrasonicSensor
 
-It uses 'input' calls to let you get ready to position a sensor and take data.
-Usually, sensor data is sampled continuously in a while loop, using a 
-time.sleep(seconds) to create an interval between taking sensor sample data.
+Usually use "time.sleep(seconds)" to regularly take sensor samples. Provides consistency.
+This file uses "input(msg)" function for individual sample collection.
 
 Author: Ryan Au
 January 24th, 2022

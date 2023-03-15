@@ -1,4 +1,6 @@
-"""sample_defining_devices
+"""
+
+--How to Define Robot Devices--
 
 Shows 3 different methods of declaring devices for a BrickPi.
 (1) configure_ports - one method call for all devices. Can become a long line.

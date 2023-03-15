@@ -1,3 +1,14 @@
+"""
+--The With Style--
+
+This file demonstrates using the With Style (Python Context Manager).
+
+It involves the code "with wait_ready_sensors():" to handle exiting the
+code automatically for you.
+
+Author: Ryan Au
+"""
+
 from utils.brick import wait_ready_sensors, EV3UltrasonicSensor, Motor, BP
 import time
 

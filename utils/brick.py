@@ -413,6 +413,8 @@ def wait_ready_sensors(debug=True):
         yield
     except KeyboardInterrupt:
         pass
+    except Exception as error:
+        print(error)
 
 
 class TouchSensor(Sensor):

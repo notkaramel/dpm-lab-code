@@ -1,3 +1,13 @@
+"""
+--Telemetry Window (Harder Version)--
+
+Telemetry displays live up-to-date information, like a 'print()' statement.
+Also allows input via sliders (integers) and buttons (true/false)
+
+Author: Ryan Au
+"""
+
+
 from utils import telemetry
 from time import sleep
 

@@ -1,10 +1,19 @@
-"""sample_sensors_separate
+"""
 
-Here are more sensor sample code, with short explanations for each 
-individual sensor that has a class in utils.brick
+--Sensor Examples (EXPLAINED MORE)--
+
+Demonstrates using the Sensors:
+
+Port 1 - TouchSensor
+Port 2 - EV3ColorSensor
+Port 3 - EV3UltrasonicSensor
+Port 4 - EV3GyroSensor
+
+Usually use "time.sleep(seconds)" to regularly take sensor samples. Provides consistency.
+This file uses "input(msg)" function for individual sample collection.
 
 Author: Ryan Au
-January 25th, 2022
+January 24th, 2022
 """
 
 ####################

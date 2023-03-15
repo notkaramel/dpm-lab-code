@@ -1,3 +1,13 @@
+"""
+--Threading Example--
+
+Demonstrates using threads with robot code. 
+Specifically collecting sensor data in the background.
+
+Author: Ryan Au
+"""
+
+
 import threading
 import time
 from utils.brick import EV3ColorSensor, EV3UltrasonicSensor, Motor, wait_ready_sensors
