@@ -6,7 +6,7 @@ Authors: Ryan Au, Younes Boubekeur
 """
 
 from __future__ import annotations
-
+from contextlib import contextmanager
 from typing import Literal, Type
 import math
 import atexit
@@ -374,6 +374,14 @@ class Sensor:
         except SensorError as error:
             return error
 
+    def set_mode(self, mode):
+        self.mode = mode
+        try:
+            self.brick.set_sensor_type(self.port, mode)
+            return True
+        except SensorError as error:
+            return error
+
     def get_value(self):
         "Get the raw sensor value. May return a float, int, list or None if error."
         try:
@@ -391,7 +399,8 @@ class Sensor:
             time.sleep(WAIT_READY_INTERVAL)
 
 
-def wait_ready_sensors(debug=False):
+@contextmanager
+def wait_ready_sensors(debug=True):
     for port, sensor in Sensor.ALL_SENSORS.items():
         if sensor is not None:
             if debug:
@@ -399,6 +408,11 @@ def wait_ready_sensors(debug=False):
             sensor.wait_ready()
     if debug:
         print("All Sensors Initialized")
+
+    try:
+        yield
+    except KeyboardInterrupt:
+        pass
 
 
 class TouchSensor(Sensor):
@@ -421,7 +435,7 @@ class TouchSensor(Sensor):
         This method is useless unless you wish to re-initialize the sensor.
         """
         try:
-            self.brick.set_sensor_type(self.port, BrickPi3.SENSOR_TYPE.TOUCH)
+            super().set_mode(BrickPi3.SENSOR_TYPE.TOUCH)
             self.mode = mode.lower()
             return True
         except SensorError as error:
@@ -460,14 +474,11 @@ class EV3UltrasonicSensor(Sensor):
         """
         try:
             if mode.lower() == self.Mode.CM:
-                self.brick.set_sensor_type(
-                    self.port, BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_CM)
+                super().set_mode(BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_CM)
             elif mode.lower() == self.Mode.IN:
-                self.brick.set_sensor_type(
-                    self.port, BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_INCHES)
+                super().set_mode(BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_INCHES)
             elif mode.lower() == self.Mode.LISTEN:
-                self.brick.set_sensor_type(
-                    self.port, BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_LISTEN)
+                super().set_mode(BrickPi3.SENSOR_TYPE.EV3_ULTRASONIC_LISTEN)
             else:
                 return False
             self.mode = mode.lower()
@@ -530,20 +541,15 @@ class EV3ColorSensor(Sensor):
         try:
 
             if mode.lower() == self.Mode.COMPONENT:
-                self.brick.set_sensor_type(
-                    self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_COLOR_COMPONENTS)
+                super().set_mode(BrickPi3.SENSOR_TYPE.EV3_COLOR_COLOR_COMPONENTS)
             elif mode.lower() == self.Mode.AMBIENT:
-                self.brick.set_sensor_type(
-                    self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_AMBIENT)
+                super().set_mode(BrickPi3.SENSOR_TYPE.EV3_COLOR_AMBIENT)
             elif mode.lower() == self.Mode.RED:
-                self.brick.set_sensor_type(
-                    self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_REFLECTED)
+                super().set_mode(BrickPi3.SENSOR_TYPE.EV3_COLOR_REFLECTED)
             elif mode.lower() == self.Mode.RAW_RED:
-                self.brick.set_sensor_type(
-                    self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_RAW_REFLECTED)
+                super().set_mode(BrickPi3.SENSOR_TYPE.EV3_COLOR_RAW_REFLECTED)
             elif mode.lower() == self.Mode.ID:
-                self.brick.set_sensor_type(
-                    self.port, BrickPi3.SENSOR_TYPE.EV3_COLOR_COLOR)
+                super().set_mode(BrickPi3.SENSOR_TYPE.EV3_COLOR_COLOR)
             else:
                 return False
             self.mode = mode.lower()
@@ -610,14 +616,11 @@ class EV3GyroSensor(Sensor):
         """
         try:
             if mode.lower() == self.Mode.ABS:
-                self.brick.set_sensor_type(
-                    self.port, BrickPi3.SENSOR_TYPE.EV3_GYRO_ABS)
+                super().set_mode(BrickPi3.SENSOR_TYPE.EV3_GYRO_ABS)
             elif mode.lower() == self.Mode.DPS:
-                self.brick.set_sensor_type(
-                    self.port, BrickPi3.SENSOR_TYPE.EV3_GYRO_DPS)
+                super().set_mode(BrickPi3.SENSOR_TYPE.EV3_GYRO_DPS)
             elif mode.lower() == self.Mode.BOTH:
-                self.brick.set_sensor_type(
-                    self.port, BrickPi3.SENSOR_TYPE.EV3_GYRO_ABS_DPS)
+                super().set_mode(BrickPi3.SENSOR_TYPE.EV3_GYRO_ABS_DPS)
             else:
                 return False
             self.mode = mode.lower()
@@ -650,8 +653,8 @@ class EV3GyroSensor(Sensor):
 class Motor:
     "Motor class for any motor."
     INF = INF
-    MAX_SPEED = 1560  # positive or negative degree per second speed
-    MAX_POWER = 100  # positive or negative percent power
+    MAX_SPEED = 1560  # Theoretical maximum achievable speed (deg/sec)
+    MAX_POWER = 100  # 100% power maximum
 
     def __init__(self, port: Literal["A", "B", "C", "D"] | list[str], bp=None):
         """
@@ -661,6 +664,9 @@ class Motor:
         """
         self.brick = Brick(bp)
         self.set_port(port)
+
+        self._limit_power = 0
+        self._limit_dps = 0
 
     def set_port(self, port):
         """
@@ -692,6 +698,7 @@ class Motor:
         power - The power from -100 to 100, or -128 for float
         """
         self.brick.set_motor_power(self.port, power)
+        self.set_limits(self._limit_power, self._limit_dps)
 
     def float_motor(self):
         """(Float the motor), which unlocks the motor, and allows outside forces to rotate it.
@@ -805,6 +812,11 @@ class Motor:
         dps - The target speed in degrees per second
         """
         self.brick.set_motor_dps(self.port, dps)
+        self.set_limits(self._limit_power, self._limit_dps)
+
+    def reset_limits(self):
+        """For position-based control, use maximum power/speed on any rotational movement."""
+        return self.set_limits(0, 0)
 
     def set_limits(self, power=0, dps=0):
         """
@@ -823,6 +835,8 @@ class Motor:
         dps - The speed limit in degrees per second, with 0 being no limit
         """
         self.brick.set_motor_limits(self.port, power, dps)
+        self._limit_power = power
+        self._limit_dps = dps
 
     def get_status(self):
         """
@@ -911,6 +925,7 @@ class Motor:
         You can zero the encoder by offsetting it by the current position
         """
         self.brick.offset_motor_encoder(self.port, position)
+        self.set_limits(self._limit_power, self._limit_dps)
 
     def reset_encoder(self):
         """
@@ -919,6 +934,7 @@ class Motor:
         Keyword arguments:
         """
         self.brick.reset_motor_encoder(self.port)
+        self.set_limits(self._limit_power, self._limit_dps)
 
     def reset_position(self):
         """
